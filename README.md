@@ -22,11 +22,35 @@ Define deterministic, reproducible test cases for agents and LLMs using YAML or 
 - Model and framework configuration
 - Tool specifications for agentic testing
 
+## Documentation
+
+**📚 [Complete Documentation](docs/)** - Comprehensive guides and references
+
+- **[Installation Guide](docs/guides/installation.md)** - Get started with Sentinel
+- **[Quick Start Tutorial](docs/guides/quickstart.md)** - Create your first test in 5 minutes
+- **[Core Concepts](docs/guides/concepts.md)** - Understand Sentinel's architecture
+- **[Writing Tests](docs/guides/writing-tests.md)** - Complete guide to test specifications
+- **[Assertions Guide](docs/guides/assertions.md)** - All assertion types explained
+- **[Test Suites](docs/guides/test-suites.md)** - Organize multiple tests
+- **[Schema Reference](docs/reference/schema.md)** - Complete schema documentation
+- **[API Reference](docs/reference/api.md)** - Python API reference
+- **[Example Gallery](docs/examples/gallery.md)** - Browse example test specs
+
 ## Installation
 
 ```bash
 pip install navam-sentinel
 ```
+
+**Note:** v0.1.0 is not yet published to PyPI. Install from source:
+
+```bash
+git clone https://github.com/navam-io/sentinel.git
+cd sentinel
+pip install -e ".[dev]"
+```
+
+Full installation instructions: **[Installation Guide](docs/guides/installation.md)**
 
 ## Quick Start
 
@@ -391,6 +415,7 @@ Contributions are welcome! Please see our contributing guidelines (coming soon).
 
 ## Support
 
-- Issues: https://github.com/navam-io/sentinel/issues
-- Documentation: https://docs.navam.io/sentinel (coming soon)
-- Email: hello@navam.io
+- **Documentation**: [docs/](docs/)
+- **Issues**: https://github.com/navam-io/sentinel/issues
+- **Discussions**: https://github.com/navam-io/sentinel/discussions
+- **Email**: hello@navam.io
