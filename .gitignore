@@ -1,52 +1,68 @@
 # macOS
 .DS_Store
+Thumbs.db
 
-# Python
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.svelte-kit/
+.output/
+out/
+
+# Tauri
+src-tauri/target/
+src-tauri/Cargo.lock
+
+# Python (backend API)
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Virtual environments
 venv/
 env/
 ENV/
 .venv/
+*.egg-info/
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
+.obsidian/
 
 # Environment variables
 .env
 .env.local
+.env.*.local
 
 # Logs
 *.log
+logs/
 
 # Database
 *.db
 *.sqlite
+*.sqlite3
 
 # Testing
+coverage/
+.nyc_output/
 .coverage
 htmlcov/
 .pytest_cache/
+
+# Sentinel-specific
+.sentinel/
+runs/
+results/

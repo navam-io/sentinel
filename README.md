@@ -1,445 +1,424 @@
 # Navam Sentinel
 
-**Unified agent regression and evaluation platform for AI labs**
+**Visual-first agent testing and evaluation platform for AI labs**
 
-Sentinel combines agent regression testing with deep evaluation capabilities, providing deterministic, repeatable testing for AI agents and models.
+**"Postman for AI Agents"** - Point, click, test. Make AI agent testing as intuitive as Postman made API testing.
 
-## Core Value Proposition
+![Version](https://img.shields.io/badge/version-0.0.0--alpha-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey)
 
-**"GitHub Actions + Jest + Safety Playground + Benchmark Studio — for AI agents + models"**
+---
 
-## Features (v0.1.0)
+## Core Philosophy
 
-### ✅ Test Case Spec DSL
+**"Point, Click, Test"** - Visual-first interface with round-trip DSL generation
 
-Define deterministic, reproducible test cases for agents and LLMs using YAML or JSON.
+Sentinel makes AI agent testing accessible to everyone—from product managers to model engineers—through an intuitive visual interface backed by a powerful YAML-based DSL for version control and CI/CD.
 
-**Key capabilities:**
-- YAML/JSON schema for test specifications
-- Pydantic-based validation with clear error messages
-- Support for single test specs and test suites
-- Comprehensive assertion types
-- Model and framework configuration
-- Tool specifications for agentic testing
+## Key Features (Visual-First)
 
-## Documentation
+### 🎨 **Visual Drag-and-Drop Test Builder**
+- Node-based canvas for creating tests (inspired by Langflow, n8n)
+- Drag nodes from palette: Models, Prompts, Tools, Assertions
+- Connect nodes to define test flow
+- Real-time YAML generation from visual canvas
 
-**📚 [Complete Documentation](docs/)** - Comprehensive guides and references
+### 🔄 **Round-Trip Visual ↔ DSL Synchronization**
+- **Visual → YAML**: Canvas changes update DSL instantly
+- **YAML → Visual**: Import YAML files, render as nodes
+- **Bidirectional editing**: Edit in canvas OR code, stay in sync
+- **Git-friendly**: Visual changes show as clean YAML diffs
 
-- **[Installation Guide](docs/guides/installation.md)** - Get started with Sentinel
-- **[Quick Start Tutorial](docs/guides/quickstart.md)** - Create your first test in 5 minutes
-- **[Core Concepts](docs/guides/concepts.md)** - Understand Sentinel's architecture
-- **[Writing Tests](docs/guides/writing-tests.md)** - Complete guide to test specifications
-- **[Assertions Guide](docs/guides/assertions.md)** - All assertion types explained
-- **[Test Suites](docs/guides/test-suites.md)** - Organize multiple tests
-- **[Schema Reference](docs/reference/schema.md)** - Complete schema documentation
-- **[API Reference](docs/reference/api.md)** - Python API reference
-- **[Example Gallery](docs/examples/gallery.md)** - Browse example test specs
+### ⏺️ **Record & Replay Test Generation**
+- Record agent interactions like Playwright Codegen
+- Auto-generate assertions from behavior
+- One-click test creation from recordings
+- Smart detection of tool calls, outputs, patterns
 
-## Installation
+### 🎯 **Visual Assertion Builder**
+- Form-based assertion creation (no YAML needed)
+- All assertion types: content, regex, tools, performance, format
+- Live validation and error hints
+- Visual pass/fail indicators on canvas
 
+### 🚀 **Live Execution Dashboard**
+- Run tests directly from canvas
+- Real-time execution trace visualization
+- Streaming metrics: tokens, latency, cost
+- Interactive tool call inspector
+
+### 📊 **Visual Regression Detection**
+- Side-by-side run comparison
+- Metric deltas with visual indicators (🔥, ⚡, 💰, ✅)
+- Semantic output diff viewer
+- Regression heatmaps over time
+
+### 🤖 **AI-Assisted Test Generation**
+- Describe tests in natural language
+- LLM generates canvas nodes and assertions
+- Context-aware suggestions and recommendations
+- Template gallery for quick starts
+
+### 👥 **Collaborative Workspaces**
+- Team-based testing with shared suites
+- Real-time collaboration
+- Comments, reviews, approvals
+- Activity feeds and notifications
+
+---
+
+## Quick Start (Coming Soon)
+
+Sentinel is currently in **pre-alpha** development. The visual-first desktop app is being built with Tauri + SvelteKit.
+
+### Installation (When Available)
+
+**Desktop App** (macOS, Windows, Linux):
 ```bash
-pip install navam-sentinel
+# Download from releases
+# Or install via package managers
+brew install navam-sentinel      # macOS
+choco install navam-sentinel     # Windows
+snap install navam-sentinel      # Linux
 ```
 
-**Note:** v0.1.0 is not yet published to PyPI. Install from source:
-
+**From Source** (Developers):
 ```bash
 git clone https://github.com/navam-io/sentinel.git
 cd sentinel
-pip install -e ".[dev]"
+
+# Frontend (SvelteKit)
+cd frontend
+npm install
+npm run dev
+
+# Backend (Python FastAPI)
+cd ../backend
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+
+# Tauri Desktop App
+npm run tauri dev
 ```
 
-Full installation instructions: **[Installation Guide](docs/guides/installation.md)**
+---
 
-## Quick Start
+## Visual Workflow Examples
 
-### 1. Create a Test Specification
+### Example 1: Create a Test Visually
 
-Create a file `my_test.yaml`:
+1. **Open Sentinel** → See blank canvas
+2. **Drag "Model" node** → Select GPT-4 or Claude
+3. **Drag "Prompt" node** → Enter: "What is the capital of France?"
+4. **Drag "Assertion" node** → Add: "Must contain: Paris"
+5. **Connect nodes** → Model → Prompt → Assertion
+6. **Click "Run"** → See live execution trace
+7. **View YAML** → Auto-generated test spec
+8. **Export** → Save as `france_qa.yaml` for git
+
+**Time to first test**: <1 minute
+
+### Example 2: Import YAML, Edit Visually
+
+1. **File → Import** → Select `existing_test.yaml`
+2. **Canvas renders** → Nodes appear with auto-layout
+3. **Click assertion node** → Edit form opens
+4. **Change value** → YAML updates in real-time
+5. **Add new assertion** → Drag from palette
+6. **Export** → Updated YAML with your changes
+
+**Round-trip complete** - no data loss
+
+### Example 3: Record & Replay
+
+1. **Click "Record"** → Agent playground opens
+2. **Interact with agent** → "Find laptops under $1000"
+3. **Agent uses tools** → browser.search(), calculator.compare()
+4. **Stop recording** → Review generated test
+5. **Auto-generated assertions**:
+   - ✅ Must call tool: "browser"
+   - ✅ Must call tool: "calculator"
+   - ✅ Output type: JSON
+   - ✅ Must contain: "price"
+6. **Save to canvas** → Nodes added automatically
+
+**Zero manual assertion writing**
+
+---
+
+## Architecture
+
+### Desktop App (Tauri)
+- **Frontend**: SvelteKit 2.0 + TypeScript
+- **Canvas**: React Flow (node-based workflow)
+- **UI**: shadcn/ui + TailwindCSS
+- **Editor**: Monaco (YAML/JSON editing)
+- **Charts**: Recharts (analytics)
+- **Backend**: Rust (Tauri core) + IPC
+
+### Python Execution Engine
+- **API**: FastAPI (test execution, validation)
+- **Models**: Pluggable providers (Anthropic, OpenAI, Bedrock, etc.)
+- **Frameworks**: LangGraph, Claude SDK, OpenAI Agents, Strands
+- **Storage**: SQLite (local) / PostgreSQL (server)
+- **Validation**: Pydantic schemas
+
+### Model Provider Support
+- ✅ Anthropic (Claude models)
+- ✅ OpenAI (GPT models)
+- 🚧 Amazon Bedrock (multi-model)
+- 🚧 HuggingFace (hosted/endpoints)
+- 🚧 Ollama (local models)
+
+### Agentic Framework Support
+- 🚧 LangGraph (multi-step agents)
+- 🚧 Claude Agent SDK
+- 🚧 OpenAI Agents SDK
+- 🚧 Strands Agents
+
+---
+
+## Test Spec DSL (YAML)
+
+While the visual UI is primary, all tests are backed by a clean YAML DSL for version control and CI/CD.
+
+### Example Test Spec
 
 ```yaml
-name: "Simple Q&A Test"
-model: "gpt-4"
-provider: "openai"
+name: "Product Search Agent Test"
+model: "claude-3-5-sonnet-20241022"
+provider: "anthropic"
 seed: 42
 
-inputs:
-  query: "What is the capital of France?"
-
-assertions:
-  - must_contain: "Paris"
-  - output_type: "text"
-  - max_latency_ms: 2000
-```
-
-### 2. Parse and Validate
-
-```python
-from sentinel.core.parser import TestSpecParser
-
-# Parse from file
-spec = TestSpecParser.parse_file("my_test.yaml")
-
-# Or parse from string
-yaml_content = """
-name: "My Test"
-model: "claude-3-5-sonnet-20241022"
-inputs:
-  query: "Test query"
-assertions:
-  - must_contain: "result"
-"""
-spec = TestSpecParser.parse_yaml(yaml_content)
-
-# Access spec fields
-print(f"Test: {spec.name}")
-print(f"Model: {spec.model}")
-print(f"Query: {spec.inputs.query}")
-```
-
-### 3. Programmatic Test Creation
-
-```python
-from sentinel.core.schema import TestSpec
-
-spec = TestSpec(
-    name="Programmatic Test",
-    model="gpt-4",
-    provider="openai",
-    seed=123,
-    inputs={"query": "What is 2+2?"},
-    assertions=[
-        {"must_contain": "4"},
-        {"output_type": "text"},
-    ],
-    tags=["math", "simple"]
-)
-
-# Export to YAML
-yaml_str = TestSpecParser.to_yaml(spec)
-print(yaml_str)
-```
-
-## Test Spec Schema
-
-### Core Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `name` | string | ✅ | Test case name |
-| `model` | string | ✅ | Model identifier (e.g., "gpt-4", "claude-3-5-sonnet-20241022") |
-| `inputs` | object | ✅ | Input parameters (query, messages, context, etc.) |
-| `assertions` | array | ✅ | Validation rules for outputs |
-| `provider` | string | | Model provider (anthropic, openai, bedrock, etc.) |
-| `seed` | integer | | Random seed for deterministic execution |
-| `model_config` | object | | Model-specific parameters (temperature, max_tokens, etc.) |
-| `tools` | array | | Available tools for the agent |
-| `framework` | string | | Agentic framework (langgraph, claude_sdk, etc.) |
-| `framework_config` | object | | Framework-specific configuration |
-| `tags` | array | | Tags for categorization |
-| `timeout_ms` | integer | | Maximum execution timeout |
-
-### Input Formats
-
-```yaml
-# Simple query
-inputs:
-  query: "Your question here"
-
-# Multi-turn conversation
-inputs:
-  messages:
-    - role: "user"
-      content: "First message"
-    - role: "assistant"
-      content: "Response"
-    - role: "user"
-      content: "Follow-up"
-  system_prompt: "You are a helpful assistant"
-
-# With context
-inputs:
-  query: "Your question"
-  context:
-    user_id: "123"
-    session_data: {...}
-```
-
-### Assertion Types
-
-```yaml
-assertions:
-  # Content assertions
-  - must_contain: "expected text"
-  - must_contain: ["text1", "text2"]  # All must be present
-  - must_not_contain: "forbidden text"
-  - regex_match: "pattern.*here"
-
-  # Tool call assertions
-  - must_call_tool: "browser"
-  - must_call_tool: ["browser", "calculator"]
-
-  # Format assertions
-  - output_type: "json"  # json, text, markdown, code, structured
-
-  # Performance assertions
-  - max_latency_ms: 5000
-
-  # Token count assertions
-  - min_tokens: 10
-  - max_tokens: 500
-```
-
-### Model Configuration
-
-```yaml
-model_config:
-  temperature: 0.7      # 0.0 - 2.0
-  max_tokens: 1000      # Maximum tokens to generate
-  top_p: 0.9           # Nucleus sampling
-  top_k: 50            # Top-k sampling
-  stop_sequences: ["STOP", "END"]
-```
-
-### Tools and Frameworks
-
-```yaml
-# Simple tool names
 tools:
   - browser
   - calculator
-  - scraper
 
-# Full tool specifications
-tools:
-  - name: "web_search"
-    description: "Search the web"
-    parameters:
-      type: "object"
-      properties:
-        query:
-          type: "string"
-      required: ["query"]
+inputs:
+  query: "Find top 3 laptops under $1000 with 16GB RAM"
 
-# Agentic framework
-framework: "langgraph"
-framework_config:
-  max_iterations: 5
-  intermediate_steps: true
+assertions:
+  - must_call_tool: ["browser", "calculator"]
+  - must_contain: "price"
+  - must_contain: "RAM"
+  - output_type: "json"
+  - max_latency_ms: 9000
+
+tags:
+  - e2e
+  - shopping
 ```
 
-### Test Suites
+**This YAML can be**:
+- Generated from visual canvas
+- Imported to visual canvas
+- Edited directly (syncs to canvas)
+- Version controlled in git
+- Run in CI/CD pipelines
 
-Group multiple tests together with shared configuration:
-
-```yaml
-name: "E-commerce Test Suite"
-version: "1.0.0"
-defaults:
-  model: "claude-3-5-sonnet-20241022"
-  provider: "anthropic"
-  timeout_ms: 30000
-  tools:
-    - browser
-    - calculator
-
-tests:
-  - name: "Product search"
-    seed: 100
-    inputs:
-      query: "Find laptops under $1000"
-    assertions:
-      - must_contain: "price"
-      - must_call_tool: "browser"
-
-  - name: "Product comparison"
-    seed: 101
-    inputs:
-      query: "Compare top 2 gaming laptops"
-    assertions:
-      - must_contain: "comparison"
-      - must_call_tool: "calculator"
-```
-
-## Examples
-
-See the [`examples/test_specs/`](examples/test_specs/) directory for complete examples:
-
-- **Browser Agent**: Product research with tools
-- **Simple Q&A**: Basic factual question answering
-- **Code Generation**: Python function generation
-- **Multi-turn Conversation**: Customer support dialogue
-- **LangGraph Agent**: Research agent with web search
-- **Test Suite**: Multiple related tests
-
-## API Reference
-
-### `TestSpecParser`
-
-Main parser class for test specifications.
-
-**Methods:**
-
-- `parse_yaml(content: str) -> TestSpec | TestSuite`
-  Parse YAML string into test spec or suite
-
-- `parse_json(content: str) -> TestSpec | TestSuite`
-  Parse JSON string into test spec or suite
-
-- `parse_file(file_path: str | Path) -> TestSpec | TestSuite`
-  Parse test spec from file (auto-detects format)
-
-- `to_yaml(spec: TestSpec | TestSuite) -> str`
-  Convert test spec to YAML string
-
-- `to_json(spec: TestSpec | TestSuite, indent: int = 2) -> str`
-  Convert test spec to JSON string
-
-- `write_file(spec: TestSpec | TestSuite, file_path: str | Path, format: str = "yaml")`
-  Write test spec to file
-
-- `validate_spec(spec: TestSpec | TestSuite) -> bool`
-  Validate an existing test spec
-
-### Error Handling
-
-```python
-from sentinel.core.parser import ParsingError
-
-try:
-    spec = TestSpecParser.parse_file("test.yaml")
-except ParsingError as e:
-    print(f"Validation failed: {e}")
-    # Access detailed errors
-    for error in e.errors:
-        print(f"  - {error}")
-except FileNotFoundError:
-    print("File not found")
-```
-
-## Development
-
-### Setup
-
-```bash
-# Clone repository
-git clone https://github.com/navam-io/sentinel.git
-cd sentinel
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # or `venv\Scripts\activate` on Windows
-
-# Install with dev dependencies
-pip install -e ".[dev]"
-```
-
-### Running Tests
-
-```bash
-# Run all tests
-pytest
-
-# Run with coverage
-pytest --cov=sentinel --cov-report=html
-
-# Run specific test file
-pytest tests/core/test_parser.py
-
-# Run specific test
-pytest tests/core/test_schema.py::TestTestSpec::test_minimal_test_spec
-```
-
-### Code Quality
-
-```bash
-# Format code
-black src/ tests/
-
-# Lint
-ruff src/ tests/
-
-# Type checking
-mypy src/
-```
+---
 
 ## Roadmap
 
-See [backlog/active.md](backlog/active.md) for the complete development roadmap.
+See [backlog/active.md](backlog/active.md) for the complete feature backlog.
 
-**Coming in v0.2.0+:**
-- Model Provider Architecture (Anthropic, OpenAI)
-- Run Executor (local execution)
-- Assertion Validation Engine
-- Agentic Framework Support (LangGraph)
-- Regression Engine
-- CLI Interface
-- Web Dashboard
+### v0.1.0 - Visual Canvas Foundation (Q1 2025)
+- ✓ Tauri desktop app setup
+- ✓ Node-based canvas (React Flow)
+- ✓ Component palette (drag-and-drop)
+- ✓ Visual → YAML generator
+- ✓ Export to file
 
-**Visual-First Future (2025+):**
+### v0.2.0 - Round-Trip Sync (Q1 2025)
+- ✓ YAML/JSON parser (Pydantic)
+- ✓ YAML → Visual importer
+- ✓ Bidirectional sync
+- ✓ Monaco editor integration
 
-Sentinel is pivoting to a **visual-first, drag-and-drop testing platform** while maintaining YAML/CLI backward compatibility. See [backlog/spec-04.md](backlog/spec-04.md) for the complete vision.
+### v0.3.0 - Model Providers & Execution (Q1 2025)
+- ✓ Anthropic + OpenAI providers
+- ✓ Visual provider marketplace
+- ✓ Local execution engine
+- ✓ Live execution dashboard
 
-**"Postman for AI Agents"** - making AI testing accessible to product managers, QA engineers, and researchers, not just hardcore engineers.
+### v0.4.0 - Assertion Builder & Validation (Q2 2025)
+- ✓ Visual assertion builder
+- ✓ All assertion types
+- ✓ Validation engine
+- ✓ Visual pass/fail indicators
 
-- **Node-based test canvas** - Drag-and-drop workflow builder (inspired by Langflow, n8n)
-- **Record & replay** - Auto-generate tests from agent interactions (inspired by Playwright)
-- **Visual assertion builder** - No YAML needed for common cases
-- **AI-assisted generation** - Describe tests in natural language
-- **Template marketplace** - Pre-built tests for common scenarios
-- **Collaborative workspaces** - Team-based testing with real-time editing
-- **Visual debugging** - Interactive trace inspection and comparison views
+### v0.5.0 - Design System (Q2 2025)
+- ✓ Tailwind theme (Sentinel colors)
+- ✓ Icon system (30+ icons)
+- ✓ Core UI components
+- ✓ Motion/interactions
+
+### v0.6.0 - Record & Replay (Q2 2025)
+- ✓ Recording mode
+- ✓ Smart detection
+- ✓ Auto-generate tests
+
+### v0.7.0 - Templates & Suites (Q2 2025)
+- ✓ Template gallery
+- ✓ Test suite organizer
+- ✓ 6+ built-in templates
+
+### v0.8.0 - Regression Engine (Q3 2025)
+- ✓ Visual comparison view
+- ✓ Regression detection
+- ✓ Trend charts
+
+### v0.9.0+ - Extended Features
+- LangGraph framework support
+- AI-assisted test generation
+- Collaborative workspaces
+- Additional model providers
+- Safety scenarios
+- CI/CD integration
+
+---
 
 ## Target Users
 
-**Current (v0.1.0 - Text-based):**
-- **Frontier Model Labs**: Testing model releases and capabilities
-- **Neo-labs**: Agent-focused research organizations
-- **Agent Product Labs**: Building production agent applications
-- **Enterprise AI Teams**: Internal AI infrastructure testing
-- **Researchers**: Model evaluation and safety research
-
-**Future (Visual-First Platform):**
-
-Expanding beyond hardcore engineers to include:
-- **Product Managers**: Validate agent behavior without writing code
+### Primary (Visual-First Interface)
+- **Product Managers**: Validate agents without coding
 - **QA Engineers**: Visual test creation and debugging
-- **Research Scientists**: Build evaluation suites with AI assistance
-- **Safety Teams**: Test safety scenarios collaboratively
-- **Non-technical Stakeholders**: Understand agent behavior through visual traces
+- **Research Scientists**: Build evals with AI assistance
+- **Safety Teams**: Collaborative safety testing
+- **Frontier Model Labs**: Test model releases
+- **Neo-labs**: Agent-focused research
+- **Agent Product Companies**: Production testing
+
+### Secondary (DSL/Advanced Mode)
+- **Model Engineers**: Programmatic testing, DSL editing
+- **DevOps Engineers**: CI/CD integration
+- **Enterprise AI Teams**: Infrastructure testing
+
+---
 
 ## Design Principles
 
+### Visual-First, Git-Friendly
+- GUI is the primary interface for most users
+- DSL is the interoperability and version control format
+- Round-trip conversion with zero data loss
+- Visual changes show as clean YAML diffs in git
+
 ### Security & Privacy First
+- Desktop-first architecture (data stays local)
+- Optional self-hosted server for teams
 - Air-gapped deployment support
-- GPU-side execution
-- Logs remain in customer VPC
 - Full control over model outputs
 - No vendor lock-in
 
 ### Deterministic & Reproducible
-- Seeded randomization
-- Prompt versioning
+- Seeded randomization for reproducibility
+- Prompt versioning and tracking
 - Structured output validation
-- Repeatable environments
+- Repeatable test environments
 
-### LLM-Oriented Development
-- YAML-based specs optimized for AI generation
-- Simple, minimal component designs
-- Fast iteration workflows
+### Research-Grade Rigor
+- Built for frontier AI labs and researchers
+- Safety testing and evaluation suites
+- Comprehensive metrics and observability
+- Regression detection across models/versions
+
+### Accessible to All
+- No coding required for basic testing
+- Intuitive visual interface inspired by Postman, Langflow
+- Advanced mode for power users (direct DSL editing)
+- AI-assisted generation for rapid testing
+
+---
+
+## Inspiration & Research
+
+Sentinel's visual-first approach is inspired by industry-leading tools:
+
+- **Langflow**: Node-based LLM workflow builder
+- **n8n**: Visual workflow automation with best practices
+- **Postman**: Collections, runner, and collaborative testing UX
+- **Playwright Codegen**: Record/replay test generation
+- **LangSmith**: Visual observability and trace inspection
+
+See [backlog/spec-04.md](backlog/spec-04.md) for complete research and design rationale.
+
+---
+
+## Contributing
+
+Contributions are welcome! Sentinel is in early development.
+
+### Development Setup
+
+```bash
+# Clone repo
+git clone https://github.com/navam-io/sentinel.git
+cd sentinel
+
+# Frontend (SvelteKit + Tauri)
+cd frontend
+npm install
+npm run dev
+
+# Backend (Python)
+cd ../backend
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+
+# Run Tauri desktop app
+npm run tauri dev
+```
+
+### Tech Stack
+- Frontend: SvelteKit 2.0, TypeScript, TailwindCSS, React Flow, Monaco
+- Desktop: Tauri 2.0 (Rust)
+- Backend: Python, FastAPI, Pydantic
+- Database: SQLite (local) / PostgreSQL (server)
+- Providers: Anthropic, OpenAI, Bedrock, HuggingFace, Ollama
+
+---
+
+## Documentation
+
+- **[Active Backlog](backlog/active.md)** - Feature roadmap and priorities
+- **[Visual UI Spec](backlog/spec-04.md)** - Complete visual component specifications
+- **[Design System](backlog/spec-03.md)** - Tailwind theme, colors, typography, components
+
+Documentation site coming soon.
+
+---
 
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## Contributing
-
-Contributions are welcome! Please see our contributing guidelines (coming soon).
+---
 
 ## Support
 
-- **Documentation**: [docs/](docs/)
 - **Issues**: https://github.com/navam-io/sentinel/issues
 - **Discussions**: https://github.com/navam-io/sentinel/discussions
 - **Email**: hello@navam.io
+- **Twitter**: [@navam_io](https://twitter.com/navam_io)
+
+---
+
+## Project Status
+
+**Current Version**: 0.0.0 (pre-alpha)
+
+**Status**: Fresh visual-first implementation in progress
+
+**Next Milestone**: v0.1.0 - Visual Canvas Foundation
+
+This is a complete restart of Sentinel with visual-first architecture from day 1. The previous text-based DSL implementation (v0.1.0) has been retired in favor of a GUI-first approach with round-trip DSL generation.
+
+---
+
+**Built with ❤️ for frontier AI labs, researchers, and agent builders**

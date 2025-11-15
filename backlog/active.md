@@ -1,652 +1,739 @@
-# Active Backlog - Navam Sentinel V1
+# Active Backlog - Navam Sentinel (Visual-First)
 
-This file contains the active feature backlog for Sentinel V1. Features are listed in priority order and will be implemented incrementally by the `/develop` command.
+This file contains the active feature backlog for Sentinel. Features are listed in priority order and will be implemented incrementally.
 
 ## Project Context
 
-**Navam Sentinel** is a unified agent regression and evaluation platform combining:
-- Deterministic agent testing
-- Model/version comparison
-- Safety and capability evaluations
-- Regression detection
-- CI/CD integration for AI agents
+**Navam Sentinel** is a **visual-first agent testing and evaluation platform** for frontier AI labs, neo-labs, and AI research organizations.
 
-**Visual-First Pivot**: Sentinel is evolving from a text-based DSL tool to a **visual-first, drag-and-drop testing platform** (see `backlog/spec-04.md`). The features below (v0.1.0 - v1.0) establish the foundation, with visual UI components coming in 2025+.
+**Core Philosophy**: "Point, Click, Test" - Make AI agent testing as intuitive as Postman made API testing, as visual as Langflow made LLM workflows, and as powerful as LangSmith made observability.
 
-**Tech Stack**:
-- Frontend: Tauri + SvelteKit + shadcn/ui + TailwindCSS
-- Backend: Python FastAPI + Postgres + Redis
-- Optional: Temporal.io for workflows
-- Model Integration: Pluggable architecture supporting Anthropic, OpenAI, Amazon Bedrock, HuggingFace, Ollama
-- Agentic Frameworks: Pluggable support for LangGraph, Claude Agent SDK, OpenAI Agents SDK, Strands Agents
-- Design System: See `backlog/spec-03.md` for complete design specifications
-- Visual UI: See `backlog/spec-04.md` for visual-first pivot specifications
+**Target Positioning**: "Postman for AI Agents" with research-grade rigor
+
+### Key Capabilities
+- Visual drag-and-drop test creation
+- Round-trip Visual ↔ DSL synchronization
+- Deterministic, repeatable agent testing
+- Cross-model/version/tool output comparison
+- Automated capability and safety evaluations
+- Regression detection (reasoning, tool calls, speed, cost)
+- Collaborative workspaces and team testing
+
+### Target Users
+
+**Primary (Visual-First Era)**:
+- **Product Managers**: Validate agent behavior without writing code
+- **QA Engineers**: Visual test creation and debugging
+- **Research Scientists**: Build evaluation suites with AI assistance
+- **Safety Teams**: Test safety scenarios collaboratively
+- **Researchers**: Model evaluation and safety research
+- **Frontier Model Labs**: Testing model releases and capabilities
+- **Neo-labs**: Agent-focused research organizations
+- **Agent Product Labs**: Building production agent applications
+
+**Secondary (Advanced Users)**:
+- **Model Engineers**: Direct DSL editing and programmatic testing
+- **DevOps Engineers**: CI/CD integration and automation
+- **Enterprise AI Teams**: Internal AI infrastructure testing
+
+## Architecture
+
+### Deployment Models
+1. **Primary**: Desktop app (Tauri) for individual users and small teams
+2. **Secondary**: Self-hosted web app for enterprise teams
+3. **Future**: Cloud SaaS for easy onboarding
+
+### Tech Stack
+
+**Frontend (Visual UI)**
+- Tauri (Rust core + TypeScript UI)
+- SvelteKit 2.0
+- React Flow (node-based canvas)
+- shadcn/ui + TailwindCSS
+- Monaco Editor (code editing when needed)
+- Recharts (data visualization)
+
+**Backend (API & Execution)**
+- Python FastAPI for execution engine and API
+- PostgreSQL for test storage and run history
+- Redis for real-time updates and queues
+- Temporal.io (optional) for deterministic workflows
+- OpenTelemetry for tracing (model → agent → tools)
+
+**Model Integration (Pluggable Architecture)**
+Priority order:
+1. Anthropic API (Claude models)
+2. OpenAI API (GPT models)
+3. Amazon Bedrock API (multi-model support)
+4. HuggingFace API (hosted and endpoints)
+5. Ollama API (local models)
+
+**Agentic Framework Support (Pluggable Architecture)**
+Priority order:
+1. LangGraph
+2. Claude Agent SDK
+3. OpenAI Agents SDK
+4. Strands Agents
+
+## Design References
+
+- **Visual UI Design**: See `backlog/spec-04.md` for complete visual component specifications
+- **Design System**: See `backlog/spec-03.md` for Tailwind theme, colors, typography, and component styles
+- **Research Inspiration**: Langflow, n8n, Postman, Playwright Codegen, LangSmith
 
 ## Feature Slices (Priority Order)
 
 ---
 
-### Feature 2: Model Provider Architecture ✓ NEXT
+### Feature 1: Visual Canvas Foundation ✓ NEXT
+**Status**: Not Started
+**Priority**: P0 - Foundation
+**Semver Impact**: minor (0.1.0)
+
+**Description**:
+Build the core visual canvas infrastructure with node-based test building. This is the foundation for all visual features.
+
+**Requirements**:
+- **Tauri Desktop App Setup**:
+  - Initialize Tauri 2.0 project with SvelteKit frontend
+  - Configure app window, menus, and system tray
+  - Set up IPC communication between Rust and frontend
+  - Configure auto-updates and packaging
+
+- **SvelteKit Frontend Setup**:
+  - Initialize SvelteKit 2.0 with TypeScript
+  - Configure TailwindCSS with Sentinel design tokens (spec-03.md)
+  - Integrate shadcn/ui component library
+  - Set up routing and layout structure
+
+- **Node-Based Canvas (React Flow)**:
+  - Integrate React Flow for node-based workflow
+  - Implement infinite canvas with zoom/pan
+  - Create basic node types (input, model, assertion, output)
+  - Enable drag-and-drop from component palette
+  - Implement node connections (edges)
+  - Auto-layout algorithm for new nodes
+  - Minimap for navigation
+
+- **Component Palette**:
+  - Left sidebar with draggable node types
+  - Categories: Inputs, Models, Tools, Assertions, Outputs
+  - Search/filter functionality
+
+- **DSL Generator (Visual → YAML)**:
+  - Convert canvas nodes to YAML test spec
+  - Real-time YAML preview panel
+  - Validation and error highlighting
+  - Export to .yaml file
+
+**Deliverables**:
+- `src-tauri/`: Rust backend with Tauri configuration
+- `frontend/`: SvelteKit application
+  - `src/lib/components/canvas/`: Canvas components
+  - `src/lib/components/palette/`: Component palette
+  - `src/lib/components/nodes/`: Node type components
+  - `src/routes/`: Page routes
+- `frontend/src/lib/dsl/`: DSL generator utilities
+- Desktop app builds (macOS, Windows, Linux)
+- Documentation: Visual canvas usage guide
+
+**Success Criteria**:
+- Desktop app launches and runs smoothly
+- Can drag nodes onto canvas
+- Can connect nodes with edges
+- Canvas generates valid YAML test spec
+- YAML updates in real-time as canvas changes
+- Can export YAML to file
+- App follows Sentinel design system (colors, typography, spacing)
+
+---
+
+### Feature 2: DSL Parser & Visual Importer
 **Status**: Not Started
 **Priority**: P0 - Foundation
 **Semver Impact**: minor (0.2.0)
 
 **Description**:
-Create a pluggable model provider architecture with a standardized interface for integrating different LLM APIs. Start with Anthropic and OpenAI as the initial providers.
+Complete the round-trip by implementing DSL → Visual conversion. Parse YAML test specs and render them on the visual canvas.
 
 **Requirements**:
-- Define abstract `ModelProvider` interface/base class with methods:
-  - `generate(prompt, config)`: Generate completion
-  - `stream(prompt, config)`: Stream completion
-  - `count_tokens(text)`: Token counting
-  - `get_model_info()`: Model metadata
-- Implement provider for **Anthropic API** (Messages API)
-  - Support for Claude models (Sonnet, Opus, Haiku)
-  - Tool calling support
-  - Structured output support
-- Implement provider for **OpenAI API** (Chat Completions API)
-  - Support for GPT models
-  - Tool calling support
-  - Structured output support
-- Provider discovery/registry system
-- Configuration schema for provider credentials and settings
-- Unified error handling across providers
-- Retry logic and rate limiting
-- Token usage tracking
+- **YAML/JSON Parser**:
+  - Pydantic-based schema validation (Python backend)
+  - Support for TestSpec and TestSuite models
+  - Comprehensive validation with clear error messages
+  - API endpoint for parsing and validation
+
+- **Visual Importer (DSL → Canvas)**:
+  - Parse YAML and convert to canvas nodes/edges
+  - Position nodes using auto-layout
+  - Preserve relationships and configurations
+  - Handle import errors gracefully
+
+- **Bidirectional Sync**:
+  - Changes in YAML editor update canvas
+  - Changes in canvas update YAML
+  - Conflict resolution strategy
+  - Undo/redo support
+
+- **YAML Editor Integration**:
+  - Monaco Editor for direct YAML editing
+  - Syntax highlighting and validation
+  - Split view: Canvas | YAML
+  - Toggle between visual and code modes
 
 **Deliverables**:
-- `src/providers/base.py`: Abstract ModelProvider base class
-- `src/providers/anthropic.py`: Anthropic provider implementation
-- `src/providers/openai.py`: OpenAI provider implementation
-- `src/providers/registry.py`: Provider registry and discovery
-- `src/providers/config.py`: Provider configuration models
-- `tests/test_providers.py`: Provider tests (with mocked API calls)
-- `examples/provider_configs/`: Example configuration files
-- Documentation: Provider integration guide
+- `backend/api/`: FastAPI application with parsing endpoints
+- `backend/core/schema.py`: Pydantic models for test specs
+- `backend/core/parser.py`: YAML/JSON parser
+- `frontend/src/lib/dsl/importer.ts`: DSL → Canvas converter
+- `frontend/src/lib/components/editor/`: Monaco editor component
+- Tests for parser and importer
+- Documentation: DSL specification and round-trip guide
 
 **Success Criteria**:
-- Both Anthropic and OpenAI providers work end-to-end
-- Providers are easily swappable via configuration
-- Consistent behavior across providers
-- All tests pass
-- Clear documentation for adding new providers
+- Can import YAML files to canvas
+- Imported tests render correctly with proper node layout
+- Editing YAML updates canvas in real-time
+- Editing canvas updates YAML in real-time
+- No data loss in round-trip conversion
+- All Pydantic validation rules work correctly
 
 ---
 
-### Feature 3: Run Executor (Local)
+### Feature 3: Model Provider Architecture & Execution
 **Status**: Not Started
 **Priority**: P0 - Foundation
 **Semver Impact**: minor (0.3.0)
 
 **Description**:
-Implement a local execution engine that runs test specs against LLM/agent implementations and collects telemetry. Uses the pluggable model provider architecture.
+Implement pluggable model provider architecture and local execution engine. Users can run tests from the visual canvas.
 
 **Requirements**:
-- Execute test specs locally
-- Use model provider architecture from Feature 2
-- Capture execution metrics:
-  - Token usage (input/output)
-  - Latency (total, per-step)
-  - Tool calls made
-  - Success/failure status
-  - Complete logs
-  - Output content
-- Apply seed for deterministic execution
-- Store run results in structured format (JSON)
-- Basic error handling and timeout support
+- **Model Provider Architecture**:
+  - Abstract `ModelProvider` base class (Python)
+  - Anthropic provider (Messages API, Claude models)
+  - OpenAI provider (Chat Completions API, GPT models)
+  - Provider registry and discovery
+  - Configuration schema for API keys and settings
+
+- **Visual Provider Marketplace**:
+  - UI for browsing available providers
+  - One-click installation/configuration
+  - API key management (secure storage in Tauri)
+  - Provider status indicators
+
+- **Run Executor**:
+  - Execute tests locally from canvas
+  - Real-time execution trace display
+  - Capture telemetry (tokens, latency, tool calls, outputs)
+  - Store run results in SQLite (local) or Postgres (server)
+
+- **Live Execution Dashboard**:
+  - Visual progress indicator on canvas
+  - Step-by-step trace tree
+  - Live metrics (tokens, latency, cost)
+  - Streaming output display
 
 **Deliverables**:
-- `src/executor/local.py`: Local executor implementation
-- `src/executor/telemetry.py`: Metrics collection
-- `src/executor/storage.py`: Run result storage
-- `tests/test_executor.py`: Executor tests (with mocked providers)
-- CLI command: `sentinel run <test-spec-path>`
+- `backend/providers/`: Model provider implementations
+- `backend/executor/`: Execution engine
+- `backend/storage/`: SQLite/Postgres storage layer
+- `frontend/src/lib/components/providers/`: Provider marketplace UI
+- `frontend/src/lib/components/execution/`: Live execution dashboard
+- Tests for providers and executor
+- Documentation: Provider integration guide
 
 **Success Criteria**:
-- Can execute test specs using any registered model provider
-- Collects all required telemetry
-- Stores results in queryable format
-- CLI command works end-to-end
-- All tests pass
+- Both Anthropic and OpenAI providers work end-to-end
+- Can run tests from visual canvas
+- Real-time execution progress visible
+- All metrics captured correctly
+- Results stored in database
+- Provider marketplace is intuitive
 
 ---
 
-### Feature 4: Assertion Validation Engine
+### Feature 4: Assertion Builder & Validation
 **Status**: Not Started
 **Priority**: P0 - Foundation
 **Semver Impact**: minor (0.4.0)
 
 **Description**:
-Implement validation logic to check run outputs against test spec assertions.
+Visual assertion builder and validation engine. Users create assertions through forms instead of YAML.
 
 **Requirements**:
-- Validate `must_contain` assertions (substring matching)
-- Validate `must_call_tool` assertions (tool invocation tracking)
-- Validate `max_latency_ms` assertions (performance thresholds)
-- Validate `output_type` assertions (format validation)
-- Generate pass/fail report with detailed failure reasons
-- Support extensible assertion types
+- **Visual Assertion Builder**:
+  - Form-based assertion creation
+  - Support all assertion types:
+    - `must_contain`, `must_not_contain` (text matching)
+    - `regex_match` (pattern matching)
+    - `must_call_tool` (tool invocation)
+    - `output_type` (format validation)
+    - `max_latency_ms` (performance)
+    - `min_tokens`, `max_tokens` (length)
+  - Template-based creation (select type → fill form)
+  - Live YAML preview
+  - Drag to reorder assertions
+
+- **Assertion Validation Engine**:
+  - Execute assertions against run outputs
+  - Generate pass/fail results with details
+  - Failure reason explanations
+  - Assertion coverage metrics
+
+- **Assertion Node UI**:
+  - Assertion nodes on canvas
+  - Visual pass/fail indicators (green/red badges)
+  - Click to expand assertion details
+  - Inline editing of assertion parameters
 
 **Deliverables**:
-- `src/validators/assertions.py`: Assertion validation logic
-- `src/validators/report.py`: Validation report generation
-- `tests/test_validators.py`: Validator tests
-- Enhanced CLI output showing assertion results
+- `frontend/src/lib/components/assertions/`: Assertion builder UI
+- `backend/validators/`: Assertion validation engine
+- `frontend/src/lib/components/nodes/AssertionNode.svelte`: Assertion node component
+- Tests for assertion builder and validator
+- Documentation: Assertions guide
 
 **Success Criteria**:
-- All assertion types validate correctly
-- Clear failure messages for debugging
-- Reports show which assertions passed/failed
-- All tests pass
+- All assertion types can be created visually
+- Assertion builder is intuitive and easy to use
+- All assertions validate correctly
+- Clear pass/fail indicators on canvas and in results
+- Assertion validation provides helpful error messages
 
 ---
 
-### Feature 5: Agentic Framework Support (LangGraph)
+### Feature 5: Design System Implementation
 **Status**: Not Started
 **Priority**: P1 - Core Value
 **Semver Impact**: minor (0.5.0)
 
 **Description**:
-Add support for running test specs against agentic frameworks, starting with LangGraph. This enables testing of multi-step agent workflows with tool calls, memory, and state management.
+Implement the complete Sentinel design system including Tailwind theme, icons, and core UI components (spec-03.md).
 
 **Requirements**:
-- Define abstract `AgenticFramework` interface/base class with methods:
-  - `execute(graph_config, inputs)`: Execute agent workflow
-  - `get_execution_trace()`: Get step-by-step execution trace
-  - `get_tool_calls()`: Extract tool invocations
-  - `get_state_history()`: Get state transitions
-- Implement **LangGraph** framework adapter:
-  - Support for compiled graphs
-  - Tool calling integration
-  - State persistence tracking
-  - Execution tracing
-- Extend test spec schema to support:
-  - `framework`: Framework identifier (e.g., "langgraph")
-  - `graph_config`: Framework-specific configuration
-  - `agent_tools`: Tool definitions for the agent
-- Integration with model providers (agents use underlying LLMs)
-- Framework discovery/registry system similar to model providers
+- **Tailwind Theme**:
+  - Sentinel brand colors (Signal Blue #6EE3F6, AI Purple #9B8CFF)
+  - Semantic colors for test results
+  - Typography system (Inter font)
+  - Spacing and sizing scales
+
+- **Icon System**:
+  - 30+ SVG icons as Svelte components
+  - Logo variants (sentinel-shield-signal)
+  - Semantic icons (model-cube, graph-nodes, test-flask, etc.)
+  - Line-based, 2px stroke, minimal geometric style
+
+- **Core Components**:
+  - Layout: `Sidebar`, `Topbar`, `DashboardLayout`
+  - Navigation: `SidebarItem`, `CommandPalette`
+  - Selectors: `ModelSelector`, `FrameworkSelector`
+  - Cards: `RunCard`, `AssertionCard`
+  - Charts: `TrendChart`, `Sparkline`
+
+- **Motion & Interactions**:
+  - Hover glows and transitions
+  - 120-160ms easing curves
+  - Focus states and accessibility
 
 **Deliverables**:
-- `src/frameworks/base.py`: Abstract AgenticFramework base class
-- `src/frameworks/langgraph.py`: LangGraph adapter implementation
-- `src/frameworks/registry.py`: Framework registry
-- `src/core/schema.py`: Update test spec schema for frameworks
-- `tests/test_frameworks.py`: Framework adapter tests
-- `examples/test_specs/agent_specs/`: Example agent test specs
-- Documentation: Framework integration guide
+- `frontend/tailwind.config.js`: Tailwind theme configuration
+- `frontend/src/lib/icons/`: SVG icon components
+- `frontend/src/lib/components/ui/`: shadcn/ui base components
+- `frontend/src/lib/components/sentinel/`: Sentinel-specific components
+- `frontend/src/app.css`: Global styles
+- Storybook or component preview page
+- Documentation: Design system guide
 
 **Success Criteria**:
-- Can execute LangGraph-based agents from test specs
-- Captures agent execution traces and tool calls
-- Integrates cleanly with model provider architecture
-- Framework is swappable via configuration
-- All tests pass
-- At least 2 example agent test specs
+- All components follow design system specifications
+- Brand colors applied consistently
+- Icons render correctly
+- Motion/interactions feel smooth and polished
+- Visual consistency across the app
 
 ---
 
-### Feature 6: Regression Engine
+### Feature 6: Record & Replay Test Generation
 **Status**: Not Started
 **Priority**: P1 - Core Value
 **Semver Impact**: minor (0.6.0)
 
 **Description**:
-Compare two test runs and detect regressions across multiple dimensions.
+Auto-generate tests by recording agent interactions (inspired by Playwright Codegen).
 
 **Requirements**:
-- Compare metrics between run A and run B:
-  - Accuracy (assertion pass rate)
-  - Tool-call success rate
-  - Output content deltas (semantic diff)
-  - Latency changes
-  - Cost changes (token usage)
-- Generate regression report with:
-  - Regression indicators (emoji + percentage change)
-  - Side-by-side comparison
-  - Threshold-based alerting
-- Support configurable regression thresholds
+- **Recording Mode**:
+  - Start/stop recording button
+  - Watch agent interactions in playground
+  - Capture: prompts, tool calls, outputs, timing
+  - Real-time interaction preview
 
-**Example Output**:
-```
-🔥 Regression detected in tool-call reliability (-12%)
-⚡ Speed improved (+8%)
-💰 Cost increased (+5%)
-✅ Accuracy maintained (0%)
-```
+- **Smart Detection**:
+  - Detect tool calls → generate `must_call_tool` assertions
+  - Detect JSON responses → add `output_type: json`
+  - Detect patterns → suggest parameterization
+  - Detect errors → create negative test cases
+
+- **Test Generation**:
+  - Auto-generate canvas nodes from recording
+  - Suggested assertions based on behavior
+  - Review and edit UI before saving
+  - Save to canvas or export to suite
 
 **Deliverables**:
-- `src/regression/comparator.py`: Run comparison logic
-- `src/regression/diff.py`: Output diffing utilities
-- `src/regression/report.py`: Regression report generation
-- `tests/test_regression.py`: Regression engine tests
-- CLI command: `sentinel compare <run-id-1> <run-id-2>`
+- `frontend/src/lib/components/recorder/`: Recording UI
+- `backend/recorder/`: Recording analysis and test generation
+- `frontend/src/routes/playground/`: Agent playground for recording
+- Documentation: Record & replay guide
 
 **Success Criteria**:
-- Accurately detects improvements and regressions
-- Clear, actionable reports
-- Configurable thresholds
-- All tests pass
+- Can record agent interactions
+- Generates reasonable assertions automatically
+- Generated tests are valid and runnable
+- UI is intuitive for non-technical users
 
 ---
 
-### Feature 7: Basic CLI + Project Initialization
+### Feature 7: Template Gallery & Test Suites
 **Status**: Not Started
 **Priority**: P1 - Core Value
 **Semver Impact**: minor (0.7.0)
 
 **Description**:
-Create comprehensive CLI with project initialization and management commands.
+Pre-built test templates and test suite organization.
 
 **Requirements**:
-- Commands:
-  - `sentinel init`: Initialize new project
-  - `sentinel run <spec>`: Run test spec
-  - `sentinel compare <run1> <run2>`: Compare runs
-  - `sentinel list`: List all runs
-  - `sentinel show <run-id>`: Show run details
-- Project structure creation (config, test specs, results directories)
-- Configuration file support (`sentinel.yaml`)
-- Pretty terminal output with rich/click
+- **Template Gallery**:
+  - Browse pre-built templates
+  - Categories: Q&A, Code Gen, Browser Agent, Safety, etc.
+  - One-click use (load to canvas)
+  - Preview before using
+  - Community sharing (future)
+
+- **Test Suite Organizer**:
+  - Folder-based test organization
+  - Drag-and-drop test management
+  - Bulk operations (run all, delete, export)
+  - Visual indicators (pass/fail status)
+  - Suite-level defaults
+
+- **Built-in Templates**:
+  - Simple Q&A
+  - Code generation
+  - Multi-turn conversation
+  - Browser agent (product search)
+  - Safety testing (jailbreak, PII)
+  - RAG agent
 
 **Deliverables**:
-- `src/cli/main.py`: CLI entry point
-- `src/cli/commands/`: Individual command implementations
-- `src/cli/config.py`: Configuration management
-- `tests/test_cli.py`: CLI integration tests
-- Documentation: CLI usage guide
+- `frontend/src/lib/components/templates/`: Template gallery UI
+- `frontend/src/lib/components/suites/`: Test suite organizer
+- `templates/`: Built-in template YAML files
+- Documentation: Templates and suites guide
 
 **Success Criteria**:
-- All CLI commands work end-to-end
-- Good UX with helpful error messages
-- Project initialization creates proper structure
-- All tests pass
+- At least 6 high-quality templates
+- Template gallery is easy to browse
+- Suite organization is intuitive
+- Can drag-and-drop tests between suites
 
 ---
 
-### Feature 8: Postgres Storage Backend
+### Feature 8: Regression Engine & Comparison View
 **Status**: Not Started
 **Priority**: P1 - Core Value
 **Semver Impact**: minor (0.8.0)
 
 **Description**:
-Replace JSON file storage with Postgres database for scalability and querying.
+Compare test runs and detect regressions with visual diff viewer.
 
 **Requirements**:
-- Database schema for:
-  - Test specs
-  - Runs (executions)
-  - Results (outputs, metrics)
-  - Comparisons (regression analyses)
-- SQLAlchemy ORM models
-- Migration support (Alembic)
-- Connection pooling
-- Query APIs for run history, filtering, aggregation
+- **Run Comparison**:
+  - Compare two runs side-by-side
+  - Metrics delta (latency, tokens, cost)
+  - Assertion pass rate changes
+  - Tool call success rate
+  - Output content diff
+
+- **Visual Comparison View**:
+  - Split view layout
+  - Metric delta cards with percentage changes
+  - Semantic diff viewer (highlight changes)
+  - Regression indicators (🔥, ⚡, 💰, ✅)
+  - Interactive trace comparison
+
+- **Regression Detection**:
+  - Configurable thresholds
+  - Automatic regression alerts
+  - Regression summary cards
+  - Historical trend charts
 
 **Deliverables**:
-- `src/db/models.py`: SQLAlchemy models
-- `src/db/migrations/`: Alembic migrations
-- `src/db/repositories.py`: Data access layer
-- `tests/test_db.py`: Database tests (with test fixtures)
-- Docker Compose for local Postgres
-- Database setup documentation
+- `backend/regression/`: Regression detection engine
+- `frontend/src/lib/components/comparison/`: Comparison view UI
+- `frontend/src/routes/compare/`: Comparison page
+- Documentation: Regression detection guide
 
 **Success Criteria**:
-- All run data persists to Postgres
-- Queries are efficient (proper indexes)
-- Migrations run cleanly
-- All tests pass
+- Can compare any two runs
+- Visual diff is clear and helpful
+- Regression detection is accurate
+- Thresholds are configurable
 
 ---
 
-### Feature 9: Design System & UI Foundation
+### Feature 9: Agentic Framework Support (LangGraph)
 **Status**: Not Started
 **Priority**: P2 - Extended Value
 **Semver Impact**: minor (0.9.0)
 
 **Description**:
-Implement the complete Navam Sentinel design system including Tailwind theme, core UI components, iconography, and layout foundations. This provides the visual and interaction foundation for the web dashboard and desktop app.
+Support for testing agentic frameworks, starting with LangGraph.
 
 **Requirements**:
-- Implement Tailwind theme configuration with Sentinel brand colors:
-  - Primary palette (Sentinel Signal: #6EE3F6)
-  - Secondary palette (AI Reliability: #9B8CFF)
-  - Neutral palette (dark theme backgrounds and surfaces)
-  - Semantic palette (success, danger, warning, info for test results)
-- Configure typography system (Inter font stack, size scale)
-- Create icon system (30+ SVG icons as Svelte components):
-  - Logo variants (sentinel-shield-signal)
-  - Semantic icons (model-cube, graph-nodes, test-flask, compare-split, etc.)
-  - Line-based, 2px stroke, minimal geometric style
-- Implement core layout components:
-  - `Sidebar` (280px default, 80px collapsed)
-  - `Topbar`
-  - `DashboardLayout`
-  - `SplitViewLayout`
-- Implement base navigation components:
-  - `SidebarItem`
-  - `CommandPalette` (Raycast-like)
-  - `ModelSelector`
-  - `FrameworkSelector`
-- Set up shadcn/ui component library integration
-- Configure motion/interaction guidelines (120-160ms transitions, ease-out curves)
-- Follow UX principles from design system:
-  - Determinism visible (always show seed, model ID, timestamp)
-  - Minimal cognitive load
-  - Research-grade clarity
+- **Framework Adapter (LangGraph)**:
+  - Execute LangGraph agents
+  - Capture state transitions
+  - Track tool calls and execution flow
+  - Integration with model providers
 
-**Design Reference**: See `backlog/spec-03.md` for complete design system specifications
+- **Visual Framework Nodes**:
+  - LangGraph node type on canvas
+  - Configure graph structure visually
+  - State visualization
+  - Multi-step execution trace
+
+- **Framework Registry**:
+  - Plugin architecture for frameworks
+  - Framework marketplace UI
+  - Configuration wizards
 
 **Deliverables**:
-- `frontend/tailwind.config.js`: Complete Tailwind theme with Sentinel tokens
-- `frontend/src/lib/icons/`: SVG icon components (30+ icons)
-- `frontend/src/lib/components/ui/`: shadcn/ui base components
-- `frontend/src/lib/components/sentinel/`: Sentinel-specific components
-  - Layout components (Sidebar, Topbar, etc.)
-  - Navigation components (ModelSelector, FrameworkSelector, etc.)
-- `frontend/src/lib/layouts/`: Page layout templates
-- `frontend/src/app.css`: Global styles and CSS custom properties
-- Documentation: Design system usage guide
-- Storybook or component preview page (optional but recommended)
+- `backend/frameworks/`: Framework adapters
+- `frontend/src/lib/components/frameworks/`: Framework UI
+- Tests for LangGraph integration
+- Documentation: Framework integration guide
 
 **Success Criteria**:
-- Tailwind theme correctly applies Sentinel brand colors
-- All 30+ icons render correctly as Svelte components
-- Core layouts (Sidebar, Topbar, Dashboard) are functional and responsive
-- Components follow design system specifications (colors, typography, spacing)
-- Motion/interactions match guidelines (hover glows, transitions)
-- Visual consistency across all components
-- Components are reusable and well-documented
+- Can execute LangGraph agents from canvas
+- Captures complete execution trace
+- Framework is configurable visually
 
 ---
 
-### Feature 10: Additional Model Providers (Bedrock, HuggingFace, Ollama)
+### Feature 10: AI-Assisted Test Generation
 **Status**: Not Started
 **Priority**: P2 - Extended Value
 **Semver Impact**: minor (0.10.0)
 
 **Description**:
-Expand model provider support to include Amazon Bedrock, HuggingFace, and Ollama APIs, enabling local and cloud model execution.
+Generate tests from natural language descriptions using AI.
 
 **Requirements**:
-- Implement **Amazon Bedrock** provider:
-  - Support for Claude models via Bedrock
-  - Support for other Bedrock models (Titan, Llama, etc.)
-  - IAM authentication
-  - Region configuration
-- Implement **HuggingFace** provider:
-  - Inference API support
-  - Inference Endpoints support
-  - Model hub integration
-  - Token authentication
-- Implement **Ollama** provider:
-  - Local model execution
-  - Model management integration
-  - Streaming support
-  - Custom model support
-- Extend provider registry to support new providers
-- Configuration examples for each provider
-- Provider-specific error handling
+- **AI Generator**:
+  - Natural language input: "Test if agent searches products under budget"
+  - LLM-powered test generation
+  - Generates canvas nodes and assertions
+  - Review and edit before adding to canvas
+
+- **Smart Suggestions**:
+  - Context-aware recommendations
+  - Missing assertion suggestions
+  - Performance optimization tips
+  - Best practice hints
 
 **Deliverables**:
-- `src/providers/bedrock.py`: Amazon Bedrock provider
-- `src/providers/huggingface.py`: HuggingFace provider
-- `src/providers/ollama.py`: Ollama provider
-- `tests/test_additional_providers.py`: Tests for new providers
-- `examples/provider_configs/`: Updated config examples
-- Documentation: Setup guide for each provider
+- `backend/ai/`: AI generation engine
+- `frontend/src/lib/components/ai/`: AI generator UI
+- Documentation: AI-assisted testing guide
 
 **Success Criteria**:
-- All three providers work end-to-end
-- Bedrock supports multiple model families
-- HuggingFace supports both hosted and endpoint models
-- Ollama supports local model execution
-- All tests pass
-- Clear setup documentation
+- Generates reasonable tests from descriptions
+- Suggestions are helpful and relevant
 
 ---
 
-### Feature 11: Additional Agentic Frameworks (Claude SDK, OpenAI SDK, Strands)
+### Feature 11: Collaborative Workspaces
 **Status**: Not Started
 **Priority**: P2 - Extended Value
 **Semver Impact**: minor (0.11.0)
 
 **Description**:
-Add support for additional agentic frameworks: Claude Agent SDK, OpenAI Agents SDK, and Strands Agents.
+Team collaboration features for shared testing.
 
 **Requirements**:
-- Implement **Claude Agent SDK** adapter:
-  - Agent execution integration
-  - Tool calling support
-  - State management
-  - Execution tracing
-- Implement **OpenAI Agents SDK** adapter:
-  - Agent execution integration
-  - Assistant API integration
-  - Thread management
-  - Tool support
-- Implement **Strands Agents** adapter:
-  - Framework integration
-  - Agent workflow support
-  - Tool calling
-  - State tracking
-- Update framework registry
-- Cross-framework consistency
-- Framework-specific test specs
+- **Team Workspaces**:
+  - Shared test suites
+  - Real-time collaboration
+  - Activity feeds
+  - Member management
+
+- **Comments & Reviews**:
+  - Comment on tests and runs
+  - Approval workflows
+  - Discussion threads
+
+- **Permissions**:
+  - Role-based access control
+  - Team/organization structure
 
 **Deliverables**:
-- `src/frameworks/claude_sdk.py`: Claude Agent SDK adapter
-- `src/frameworks/openai_sdk.py`: OpenAI Agents SDK adapter
-- `src/frameworks/strands.py`: Strands Agents adapter
-- `tests/test_additional_frameworks.py`: Tests for new frameworks
-- `examples/test_specs/agent_specs/`: Framework-specific examples
-- Documentation: Framework comparison and setup guides
+- `backend/collaboration/`: Collaboration services
+- `frontend/src/lib/components/workspace/`: Workspace UI
+- WebSocket for real-time updates
+- Documentation: Collaboration guide
 
 **Success Criteria**:
-- All three framework adapters work correctly
-- Consistent interface across all frameworks
-- Clear execution tracing for all frameworks
-- All tests pass
-- Example specs for each framework
+- Teams can share and collaborate on tests
+- Real-time updates work smoothly
+- Permissions system is flexible
 
 ---
 
-### Feature 12: Eval Set Builder (Synthetic Generation)
+### Feature 12: Additional Model Providers
 **Status**: Not Started
 **Priority**: P2 - Extended Value
 **Semver Impact**: minor (0.12.0)
 
 **Description**:
-Generate larger evaluation sets from seed examples using LLM-based expansion.
+Expand model provider support to Bedrock, HuggingFace, Ollama.
 
 **Requirements**:
-- Take 1-5 seed test specs
-- Generate N variations using LLM:
-  - Parameter fuzzing
-  - Scenario variations
-  - Edge case generation
-  - Balanced sampling
-- Maintain determinism (seeded generation)
-- Support filtering/curation of generated tests
+- Amazon Bedrock provider
+- HuggingFace provider (Inference API)
+- Ollama provider (local models)
+- Provider configuration wizards
+- Multi-model support in marketplace
 
 **Deliverables**:
-- `src/evalset/generator.py`: Synthetic test generation
-- `src/evalset/strategies.py`: Generation strategies
-- `tests/test_evalset.py`: Generator tests
-- CLI command: `sentinel evalset generate <seed-spec> --count N`
-- Example generation templates
+- `backend/providers/bedrock.py`
+- `backend/providers/huggingface.py`
+- `backend/providers/ollama.py`
+- Tests and documentation
 
 **Success Criteria**:
-- Generates diverse, valid test specs
-- Seeded generation is reproducible
-- Generated tests are semantically meaningful
-- All tests pass
+- All providers work end-to-end
+- Easy to configure and use
 
 ---
 
-### Feature 13: Safety Scenarios (Basic)
+### Feature 13: Safety Scenarios & Eval Set Builder
 **Status**: Not Started
 **Priority**: P2 - Extended Value
 **Semver Impact**: minor (0.13.0)
 
 **Description**:
-Implement basic safety violation detection for agent outputs.
+Safety testing and synthetic eval generation.
 
 **Requirements**:
-- Detection for:
-  - Insecure tool calls (e.g., executing arbitrary code)
-  - PII extraction (basic pattern matching)
-  - Jailbreak attempts (prompt injection detection)
-  - Goal misalignment indicators
-- Configurable safety rules
-- Safety violation reporting in run results
+- **Safety Detectors**:
+  - Jailbreak attempts
+  - PII extraction
+  - Insecure tool calls
+  - Content filtering
+
+- **Eval Set Builder**:
+  - Generate N tests from seed examples
+  - LLM-based expansion
+  - Balanced sampling
+  - Curation UI
 
 **Deliverables**:
-- `src/safety/detectors.py`: Safety violation detectors
-- `src/safety/rules.py`: Safety rule definitions
-- `tests/test_safety.py`: Safety detector tests
-- Integration with run executor
-- Documentation: Safety scenarios guide
+- `backend/safety/`: Safety detectors
+- `backend/evalset/`: Eval generation engine
+- UI for safety and eval features
+- Documentation
 
 **Success Criteria**:
-- Detects common safety violations
-- Low false positive rate
-- Clear violation descriptions
-- All tests pass
+- Safety detectors work accurately
+- Can generate large eval sets from seeds
 
 ---
 
-### Feature 14: Dashboard (Web UI with Design System)
+### Feature 14: Dashboard & Analytics
 **Status**: Not Started
 **Priority**: P2 - Extended Value
 **Semver Impact**: minor (0.14.0)
-**Dependencies**: Feature 9 (Design System & UI Foundation)
 
 **Description**:
-Create comprehensive web dashboard for viewing run history, test results, and comparisons using the Sentinel design system components. Implements the user journeys and page templates defined in spec-03.md.
+Overview dashboard with trends and analytics.
 
 **Requirements**:
-- FastAPI backend endpoints:
-  - List runs with filtering and pagination
-  - Get run details with execution traces
-  - Compare runs with regression detection
-  - Get dashboard metrics and trends
-- SvelteKit frontend pages using design system components:
-  - **Run History Page**: `<RunFilters />`, `<RunTable />`, `<Pagination />`
-  - **Run Detail Page**: `<RunCard />`, `<ExecutionTraceTree />`, `<ToolCallList />`, `<OutputViewer />`, `<AssertionResults />`
-  - **Comparison Page**: `<RunComparisonHeader />`, `<MetricDeltaGrid />`, `<SideBySideDiff />`, `<LatencyChart />`, `<TokenUsageComparison />`
-  - **Dashboard Page**: `<TrendChart />`, `<RegressionSummaryCard />`, `<ModelLeaderboard />`, `<Sparkline />`
-- Implement domain-specific components from design system:
-  - Run execution components: `RunCard`, `RunStatusPill`, `TokenUsageBar`, `LatencyHeatmap`, `ToolCallList`, `ExecutionTraceTree`, `FailureExplainerPanel`
-  - Comparison components: `RunComparisonHeader`, `SideBySideDiff`, `MetricDeltaCard`, `SemanticDiffViewer`, `CostComparisonChart`
-  - Dashboard components: `TrendChart`, `PieDonut`, `Sparkline`, `RegressionSummaryCard`, `SafetyViolationList`, `ModelLeaderboard`
-- Charts and visualizations using design system colors and styles:
-  - Latency trends over time
-  - Cost/token usage trends
-  - Success rate and regression detection
-  - Tool call success rates
-- Follow UX principles from spec-03.md:
-  - Determinism visible (show seed, model ID, provider, timestamp)
-  - Comparison-first design (1-click access to comparisons)
-  - Research-grade clarity (simple charts, minimal clutter)
-- Implement user journeys from spec-03.md:
-  - Journey 3: Viewing a Run
-  - Journey 4: Regression Comparison
+- **Dashboard Views**:
+  - Run history with filtering
+  - Success rate trends
+  - Latency/cost trends over time
+  - Model leaderboard
+  - Regression heatmap
 
-**Design Reference**: Components and layouts defined in `backlog/spec-03.md` sections 6, 9, and 10
+- **Charts & Visualizations**:
+  - Trend charts (Recharts)
+  - Sparklines for quick insights
+  - Pie/donut charts for distributions
+  - Heatmaps for regression tracking
 
 **Deliverables**:
-- `src/api/`: FastAPI application with endpoints
-- `frontend/src/routes/`: SvelteKit page routes
-  - `/runs`: Run history
-  - `/runs/[id]`: Run detail
-  - `/compare`: Comparison view
-  - `/dashboard`: Dashboard overview
-- `frontend/src/lib/components/sentinel/`: Dashboard-specific components
-  - Run components (RunCard, RunTable, ExecutionTraceTree, etc.)
-  - Comparison components (SideBySideDiff, MetricDeltaCard, etc.)
-  - Dashboard components (TrendChart, RegressionSummaryCard, etc.)
-- `tests/test_api.py`: API endpoint tests
-- `frontend/src/lib/components/sentinel/*.test.ts`: Component tests
-- Docker Compose configuration with backend + frontend + Postgres
-- Dashboard usage documentation
+- `frontend/src/routes/dashboard/`: Dashboard page
+- `frontend/src/lib/components/charts/`: Chart components
+- Documentation: Dashboard guide
 
 **Success Criteria**:
-- All page layouts match design system specifications
-- Components use Sentinel design tokens (colors, typography, spacing)
-- Can view all runs in browser with filtering and pagination
-- Run detail page shows complete execution traces and metrics
-- Charts display correctly using design system color palette
-- Comparison view clearly highlights regressions using semantic colors
-- Motion/interactions follow design guidelines (glows, transitions)
-- Responsive design works on desktop and tablet
-- All tests pass
-- Visual consistency with design system
+- Dashboard provides clear insights
+- Charts are interactive and helpful
+- Performance is good with large datasets
 
 ---
 
-### Feature 15: CI/CD Integration (GitHub Actions)
+### Feature 15: CI/CD Integration & Export
 **Status**: Not Started
 **Priority**: P2 - Extended Value
 **Semver Impact**: minor (0.15.0)
 
 **Description**:
-Enable Sentinel to run in CI/CD pipelines with GitHub Actions integration.
+Run Sentinel tests in CI/CD pipelines.
 
 **Requirements**:
-- GitHub Action for running Sentinel tests
-- PR comment integration (post regression reports)
-- Exit codes for CI failures
-- Artifact upload (run results)
-- Example workflows for common scenarios
+- **CLI Tool**:
+  - `sentinel run <test.yaml>` command
+  - Exit codes for CI failures
+  - Artifact upload
+  - Report generation (HTML, JSON)
+
+- **GitHub Actions**:
+  - Pre-built GitHub Action
+  - PR comment integration
+  - Example workflows
+
+- **Export Capabilities**:
+  - Export tests to YAML
+  - Export results to JSON/CSV
+  - Generate PDF reports
 
 **Deliverables**:
-- `.github/actions/sentinel/`: Custom GitHub Action
-- Example workflow files
-- `src/ci/github.py`: GitHub integration utilities
+- CLI tool (Node.js or Python)
+- GitHub Action configuration
+- Export utilities
 - Documentation: CI/CD integration guide
 
 **Success Criteria**:
-- Can run Sentinel in GitHub Actions
-- Regression reports appear as PR comments
-- CI fails on regressions (configurable)
-- Clear documentation for setup
-
----
-
-## Completed Features
-
-### ✅ Feature 1: Test Case Spec DSL (v0.1.0)
-**Completed**: November 15, 2025
-**Release Notes**: [backlog/release-0.1.0.md](backlog/release-0.1.0.md)
-
-Complete YAML/JSON schema and parser for defining deterministic, reproducible test cases for agents and LLMs.
-
-**Delivered**:
-- Pydantic-based schema with comprehensive validation
-- YAML/JSON parser with clear error messages
-- 6 example test specifications
-- 81 tests with 98% coverage
-- Complete README documentation
-
-**Key Components**:
-- `src/sentinel/core/schema.py`: TestSpec, TestSuite, assertion models
-- `src/sentinel/core/parser.py`: TestSpecParser with serialization
-- `examples/test_specs/`: Example specifications
-- Comprehensive test suite
+- Can run tests in CI/CD
+- Integration is smooth and well-documented
 
 ---
 
 ## Notes
 
-- Each feature should be completable in a single development session
-- Tests are mandatory for each feature
-- Features are ordered to build incrementally (foundation → core value → extended value)
-- **Design system** is defined in `backlog/spec-03.md` and implemented in Feature 9 before dashboard work
-- **Model providers** are implemented in priority order: Anthropic (0.2.0) → OpenAI (0.2.0) → Bedrock/HuggingFace/Ollama (0.10.0)
-- **Agentic frameworks** are implemented in priority order: LangGraph (0.5.0) → Claude SDK/OpenAI SDK/Strands (0.11.0)
-- **UI/Frontend features** depend on Feature 9 (Design System) and use components from spec-03.md
-- Semver increments are suggestions; develop command will determine final version based on changes
-- Current version: 0.1.0
-- Total features: 15 (4 P0 foundation, 4 P1 core value, 7 P2 extended value)
-- Completed features: 1
+- **Visual-first from day 1**: GUI is the primary interface, DSL is the interoperability format
+- **Round-trip is critical**: Visual ↔ DSL must be seamless and bidirectional
+- **Design system**: Follow spec-03.md for all UI components
+- **Visual patterns**: Reference spec-04.md for component designs and user journeys
+- **Incremental delivery**: Each feature should be completable and deliverable independently
+- **Testing is mandatory**: All features require tests
+- **Documentation is required**: Each feature needs user documentation
+
+## Current Status
+
+- **Version**: 0.0.0 (pre-alpha, fresh start)
+- **Next Feature**: Feature 1 - Visual Canvas Foundation
+- **Architecture**: Visual-first desktop app (Tauri + SvelteKit) with Python backend
