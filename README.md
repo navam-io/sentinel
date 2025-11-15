@@ -377,13 +377,37 @@ See [backlog/active.md](backlog/active.md) for the complete development roadmap.
 - CLI Interface
 - Web Dashboard
 
+**Visual-First Future (2025+):**
+
+Sentinel is pivoting to a **visual-first, drag-and-drop testing platform** while maintaining YAML/CLI backward compatibility. See [backlog/spec-04.md](backlog/spec-04.md) for the complete vision.
+
+**"Postman for AI Agents"** - making AI testing accessible to product managers, QA engineers, and researchers, not just hardcore engineers.
+
+- **Node-based test canvas** - Drag-and-drop workflow builder (inspired by Langflow, n8n)
+- **Record & replay** - Auto-generate tests from agent interactions (inspired by Playwright)
+- **Visual assertion builder** - No YAML needed for common cases
+- **AI-assisted generation** - Describe tests in natural language
+- **Template marketplace** - Pre-built tests for common scenarios
+- **Collaborative workspaces** - Team-based testing with real-time editing
+- **Visual debugging** - Interactive trace inspection and comparison views
+
 ## Target Users
 
+**Current (v0.1.0 - Text-based):**
 - **Frontier Model Labs**: Testing model releases and capabilities
 - **Neo-labs**: Agent-focused research organizations
 - **Agent Product Labs**: Building production agent applications
 - **Enterprise AI Teams**: Internal AI infrastructure testing
 - **Researchers**: Model evaluation and safety research
+
+**Future (Visual-First Platform):**
+
+Expanding beyond hardcore engineers to include:
+- **Product Managers**: Validate agent behavior without writing code
+- **QA Engineers**: Visual test creation and debugging
+- **Research Scientists**: Build evaluation suites with AI assistance
+- **Safety Teams**: Test safety scenarios collaboratively
+- **Non-technical Stakeholders**: Understand agent behavior through visual traces
 
 ## Design Principles
 

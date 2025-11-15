@@ -58,10 +58,10 @@ Priority order:
 3. OpenAI Agents SDK
 4. Strands Agents
 
-## V1 Feature Slices (14 Total)
+## V1 Feature Slices (15 Total)
 
 ### P0 - Foundation (Features 1-4)
-1. **Test Case Spec DSL**: YAML/JSON schema and parser for deterministic test specs
+1. **Test Case Spec DSL**: YAML/JSON schema and parser for deterministic test specs ✅ **COMPLETED (v0.1.0)**
 2. **Model Provider Architecture**: Pluggable providers (Anthropic, OpenAI initially)
 3. **Run Executor**: Local execution with telemetry collection
 4. **Assertion Validation**: Validate outputs against test assertions
@@ -72,13 +72,14 @@ Priority order:
 7. **Basic CLI**: Project initialization and command-line interface
 8. **Postgres Storage**: Database backend for scalable storage
 
-### P2 - Extended Value (Features 9-14)
-9. **Additional Model Providers**: Bedrock, HuggingFace, Ollama support
-10. **Additional Agentic Frameworks**: Claude SDK, OpenAI SDK, Strands support
-11. **Eval Set Builder**: Synthetic test generation from seed examples
-12. **Safety Scenarios**: Basic safety violation detection
-13. **Dashboard**: Web UI for run history and comparisons
-14. **CI/CD Integration**: GitHub Actions integration and automation
+### P2 - Extended Value (Features 9-15)
+9. **Design System & UI Foundation**: Tailwind theme, icons, core components (see backlog/spec-03.md)
+10. **Additional Model Providers**: Bedrock, HuggingFace, Ollama support
+11. **Additional Agentic Frameworks**: Claude SDK, OpenAI SDK, Strands support
+12. **Eval Set Builder**: Synthetic test generation from seed examples
+13. **Safety Scenarios**: Basic safety violation detection
+14. **Dashboard**: Web UI for run history and comparisons (uses design system from Feature 9)
+15. **CI/CD Integration**: GitHub Actions integration and automation
 
 ### Key CLI Commands
 ```bash
@@ -113,10 +114,64 @@ sentinel show <run-id>                          # Show run details
 
 ## Project Status
 
-**Current State**: Specification phase - no code implementation yet. The repository contains only the initial product specification in `/backlog/initial-spec.md`.
+**Current Version**: v0.1.0
 
-**Next Steps**: Implementation should begin with the foundational infrastructure:
-1. Test Case Spec DSL (YAML schema and parser)
-2. Basic Run Executor (local execution first)
-3. Simple CLI interface
-4. Core data models and storage layer
+**Completed Features**:
+- ✅ Feature 1: Test Case Spec DSL (YAML/JSON schema, parser, validation)
+  - Pydantic-based schema models
+  - Full YAML/JSON parsing and serialization
+  - 6 example test specifications
+  - 81 tests with 98% coverage
+  - Complete documentation (11 docs files)
+
+**Next Feature**: Feature 2 - Model Provider Architecture (Anthropic, OpenAI)
+
+**Active Development**: See `/backlog/active.md` for complete feature backlog and priorities
+
+## Visual-First Pivot (2025 Roadmap)
+
+**Important**: Sentinel is pivoting to a **visual-first, drag-and-drop testing platform** while maintaining YAML/CLI backward compatibility. See `/backlog/spec-04.md` for the complete vision.
+
+**Target Positioning**: "Postman for AI Agents" - making AI testing accessible beyond hardcore engineers
+
+### Visual UI Features (Post-v1.0)
+
+**Phase 1: Foundation (Q1 2025)**
+- Node-based test canvas (React Flow/Svelte Flow)
+- Visual assertion builder (no YAML needed)
+- Provider marketplace (one-click install)
+- Template gallery (pre-built tests)
+- YAML import/export (backward compatible)
+
+**Phase 2: Intelligence (Q2 2025)**
+- Record & replay (auto-generate tests from interactions)
+- AI-assisted test generation (natural language → tests)
+- Smart suggestions (context-aware recommendations)
+- Visual debugging tools (interactive traces)
+
+**Phase 3: Collaboration (Q3 2025)**
+- Team workspaces (real-time editing)
+- Comments & reviews (approval workflows)
+- Role-based permissions
+- Activity feeds & notifications
+
+**Phase 4: Scale (Q4 2025)**
+- Enterprise features (SSO, audit logs)
+- Custom plugins & integrations
+- Advanced analytics & reporting
+- White-label options
+
+### Design Approach
+- **Visual-first**: GUI is primary interface, YAML is advanced mode
+- **Backward compatible**: All YAML files remain valid, can be imported/exported
+- **Git-friendly**: Visual changes show as YAML diffs in version control
+- **Research-inspired**: Based on Langflow, n8n, Postman, Playwright, LangSmith patterns
+
+### Expanded Target Users (Visual Era)
+- Product Managers (validate agents without code)
+- QA Engineers (visual test creation)
+- Research Scientists (AI-assisted eval suites)
+- Safety Teams (collaborative testing)
+- Non-technical Stakeholders (understand via visual traces)
+
+**When implementing visual features**: Reference `/backlog/spec-04.md` for detailed component designs, user journeys, and UX patterns

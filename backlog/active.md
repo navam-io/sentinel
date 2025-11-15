@@ -11,6 +11,8 @@ This file contains the active feature backlog for Sentinel V1. Features are list
 - Regression detection
 - CI/CD integration for AI agents
 
+**Visual-First Pivot**: Sentinel is evolving from a text-based DSL tool to a **visual-first, drag-and-drop testing platform** (see `backlog/spec-04.md`). The features below (v0.1.0 - v1.0) establish the foundation, with visual UI components coming in 2025+.
+
 **Tech Stack**:
 - Frontend: Tauri + SvelteKit + shadcn/ui + TailwindCSS
 - Backend: Python FastAPI + Postgres + Redis
@@ -18,6 +20,7 @@ This file contains the active feature backlog for Sentinel V1. Features are list
 - Model Integration: Pluggable architecture supporting Anthropic, OpenAI, Amazon Bedrock, HuggingFace, Ollama
 - Agentic Frameworks: Pluggable support for LangGraph, Claude Agent SDK, OpenAI Agents SDK, Strands Agents
 - Design System: See `backlog/spec-03.md` for complete design specifications
+- Visual UI: See `backlog/spec-04.md` for visual-first pivot specifications
 
 ## Feature Slices (Priority Order)
 
