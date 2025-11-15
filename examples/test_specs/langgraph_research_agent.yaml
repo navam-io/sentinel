@@ -1,0 +1,44 @@
+name: "LangGraph research agent - Tech news"
+description: "Test LangGraph-based agent for researching and summarizing recent tech news"
+model: "claude-3-5-sonnet-20241022"
+provider: "anthropic"
+framework: "langgraph"
+seed: 789
+tools:
+  - name: "web_search"
+    description: "Search the web for information"
+    parameters:
+      type: "object"
+      properties:
+        query:
+          type: "string"
+          description: "Search query"
+      required: ["query"]
+  - name: "scrape_url"
+    description: "Scrape content from a URL"
+    parameters:
+      type: "object"
+      properties:
+        url:
+          type: "string"
+          description: "URL to scrape"
+      required: ["url"]
+framework_config:
+  max_iterations: 5
+  intermediate_steps: true
+inputs:
+  query: "Find and summarize the latest 3 AI announcements from major tech companies this week"
+  context:
+    date_range: "last 7 days"
+    companies: ["Google", "OpenAI", "Anthropic", "Microsoft"]
+assertions:
+  - must_call_tool: "web_search"
+  - must_contain: "AI"
+  - output_type: "structured"
+  - max_latency_ms: 15000
+tags:
+  - langgraph
+  - research
+  - agent
+  - multi-step
+timeout_ms: 30000

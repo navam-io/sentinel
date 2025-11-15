@@ -23,62 +23,7 @@ This file contains the active feature backlog for Sentinel V1. Features are list
 
 ---
 
-### Feature 1: Test Case Spec DSL ✓ NEXT
-**Status**: Not Started
-**Priority**: P0 - Foundation
-**Semver Impact**: minor (0.1.0)
-
-**Description**:
-Create a YAML/JSON schema and parser for defining deterministic, reproducible test cases for agents and LLMs.
-
-**Requirements**:
-- Define YAML schema for test specifications
-- Support fields:
-  - `name`: Test case name
-  - `model`: Model identifier
-  - `tools`: List of available tools
-  - `seed`: Random seed for determinism
-  - `inputs`: Input parameters/prompts
-  - `assertions`: Validation rules
-    - `must_contain`: Required strings in output
-    - `must_call_tool`: Required tool invocations
-    - `max_latency_ms`: Latency threshold
-    - `output_type`: Expected output format (json, text, etc.)
-- Implement Python parser/validator using Pydantic
-- Support JSON Schema validation
-- Create example test specs
-
-**Example Test Spec**:
-```yaml
-name: "Browser agent - Amazon product research"
-model: "frontier-v4"
-tools: ["browser", "scraper", "calculator"]
-seed: 42
-inputs:
-  query: "Find top 3 laptops under $1000"
-assertions:
-  - must_contain: "price"
-  - must_call_tool: "browser"
-  - max_latency_ms: 9000
-  - output_type: "json"
-```
-
-**Deliverables**:
-- `src/core/schema.py`: Pydantic models for test spec
-- `src/core/parser.py`: YAML/JSON parser
-- `tests/test_parser.py`: Parser unit tests
-- `examples/test_specs/`: Example test specifications
-- Documentation in README or docs/
-
-**Success Criteria**:
-- Valid test specs parse without errors
-- Invalid specs produce clear validation errors
-- All tests pass
-- At least 3 example test specs provided
-
----
-
-### Feature 2: Model Provider Architecture
+### Feature 2: Model Provider Architecture ✓ NEXT
 **Status**: Not Started
 **Priority**: P0 - Foundation
 **Semver Impact**: minor (0.2.0)
@@ -668,7 +613,24 @@ Enable Sentinel to run in CI/CD pipelines with GitHub Actions integration.
 
 ## Completed Features
 
-(Features will be moved here as they are completed by the develop command, with links to their release notes in backlog/release-{semver}.md)
+### ✅ Feature 1: Test Case Spec DSL (v0.1.0)
+**Completed**: November 15, 2025
+**Release Notes**: [backlog/release-0.1.0.md](backlog/release-0.1.0.md)
+
+Complete YAML/JSON schema and parser for defining deterministic, reproducible test cases for agents and LLMs.
+
+**Delivered**:
+- Pydantic-based schema with comprehensive validation
+- YAML/JSON parser with clear error messages
+- 6 example test specifications
+- 81 tests with 98% coverage
+- Complete README documentation
+
+**Key Components**:
+- `src/sentinel/core/schema.py`: TestSpec, TestSuite, assertion models
+- `src/sentinel/core/parser.py`: TestSpecParser with serialization
+- `examples/test_specs/`: Example specifications
+- Comprehensive test suite
 
 ---
 
@@ -682,5 +644,6 @@ Enable Sentinel to run in CI/CD pipelines with GitHub Actions integration.
 - **Agentic frameworks** are implemented in priority order: LangGraph (0.5.0) → Claude SDK/OpenAI SDK/Strands (0.11.0)
 - **UI/Frontend features** depend on Feature 9 (Design System) and use components from spec-03.md
 - Semver increments are suggestions; develop command will determine final version based on changes
-- Current version: 0.0.0 (not yet released)
+- Current version: 0.1.0
 - Total features: 15 (4 P0 foundation, 4 P1 core value, 7 P2 extended value)
+- Completed features: 1
