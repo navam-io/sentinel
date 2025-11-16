@@ -349,12 +349,54 @@ All requirements delivered successfully. See `backlog/release-0.4.0.md` for full
 
 ---
 
-### Feature 2.5: Monaco YAML Editor Integration ✓ NEXT
-**Status**: Not Started
-**Priority**: P0 - Foundation
-**Semver Impact**: patch (0.4.1)
+### ✅ Release 0.5.0: Monaco YAML Editor Integration
+**Status**: Completed ✅
+**Released**: November 16, 2025
+**Semver**: 0.4.4 → 0.5.0 (minor)
 
 **Description**:
+Professional code editing experience with Monaco Editor replacing the basic textarea. Features include YAML syntax highlighting, line numbers, code folding, and improved editing capabilities.
+
+**What Was Delivered**:
+- **Monaco Editor Integration**: Professional code editor with YAML support ✅
+- **Enhanced Editing Experience**: Syntax highlighting, line numbers, code folding ✅
+- **Read-Only and Edit Modes**: Seamless switching between preview and edit ✅
+- **Dark Theme**: Styled to match Sentinel design system ✅
+- **Comprehensive Tests**: 10 new tests (44 total, 100% passing) ✅
+- **Zero TypeScript Errors**: Full type safety maintained ✅
+
+**Key Features**:
+1. Monaco Editor (same as VS Code)
+2. YAML syntax highlighting in both preview and edit modes
+3. Line numbers and code folding
+4. Auto-indentation (2 spaces for YAML)
+5. Find/replace functionality (Cmd+F)
+6. Multi-cursor editing
+7. Professional UX matching industry standards
+
+**Files**:
+- `frontend/src/components/yaml/MonacoYamlEditor.tsx` - Monaco wrapper (110 LOC)
+- `frontend/src/components/yaml/MonacoYamlEditor.test.tsx` - 10 tests
+- `frontend/src/components/yaml/YamlPreview.tsx` - Updated integration
+
+**Success Criteria Met**:
+- ✅ Monaco Editor renders correctly in YAML preview panel
+- ✅ Syntax highlighting works for YAML
+- ✅ Edit mode allows smooth editing experience
+- ✅ Read-only preview mode works correctly
+- ✅ Apply/Cancel buttons work correctly
+- ✅ Theme matches Sentinel design system
+- ✅ All 44 tests passing (100% pass rate)
+- ✅ 0 TypeScript errors
+- ✅ Production build successful
+
+**Documentation**: See `backlog/release-0.5.0.md` for complete release notes.
+
+---
+
+### Feature 2.5 (Original Requirements - Completed Above)
+
+**Original Description**:
 Replace the basic textarea YAML editor with Monaco Editor for professional code editing experience with syntax highlighting, autocomplete, and real-time validation.
 
 **Requirements**:
@@ -949,12 +991,12 @@ Run Sentinel tests in CI/CD pipelines.
 
 ## Current Status
 
-- **Version**: 0.4.0 (DSL Parser & Visual Importer)
-- **Latest Release**: Release 0.4.0 - DSL Parser & Visual Importer (November 16, 2025)
-- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer)
-- **Next Feature**: Feature 2.5 - Monaco YAML Editor Integration (v0.4.1) ← NEXT
+- **Version**: 0.5.0 (Monaco YAML Editor Integration)
+- **Latest Release**: Release 0.5.0 - Monaco YAML Editor Integration (November 16, 2025)
+- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor)
+- **Next Feature**: Feature 3 - Model Provider Architecture & Execution (v0.6.0) ← NEXT
 - **Architecture**: Visual-first desktop app (Tauri + React 19 + React Flow) with Python backend
-- **Test Status**: 27/27 tests passing (100%)
+- **Test Status**: 44/44 tests passing (100%)
 
 ## Migration Decision (November 16, 2025)
 

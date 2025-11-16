@@ -6,7 +6,7 @@ This file tracks known issues and bugs in Navam Sentinel.
 
 ## Open Issues
 
-None
+[ ] Make the Test Script panel resizable to left or right. Let it go all the way to 50% main window width max and minimum current width.
 
 ---
 
