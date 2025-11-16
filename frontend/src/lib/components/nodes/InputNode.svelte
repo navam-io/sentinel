@@ -13,14 +13,6 @@
 		data.query = query;
 	}
 
-	// Prevent node dragging when interacting with textarea
-	function handleMouseDown(e: MouseEvent) {
-		e.stopPropagation();
-	}
-
-	function handlePointerDown(e: PointerEvent) {
-		e.stopPropagation();
-	}
 </script>
 
 <div class="sentinel-node input-node">
@@ -32,9 +24,7 @@
 		<textarea
 			value={query}
 			oninput={updateQuery}
-			onmousedown={handleMouseDown}
-			onpointerdown={handlePointerDown}
-			class="sentinel-input text-sm w-full min-h-20 resize-y"
+			class="sentinel-input text-sm w-full min-h-16 resize-y nodrag nopan"
 			placeholder="Enter your prompt..."
 		></textarea>
 	</div>

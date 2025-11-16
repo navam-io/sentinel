@@ -28,14 +28,6 @@
 		data.assertionValue = assertionValue;
 	}
 
-	// Prevent node dragging when interacting with controls
-	function handleMouseDown(e: MouseEvent) {
-		e.stopPropagation();
-	}
-
-	function handlePointerDown(e: PointerEvent) {
-		e.stopPropagation();
-	}
 </script>
 
 <div class="sentinel-node assertion-node">
@@ -45,31 +37,27 @@
 	</div>
 	<div class="node-body">
 		<div class="space-y-3">
-			<div>
+			<div class="nodrag nopan">
 				<label for="assertion-type" class="label">Type</label>
 				<select
 					id="assertion-type"
 					value={assertionType}
 					onchange={updateType}
-					onmousedown={handleMouseDown}
-					onpointerdown={handlePointerDown}
-					class="sentinel-input text-sm w-full"
+					class="sentinel-input text-sm w-full nodrag nopan"
 				>
 					{#each assertionTypes as type}
 						<option value={type.value}>{type.label}</option>
 					{/each}
 				</select>
 			</div>
-			<div>
+			<div class="nodrag nopan">
 				<label for="assertion-value" class="label">Value</label>
 				<input
 					id="assertion-value"
 					type="text"
 					value={assertionValue}
 					oninput={updateValue}
-					onmousedown={handleMouseDown}
-					onpointerdown={handlePointerDown}
-					class="sentinel-input text-sm w-full"
+					class="sentinel-input text-sm w-full nodrag nopan"
 					placeholder="Expected value..."
 				/>
 			</div>

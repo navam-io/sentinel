@@ -103,12 +103,14 @@
 
   /* Shared node styles */
   .sentinel-node {
-    min-width: 280px;
+    min-width: 196px;
+    max-width: 220px;
     background: var(--sentinel-surface);
     border: 1px solid var(--sentinel-border);
-    border-radius: 12px;
+    border-radius: 12px !important;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
+    overflow: hidden;
   }
 
   .sentinel-node:hover {
@@ -119,35 +121,35 @@
   .sentinel-node .node-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 16px;
+    gap: 8px;
+    padding: 10px 12px;
     border-bottom: 1px solid var(--sentinel-border);
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent);
-    border-radius: 12px 12px 0 0;
+    border-radius: 0 !important;
   }
 
   .sentinel-node .node-icon {
-    font-size: 18px;
+    font-size: 16px;
     flex-shrink: 0;
   }
 
   .sentinel-node .node-title {
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--sentinel-text);
     letter-spacing: 0.01em;
   }
 
   .sentinel-node .node-body {
-    padding: 16px;
+    padding: 12px;
   }
 
   .sentinel-node .label {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 500;
     color: var(--sentinel-text-muted);
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }

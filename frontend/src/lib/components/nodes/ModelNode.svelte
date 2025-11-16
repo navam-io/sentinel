@@ -46,22 +46,20 @@
 	</div>
 	<div class="node-body">
 		<div class="space-y-3">
-			<div>
+			<div class="nodrag nopan">
 				<label for="model-select" class="label">Model</label>
 				<select
 					id="model-select"
 					value={selectedModel}
 					onchange={updateModel}
-					onmousedown={handleMouseDown}
-					onpointerdown={handlePointerDown}
-					class="sentinel-input text-sm w-full"
+					class="sentinel-input text-sm w-full nodrag nopan"
 				>
 					{#each models as model}
 						<option value={model}>{model}</option>
 					{/each}
 				</select>
 			</div>
-			<div>
+			<div class="nodrag nopan">
 				<label for="temperature-range" class="label">Temperature: {temperature}</label>
 				<input
 					id="temperature-range"
@@ -71,9 +69,7 @@
 					step="0.1"
 					value={temperature}
 					oninput={updateTemperature}
-					onmousedown={handleMouseDown}
-					onpointerdown={handlePointerDown}
-					class="w-full"
+					class="w-full cursor-pointer nodrag nopan"
 				/>
 			</div>
 		</div>

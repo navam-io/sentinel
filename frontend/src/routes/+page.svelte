@@ -76,8 +76,35 @@
 </div>
 
 <style>
+	/* Force dark canvas background */
 	:global(.svelte-flow) {
-		background-color: var(--sentinel-bg);
+		background-color: #1a1d23 !important;
+	}
+
+	:global(.svelte-flow__background) {
+		background-color: #1a1d23 !important;
+	}
+
+	:global(.svelte-flow__pane) {
+		background-color: #1a1d23 !important;
+	}
+
+	/* Make edges visible but not too thick */
+	:global(.svelte-flow__edge-path) {
+		stroke: #6EE3F6 !important;
+		stroke-width: 3px !important;
+	}
+
+	:global(.svelte-flow__edge.selected .svelte-flow__edge-path) {
+		stroke: #3CBACD !important;
+		stroke-width: 4px !important;
+	}
+
+	/* Hide Svelte Flow watermark completely */
+	:global(.svelte-flow__attribution) {
+		display: none !important;
+		visibility: hidden !important;
+		opacity: 0 !important;
 	}
 
 	:global(.svelte-flow__node) {
@@ -86,17 +113,34 @@
 		color: var(--sentinel-text);
 	}
 
-	:global(.svelte-flow__edge-path) {
-		stroke: var(--sentinel-primary);
+	/* Style zoom controls - dark theme */
+	:global(.svelte-flow__controls) {
+		background-color: var(--sentinel-surface) !important;
+		border: 1px solid var(--sentinel-border) !important;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
 	}
 
-	:global(.svelte-flow__controls) {
-		background-color: var(--sentinel-surface);
-		border-color: var(--sentinel-border);
+	:global(.svelte-flow__controls-button) {
+		background-color: var(--sentinel-bg-elevated) !important;
+		border: 1px solid var(--sentinel-border) !important;
+		color: var(--sentinel-text) !important;
+		width: 32px !important;
+		height: 32px !important;
+	}
+
+	:global(.svelte-flow__controls-button:hover) {
+		background-color: var(--sentinel-hover) !important;
+		border-color: var(--sentinel-primary) !important;
+	}
+
+	:global(.svelte-flow__controls-button svg) {
+		fill: var(--sentinel-text) !important;
+		max-width: 16px !important;
+		max-height: 16px !important;
 	}
 
 	:global(.svelte-flow__minimap) {
-		background-color: var(--sentinel-bg-elevated);
-		border-color: var(--sentinel-border);
+		background-color: var(--sentinel-bg-elevated) !important;
+		border: 1px solid var(--sentinel-border) !important;
 	}
 </style>
