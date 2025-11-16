@@ -21,7 +21,6 @@
 	};
 
 	let showYamlPreview = $state(true);
-	let selectedNodes = $state<string[]>([]);
 
 	function toggleYamlPreview() {
 		showYamlPreview = !showYamlPreview;
@@ -35,58 +34,51 @@
 		}
 	}
 
-	// Handle node selection
-	function handleNodesChange(event: any) {
-		if (event?.detail?.nodes) {
-			selectedNodes = event.detail.nodes.map((n: any) => n.id);
-		}
-	}
-
-	// Delete selected nodes with Delete or Backspace key
-	function handleKeyDown(event: KeyboardEvent) {
-		if ((event.key === 'Delete' || event.key === 'Backspace') && selectedNodes.length > 0) {
-			// Prevent backspace from navigating back
-			event.preventDefault();
-
-			selectedNodes.forEach(nodeId => {
-				nodesStore.update(nodes => nodes.filter(n => n.id !== nodeId));
-				edgesStore.update(edges => edges.filter(e => e.source !== nodeId && e.target !== nodeId));
-			});
-
-			selectedNodes = [];
-		}
-	}
-
 	// Handle drop event with proper flow coordinate conversion
 	function onDragOver(event: DragEvent) {
 		event.preventDefault();
+		event.stopPropagation();
 		if (event.dataTransfer) {
 			event.dataTransfer.dropEffect = 'move';
 		}
+		// Debug: Uncomment to see if dragover is firing
+		// console.log('Drag over canvas');
 	}
 
-	let reactFlowWrapper: HTMLElement;
-
-	function onDrop(event: CustomEvent) {
+	function onDrop(event: DragEvent) {
+		console.log('Drop event fired!', event);
 		event.preventDefault();
+		event.stopPropagation();
 
-		const dragEvent = event as any;
-		const nodeType = dragEvent.dataTransfer?.getData('application/svelteflow');
-		const label = dragEvent.dataTransfer?.getData('application/label');
+		const nodeType = event.dataTransfer?.getData('application/svelteflow');
+		const label = event.dataTransfer?.getData('application/label');
 
-		if (!nodeType || !label) return;
+		console.log('Drop data retrieved:', { nodeType, label });
 
-		// Calculate position relative to the flow viewport
+		if (!nodeType || !label) {
+			console.log('Drop failed: missing nodeType or label', { nodeType, label });
+			return;
+		}
+
+		// Get the canvas element to calculate proper flow coordinates
+		const canvasElement = event.currentTarget as HTMLElement;
+		const flowBounds = canvasElement.getBoundingClientRect();
+
+		// Calculate position in flow coordinates
 		const position = {
-			x: dragEvent.clientX - 360, // Account for sidebar width
-			y: dragEvent.clientY - 100
+			x: event.clientX - flowBounds.left,
+			y: event.clientY - flowBounds.top
 		};
 
+		console.log('Dropping node:', { nodeType, label, position, bounds: flowBounds });
 		addNodeAtPosition(nodeType, label, position);
 	}
-</script>
 
-<svelte:window onkeydown={handleKeyDown} />
+	// Alternative: Use SvelteFlow's native drop handler
+	function onFlowDrop(event: CustomEvent) {
+		console.log('SvelteFlow drop event:', event.detail);
+	}
+</script>
 
 <div class="h-screen w-screen flex flex-col bg-sentinel-bg">
 	<!-- Top Bar -->
@@ -119,11 +111,15 @@
 		<ComponentPalette />
 
 		<!-- Canvas Area -->
-		<div
-			class="flex-1 relative"
-			ondragover={onDragOver}
-			ondrop={onDrop}
-		>
+		<div class="flex-1 relative canvas-drop-area" role="application">
+			<div
+				class="absolute inset-0 pointer-events-none"
+				style="z-index: 5;"
+				ondragover={onDragOver}
+				ondrop={onDrop}
+				role="region"
+				aria-label="Drop zone"
+			></div>
 			<SvelteFlow
 				nodes={$nodesStore}
 				edges={$edgesStore}
@@ -131,7 +127,6 @@
 				fitView
 				class="bg-sentinel-bg"
 				onpaneclick={handlePaneClick}
-				onnodeschange={handleNodesChange}
 				nodesDraggable={true}
 				nodesConnectable={true}
 				elementsSelectable={true}
@@ -150,6 +145,7 @@
 </div>
 
 <style>
+
 	/* Force dark canvas background */
 	:global(.svelte-flow) {
 		background-color: #1a1d23 !important;

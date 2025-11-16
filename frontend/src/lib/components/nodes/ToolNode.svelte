@@ -6,8 +6,8 @@
 
 	let { data, id }: NodeProps = $props();
 
-	let toolName = $state(data.toolName || 'web_search');
-	let toolDescription = $state(data.toolDescription || '');
+	let toolName = $state<string>((data.toolName as string) || 'web_search');
+	let toolDescription = $state<string>((data.toolDescription as string) || '');
 
 	function updateToolName(e: Event) {
 		const target = e.target as HTMLInputElement;
@@ -40,7 +40,7 @@
 
 <div class="sentinel-node tool-node">
 	<button class="node-delete-btn nodrag nopan" onclick={deleteNode} title="Delete node">
-		<X size={12} strokeWidth={2.5} />
+		<X size={10} strokeWidth={2} />
 	</button>
 	<div class="node-header">
 		<Wrench size={18} class="node-icon" strokeWidth={2} />

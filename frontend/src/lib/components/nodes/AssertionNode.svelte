@@ -49,7 +49,7 @@
 
 <div class="sentinel-node assertion-node">
 	<button class="node-delete-btn nodrag nopan" onclick={deleteNode} title="Delete node">
-		<X size={12} strokeWidth={2.5} />
+		<X size={10} strokeWidth={2} />
 	</button>
 	<div class="node-header">
 		<CheckCircle2 size={18} class="node-icon" strokeWidth={2} />

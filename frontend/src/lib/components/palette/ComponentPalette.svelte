@@ -45,6 +45,7 @@
 			event.dataTransfer.setData('application/svelteflow', nodeType);
 			event.dataTransfer.setData('application/label', label);
 			event.dataTransfer.effectAllowed = 'move';
+			console.log('Drag started:', { nodeType, label });
 		}
 	}
 
