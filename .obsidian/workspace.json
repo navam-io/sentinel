@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "546526fd43e94fa2",
+        "id": "f5c56709b310dae4",
         "type": "tabs",
         "children": [
           {
-            "id": "7aac3eda99015490",
+            "id": "9cb05beeb1db922e",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "docs/visual-canvas.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "visual-canvas"
+              "title": "New tab"
             }
           }
         ]
@@ -169,19 +165,25 @@
       "bases:Create new base": false
     }
   },
-  "active": "7aac3eda99015490",
+  "active": "9cb05beeb1db922e",
   "lastOpenFiles": [
-    "frontend/src-tauri/target/debug/deps/sentinel-8c4b1af5d16d018d",
-    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd1kd4hbm7-0a3ftw8-65q3aq90n9nu0luwfa3sw6mkm/work-products.bin",
-    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd1kd4hbm7-0a3ftw8-65q3aq90n9nu0luwfa3sw6mkm/query-cache.bin",
-    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd1kd4hbm7-0a3ftw8-65q3aq90n9nu0luwfa3sw6mkm/f59cnd8461voiyix25bgo42zo.o",
-    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd1kd4hbm7-0a3ftw8-65q3aq90n9nu0luwfa3sw6mkm/f4ymdy3q59n9nl292fbqyf9rq.o",
-    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd1kd4hbm7-0a3ftw8-65q3aq90n9nu0luwfa3sw6mkm/f3hxaabyvuicljqmyx9bv9c5u.o",
-    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd1kd4hbm7-0a3ftw8-65q3aq90n9nu0luwfa3sw6mkm/f215ejtrzri0do2ma3w073d5e.o",
-    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd1kd4hbm7-0a3ftw8-65q3aq90n9nu0luwfa3sw6mkm/eyd598vbs2j36yi730ajqdr50.o",
-    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd1kd4hbm7-0a3ftw8-65q3aq90n9nu0luwfa3sw6mkm/ey1tg2y5960to3xqkxbsk3tc0.o",
-    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd1kd4hbm7-0a3ftw8-65q3aq90n9nu0luwfa3sw6mkm/evee9oouiilxam0o3plor4doq.o",
-    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd1kd4hbm7-0a3ftw8-65q3aq90n9nu0luwfa3sw6mkm/et8h25smjnsgb47i0coqygfy1.o",
+    "frontend/src-tauri/target/debug/deps/sentinel-63132a9de1e5537b",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3kus3tkvrovro/s-hd1pn27adz-0gymq7t-20zqf74g8bo80g4pe6uvy8k7i/work-products.bin",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3kus3tkvrovro/s-hd1pn27adz-0gymq7t-20zqf74g8bo80g4pe6uvy8k7i/query-cache.bin",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3kus3tkvrovro/s-hd1pn27adz-0gymq7t-20zqf74g8bo80g4pe6uvy8k7i/eyvaypq0q2ehnpm3haa78z7ej.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3kus3tkvrovro/s-hd1pn27adz-0gymq7t-20zqf74g8bo80g4pe6uvy8k7i/ezc0sy5r6yo1npkep5gxmla93.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3kus3tkvrovro/s-hd1pn27adz-0gymq7t-20zqf74g8bo80g4pe6uvy8k7i/eyncckpl5g0hbmyh2m3wsmf1g.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3kus3tkvrovro/s-hd1pn27adz-0gymq7t-20zqf74g8bo80g4pe6uvy8k7i/exkjv8vt3nn6x1ice9zorkij8.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3kus3tkvrovro/s-hd1pn27adz-0gymq7t-20zqf74g8bo80g4pe6uvy8k7i/eu49xti6u9ggakp65n5ixkd2j.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3kus3tkvrovro/s-hd1pn27adz-0gymq7t-20zqf74g8bo80g4pe6uvy8k7i/etsyypq5w55oxcbqr2v9tddhc.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3kus3tkvrovro/s-hd1pn27adz-0gymq7t-20zqf74g8bo80g4pe6uvy8k7i/et65nwxu0eok432x1h6lgn76h.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3kus3tkvrovro/s-hd1pn27adz-0gymq7t-20zqf74g8bo80g4pe6uvy8k7i/eqxe6rq3qvr300498v4671h4v.o",
+    "backlog/release-0.4.2.md",
+    "backlog/release-0.4.1.md",
+    "backlog/issues.md",
+    "backlog/release-0.4.0.md",
+    "blogs/visual-first-design/blog-post.md",
+    "docs/visual-canvas.md",
     "blogs/visual-first-design/canvas-palette-svelte.png",
     "frontend/node_modules/autoprefixer/README.md",
     "frontend/node_modules/@xyflow/react/node_modules/zustand/readme.md",
@@ -202,12 +204,6 @@
     "frontend/node_modules/json5/README.md",
     "frontend/node_modules/json5/LICENSE.md",
     "frontend/node_modules/jsesc/README.md",
-    "frontend/node_modules/js-tokens/README.md",
-    "frontend/node_modules/js-tokens/CHANGELOG.md",
-    "frontend/node_modules/gensync/README.md",
-    "frontend/node_modules/semver/README.md",
-    "frontend/node_modules/convert-source-map/README.md",
-    "frontend/node_modules/react-refresh/README.md",
     "frontend/src-svelte-backup/lib/assets/favicon.svg",
     "frontend/src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
     "frontend/src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
