@@ -81,6 +81,46 @@ Priority order:
 - **Design System**: See `backlog/spec-03.md` for Tailwind theme, colors, typography, and component styles
 - **Research Inspiration**: Langflow, n8n, Postman, Playwright Codegen, LangSmith
 
+## Completed Features
+
+---
+
+### ✅ Release 0.1.0: DSL Schema & Parser Foundation
+**Status**: Completed
+**Released**: November 15, 2025
+**Semver**: 0.0.0 → 0.1.0 (minor)
+
+**Description**:
+Complete DSL schema and parser implementation as the backend foundation for visual-first development. This provides the infrastructure that the visual UI will use to generate and import YAML test specifications.
+
+**What Was Delivered**:
+- **Pydantic-based DSL Schema**: Complete schema for TestSpec, TestSuite, InputSpec, ModelConfig, ToolSpec, Message models
+- **YAML/JSON Parser**: Full-featured parser with validation, serialization, file I/O, and round-trip conversion
+- **8 Assertion Types**: must_contain, must_not_contain, regex_match, must_call_tool, output_type, max_latency_ms, min_tokens, max_tokens
+- **6 Example Templates**: Simple Q&A, code generation, browser agent, multi-turn, LangGraph agent, test suite
+- **70 Tests**: Comprehensive test coverage (98%) including schema, parser, and integration tests
+- **Release Notes**: Complete documentation in `backlog/release-0.1.0.md`
+
+**Key Files**:
+- `backend/core/schema.py` - Pydantic models (67 statements, 99% coverage)
+- `backend/core/parser.py` - YAML/JSON parser (92 statements, 98% coverage)
+- `tests/core/test_schema.py` - 31 schema tests
+- `tests/core/test_parser.py` - 30 parser tests
+- `tests/integration/test_templates.py` - 9 template tests
+- `templates/*.yaml` - 6 example templates
+
+**Success Criteria Met**:
+- ✅ All 70 tests pass (100% pass rate)
+- ✅ 98% code coverage achieved
+- ✅ Round-trip conversion works (parse → serialize → parse)
+- ✅ All templates validate successfully
+- ✅ Zero data loss in Visual ↔ DSL conversion
+- ✅ Clear error messages for validation failures
+
+**Documentation**: See `backlog/release-0.1.0.md` for complete release notes.
+
+---
+
 ## Feature Slices (Priority Order)
 
 ---
@@ -88,7 +128,7 @@ Priority order:
 ### Feature 1: Visual Canvas Foundation ✓ NEXT
 **Status**: Not Started
 **Priority**: P0 - Foundation
-**Semver Impact**: minor (0.1.0)
+**Semver Impact**: minor (0.2.0)
 
 **Description**:
 Build the core visual canvas infrastructure with node-based test building. This is the foundation for all visual features.
@@ -734,6 +774,7 @@ Run Sentinel tests in CI/CD pipelines.
 
 ## Current Status
 
-- **Version**: 0.0.0 (pre-alpha, fresh start)
-- **Next Feature**: Feature 1 - Visual Canvas Foundation
+- **Version**: 0.1.0 (DSL foundation complete)
+- **Latest Release**: Release 0.1.0 - DSL Schema & Parser Foundation (November 15, 2025)
+- **Next Feature**: Feature 1 - Visual Canvas Foundation (0.2.0)
 - **Architecture**: Visual-first desktop app (Tauri + SvelteKit) with Python backend

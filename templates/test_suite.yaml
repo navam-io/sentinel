@@ -1,0 +1,49 @@
+name: "E-commerce Agent Test Suite"
+description: "Comprehensive test suite for e-commerce shopping agent capabilities"
+version: "1.0.0"
+
+defaults:
+  model: "claude-3-5-sonnet-20241022"
+  provider: "anthropic"
+  timeout_ms: 30000
+  tools:
+    - browser
+    - scraper
+    - calculator
+  tags:
+    - e2e
+    - shopping
+
+tests:
+  - name: "Product search - Laptops"
+    model: "claude-3-5-sonnet-20241022"
+    seed: 100
+    inputs:
+      query: "Find laptops under $1000"
+    assertions:
+      - must_contain: "price"
+      - must_call_tool: "browser"
+      - output_type: "json"
+
+  - name: "Product comparison - Gaming laptops"
+    model: "claude-3-5-sonnet-20241022"
+    seed: 101
+    inputs:
+      query: "Compare the top 2 gaming laptops under $1500"
+    assertions:
+      - must_contain: "comparison"
+      - must_contain: "gaming"
+      - must_call_tool: ["browser", "calculator"]
+      - output_type: "json"
+
+  - name: "Price tracking - Specific product"
+    model: "claude-3-5-sonnet-20241022"
+    seed: 102
+    inputs:
+      query: "Track price for ASUS ROG Strix G15 laptop"
+    assertions:
+      - must_contain: "ASUS"
+      - must_contain: "price"
+      - must_call_tool: "scraper"
+      - output_type: "structured"
+      - max_latency_ms: 8000

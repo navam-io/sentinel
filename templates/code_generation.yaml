@@ -1,0 +1,28 @@
+name: "Code Generation - Python Function"
+description: "Test model's ability to generate valid Python code with specific requirements"
+model: "claude-3-5-sonnet-20241022"
+provider: "anthropic"
+seed: 999
+
+model_config:
+  temperature: 0.3
+  max_tokens: 500
+
+inputs:
+  query: |
+    Write a Python function that calculates the factorial of a number
+    using recursion. Include docstring and type hints.
+  system_prompt: "You are an expert Python developer. Generate clean, well-documented code."
+
+assertions:
+  - must_contain: "def factorial"
+  - must_contain: "return"
+  - must_contain: '"""'
+  - regex_match: "def factorial\\(.*\\).*->"
+  - output_type: "code"
+  - max_latency_ms: 3000
+
+tags:
+  - code-generation
+  - python
+  - algorithms
