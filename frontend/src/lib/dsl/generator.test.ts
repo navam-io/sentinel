@@ -113,7 +113,60 @@ describe('DSL Generator', () => {
 
 			const yaml = generateYAML(nodes, edges);
 
+			expect(yaml).toContain('tools:');
 			expect(yaml).toContain('- browser');
+		});
+
+		it('should generate YAML with multiple tool nodes', () => {
+			const nodes: Node[] = [
+				{
+					id: '1',
+					type: 'tool',
+					data: {
+						label: 'Tool',
+						toolName: 'browser'
+					},
+					position: { x: 100, y: 100 }
+				},
+				{
+					id: '2',
+					type: 'tool',
+					data: {
+						label: 'Tool',
+						toolName: 'calculator'
+					},
+					position: { x: 100, y: 300 }
+				}
+			];
+			const edges: Edge[] = [];
+
+			const yaml = generateYAML(nodes, edges);
+
+			expect(yaml).toContain('tools:');
+			expect(yaml).toContain('- browser');
+			expect(yaml).toContain('- calculator');
+		});
+
+		it('should generate YAML with tool node including description', () => {
+			const nodes: Node[] = [
+				{
+					id: '1',
+					type: 'tool',
+					data: {
+						label: 'Tool',
+						toolName: 'web_search',
+						toolDescription: 'Search the web for information'
+					},
+					position: { x: 100, y: 100 }
+				}
+			];
+			const edges: Edge[] = [];
+
+			const yaml = generateYAML(nodes, edges);
+
+			expect(yaml).toContain('tools:');
+			expect(yaml).toContain('name: web_search');
+			expect(yaml).toContain('description: Search the web for information');
 		});
 
 		it('should generate YAML with system node', () => {
@@ -137,6 +190,49 @@ describe('DSL Generator', () => {
 			expect(yaml).toContain('description: Test description');
 			expect(yaml).toContain('timeout_ms: 5000');
 			expect(yaml).toContain('framework: langgraph');
+		});
+
+		it('should generate YAML with system node (default values from ComponentPalette)', () => {
+			const nodes: Node[] = [
+				{
+					id: '1',
+					type: 'system',
+					data: {
+						label: 'System',
+						description: 'System configuration',
+						timeout_ms: 30000,
+						framework: 'langgraph'
+					},
+					position: { x: 100, y: 100 }
+				}
+			];
+			const edges: Edge[] = [];
+
+			const yaml = generateYAML(nodes, edges);
+
+			expect(yaml).toContain('description: System configuration');
+			expect(yaml).toContain('timeout_ms: 30000');
+			expect(yaml).toContain('framework: langgraph');
+		});
+
+		it('should generate YAML with tool node (default values from ComponentPalette)', () => {
+			const nodes: Node[] = [
+				{
+					id: '1',
+					type: 'tool',
+					data: {
+						label: 'Tool',
+						toolName: 'tool_name'
+					},
+					position: { x: 100, y: 100 }
+				}
+			];
+			const edges: Edge[] = [];
+
+			const yaml = generateYAML(nodes, edges);
+
+			expect(yaml).toContain('tools:');
+			expect(yaml).toContain('- tool_name');
 		});
 
 		it('should generate complete YAML with all node types', () => {

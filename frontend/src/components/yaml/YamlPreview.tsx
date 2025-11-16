@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Download, Upload, Edit3, Copy, Check, X } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import { generateYAML, parseYAMLToNodes } from '../../lib/dsl/generator';
 import { writeText } from '@tauri-apps/plugin-clipboard-manager';
@@ -119,48 +120,60 @@ function YamlPreview() {
 							<>
 								<button
 									onClick={importYamlFile}
-									className="text-[0.6rem] px-2 py-1 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120"
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120"
 									title="Import YAML/JSON file"
+									aria-label="Import YAML/JSON file"
 								>
-									📥 Import
+									<Upload size={12} strokeWidth={2} />
+									Import
 								</button>
 								<button
 									onClick={toggleEditMode}
-									className="text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
 									title="Edit YAML"
+									aria-label="Edit YAML"
 								>
-									✏️ Edit
+									<Edit3 size={12} strokeWidth={2} />
+									Edit
 								</button>
 								<button
 									onClick={copyToClipboard}
-									className="text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
 									title="Copy to clipboard"
+									aria-label="Copy YAML to clipboard"
 								>
-									📋 Copy
+									<Copy size={12} strokeWidth={2} />
+									Copy
 								</button>
 								<button
 									onClick={downloadYaml}
-									className="text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
 									title="Download YAML"
+									aria-label="Download YAML file"
 								>
-									💾 Save
+									<Download size={12} strokeWidth={2} />
+									Save
 								</button>
 							</>
 						) : (
 							<>
 								<button
 									onClick={applyYamlChanges}
-									className="text-[0.6rem] px-2 py-1 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120"
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120"
 									title="Apply changes"
+									aria-label="Apply YAML changes"
 								>
-									✓ Apply
+									<Check size={12} strokeWidth={2} />
+									Apply
 								</button>
 								<button
 									onClick={cancelEdit}
-									className="text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
 									title="Cancel editing"
+									aria-label="Cancel editing"
 								>
-									✕ Cancel
+									<X size={12} strokeWidth={2} />
+									Cancel
 								</button>
 							</>
 						)}

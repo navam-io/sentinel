@@ -48,11 +48,64 @@ function ComponentPalette() {
 		// Use last canvas click position
 		const position = { ...lastCanvasClickPosition };
 
+		// Initialize node data based on type
+		let nodeData: any = { label };
+
+		switch (nodeType) {
+			case 'input':
+				nodeData = {
+					label,
+					query: 'Enter your query here',
+					system_prompt: '',
+					context: {}
+				};
+				break;
+
+			case 'model':
+				nodeData = {
+					label,
+					model: 'gpt-4',
+					provider: 'openai',
+					temperature: 0.7,
+					max_tokens: 1000
+				};
+				break;
+
+			case 'system':
+				nodeData = {
+					label,
+					description: 'System configuration',
+					timeout_ms: 30000,
+					framework: 'langgraph'
+				};
+				break;
+
+			case 'tool':
+				nodeData = {
+					label,
+					toolName: 'tool_name',
+					toolDescription: '',
+					toolParameters: null
+				};
+				break;
+
+			case 'assertion':
+				nodeData = {
+					label,
+					assertionType: 'must_contain',
+					assertionValue: ''
+				};
+				break;
+
+			default:
+				nodeData = { label };
+		}
+
 		// Create new node
 		const newNode = {
 			id: `${nodeType}-${Date.now()}`,
 			type: nodeType,
-			data: { label },
+			data: nodeData,
 			position
 		};
 

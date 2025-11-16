@@ -69,7 +69,10 @@ describe('ComponentPalette', () => {
 				expect.objectContaining({
 					id: expect.stringMatching(/^input-\d+$/),
 					type: 'input',
-					data: { label: 'Prompt' },
+					data: expect.objectContaining({
+						label: 'Prompt',
+						query: 'Enter your query here'
+					}),
 					position: { x: 100, y: 100 }
 				})
 			);
@@ -94,7 +97,10 @@ describe('ComponentPalette', () => {
 			expect(mockAddNode).toHaveBeenCalledWith(
 				expect.objectContaining({
 					type: 'model',
-					data: { label: 'Model' }
+					data: expect.objectContaining({
+						label: 'Model',
+						model: 'gpt-4'
+					})
 				})
 			);
 
@@ -105,7 +111,10 @@ describe('ComponentPalette', () => {
 			expect(mockAddNode).toHaveBeenCalledWith(
 				expect.objectContaining({
 					type: 'assertion',
-					data: { label: 'Assertion' }
+					data: expect.objectContaining({
+						label: 'Assertion',
+						assertionType: 'must_contain'
+					})
 				})
 			);
 
@@ -116,7 +125,10 @@ describe('ComponentPalette', () => {
 			expect(mockAddNode).toHaveBeenCalledWith(
 				expect.objectContaining({
 					type: 'tool',
-					data: { label: 'Tool' }
+					data: expect.objectContaining({
+						label: 'Tool',
+						toolName: 'tool_name'
+					})
 				})
 			);
 
@@ -127,7 +139,10 @@ describe('ComponentPalette', () => {
 			expect(mockAddNode).toHaveBeenCalledWith(
 				expect.objectContaining({
 					type: 'system',
-					data: { label: 'System' }
+					data: expect.objectContaining({
+						label: 'System',
+						description: 'System configuration'
+					})
 				})
 			);
 		});
