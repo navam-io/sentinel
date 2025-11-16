@@ -20,6 +20,9 @@ out/
 # Tauri
 src-tauri/target/
 src-tauri/Cargo.lock
+frontend/src-tauri/target/
+frontend/src-tauri/Cargo.lock
+frontend/src-tauri/gen/
 
 # Python (backend API)
 __pycache__/
