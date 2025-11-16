@@ -85,6 +85,48 @@ Priority order:
 
 ---
 
+### ✅ Release 0.2.0: Visual Canvas Foundation
+**Status**: Completed
+**Released**: November 15, 2025
+**Semver**: 0.1.0 → 0.2.0 (minor)
+
+**Description**:
+Complete visual-first interface with node-based canvas for building AI agent tests. Users can now create tests through drag-and-drop instead of writing YAML.
+
+**What Was Delivered**:
+- **Tauri 2.0 Desktop App**: Native app infrastructure with Rust backend
+- **SvelteKit 2.0 Frontend**: Modern reactive UI with TypeScript
+- **Node-Based Canvas**: @xyflow/svelte integration with infinite zoom/pan
+- **3 Node Types**: Input, Model, and Assertion nodes with visual configuration
+- **Component Palette**: Drag-and-drop sidebar with organized node categories
+- **YAML Preview Panel**: Real-time YAML generation with copy/download
+- **DSL Generator**: Visual → YAML conversion with full schema support
+- **Sentinel Design System**: TailwindCSS 4.0 with custom theme tokens
+- **Zero TypeScript Errors**: Full type safety across all components
+
+**Key Files**:
+- `frontend/src/routes/+page.svelte` - Main canvas page
+- `frontend/src/lib/components/palette/ComponentPalette.svelte` - Node palette
+- `frontend/src/lib/components/yaml/YamlPreview.svelte` - YAML preview
+- `frontend/src/lib/components/nodes/` - Node type components
+- `frontend/src/lib/dsl/generator.ts` - YAML generator
+- `frontend/src/lib/stores/canvas.ts` - State management
+- `src-tauri/` - Tauri Rust backend
+
+**Success Criteria Met**:
+- ✅ Desktop app infrastructure set up (Tauri 2.0)
+- ✅ Can drag nodes onto canvas or click to add
+- ✅ Can connect nodes with visual edges
+- ✅ Canvas generates valid YAML test spec
+- ✅ YAML updates in real-time as canvas changes
+- ✅ Can export/download YAML files
+- ✅ Follows Sentinel design system completely
+- ✅ 0 TypeScript errors, 70 backend tests passing (98% coverage)
+
+**Documentation**: See `backlog/release-0.2.0.md` for complete release notes.
+
+---
+
 ### ✅ Release 0.1.0: DSL Schema & Parser Foundation
 **Status**: Completed
 **Released**: November 15, 2025
@@ -125,8 +167,8 @@ Complete DSL schema and parser implementation as the backend foundation for visu
 
 ---
 
-### Feature 1: Visual Canvas Foundation ✓ NEXT
-**Status**: Not Started
+### Feature 1: Visual Canvas Foundation ✅ COMPLETED
+**Status**: Completed (v0.2.0)
 **Priority**: P0 - Foundation
 **Semver Impact**: minor (0.2.0)
 
@@ -188,10 +230,10 @@ Build the core visual canvas infrastructure with node-based test building. This 
 
 ---
 
-### Feature 2: DSL Parser & Visual Importer
+### Feature 2: DSL Parser & Visual Importer ✓ NEXT
 **Status**: Not Started
 **Priority**: P0 - Foundation
-**Semver Impact**: minor (0.2.0)
+**Semver Impact**: minor (0.3.0)
 
 **Description**:
 Complete the round-trip by implementing DSL → Visual conversion. Parse YAML test specs and render them on the visual canvas.
