@@ -11,10 +11,14 @@
             "id": "7aac3eda99015490",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "docs/visual-canvas.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "visual-canvas"
             }
           }
         ]
@@ -90,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "docs/visual-canvas.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "Backlinks for visual-canvas"
             }
           },
           {
@@ -108,11 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "docs/visual-canvas.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links"
+              "title": "Outgoing links from visual-canvas"
             }
           },
           {
@@ -136,12 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "docs/visual-canvas.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of visual-canvas"
             }
           }
         ]
@@ -164,23 +171,36 @@
   },
   "active": "7aac3eda99015490",
   "lastOpenFiles": [
+    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd134wbv1w-1lodjfn-aksorm3z2qbvgts9tlcnjrq1o/work-products.bin",
+    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd134wbv1w-1lodjfn-aksorm3z2qbvgts9tlcnjrq1o/f59cnd8461voiyix25bgo42zo.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd134wbv1w-1lodjfn-aksorm3z2qbvgts9tlcnjrq1o/query-cache.bin",
+    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd134wbv1w-1lodjfn-aksorm3z2qbvgts9tlcnjrq1o/f4ymdy3q59n9nl292fbqyf9rq.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd134wbv1w-1lodjfn-aksorm3z2qbvgts9tlcnjrq1o/f3hxaabyvuicljqmyx9bv9c5u.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd134wbv1w-1lodjfn-aksorm3z2qbvgts9tlcnjrq1o/f215ejtrzri0do2ma3w073d5e.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd134wbv1w-1lodjfn-aksorm3z2qbvgts9tlcnjrq1o/eyd598vbs2j36yi730ajqdr50.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd134wbv1w-1lodjfn-aksorm3z2qbvgts9tlcnjrq1o/ey1tg2y5960to3xqkxbsk3tc0.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd134wbv1w-1lodjfn-aksorm3z2qbvgts9tlcnjrq1o/evee9oouiilxam0o3plor4doq.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd134wbv1w-1lodjfn-aksorm3z2qbvgts9tlcnjrq1o/et8h25smjnsgb47i0coqygfy1.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-0tvf0m6z079tb/s-hd134wbv1w-1lodjfn-aksorm3z2qbvgts9tlcnjrq1o/esf2koearisk0rwof37z8qag8.o",
+    "frontend/node_modules/lucide-svelte/README.md",
+    "frontend/src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
+    "frontend/src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
+    "frontend/src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
+    "frontend/src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png",
+    "frontend/src-tauri/icons/android/mipmap-xhdpi/ic_launcher.png",
+    "frontend/src-tauri/icons/android/mipmap-xhdpi/ic_launcher_round.png",
+    "frontend/src-tauri/icons/android/mipmap-mdpi/ic_launcher.png",
+    "frontend/src-tauri/icons/android/mipmap-mdpi/ic_launcher_round.png",
+    "frontend/src-tauri/icons/android/mipmap-hdpi/ic_launcher.png",
+    "frontend/src-tauri/icons/android/mipmap-hdpi/ic_launcher_round.png",
+    "docs/README.md",
     "docs/visual-canvas.md",
-    "README.md.tmp.36189.1763273734451",
-    "README.md.tmp.36189.1763273719055",
     "blogs/sentinel-dsl-foundation/social-media-summary.md",
     "blogs/sentinel-dsl-foundation/linkedin-post.md",
     "blogs/sentinel-dsl-foundation/blog-post.md",
     "blogs/sentinel-dsl-foundation/README.md",
-    "blogs/sentinel-dsl-foundation",
     "backlog/release-0.2.0.md",
-    "frontend/src/lib/components/nodes/InputNode.svelte.tmp.36189.1763272843274",
-    "frontend/postcss.config.js.tmp.36189.1763272814513",
-    "frontend/node_modules/@tailwindcss/oxide-darwin-arm64/LICENSE",
     "frontend/node_modules/@tailwindcss/oxide-darwin-arm64/README.md",
-    "frontend/node_modules/@tailwindcss/oxide-darwin-arm64/package.json",
-    "frontend/node_modules/@tailwindcss/oxide-darwin-arm64/tailwindcss-oxide.darwin-arm64.node",
-    "frontend/node_modules/@tailwindcss/oxide/LICENSE",
-    "frontend/node_modules/@tailwindcss/oxide/index.d.ts",
     "frontend/node_modules/@alloc/quick-lru/readme.md",
     "frontend/node_modules/@tailwindcss/postcss/README.md",
     "frontend/node_modules/lightningcss-darwin-arm64/README.md",
@@ -196,19 +216,6 @@
     "frontend/node_modules/@svelte-put/shortcut/README.md",
     "frontend/node_modules/@xyflow/svelte/README.md",
     "frontend/node_modules/@xyflow/system/README.md",
-    "frontend/node_modules/@types/d3-drag/README.md",
-    "frontend/node_modules/yaml/README.md",
-    "frontend/node_modules/js-yaml/README.md",
-    "frontend/node_modules/@tauri-apps/api/README.md",
-    "src-tauri/icons/128x128@2x.png",
-    "src-tauri/icons/32x32.png",
-    "src-tauri/icons/128x128.png",
-    "frontend/src/lib/assets/favicon.svg",
-    "assets/sentinel-round-abstract.png",
-    "assets/sentinel-square-abstract.png",
-    "assets/sentinel-square.png",
-    "assets/sentinel-round.png",
-    "htmlcov/keybd_closed_cb_ce680311.png",
-    "htmlcov/favicon_32_cb_58284776.png"
+    "frontend/node_modules/@types/d3-drag/README.md"
   ]
 }

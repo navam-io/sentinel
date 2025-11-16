@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Handle, Position } from '@xyflow/svelte';
 	import type { NodeProps } from '@xyflow/svelte';
+	import { Cpu } from 'lucide-svelte';
 
 	let { data }: NodeProps = $props();
 
@@ -27,32 +28,51 @@
 		temperature = parseFloat(target.value);
 		data.temperature = temperature;
 	}
+
+	// Prevent node dragging when interacting with controls
+	function handleMouseDown(e: MouseEvent) {
+		e.stopPropagation();
+	}
+
+	function handlePointerDown(e: PointerEvent) {
+		e.stopPropagation();
+	}
 </script>
 
 <div class="sentinel-node model-node">
 	<div class="node-header">
-		<span class="node-icon">🤖</span>
+		<Cpu size={18} class="node-icon" strokeWidth={2} />
 		<span class="node-title">Model</span>
 	</div>
 	<div class="node-body">
 		<div class="space-y-3">
 			<div>
-				<label class="label">Model</label>
-				<select value={selectedModel} onchange={updateModel} class="sentinel-input text-sm w-full">
+				<label for="model-select" class="label">Model</label>
+				<select
+					id="model-select"
+					value={selectedModel}
+					onchange={updateModel}
+					onmousedown={handleMouseDown}
+					onpointerdown={handlePointerDown}
+					class="sentinel-input text-sm w-full"
+				>
 					{#each models as model}
 						<option value={model}>{model}</option>
 					{/each}
 				</select>
 			</div>
 			<div>
-				<label class="label">Temperature: {temperature}</label>
+				<label for="temperature-range" class="label">Temperature: {temperature}</label>
 				<input
+					id="temperature-range"
 					type="range"
 					min="0"
 					max="2"
 					step="0.1"
 					value={temperature}
 					oninput={updateTemperature}
+					onmousedown={handleMouseDown}
+					onpointerdown={handlePointerDown}
 					class="w-full"
 				/>
 			</div>
@@ -61,16 +81,3 @@
 	<Handle type="target" position={Position.Top} />
 	<Handle type="source" position={Position.Bottom} />
 </div>
-
-<style>
-	.model-node {
-		border-top: 3px solid var(--sentinel-secondary);
-	}
-
-	.label {
-		display: block;
-		font-size: 0.75rem;
-		color: var(--sentinel-text-muted);
-		margin-bottom: 4px;
-	}
-</style>

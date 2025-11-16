@@ -1,30 +1,40 @@
 <script lang="ts">
 	import { addNode } from '$lib/stores/canvas';
+	import { MessageSquare, Settings, Cpu, Wrench, CheckCircle2 } from 'lucide-svelte';
+	import type { ComponentType } from 'svelte';
 
-	const nodeTypes = [
+	const nodeTypes: {
+		category: string;
+		nodes: {
+			type: string;
+			label: string;
+			icon: ComponentType;
+			description: string;
+		}[];
+	}[] = [
 		{
 			category: 'Inputs',
 			nodes: [
-				{ type: 'input', label: '💬 Prompt', icon: '💬', description: 'User input prompt' },
-				{ type: 'system', label: '⚙️ System', icon: '⚙️', description: 'System prompt' },
+				{ type: 'input', label: 'Prompt', icon: MessageSquare, description: 'User input prompt' },
+				{ type: 'system', label: 'System', icon: Settings, description: 'System prompt' },
 			]
 		},
 		{
 			category: 'Models',
 			nodes: [
-				{ type: 'model', label: '🤖 Model', icon: '🤖', description: 'AI model configuration' },
+				{ type: 'model', label: 'Model', icon: Cpu, description: 'AI model configuration' },
 			]
 		},
 		{
 			category: 'Tools',
 			nodes: [
-				{ type: 'tool', label: '🔧 Tool', icon: '🔧', description: 'Agent tool' },
+				{ type: 'tool', label: 'Tool', icon: Wrench, description: 'Agent tool' },
 			]
 		},
 		{
 			category: 'Assertions',
 			nodes: [
-				{ type: 'assertion', label: '✓ Assertion', icon: '✓', description: 'Test assertion' },
+				{ type: 'assertion', label: 'Assertion', icon: CheckCircle2, description: 'Test assertion' },
 			]
 		}
 	];
@@ -69,8 +79,8 @@
 							ondragstart={(e) => handleDragStart(e, node.type)}
 							onclick={() => handleAddNode(node.type, node.label)}
 						>
-							<div class="flex items-center gap-2">
-								<span class="text-lg">{node.icon}</span>
+							<div class="flex items-center gap-3">
+								<svelte:component this={node.icon} size={18} strokeWidth={2} class="text-sentinel-primary flex-shrink-0" />
 								<div class="flex-1 min-w-0">
 									<div class="text-sm font-medium text-sentinel-text truncate">
 										{node.label}

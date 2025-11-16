@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SvelteFlow, Background, Controls, MiniMap } from '@xyflow/svelte';
+	import { SvelteFlow, Background, Controls, MiniMap, BackgroundVariant } from '@xyflow/svelte';
 	import '@xyflow/svelte/dist/style.css';
 	import ComponentPalette from '$lib/components/palette/ComponentPalette.svelte';
 	import YamlPreview from '$lib/components/yaml/YamlPreview.svelte';
@@ -7,6 +7,7 @@
 	import ModelNode from '$lib/components/nodes/ModelNode.svelte';
 	import AssertionNode from '$lib/components/nodes/AssertionNode.svelte';
 	import { nodesStore, edgesStore } from '$lib/stores/canvas';
+	import { Play, FileDown } from 'lucide-svelte';
 
 	// Register custom node types
 	const nodeTypes = {
@@ -36,10 +37,12 @@
 			>
 				{showYamlPreview ? 'Hide' : 'Show'} YAML
 			</button>
-			<button class="sentinel-button-primary text-sm">
-				▶ Run Test
+			<button class="sentinel-button-primary text-sm flex items-center gap-2">
+				<Play size={16} strokeWidth={2} />
+				Run Test
 			</button>
-			<button class="sentinel-button-secondary text-sm">
+			<button class="sentinel-button-secondary text-sm flex items-center gap-2">
+				<FileDown size={16} strokeWidth={2} />
 				Export
 			</button>
 		</div>
@@ -59,7 +62,7 @@
 				fitView
 				class="bg-sentinel-bg"
 			>
-				<Background />
+				<Background variant={BackgroundVariant.Dots} gap={16} size={1} />
 				<Controls />
 				<MiniMap />
 			</SvelteFlow>

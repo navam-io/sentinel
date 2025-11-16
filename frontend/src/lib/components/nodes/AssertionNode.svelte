@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Handle, Position } from '@xyflow/svelte';
 	import type { NodeProps } from '@xyflow/svelte';
+	import { CheckCircle2 } from 'lucide-svelte';
 
 	let { data }: NodeProps = $props();
 
@@ -26,29 +27,48 @@
 		assertionValue = target.value;
 		data.assertionValue = assertionValue;
 	}
+
+	// Prevent node dragging when interacting with controls
+	function handleMouseDown(e: MouseEvent) {
+		e.stopPropagation();
+	}
+
+	function handlePointerDown(e: PointerEvent) {
+		e.stopPropagation();
+	}
 </script>
 
 <div class="sentinel-node assertion-node">
 	<div class="node-header">
-		<span class="node-icon">✓</span>
+		<CheckCircle2 size={18} class="node-icon" strokeWidth={2} />
 		<span class="node-title">Assertion</span>
 	</div>
 	<div class="node-body">
 		<div class="space-y-3">
 			<div>
-				<label class="label">Type</label>
-				<select value={assertionType} onchange={updateType} class="sentinel-input text-sm w-full">
+				<label for="assertion-type" class="label">Type</label>
+				<select
+					id="assertion-type"
+					value={assertionType}
+					onchange={updateType}
+					onmousedown={handleMouseDown}
+					onpointerdown={handlePointerDown}
+					class="sentinel-input text-sm w-full"
+				>
 					{#each assertionTypes as type}
 						<option value={type.value}>{type.label}</option>
 					{/each}
 				</select>
 			</div>
 			<div>
-				<label class="label">Value</label>
+				<label for="assertion-value" class="label">Value</label>
 				<input
+					id="assertion-value"
 					type="text"
 					value={assertionValue}
 					oninput={updateValue}
+					onmousedown={handleMouseDown}
+					onpointerdown={handlePointerDown}
 					class="sentinel-input text-sm w-full"
 					placeholder="Expected value..."
 				/>
@@ -57,16 +77,3 @@
 	</div>
 	<Handle type="target" position={Position.Top} />
 </div>
-
-<style>
-	.assertion-node {
-		border-top: 3px solid var(--sentinel-success);
-	}
-
-	.label {
-		display: block;
-		font-size: 0.75rem;
-		color: var(--sentinel-text-muted);
-		margin-bottom: 4px;
-	}
-</style>

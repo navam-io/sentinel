@@ -42,6 +42,29 @@
   :root {
     /* Font feature settings */
     font-feature-settings: 'liga' 1, 'calt' 1;
+
+    /* Expose Tailwind theme colors as CSS variables */
+    --sentinel-primary: #6EE3F6;
+    --sentinel-primary-dark: #3CBACD;
+    --sentinel-primary-glow: rgb(110 227 246 / 0.35);
+
+    --sentinel-secondary: #9B8CFF;
+    --sentinel-secondary-dark: #6C5AE0;
+
+    --sentinel-bg: #0C0F12;
+    --sentinel-bg-elevated: #14181D;
+    --sentinel-surface: #1C2026;
+    --sentinel-border: #2C323A;
+    --sentinel-text: #E8EAED;
+    --sentinel-text-muted: #9CA3AF;
+
+    --sentinel-success: #10B981;
+    --sentinel-error: #EF4444;
+    --sentinel-warning: #F59E0B;
+    --sentinel-info: #3B82F6;
+
+    --sentinel-hover: rgb(110 227 246 / 0.1);
+    --sentinel-active: rgb(110 227 246 / 0.2);
   }
 
   body {
@@ -76,5 +99,200 @@
     @apply bg-sentinel-surface border border-sentinel-border text-sentinel-text px-3 py-2 rounded-md;
     @apply focus:outline-none focus:ring-2 focus:ring-sentinel-primary focus:border-transparent;
     @apply placeholder-sentinel-text-muted;
+  }
+
+  /* Shared node styles */
+  .sentinel-node {
+    min-width: 280px;
+    background: var(--sentinel-surface);
+    border: 1px solid var(--sentinel-border);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+  }
+
+  .sentinel-node:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .sentinel-node .node-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--sentinel-border);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent);
+    border-radius: 12px 12px 0 0;
+  }
+
+  .sentinel-node .node-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .sentinel-node .node-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--sentinel-text);
+    letter-spacing: 0.01em;
+  }
+
+  .sentinel-node .node-body {
+    padding: 16px;
+  }
+
+  .sentinel-node .label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--sentinel-text-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .input-node {
+    border-top: 3px solid var(--sentinel-primary);
+  }
+
+  .input-node .node-header {
+    border-top: 1px solid rgba(110, 227, 246, 0.2);
+  }
+
+  .model-node {
+    border-top: 3px solid var(--sentinel-secondary);
+  }
+
+  .model-node .node-header {
+    border-top: 1px solid rgba(155, 140, 255, 0.2);
+  }
+
+  .assertion-node {
+    border-top: 3px solid var(--sentinel-success);
+  }
+
+  .assertion-node .node-header {
+    border-top: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  /* Svelte Flow watermark customization */
+  .svelte-flow__attribution {
+    background: var(--sentinel-bg-elevated) !important;
+    color: var(--sentinel-text-muted) !important;
+    border: 1px solid var(--sentinel-border) !important;
+    font-size: 0.7rem !important;
+    opacity: 0.5 !important;
+  }
+
+  .svelte-flow__attribution a {
+    color: var(--sentinel-primary) !important;
+  }
+
+  /* Improve input contrast */
+  .sentinel-input {
+    background: var(--sentinel-bg) !important;
+    color: var(--sentinel-text) !important;
+  }
+
+  .sentinel-input::placeholder {
+    color: var(--sentinel-text-muted) !important;
+  }
+
+  /* Range slider styling */
+  input[type="range"] {
+    accent-color: var(--sentinel-primary);
+  }
+
+  /* Select dropdown styling */
+  select.sentinel-input option {
+    background: var(--sentinel-surface);
+    color: var(--sentinel-text);
+  }
+
+  /* Svelte Flow Edge Styling - Fix invisible connectors */
+  :global(.svelte-flow__edge-path) {
+    stroke: var(--sentinel-primary) !important;
+    stroke-width: 4px !important;
+  }
+
+  :global(.svelte-flow__edge-path.animated) {
+    stroke-dasharray: 5;
+    animation: dashdraw 0.5s linear infinite;
+  }
+
+  @keyframes dashdraw {
+    to {
+      stroke-dashoffset: -10;
+    }
+  }
+
+  :global(.svelte-flow__edge.selected .svelte-flow__edge-path) {
+    stroke: var(--sentinel-primary-dark) !important;
+    stroke-width: 6px !important;
+  }
+
+  :global(.svelte-flow__edge-text) {
+    fill: var(--sentinel-text) !important;
+    font-size: 12px !important;
+  }
+
+  /* Connection Handles */
+  :global(.svelte-flow__handle) {
+    width: 12px !important;
+    height: 12px !important;
+    background: var(--sentinel-primary) !important;
+    border: 2px solid var(--sentinel-surface) !important;
+  }
+
+  :global(.svelte-flow__handle:hover) {
+    background: var(--sentinel-primary-dark) !important;
+    transform: scale(1.2);
+  }
+
+  :global(.svelte-flow__handle-connecting) {
+    background: var(--sentinel-secondary) !important;
+  }
+
+  /* Canvas Background */
+  :global(.svelte-flow__background) {
+    background-color: #1a1d23 !important;
+  }
+
+  :global(.svelte-flow__background-pattern) {
+    stroke: var(--sentinel-border) !important;
+    opacity: 0.4 !important;
+  }
+
+  /* Minimap Styling */
+  :global(.svelte-flow__minimap) {
+    background: var(--sentinel-bg-elevated) !important;
+    border: 1px solid var(--sentinel-border) !important;
+  }
+
+  :global(.svelte-flow__minimap-node) {
+    fill: var(--sentinel-surface) !important;
+    stroke: var(--sentinel-border) !important;
+  }
+
+  /* Controls Styling */
+  :global(.svelte-flow__controls) {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  :global(.svelte-flow__controls-button) {
+    background: var(--sentinel-surface) !important;
+    border: 1px solid var(--sentinel-border) !important;
+    color: var(--sentinel-text) !important;
+  }
+
+  :global(.svelte-flow__controls-button:hover) {
+    background: var(--sentinel-hover) !important;
+    border-color: var(--sentinel-primary) !important;
+  }
+
+  /* Improve icon color in node headers */
+  .node-icon {
+    color: var(--sentinel-primary);
   }
 }
