@@ -6,40 +6,7 @@ This file tracks known issues and bugs in Navam Sentinel.
 
 ## Open Issues
 
-### Issue #5: YAML Preview Panel Title and Tagline Layout
-**Priority**: Low
-**Type**: UI/UX - Design Improvement
-**Reported**: November 16, 2025
-**Status**: Open
-**Affects**: v0.4.1
-
-**Description**:
-The YAML preview panel header needs better title and tagline layout. The title should be "Test Script" (left-aligned) with the tagline on its own line above the toolbar.
-
-**Current State**:
-```tsx
-<h2 className="text-sm font-semibold text-sentinel-text">
-  {isEditMode ? 'Edit YAML' : 'YAML Preview'}
-</h2>
-<p className="text-[0.6rem] text-sentinel-text-muted mt-1">
-  {isEditMode ? 'Edit and apply to update canvas' : 'Auto-generated from canvas'}
-</p>
-```
-
-**Expected Behavior**:
-- Title: "Test Script" (always, even in edit mode)
-- Tagline: Right-aligned on same line as title, or on separate line above toolbar
-- No text wrapping
-- Consistent with Sentinel design system
-
-**Files to Modify**:
-- `frontend/src/components/yaml/YamlPreview.tsx` - Update header layout
-
-**Acceptance Criteria**:
-- [ ] Title changed to "Test Script"
-- [ ] Tagline layout improved (no wrap)
-- [ ] Visual consistency with rest of app
-- [ ] Responsive layout (handles small windows)
+None
 
 ---
 
@@ -171,6 +138,64 @@ The OR condition (`||`) ensures that if EITHER description OR parameters exist, 
 - `frontend/src/lib/dsl/generator.test.ts` - Added 2 comprehensive test cases
 
 **Outcome**: Feature was already implemented correctly. Added test coverage to verify and document expected behavior.
+
+---
+
+### Issue #5: YAML Preview Panel Title and Tagline Layout ✅
+**Priority**: Low
+**Type**: UI/UX - Design Improvement
+**Reported**: November 16, 2025
+**Status**: Closed
+**Affects**: v0.4.1
+**Fixed In**: v0.4.4
+**Closed**: November 16, 2025
+
+**Description**:
+The YAML preview panel header needed better title and tagline layout for improved clarity and consistency with the Sentinel design system.
+
+**Changes Made**:
+
+1. **Title Updated**: Changed from dynamic "YAML Preview" / "Edit YAML" to static "Test Script"
+2. **Tagline Repositioned**: Moved from below toolbar to same line as title (right-aligned)
+3. **No-Wrap Protection**: Added `whitespace-nowrap` to prevent text wrapping
+4. **Improved Layout**: Better visual hierarchy with title/tagline on separate row from toolbar
+
+**Before**:
+```tsx
+<div className="flex items-center justify-between">
+  <h2>{isEditMode ? 'Edit YAML' : 'YAML Preview'}</h2>
+  <div className="flex gap-2">{/* Buttons */}</div>
+</div>
+<p>{isEditMode ? 'Edit and apply...' : 'Auto-generated...'}</p>
+```
+
+**After**:
+```tsx
+<div className="flex items-center justify-between mb-2">
+  <h2 className="whitespace-nowrap">Test Script</h2>
+  <p className="whitespace-nowrap">
+    {isEditMode ? 'Edit and apply...' : 'Auto-generated...'}
+  </p>
+</div>
+<div className="flex items-center justify-end">
+  <div className="flex gap-2">{/* Buttons */}</div>
+</div>
+```
+
+**Resolution**:
+- ✅ Title changed to "Test Script" (always consistent)
+- ✅ Tagline positioned on same line as title (right-aligned)
+- ✅ No text wrapping (whitespace-nowrap)
+- ✅ Visual consistency with Sentinel design system
+- ✅ Responsive layout maintained
+- ✅ All 34 tests passing
+- ✅ 0 TypeScript errors
+- ✅ Production build successful
+
+**Files Modified**:
+- `frontend/src/components/yaml/YamlPreview.tsx` - Updated header layout
+
+**Impact**: Improved visual clarity and consistency. Users will see "Test Script" as the panel title regardless of edit mode.
 
 ---
 

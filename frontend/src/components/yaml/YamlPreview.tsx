@@ -111,10 +111,15 @@ function YamlPreview() {
 		<div className="w-96 bg-sentinel-bg-elevated border-l border-sentinel-border flex flex-col">
 			{/* Preview Header */}
 			<div className="p-4 border-b border-sentinel-border">
-				<div className="flex items-center justify-between">
-					<h2 className="text-sm font-semibold text-sentinel-text">
-						{isEditMode ? 'Edit YAML' : 'YAML Preview'}
+				<div className="flex items-center justify-between mb-2">
+					<h2 className="text-sm font-semibold text-sentinel-text whitespace-nowrap">
+						Test Script
 					</h2>
+					<p className="text-[0.6rem] text-sentinel-text-muted whitespace-nowrap">
+						{isEditMode ? 'Edit and apply to update canvas' : 'Auto-generated from canvas'}
+					</p>
+				</div>
+				<div className="flex items-center justify-end">
 					<div className="flex gap-2">
 						{!isEditMode ? (
 							<>
@@ -179,9 +184,6 @@ function YamlPreview() {
 						)}
 					</div>
 				</div>
-				<p className="text-[0.6rem] text-sentinel-text-muted mt-1">
-					{isEditMode ? 'Edit and apply to update canvas' : 'Auto-generated from canvas'}
-				</p>
 			</div>
 
 			{/* YAML Content */}
