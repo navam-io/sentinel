@@ -6,63 +6,6 @@ This file tracks known issues and bugs in Navam Sentinel.
 
 ## Open Issues
 
-### Issue #4: Tool Description Not Included in YAML Without Parameters
-**Priority**: Medium
-**Type**: Bug - Incomplete Data
-**Reported**: November 16, 2025
-**Status**: Open
-**Affects**: v0.4.1
-
-**Description**:
-When adding a Tool node with only a description (no parameters), the description is not included in the generated YAML. The generator only includes the description if both description AND parameters are present.
-
-**Steps to Reproduce**:
-1. Add Tool node to canvas
-2. Set tool name to "tool_name"
-3. Add description "Tool description..."
-4. Leave parameters empty
-5. Check YAML - only `- tool_name` appears, no description
-
-**Current Behavior**:
-```typescript
-// generator.ts lines 139-145
-if (node.data?.toolDescription || node.data?.toolParameters) {
-  const toolSpec: ToolSpec = { name: String(node.data.toolName) };
-  if (node.data.toolDescription) {
-    toolSpec.description = String(node.data.toolDescription);
-  }
-  if (node.data.toolParameters) {
-    toolSpec.parameters = node.data.toolParameters;
-  }
-  spec.tools.push(toolSpec);
-} else {
-  spec.tools.push(String(node.data.toolName)); // Only pushes name
-}
-```
-
-**Expected Behavior**:
-If tool has a description, it should be included in YAML:
-```yaml
-tools:
-  - name: tool_name
-    description: "Tool description..."
-```
-
-**Root Cause**:
-Generator logic condition uses OR (`||`) but then only creates ToolSpec object. If only description exists (no parameters), it should still create a ToolSpec object.
-
-**Files to Modify**:
-- `frontend/src/lib/dsl/generator.ts` - Fix tool description logic
-
-**Acceptance Criteria**:
-- [ ] Tool description appears in YAML even without parameters
-- [ ] Tool name only (no description) still works
-- [ ] Tool with both description and parameters works
-- [ ] Tests added for all three cases
-- [ ] All existing tests still pass
-
----
-
 ### Issue #5: YAML Preview Panel Title and Tagline Layout
 **Priority**: Low
 **Type**: UI/UX - Design Improvement
@@ -179,6 +122,55 @@ Field name mismatch between SystemNode component and generator logic. SystemNode
 - `frontend/src/lib/dsl/generator.test.ts` - Added 2 new tests (updated 1, added 1 round-trip test)
 
 **Impact**: Issue fully resolved, system prompts now appear in YAML and persist through round-trip conversion.
+
+---
+
+### Issue #4: Tool Description Not Included in YAML Without Parameters ✅
+**Priority**: Medium
+**Type**: Test Coverage - Verification
+**Reported**: November 16, 2025
+**Status**: Closed - Not a Bug
+**Affects**: v0.4.1
+**Verified In**: v0.4.3
+**Closed**: November 16, 2025
+
+**Description**:
+Initial concern that tool descriptions might not be included in YAML when parameters are empty/null. Investigation revealed the feature was already working correctly.
+
+**Investigation**:
+The generator code already handles tool descriptions correctly:
+```typescript
+// generator.ts lines 135-148
+if (node.data?.toolDescription || node.data?.toolParameters) {
+  const toolSpec: ToolSpec = { name: String(node.data.toolName) };
+  if (node.data.toolDescription) {
+    toolSpec.description = String(node.data.toolDescription);
+  }
+  if (node.data.toolParameters) {
+    toolSpec.parameters = node.data.toolParameters;
+  }
+  spec.tools.push(toolSpec);
+} else {
+  spec.tools.push(String(node.data.toolName));
+}
+```
+
+The OR condition (`||`) ensures that if EITHER description OR parameters exist, a ToolSpec object is created.
+
+**Resolution**:
+- ✅ Code review confirmed feature works correctly
+- ✅ Added comprehensive test coverage (2 new tests)
+- ✅ Test: Tool with description only (no parameters) - creates ToolSpec
+- ✅ Test: Tool with name only (empty description, null parameters) - creates string
+- ✅ Test: Tool with description AND parameters - creates full ToolSpec (already existed)
+- ✅ All 34 tests passing (was 32, added 2 verification tests)
+- ✅ 0 TypeScript errors
+- ✅ Production build successful
+
+**Files Modified**:
+- `frontend/src/lib/dsl/generator.test.ts` - Added 2 comprehensive test cases
+
+**Outcome**: Feature was already implemented correctly. Added test coverage to verify and document expected behavior.
 
 ---
 

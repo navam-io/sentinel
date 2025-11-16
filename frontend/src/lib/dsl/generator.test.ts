@@ -155,7 +155,8 @@ describe('DSL Generator', () => {
 					data: {
 						label: 'Tool',
 						toolName: 'web_search',
-						toolDescription: 'Search the web for information'
+						toolDescription: 'Search the web for information',
+						toolParameters: null
 					},
 					position: { x: 100, y: 100 }
 				}
@@ -167,6 +168,57 @@ describe('DSL Generator', () => {
 			expect(yaml).toContain('tools:');
 			expect(yaml).toContain('name: web_search');
 			expect(yaml).toContain('description: Search the web for information');
+		});
+
+		it('should generate YAML with tool node with only name (no description, no parameters)', () => {
+			const nodes: Node[] = [
+				{
+					id: '1',
+					type: 'tool',
+					data: {
+						label: 'Tool',
+						toolName: 'calculator',
+						toolDescription: '',
+						toolParameters: null
+					},
+					position: { x: 100, y: 100 }
+				}
+			];
+			const edges: Edge[] = [];
+
+			const yaml = generateYAML(nodes, edges);
+
+			expect(yaml).toContain('tools:');
+			expect(yaml).toContain('- calculator');
+			// Should be simple string format, not object format
+			expect(yaml).not.toContain('name: calculator');
+		});
+
+		it('should generate YAML with tool node with description and parameters', () => {
+			const nodes: Node[] = [
+				{
+					id: '1',
+					type: 'tool',
+					data: {
+						label: 'Tool',
+						toolName: 'api_call',
+						toolDescription: 'Make an API call',
+						toolParameters: {
+							url: 'string',
+							method: 'string'
+						}
+					},
+					position: { x: 100, y: 100 }
+				}
+			];
+			const edges: Edge[] = [];
+
+			const yaml = generateYAML(nodes, edges);
+
+			expect(yaml).toContain('tools:');
+			expect(yaml).toContain('name: api_call');
+			expect(yaml).toContain('description: Make an API call');
+			expect(yaml).toContain('parameters:');
 		});
 
 		it('should generate YAML with system node', () => {
