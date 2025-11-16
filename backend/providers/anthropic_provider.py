@@ -12,11 +12,19 @@ class AnthropicProvider(ModelProvider):
     """Provider for Anthropic's Claude models."""
 
     AVAILABLE_MODELS = [
-        "claude-3-5-sonnet-20241022",
-        "claude-3-5-haiku-20241022",
-        "claude-3-opus-20240229",
-        "claude-3-sonnet-20240229",
-        "claude-3-haiku-20240307",
+        # Latest (Recommended - Claude 4.x)
+        "claude-sonnet-4-5-20250929",      # Claude Sonnet 4.5 (Latest, best balance)
+        "claude-haiku-4-5-20251001",       # Claude Haiku 4.5 (Fast, cost-effective)
+        "claude-opus-4-1-20250805",        # Claude Opus 4.1 (Most capable)
+
+        # Legacy (Still Available)
+        "claude-sonnet-4-20250514",        # Claude Sonnet 4
+        "claude-opus-4-20250514",          # Claude Opus 4
+        "claude-3-7-sonnet-20250219",      # Claude Sonnet 3.7
+        "claude-3-5-haiku-20241022",       # Claude Haiku 3.5
+
+        # Deprecated (Will be removed in future)
+        "claude-3-haiku-20240307",         # Claude Haiku 3 (Deprecated)
     ]
 
     def __init__(self, config: ProviderConfig):
@@ -170,12 +178,15 @@ class AnthropicProvider(ModelProvider):
     def _calculate_cost(self, model: str, input_tokens: int, output_tokens: int) -> float:
         """Calculate approximate cost in USD.
 
-        Pricing as of November 2024 (subject to change):
-        - Claude 3.5 Sonnet: $3/MTok input, $15/MTok output
-        - Claude 3.5 Haiku: $1/MTok input, $5/MTok output
-        - Claude 3 Opus: $15/MTok input, $75/MTok output
-        - Claude 3 Sonnet: $3/MTok input, $15/MTok output
-        - Claude 3 Haiku: $0.25/MTok input, $1.25/MTok output
+        Pricing as of November 2025 (subject to change):
+        - Claude Sonnet 4.5: $3/MTok input, $15/MTok output
+        - Claude Haiku 4.5: $1/MTok input, $5/MTok output
+        - Claude Opus 4.1: $15/MTok input, $75/MTok output
+        - Claude Sonnet 4: $3/MTok input, $15/MTok output
+        - Claude Opus 4: $15/MTok input, $75/MTok output
+        - Claude Sonnet 3.7: $3/MTok input, $15/MTok output
+        - Claude Haiku 3.5: $0.80/MTok input, $4/MTok output
+        - Claude Haiku 3: $0.25/MTok input, $1.25/MTok output (Deprecated)
 
         Args:
             model: Model identifier
@@ -185,13 +196,26 @@ class AnthropicProvider(ModelProvider):
         Returns:
             Cost in USD
         """
-        # Pricing per million tokens
+        # Pricing per million tokens (input, output)
         pricing = {
+            # Latest (Claude 4.x)
+            "claude-sonnet-4-5-20250929": (3.0, 15.0),
+            "claude-haiku-4-5-20251001": (1.0, 5.0),
+            "claude-opus-4-1-20250805": (15.0, 75.0),
+
+            # Legacy (Still Available)
+            "claude-sonnet-4-20250514": (3.0, 15.0),
+            "claude-opus-4-20250514": (15.0, 75.0),
+            "claude-3-7-sonnet-20250219": (3.0, 15.0),
+            "claude-3-5-haiku-20241022": (0.80, 4.0),
+
+            # Deprecated
+            "claude-3-haiku-20240307": (0.25, 1.25),
+
+            # Legacy models (for backward compatibility)
             "claude-3-5-sonnet-20241022": (3.0, 15.0),
-            "claude-3-5-haiku-20241022": (1.0, 5.0),
             "claude-3-opus-20240229": (15.0, 75.0),
             "claude-3-sonnet-20240229": (3.0, 15.0),
-            "claude-3-haiku-20240307": (0.25, 1.25),
         }
 
         input_price, output_price = pricing.get(model, (3.0, 15.0))  # Default to Sonnet pricing

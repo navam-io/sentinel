@@ -11,7 +11,7 @@ describe('DSL Generator', () => {
 			const yaml = generateYAML(nodes, edges);
 
 			expect(yaml).toContain('name: Test from Canvas');
-			expect(yaml).toContain('model: gpt-4');
+			expect(yaml).toContain('model: claude-sonnet-4-5-20250929');
 			expect(yaml).toContain('query: Enter your query here');
 			expect(yaml).toContain('must_contain: result');
 		});
@@ -325,7 +325,7 @@ describe('DSL Generator', () => {
 			const yaml = generateYAML(nodes, edges);
 
 			expect(yaml).toContain('query: What is the capital of France?');
-			expect(yaml).toContain('model: gpt-4');
+			expect(yaml).toContain('model: gpt-4');  // Model from node data, not default
 			expect(yaml).toContain('provider: openai');
 			expect(yaml).toContain('temperature: 0');
 			expect(yaml).toContain('max_tokens: 100');

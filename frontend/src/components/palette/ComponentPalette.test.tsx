@@ -99,7 +99,8 @@ describe('ComponentPalette', () => {
 					type: 'model',
 					data: expect.objectContaining({
 						label: 'Model',
-						model: 'gpt-4'
+						model: 'claude-sonnet-4-5-20250929',
+						provider: 'anthropic'
 					})
 				})
 			);

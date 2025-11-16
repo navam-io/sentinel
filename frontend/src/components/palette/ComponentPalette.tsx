@@ -64,8 +64,8 @@ function ComponentPalette() {
 			case 'model':
 				nodeData = {
 					label,
-					model: 'gpt-4',
-					provider: 'openai',
+					model: 'claude-sonnet-4-5-20250929',  // Default to latest Claude Sonnet 4.5
+					provider: 'anthropic',
 					temperature: 0.7,
 					max_tokens: 1000
 				};

@@ -6,8 +6,6 @@ This file tracks known issues and bugs in Navam Sentinel.
 
 ## Open Issues
 
-[ ] Research the latest model ids for the model providers being used and replace the existing model ids with latest.
-
 [ ] Fix this: [Error] Failed to load resource: the server responded with a status of 404 () (loader.js.map, line 0)
 
 [ ] Fix this: INFO:     127.0.0.1:52679 - "POST /api/execution/execute HTTP/1.1" 400 Bad Request
@@ -15,6 +13,89 @@ This file tracks known issues and bugs in Navam Sentinel.
 ---
 
 ## Closed Issues
+
+### Issue #8: Update Model IDs to Latest Claude 4.x Versions ✅
+**Priority**: Medium
+**Type**: Enhancement - Maintenance
+**Reported**: November 16, 2025
+**Status**: Closed
+**Affects**: v0.7.0
+**Fixed In**: v0.8.0
+**Closed**: November 16, 2025
+
+**Description**:
+The project was using outdated Claude 3.x model IDs as defaults. Anthropic has since released Claude 4.x models (Sonnet 4.5, Haiku 4.5, Opus 4.1) and Claude 3.7 Sonnet, which offer improved performance and capabilities. The model catalog needed to be updated to reflect the latest available models.
+
+**Research Findings**:
+- **Latest Models** (as of November 2025):
+  - `claude-sonnet-4-5-20250929` - Claude Sonnet 4.5 (Latest, best balance)
+  - `claude-haiku-4-5-20251001` - Claude Haiku 4.5 (Fast, cost-effective)
+  - `claude-opus-4-1-20250805` - Claude Opus 4.1 (Most capable)
+  - `claude-sonnet-4-20250514` - Claude Sonnet 4
+  - `claude-opus-4-20250514` - Claude Opus 4
+  - `claude-3-7-sonnet-20250219` - Claude Sonnet 3.7
+
+- **Deprecated Models**:
+  - Claude 3 Opus (2024-02-29) - Deprecated June 30, 2025
+  - Claude 3 Sonnet (2024-02-29) - Retired July 21, 2025
+
+- **Updated Pricing** (November 2025):
+  - Sonnet 4.5: $3/MTok input, $15/MTok output
+  - Haiku 4.5: $1/MTok input, $5/MTok output
+  - Opus 4.1: $15/MTok input, $75/MTok output
+  - Haiku 3.5: $0.80/MTok input, $4/MTok output (updated)
+
+**Implementation**:
+1. **Backend (`anthropic_provider.py`)**:
+   - Updated `AVAILABLE_MODELS` list with Claude 4.x models
+   - Reorganized with comments: Latest (Recommended), Legacy, Deprecated
+   - Updated `_calculate_cost()` pricing table
+   - Added backward compatibility for old model IDs
+
+2. **Frontend (`generator.ts`)**:
+   - Changed default model from `gpt-4` to `claude-sonnet-4-5-20250929`
+   - New default provides better performance and is actually implemented
+
+3. **Frontend (`ModelNode.tsx`)**:
+   - Updated models dropdown with all Claude 4.x models
+   - Organized with comments: Latest, Legacy, OpenAI placeholders
+   - Changed default model in useState
+
+4. **Frontend (`ComponentPalette.tsx`)**:
+   - Updated default model for new Model nodes
+   - Changed provider from `openai` to `anthropic`
+
+5. **Tests Updated**:
+   - Fixed test expectations to match new default model
+   - Updated ComponentPalette test to expect `claude-sonnet-4-5-20250929`
+   - Updated generator tests for empty canvas default
+
+**Files Modified**:
+- `backend/providers/anthropic_provider.py` - Model catalog and pricing
+- `frontend/src/lib/dsl/generator.ts` - Default model
+- `frontend/src/components/nodes/ModelNode.tsx` - Model dropdown and default
+- `frontend/src/components/palette/ComponentPalette.tsx` - Component defaults
+- `frontend/src/lib/dsl/generator.test.ts` - Test expectations
+- `frontend/src/components/palette/ComponentPalette.test.tsx` - Test expectations
+
+**User Benefits**:
+- ✅ Access to latest, most capable Claude models
+- ✅ Better default model (Sonnet 4.5 vs old GPT-4)
+- ✅ Improved performance from newer models
+- ✅ Up-to-date pricing information
+- ✅ Clear organization (Latest, Legacy, Deprecated)
+- ✅ Backward compatibility maintained
+
+**Testing**:
+- ✅ All 46 tests passing
+- ✅ 0 TypeScript errors
+- ✅ Production build successful
+- ✅ Model dropdown shows all new models
+- ✅ Default model correctly set to Claude Sonnet 4.5
+
+**Impact**: Users now have access to the latest Claude 4.x models with improved capabilities and accurate pricing. The default model provides better performance out of the box.
+
+---
 
 ### Issue #7: UI Reorganization - Consolidate Run Panel into Test Script Panel ✅
 **Priority**: Medium

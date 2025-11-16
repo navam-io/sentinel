@@ -6,17 +6,28 @@ import { useCanvasStore } from '../../stores/canvasStore';
 import { useHandleConnection } from '../../hooks/useHandleConnection';
 
 const models = [
+	// Latest Claude 4.x (Recommended)
+	'claude-sonnet-4-5-20250929',      // Claude Sonnet 4.5 (Latest)
+	'claude-haiku-4-5-20251001',       // Claude Haiku 4.5 (Fast)
+	'claude-opus-4-1-20250805',        // Claude Opus 4.1 (Most capable)
+
+	// Claude 4.0
+	'claude-sonnet-4-20250514',        // Claude Sonnet 4
+	'claude-opus-4-20250514',          // Claude Opus 4
+
+	// Claude 3.x (Legacy)
+	'claude-3-7-sonnet-20250219',      // Claude Sonnet 3.7
+	'claude-3-5-haiku-20241022',       // Claude Haiku 3.5
+
+	// OpenAI (Placeholder - not yet implemented)
 	'gpt-4',
 	'gpt-4-turbo',
-	'gpt-3.5-turbo',
-	'claude-3-5-sonnet-20241022',
-	'claude-3-opus-20240229',
-	'claude-3-sonnet-20240229'
+	'gpt-3.5-turbo'
 ];
 
 function ModelNode({ data, id }: NodeProps) {
 	const { updateNode, removeNode } = useCanvasStore();
-	const [selectedModel, setSelectedModel] = useState<string>((data?.model as string) || 'gpt-4');
+	const [selectedModel, setSelectedModel] = useState<string>((data?.model as string) || 'claude-sonnet-4-5-20250929');
 	const [temperature, setTemperature] = useState<number>((data?.temperature as number) || 0.7);
 	const isTargetConnected = useHandleConnection(id, 'target');
 	const isSourceConnected = useHandleConnection(id, 'source');
