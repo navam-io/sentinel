@@ -104,12 +104,12 @@ class AnthropicProvider(ModelProvider):
             if tools:
                 request_params["tools"] = tools
 
-            # Add optional parameters
-            if "top_p" in kwargs:
+            # Add optional parameters (only if not None)
+            if "top_p" in kwargs and kwargs["top_p"] is not None:
                 request_params["top_p"] = kwargs["top_p"]
-            if "top_k" in kwargs:
+            if "top_k" in kwargs and kwargs["top_k"] is not None:
                 request_params["top_k"] = kwargs["top_k"]
-            if "stop_sequences" in kwargs:
+            if "stop_sequences" in kwargs and kwargs["stop_sequences"] is not None:
                 request_params["stop_sequences"] = kwargs["stop_sequences"]
 
             # Call Anthropic API

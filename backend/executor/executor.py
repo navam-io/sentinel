@@ -109,12 +109,14 @@ class TestExecutor:
         top_k = None
         stop_sequences = None
 
-        if test_spec.model_config:
-            temperature = test_spec.model_config.temperature or 0.7
-            max_tokens = test_spec.model_config.max_tokens
-            top_p = test_spec.model_config.top_p
-            top_k = test_spec.model_config.top_k
-            stop_sequences = test_spec.model_config.stop_sequences
+        if test_spec.model_config_params:
+            # Access model_config_params (the actual field name, not the alias)
+            model_cfg = test_spec.model_config_params
+            temperature = model_cfg.temperature or 0.7
+            max_tokens = model_cfg.max_tokens
+            top_p = model_cfg.top_p
+            top_k = model_cfg.top_k
+            stop_sequences = model_cfg.stop_sequences
 
         # Convert tools to provider format
         tools = None

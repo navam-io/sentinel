@@ -6,10 +6,136 @@ This file tracks known issues and bugs in Navam Sentinel.
 
 ## Open Issues
 
+None. All known issues have been resolved! 🎉
 
 ---
 
 ## Closed Issues
+
+### Issue #10: Backend Execution Failures (Multiple Errors) ✅
+**Priority**: Critical
+**Type**: Bug - Backend Execution
+**Reported**: November 16, 2025
+**Status**: Closed
+**Affects**: v0.8.0, v0.8.1
+**Fixed In**: v0.8.2
+**Closed**: November 16, 2025
+
+**Description**:
+Backend test execution was completely broken with multiple cascading errors preventing any tests from running successfully.
+
+**Errors Encountered**:
+1. **Startup Error**: `python: command not found`
+2. **500 Error**: `'dict' object has no attribute 'temperature'`
+3. **400 Error**: `top_k: Input should be a valid integer` (Anthropic API rejection)
+
+**Root Causes**:
+
+**1. Startup Script Issues** (`backend/start.sh`):
+- Used `python` instead of `python3` (not available on macOS by default)
+- Didn't activate virtual environment before running server
+- Result: Server failed to start or couldn't find dependencies
+
+**2. Model Config Field Access Bug** (`backend/executor/executor.py`):
+- Code used `test_spec.model_config.temperature`
+- But field is named `model_config_params` with alias `model_config`
+- Pydantic didn't properly deserialize the alias
+- Result: 500 Internal Server Error with AttributeError
+
+**3. None Parameter Handling** (`backend/providers/anthropic_provider.py`):
+- Optional parameters (`top_k`, `top_p`, `stop_sequences`) passed as `None`
+- Anthropic API rejects `None` values for integer fields
+- Result: 400 Bad Request from Anthropic API
+
+**Impact**:
+- ❌ Backend completely non-functional
+- ❌ No tests could be executed
+- ❌ End-to-end flow broken
+- ❌ Development workflow blocked
+
+**Solutions**:
+
+**1. Fixed Startup Script**:
+```bash
+# Before
+python -m backend.main
+
+# After
+# Activate virtual environment if it exists
+if [ -d "venv" ]; then
+    source venv/bin/activate
+fi
+
+# Change to parent directory to run as module
+cd ..
+
+# Start the server
+python3 -m backend.main
+```
+
+**2. Fixed Model Config Access**:
+```python
+# Before (executor.py line 112)
+if test_spec.model_config:
+    temperature = test_spec.model_config.temperature or 0.7
+    ...
+
+# After
+if test_spec.model_config_params:
+    # Access model_config_params (the actual field name, not the alias)
+    model_cfg = test_spec.model_config_params
+    temperature = model_cfg.temperature or 0.7
+    ...
+```
+
+**3. Fixed Optional Parameter Handling**:
+```python
+# Before (anthropic_provider.py lines 108-113)
+if "top_k" in kwargs:
+    request_params["top_k"] = kwargs["top_k"]  # ❌ Passes None
+
+# After
+if "top_k" in kwargs and kwargs["top_k"] is not None:
+    request_params["top_k"] = kwargs["top_k"]  # ✅ Only non-None values
+```
+
+**Files Modified**:
+- `backend/start.sh` - Python3 and venv activation (5 lines)
+- `backend/executor/executor.py` - Field access fix (8 lines)
+- `backend/providers/anthropic_provider.py` - None checks (3 lines)
+
+**Testing**:
+- ✅ All 46 frontend tests passing
+- ✅ Backend starts successfully
+- ✅ End-to-end execution test successful
+- ✅ Anthropic API accepts requests
+- ✅ Test returns: `{"success": true, "output": "2 + 2 = 4", ...}`
+
+**Verification**:
+Successfully executed test via API:
+```bash
+curl -X POST http://localhost:8000/api/execution/execute \
+  -H "Content-Type: application/json" \
+  -d '{"test_spec": {...}}'
+```
+
+Response:
+```json
+{
+  "result": {
+    "success": true,
+    "output": "2 + 2 = 4",
+    "latency_ms": 4031,
+    "tokens_input": 14,
+    "tokens_output": 13,
+    "cost_usd": 0.000237
+  }
+}
+```
+
+**Impact**: Backend execution fully functional, all tests can now run end-to-end successfully.
+
+---
 
 ### Issue #9: 404 Error for loader.js.map in Development ✅
 **Priority**: Low
