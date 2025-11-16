@@ -6,13 +6,77 @@ This file tracks known issues and bugs in Navam Sentinel.
 
 ## Open Issues
 
-[ ] Fix this: [Error] Failed to load resource: the server responded with a status of 404 () (loader.js.map, line 0)
-
-[ ] Fix this: INFO:     127.0.0.1:52679 - "POST /api/execution/execute HTTP/1.1" 400 Bad Request
 
 ---
 
 ## Closed Issues
+
+### Issue #9: 404 Error for loader.js.map in Development ✅
+**Priority**: Low
+**Type**: Bug - Development Experience
+**Reported**: November 16, 2025
+**Status**: Closed
+**Affects**: v0.8.0
+**Fixed In**: v0.8.1
+**Closed**: November 16, 2025
+
+**Description**:
+During development, the browser console showed a 404 error when trying to load source maps:
+```
+[Error] Failed to load resource: the server responded with a status of 404 () (loader.js.map, line 0)
+```
+
+This error appeared because Vite was not configured to generate source maps for regular development builds.
+
+**Root Cause**:
+In `vite.config.ts`, the `sourcemap` build option was set to:
+```typescript
+sourcemap: !!process.env.TAURI_DEBUG
+```
+
+This meant source maps were only generated when the `TAURI_DEBUG` environment variable was set, which is not the case for regular `npm run dev` or `npm run build` commands. As a result, the browser expected source map files but they didn't exist, causing 404 errors.
+
+**Impact**:
+- Non-critical: Development functionality was not affected
+- Developer experience: Made debugging slightly harder without source maps
+- Console noise: 404 errors appeared in browser console during development
+
+**Solution**:
+Updated the source map configuration to generate maps for all non-production builds:
+
+```typescript
+// Before (line 39)
+sourcemap: !!process.env.TAURI_DEBUG
+
+// After (line 39)
+sourcemap: process.env.NODE_ENV === 'production' ? false : true
+```
+
+**Behavior After Fix**:
+- ✅ Source maps generated during development (`npm run dev`)
+- ✅ Source maps generated for debug builds (`TAURI_DEBUG=true`)
+- ✅ Source maps NOT generated for production builds (smaller bundle)
+- ✅ No more 404 errors in console
+- ✅ Better debugging experience with source maps
+
+**Files Modified**:
+- `frontend/vite.config.ts` - Updated sourcemap configuration (1 line)
+
+**Testing**:
+- ✅ All 46 tests passing
+- ✅ 0 TypeScript errors
+- ✅ Build with NODE_ENV=development produces source maps
+- ✅ Source map file verified: `dist/assets/index-*.js.map` (3.0MB)
+- ✅ No regressions in development or production builds
+
+**Verification**:
+Ran `NODE_ENV=development npm run build` and confirmed:
+- Source map generated: `index-Cn6zzuQW.js.map` (3.0MB)
+- Build output shows: `map: 3,129.18 kB`
+
+**Impact**: Developers now have source maps available for better debugging, and the 404 console errors are eliminated.
+
+---
 
 ### Issue #8: Update Model IDs to Latest Claude 4.x Versions ✅
 **Priority**: Medium

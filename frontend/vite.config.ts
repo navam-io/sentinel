@@ -35,7 +35,7 @@ export default defineConfig({
 		target: process.env.TAURI_PLATFORM == 'windows' ? 'chrome105' : 'safari13',
 		// Don't minify for debug builds
 		minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
-		// Produce sourcemaps for debug builds
-		sourcemap: !!process.env.TAURI_DEBUG,
+		// Produce sourcemaps for debug builds and development
+		sourcemap: process.env.NODE_ENV === 'production' ? false : true,
 	},
 });
