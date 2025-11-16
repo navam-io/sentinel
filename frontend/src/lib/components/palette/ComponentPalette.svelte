@@ -64,7 +64,7 @@
 				<div class="space-y-1">
 					{#each category.nodes as node}
 						<button
-							class="w-full text-left p-3 bg-sentinel-surface border border-sentinel-border rounded-sentinel hover:bg-sentinel-hover hover:border-sentinel-primary transition-all duration-120 cursor-move"
+							class="w-full text-left p-3 bg-sentinel-surface border border-sentinel-border rounded-md hover:bg-sentinel-hover hover:border-sentinel-primary transition-all duration-150 cursor-move"
 							draggable="true"
 							ondragstart={(e) => handleDragStart(e, node.type)}
 							onclick={() => handleAddNode(node.type, node.label)}

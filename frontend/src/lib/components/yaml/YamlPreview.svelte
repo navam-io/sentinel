@@ -54,7 +54,7 @@
 
 	<!-- YAML Content -->
 	<div class="flex-1 overflow-y-auto p-4">
-		<pre class="text-xs font-mono text-sentinel-text bg-sentinel-bg p-4 rounded-sentinel border border-sentinel-border overflow-x-auto">
+		<pre class="text-xs font-mono text-sentinel-text bg-sentinel-bg p-4 rounded-md border border-sentinel-border overflow-x-auto">
 {yaml}
 		</pre>
 	</div>

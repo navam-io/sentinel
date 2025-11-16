@@ -3,10 +3,10 @@
   "version": "0.2.0",
   "identifier": "io.navam.sentinel",
   "build": {
-    "beforeDevCommand": "cd frontend && npm run dev",
-    "beforeBuildCommand": "cd frontend && npm run build",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
     "devUrl": "http://localhost:5173",
-    "frontendDist": "../frontend/build"
+    "frontendDist": "../build"
   },
   "app": {
     "withGlobalTauri": false,
@@ -38,16 +38,5 @@
       "icons/icon.ico"
     ]
   },
-  "plugins": {
-    "fs": {
-      "scope": ["$APPDATA/*", "$DOCUMENT/*"]
-    },
-    "dialog": {
-      "all": true
-    },
-    "shell": {
-      "all": false,
-      "open": true
-    }
-  }
+  "plugins": {}
 }
