@@ -4,7 +4,6 @@ import {
 	Background,
 	Controls,
 	MiniMap,
-	Panel,
 	BackgroundVariant,
 	useReactFlow
 } from '@xyflow/react';
@@ -104,10 +103,6 @@ function Canvas() {
 				/>
 				<Controls />
 				<MiniMap />
-				<Panel position="top-left" className="bg-sentinel-surface border border-sentinel-border rounded-lg p-4">
-					<h1 className="text-xl font-bold text-sentinel-primary">Sentinel</h1>
-					<p className="text-sm text-sentinel-text-muted">AI Agent Testing Platform</p>
-				</Panel>
 			</ReactFlow>
 		</div>
 	);

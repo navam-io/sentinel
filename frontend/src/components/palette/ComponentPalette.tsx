@@ -71,6 +71,12 @@ function ComponentPalette() {
 
 	return (
 		<div className="w-64 bg-sentinel-bg-elevated border-r border-sentinel-border flex flex-col">
+			{/* App Title */}
+			<div className="p-4 border-b border-sentinel-border">
+				<h1 className="text-xl font-bold text-sentinel-primary">Sentinel</h1>
+				<p className="text-xs text-sentinel-text-muted whitespace-nowrap">AI Agent Testing Platform</p>
+			</div>
+
 			{/* Palette Header */}
 			<div className="p-4 border-b border-sentinel-border">
 				<h2 className="text-sm font-semibold text-sentinel-text">Components</h2>
