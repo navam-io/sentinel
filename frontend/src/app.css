@@ -111,11 +111,41 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
     overflow: hidden;
+    position: relative;
   }
 
   .sentinel-node:hover {
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
     transform: translateY(-1px);
+  }
+
+  .sentinel-node:hover .node-delete-btn {
+    opacity: 1;
+  }
+
+  .node-delete-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background: var(--sentinel-error);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 10;
+  }
+
+  .node-delete-btn:hover {
+    background: #dc2626;
+    transform: scale(1.1);
   }
 
   .sentinel-node .node-header {
@@ -135,7 +165,7 @@
 
   .sentinel-node .node-title {
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: 0.6rem;
     color: var(--sentinel-text);
     letter-spacing: 0.01em;
   }
@@ -146,7 +176,7 @@
 
   .sentinel-node .label {
     display: block;
-    font-size: 0.7rem;
+    font-size: 0.5rem;
     font-weight: 500;
     color: var(--sentinel-text-muted);
     margin-bottom: 4px;
@@ -176,6 +206,22 @@
 
   .assertion-node .node-header {
     border-top: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  .tool-node {
+    border-top: 3px solid var(--sentinel-warning);
+  }
+
+  .tool-node .node-header {
+    border-top: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  .system-node {
+    border-top: 3px solid var(--sentinel-info);
+  }
+
+  .system-node .node-header {
+    border-top: 1px solid rgba(59, 130, 246, 0.2);
   }
 
   /* Svelte Flow watermark customization */

@@ -2,6 +2,9 @@ import { writable, derived } from 'svelte/store';
 import type { Node, Edge } from '@xyflow/svelte';
 import { generateYAML } from '$lib/dsl/generator';
 
+// Track last canvas click position for smart node placement
+export const lastCanvasClickPosition = writable<{ x: number; y: number }>({ x: 250, y: 150 });
+
 // Node and Edge stores
 export const nodesStore = writable<Node[]>([
 	{
@@ -50,6 +53,17 @@ export const yamlStore = derived(
 // Helper functions for node manipulation
 export function addNode(node: Node) {
 	nodesStore.update(nodes => [...nodes, node]);
+}
+
+export function addNodeAtPosition(nodeType: string, label: string, position: { x: number; y: number }) {
+	const newNode: Node = {
+		id: `${nodeType}-${Date.now()}`,
+		type: nodeType,
+		data: { label },
+		position
+	};
+	addNode(newNode);
+	return newNode;
 }
 
 export function removeNode(nodeId: string) {

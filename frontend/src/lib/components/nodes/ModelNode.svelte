@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { Handle, Position } from '@xyflow/svelte';
 	import type { NodeProps } from '@xyflow/svelte';
-	import { Cpu } from 'lucide-svelte';
+	import { Cpu, X } from 'lucide-svelte';
+	import { nodesStore, edgesStore } from '$lib/stores/canvas';
 
-	let { data }: NodeProps = $props();
+	let { data, id }: NodeProps = $props();
 
 	const models = [
 		'gpt-4',
@@ -21,25 +22,35 @@
 		const target = e.target as HTMLSelectElement;
 		selectedModel = target.value;
 		data.model = selectedModel;
+
+		// Trigger store update for reactivity
+		nodesStore.update(nodes =>
+			nodes.map(n => n.id === id ? { ...n, data: { ...n.data, model: selectedModel } } : n)
+		);
 	}
 
 	function updateTemperature(e: Event) {
 		const target = e.target as HTMLInputElement;
 		temperature = parseFloat(target.value);
 		data.temperature = temperature;
+
+		// Trigger store update for reactivity
+		nodesStore.update(nodes =>
+			nodes.map(n => n.id === id ? { ...n, data: { ...n.data, temperature } } : n)
+		);
 	}
 
-	// Prevent node dragging when interacting with controls
-	function handleMouseDown(e: MouseEvent) {
+	function deleteNode(e: Event) {
 		e.stopPropagation();
-	}
-
-	function handlePointerDown(e: PointerEvent) {
-		e.stopPropagation();
+		nodesStore.update(nodes => nodes.filter(n => n.id !== id));
+		edgesStore.update(edges => edges.filter(e => e.source !== id && e.target !== id));
 	}
 </script>
 
 <div class="sentinel-node model-node">
+	<button class="node-delete-btn nodrag nopan" onclick={deleteNode} title="Delete node">
+		<X size={12} strokeWidth={2.5} />
+	</button>
 	<div class="node-header">
 		<Cpu size={18} class="node-icon" strokeWidth={2} />
 		<span class="node-title">Model</span>
@@ -52,7 +63,7 @@
 					id="model-select"
 					value={selectedModel}
 					onchange={updateModel}
-					class="sentinel-input text-sm w-full nodrag nopan"
+					class="sentinel-input text-[0.65rem] w-full nodrag nopan"
 				>
 					{#each models as model}
 						<option value={model}>{model}</option>
@@ -60,7 +71,7 @@
 				</select>
 			</div>
 			<div class="nodrag nopan">
-				<label for="temperature-range" class="label">Temperature: {temperature}</label>
+				<label for="temperature-range" class="label text-[0.55rem]">Temperature: {temperature}</label>
 				<input
 					id="temperature-range"
 					type="range"

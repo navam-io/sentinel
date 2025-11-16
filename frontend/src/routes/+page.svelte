@@ -1,48 +1,113 @@
 <script lang="ts">
-	import { SvelteFlow, Background, Controls, MiniMap, BackgroundVariant } from '@xyflow/svelte';
+	import { SvelteFlow, Background, Controls, MiniMap, BackgroundVariant, type XYPosition } from '@xyflow/svelte';
 	import '@xyflow/svelte/dist/style.css';
 	import ComponentPalette from '$lib/components/palette/ComponentPalette.svelte';
 	import YamlPreview from '$lib/components/yaml/YamlPreview.svelte';
 	import InputNode from '$lib/components/nodes/InputNode.svelte';
 	import ModelNode from '$lib/components/nodes/ModelNode.svelte';
 	import AssertionNode from '$lib/components/nodes/AssertionNode.svelte';
-	import { nodesStore, edgesStore } from '$lib/stores/canvas';
+	import ToolNode from '$lib/components/nodes/ToolNode.svelte';
+	import SystemNode from '$lib/components/nodes/SystemNode.svelte';
+	import { nodesStore, edgesStore, addNodeAtPosition, lastCanvasClickPosition } from '$lib/stores/canvas';
 	import { Play, FileDown } from 'lucide-svelte';
 
 	// Register custom node types
 	const nodeTypes = {
 		input: InputNode,
 		model: ModelNode,
-		assertion: AssertionNode
+		assertion: AssertionNode,
+		tool: ToolNode,
+		system: SystemNode
 	};
 
 	let showYamlPreview = $state(true);
+	let selectedNodes = $state<string[]>([]);
 
 	function toggleYamlPreview() {
 		showYamlPreview = !showYamlPreview;
 	}
+
+	// Track canvas clicks for smart positioning
+	function handlePaneClick(event: any) {
+		if (event?.detail) {
+			const { x, y } = event.detail;
+			lastCanvasClickPosition.set({ x, y });
+		}
+	}
+
+	// Handle node selection
+	function handleNodesChange(event: any) {
+		if (event?.detail?.nodes) {
+			selectedNodes = event.detail.nodes.map((n: any) => n.id);
+		}
+	}
+
+	// Delete selected nodes with Delete or Backspace key
+	function handleKeyDown(event: KeyboardEvent) {
+		if ((event.key === 'Delete' || event.key === 'Backspace') && selectedNodes.length > 0) {
+			// Prevent backspace from navigating back
+			event.preventDefault();
+
+			selectedNodes.forEach(nodeId => {
+				nodesStore.update(nodes => nodes.filter(n => n.id !== nodeId));
+				edgesStore.update(edges => edges.filter(e => e.source !== nodeId && e.target !== nodeId));
+			});
+
+			selectedNodes = [];
+		}
+	}
+
+	// Handle drop event with proper flow coordinate conversion
+	function onDragOver(event: DragEvent) {
+		event.preventDefault();
+		if (event.dataTransfer) {
+			event.dataTransfer.dropEffect = 'move';
+		}
+	}
+
+	let reactFlowWrapper: HTMLElement;
+
+	function onDrop(event: CustomEvent) {
+		event.preventDefault();
+
+		const dragEvent = event as any;
+		const nodeType = dragEvent.dataTransfer?.getData('application/svelteflow');
+		const label = dragEvent.dataTransfer?.getData('application/label');
+
+		if (!nodeType || !label) return;
+
+		// Calculate position relative to the flow viewport
+		const position = {
+			x: dragEvent.clientX - 360, // Account for sidebar width
+			y: dragEvent.clientY - 100
+		};
+
+		addNodeAtPosition(nodeType, label, position);
+	}
 </script>
+
+<svelte:window onkeydown={handleKeyDown} />
 
 <div class="h-screen w-screen flex flex-col bg-sentinel-bg">
 	<!-- Top Bar -->
-	<div class="h-14 bg-sentinel-bg-elevated border-b border-sentinel-border flex items-center justify-between px-4">
-		<div class="flex items-center gap-4">
-			<h1 class="text-xl font-semibold text-sentinel-primary">Sentinel</h1>
-			<span class="text-sm text-sentinel-text-muted">Visual Test Builder</span>
+	<div class="h-12 bg-sentinel-bg-elevated border-b border-sentinel-border flex items-center justify-between px-4">
+		<div class="flex items-center gap-3">
+			<h1 class="text-base font-semibold text-sentinel-primary">Sentinel</h1>
+			<span class="text-[0.65rem] text-sentinel-text-muted">Visual Test Builder</span>
 		</div>
 		<div class="flex items-center gap-2">
 			<button
 				onclick={toggleYamlPreview}
-				class="sentinel-button-secondary text-sm"
+				class="sentinel-button-secondary text-[0.65rem]"
 			>
 				{showYamlPreview ? 'Hide' : 'Show'} YAML
 			</button>
-			<button class="sentinel-button-primary text-sm flex items-center gap-2">
-				<Play size={16} strokeWidth={2} />
+			<button class="sentinel-button-primary text-[0.65rem] flex items-center gap-1.5">
+				<Play size={12} strokeWidth={2} />
 				Run Test
 			</button>
-			<button class="sentinel-button-secondary text-sm flex items-center gap-2">
-				<FileDown size={16} strokeWidth={2} />
+			<button class="sentinel-button-secondary text-[0.65rem] flex items-center gap-1.5">
+				<FileDown size={12} strokeWidth={2} />
 				Export
 			</button>
 		</div>
@@ -54,13 +119,22 @@
 		<ComponentPalette />
 
 		<!-- Canvas Area -->
-		<div class="flex-1 relative">
+		<div
+			class="flex-1 relative"
+			ondragover={onDragOver}
+			ondrop={onDrop}
+		>
 			<SvelteFlow
 				nodes={$nodesStore}
 				edges={$edgesStore}
 				{nodeTypes}
 				fitView
 				class="bg-sentinel-bg"
+				onpaneclick={handlePaneClick}
+				onnodeschange={handleNodesChange}
+				nodesDraggable={true}
+				nodesConnectable={true}
+				elementsSelectable={true}
 			>
 				<Background variant={BackgroundVariant.Dots} gap={16} size={1} />
 				<Controls />
