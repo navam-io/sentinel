@@ -45,13 +45,20 @@ This file contains the active feature backlog for Sentinel. Features are listed 
 
 ### Tech Stack
 
+**Framework Decision** (November 16, 2025):
+- **Migrating from Svelte to React** for production-ready canvas library
+- See `backlog/06-spec-framework.md` for comprehensive analysis
+- See `backlog/05-spec-flow.md` for React Flow implementation guide
+
 **Frontend (Visual UI)**
-- Tauri (Rust core + TypeScript UI)
-- SvelteKit 2.0
-- React Flow (node-based canvas)
-- shadcn/ui + TailwindCSS
-- Monaco Editor (code editing when needed)
-- Recharts (data visualization)
+- Tauri 2.0 (Rust core + TypeScript UI)
+- **React 19 + TypeScript + Vite** (replacing SvelteKit 2.0)
+- **React Flow** (@xyflow/react) - production-ready node-based canvas (400k+ weekly downloads)
+- **shadcn/ui** (original React version with v0 AI support)
+- **Zustand** for state management
+- **TailwindCSS 4.0** for styling (Sentinel design system)
+- **Monaco Editor** (code editing when needed)
+- **Recharts** (data visualization)
 
 **Backend (API & Execution)**
 - Python FastAPI for execution engine and API
@@ -85,19 +92,20 @@ Priority order:
 
 ---
 
-### ✅ Release 0.2.0: Visual Canvas Foundation
-**Status**: Completed
+### ✅ Release 0.2.0: Visual Canvas Foundation (Svelte) - DEPRECATED
+**Status**: Completed but **Migrating to React**
 **Released**: November 15, 2025
+**Migration Decision**: November 16, 2025
 **Semver**: 0.1.0 → 0.2.0 (minor)
 
-**Description**:
-Complete visual-first interface with node-based canvas for building AI agent tests. Users can now create tests through drag-and-drop instead of writing YAML.
+**Migration Notice**:
+This release used **SvelteFlow (alpha)** which has known drag-and-drop issues (#4980, #4418). Based on comprehensive research (see `06-spec-framework.md`), we are migrating to **React + React Flow** for production-ready stability. The Svelte implementation (~1,215 LOC) will be replaced with React in 3-5 days.
 
-**What Was Delivered**:
-- **Tauri 2.0 Desktop App**: Native app infrastructure with Rust backend
-- **SvelteKit 2.0 Frontend**: Modern reactive UI with TypeScript
-- **Node-Based Canvas**: @xyflow/svelte integration with infinite zoom/pan
-- **3 Node Types**: Input, Model, and Assertion nodes with visual configuration
+**What Was Delivered** (Svelte version - being replaced):
+- **Tauri 2.0 Desktop App**: Native app infrastructure with Rust backend ✅ (keeping)
+- **SvelteKit 2.0 Frontend**: Modern reactive UI with TypeScript ❌ (migrating to React 19)
+- **Node-Based Canvas**: @xyflow/svelte integration ❌ (migrating to React Flow)
+- **3 Node Types**: Input, Model, and Assertion nodes ✅ (migrating to React components)
 - **Component Palette**: Drag-and-drop sidebar with organized node categories
 - **YAML Preview Panel**: Real-time YAML generation with copy/download
 - **DSL Generator**: Visual → YAML conversion with full schema support
@@ -167,66 +175,81 @@ Complete DSL schema and parser implementation as the backend foundation for visu
 
 ---
 
-### Feature 1: Visual Canvas Foundation ✅ COMPLETED
-**Status**: Completed (v0.2.0)
+### Feature 1: Visual Canvas Foundation 🔄 IN PROGRESS (React Migration)
+**Status**: Migrating from Svelte to React
 **Priority**: P0 - Foundation
-**Semver Impact**: minor (0.2.0)
+**Semver Impact**: minor (0.3.0 - React version)
+**Migration Timeline**: 3-5 days (November 16-20, 2025)
+
+**Migration Rationale**:
+- **SvelteFlow is alpha** (v0.1.28) with known drag-and-drop bugs (#4980, #4418)
+- **React Flow is production-ready** (v11, 400k+ weekly downloads, used by Langflow/OneSignal)
+- **Visual canvas is our CORE feature** - cannot compromise on stability
+- **Perfect timing** - only ~1,215 LOC, minimal migration cost
+- **Ecosystem advantage** - 122:1 job ratio, 100+ UI libraries, v0 AI support
+
+**See**: `backlog/06-spec-framework.md` for comprehensive analysis and migration plan
 
 **Description**:
-Build the core visual canvas infrastructure with node-based test building. This is the foundation for all visual features.
+Build the core visual canvas infrastructure with node-based test building using **React + React Flow**. This is the foundation for all visual features.
 
 **Requirements**:
-- **Tauri Desktop App Setup**:
-  - Initialize Tauri 2.0 project with SvelteKit frontend
+- **Tauri Desktop App Setup**: ✅ COMPLETE (keeping Tauri 2.0)
+  - Initialize Tauri 2.0 project with React frontend
   - Configure app window, menus, and system tray
   - Set up IPC communication between Rust and frontend
   - Configure auto-updates and packaging
 
-- **SvelteKit Frontend Setup**:
-  - Initialize SvelteKit 2.0 with TypeScript
-  - Configure TailwindCSS with Sentinel design tokens (spec-03.md)
-  - Integrate shadcn/ui component library
-  - Set up routing and layout structure
+- **React Frontend Setup**: 🔄 IN PROGRESS
+  - Initialize React 19 + TypeScript + Vite
+  - Configure TailwindCSS 4.0 with Sentinel design tokens (spec-03.md)
+  - Integrate shadcn/ui component library (original React version)
+  - Set up Zustand for state management
+  - Set up routing with React Router
 
-- **Node-Based Canvas (React Flow)**:
-  - Integrate React Flow for node-based workflow
+- **Node-Based Canvas (React Flow)**: 🔄 IN PROGRESS
+  - Integrate **React Flow** (@xyflow/react) for node-based workflow
   - Implement infinite canvas with zoom/pan
-  - Create basic node types (input, model, assertion, output)
-  - Enable drag-and-drop from component palette
+  - Create basic node types (input, model, assertion, tool, system)
+  - Enable drag-and-drop from component palette (RELIABLE)
   - Implement node connections (edges)
   - Auto-layout algorithm for new nodes
   - Minimap for navigation
 
-- **Component Palette**:
+- **Component Palette**: 🔄 IN PROGRESS
   - Left sidebar with draggable node types
   - Categories: Inputs, Models, Tools, Assertions, Outputs
-  - Search/filter functionality
+  - Click to add OR drag-and-drop to canvas
 
-- **DSL Generator (Visual → YAML)**:
+- **DSL Generator (Visual → YAML)**: 🔄 IN PROGRESS
   - Convert canvas nodes to YAML test spec
   - Real-time YAML preview panel
   - Validation and error highlighting
   - Export to .yaml file
 
 **Deliverables**:
-- `src-tauri/`: Rust backend with Tauri configuration
-- `frontend/`: SvelteKit application
-  - `src/lib/components/canvas/`: Canvas components
-  - `src/lib/components/palette/`: Component palette
-  - `src/lib/components/nodes/`: Node type components
-  - `src/routes/`: Page routes
-- `frontend/src/lib/dsl/`: DSL generator utilities
+- `src-tauri/`: Rust backend with Tauri configuration ✅ (keeping)
+- `src/`: React application (replacing `frontend/`)
+  - `components/canvas/`: Canvas components
+  - `components/palette/`: Component palette
+  - `components/nodes/`: Node type components (React + TypeScript)
+  - `components/yaml/`: YAML preview
+  - `components/ui/`: shadcn/ui components
+  - `stores/canvas.ts`: Zustand state management
+  - `App.tsx`: Main application component
 - Desktop app builds (macOS, Windows, Linux)
-- Documentation: Visual canvas usage guide
+- Documentation: Visual canvas usage guide + migration notes
 
 **Success Criteria**:
-- Desktop app launches and runs smoothly
-- Can drag nodes onto canvas
-- Can connect nodes with edges
-- Canvas generates valid YAML test spec
-- YAML updates in real-time as canvas changes
-- Can export YAML to file
-- App follows Sentinel design system (colors, typography, spacing)
+- ✅ Desktop app launches and runs smoothly (Tauri working)
+- ✅ Can drag nodes onto canvas **100% reliably** (React Flow)
+- ✅ Can connect nodes with edges
+- ✅ Canvas generates valid YAML test spec
+- ✅ YAML updates in real-time as canvas changes
+- ✅ Can export YAML to file
+- ✅ App follows Sentinel design system (colors, typography, spacing)
+- ✅ **No TypeScript errors**
+- ✅ **Drag-and-drop works every time** (critical improvement over SvelteFlow)
 
 ---
 
@@ -267,8 +290,8 @@ Complete the round-trip by implementing DSL → Visual conversion. Parse YAML te
 - `backend/api/`: FastAPI application with parsing endpoints
 - `backend/core/schema.py`: Pydantic models for test specs
 - `backend/core/parser.py`: YAML/JSON parser
-- `frontend/src/lib/dsl/importer.ts`: DSL → Canvas converter
-- `frontend/src/lib/components/editor/`: Monaco editor component
+- `src/dsl/importer.ts`: DSL → Canvas converter (React)
+- `src/components/editor/`: Monaco editor component (React)
 - Tests for parser and importer
 - Documentation: DSL specification and round-trip guide
 
@@ -320,8 +343,8 @@ Implement pluggable model provider architecture and local execution engine. User
 - `backend/providers/`: Model provider implementations
 - `backend/executor/`: Execution engine
 - `backend/storage/`: SQLite/Postgres storage layer
-- `frontend/src/lib/components/providers/`: Provider marketplace UI
-- `frontend/src/lib/components/execution/`: Live execution dashboard
+- `src/components/providers/`: Provider marketplace UI (React)
+- `src/components/execution/`: Live execution dashboard (React)
 - Tests for providers and executor
 - Documentation: Provider integration guide
 
@@ -370,9 +393,9 @@ Visual assertion builder and validation engine. Users create assertions through 
   - Inline editing of assertion parameters
 
 **Deliverables**:
-- `frontend/src/lib/components/assertions/`: Assertion builder UI
+- `src/components/assertions/`: Assertion builder UI (React)
 - `backend/validators/`: Assertion validation engine
-- `frontend/src/lib/components/nodes/AssertionNode.svelte`: Assertion node component
+- `src/components/nodes/AssertionNode.tsx`: Assertion node component (React + TypeScript)
 - Tests for assertion builder and validator
 - Documentation: Assertions guide
 
@@ -419,11 +442,11 @@ Implement the complete Sentinel design system including Tailwind theme, icons, a
   - Focus states and accessibility
 
 **Deliverables**:
-- `frontend/tailwind.config.js`: Tailwind theme configuration
-- `frontend/src/lib/icons/`: SVG icon components
-- `frontend/src/lib/components/ui/`: shadcn/ui base components
-- `frontend/src/lib/components/sentinel/`: Sentinel-specific components
-- `frontend/src/app.css`: Global styles
+- `tailwind.config.js`: Tailwind theme configuration
+- `src/components/icons/`: SVG icon components (React)
+- `src/components/ui/`: shadcn/ui base components (React)
+- `src/components/sentinel/`: Sentinel-specific components (React)
+- `src/index.css`: Global styles
 - Storybook or component preview page
 - Documentation: Design system guide
 
@@ -464,9 +487,9 @@ Auto-generate tests by recording agent interactions (inspired by Playwright Code
   - Save to canvas or export to suite
 
 **Deliverables**:
-- `frontend/src/lib/components/recorder/`: Recording UI
+- `src/components/recorder/`: Recording UI (React)
 - `backend/recorder/`: Recording analysis and test generation
-- `frontend/src/routes/playground/`: Agent playground for recording
+- `src/pages/playground/`: Agent playground for recording (React)
 - Documentation: Record & replay guide
 
 **Success Criteria**:
@@ -509,8 +532,8 @@ Pre-built test templates and test suite organization.
   - RAG agent
 
 **Deliverables**:
-- `frontend/src/lib/components/templates/`: Template gallery UI
-- `frontend/src/lib/components/suites/`: Test suite organizer
+- `src/components/templates/`: Template gallery UI (React)
+- `src/components/suites/`: Test suite organizer (React)
 - `templates/`: Built-in template YAML files
 - Documentation: Templates and suites guide
 
@@ -553,8 +576,8 @@ Compare test runs and detect regressions with visual diff viewer.
 
 **Deliverables**:
 - `backend/regression/`: Regression detection engine
-- `frontend/src/lib/components/comparison/`: Comparison view UI
-- `frontend/src/routes/compare/`: Comparison page
+- `src/components/comparison/`: Comparison view UI (React)
+- `src/pages/compare/`: Comparison page (React)
 - Documentation: Regression detection guide
 
 **Success Criteria**:
@@ -593,7 +616,7 @@ Support for testing agentic frameworks, starting with LangGraph.
 
 **Deliverables**:
 - `backend/frameworks/`: Framework adapters
-- `frontend/src/lib/components/frameworks/`: Framework UI
+- `src/components/frameworks/`: Framework UI (React)
 - Tests for LangGraph integration
 - Documentation: Framework integration guide
 
@@ -627,7 +650,7 @@ Generate tests from natural language descriptions using AI.
 
 **Deliverables**:
 - `backend/ai/`: AI generation engine
-- `frontend/src/lib/components/ai/`: AI generator UI
+- `src/components/ai/`: AI generator UI (React)
 - Documentation: AI-assisted testing guide
 
 **Success Criteria**:
@@ -662,7 +685,7 @@ Team collaboration features for shared testing.
 
 **Deliverables**:
 - `backend/collaboration/`: Collaboration services
-- `frontend/src/lib/components/workspace/`: Workspace UI
+- `src/components/workspace/`: Workspace UI (React)
 - WebSocket for real-time updates
 - Documentation: Collaboration guide
 
@@ -756,8 +779,8 @@ Overview dashboard with trends and analytics.
   - Heatmaps for regression tracking
 
 **Deliverables**:
-- `frontend/src/routes/dashboard/`: Dashboard page
-- `frontend/src/lib/components/charts/`: Chart components
+- `src/pages/dashboard/`: Dashboard page (React)
+- `src/components/charts/`: Chart components (React + Recharts)
 - Documentation: Dashboard guide
 
 **Success Criteria**:
@@ -816,7 +839,29 @@ Run Sentinel tests in CI/CD pipelines.
 
 ## Current Status
 
-- **Version**: 0.1.0 (DSL foundation complete)
-- **Latest Release**: Release 0.1.0 - DSL Schema & Parser Foundation (November 15, 2025)
-- **Next Feature**: Feature 1 - Visual Canvas Foundation (0.2.0)
-- **Architecture**: Visual-first desktop app (Tauri + SvelteKit) with Python backend
+- **Version**: 0.2.0 (Visual Canvas - Svelte version, being migrated to React)
+- **Latest Release**: Release 0.2.0 - Visual Canvas Foundation (November 15, 2025)
+- **Active Work**: Migrating to React + React Flow (November 16-20, 2025)
+- **Next Release**: 0.3.0 - React-based Visual Canvas Foundation
+- **Architecture**: Visual-first desktop app (Tauri + React 19 + React Flow) with Python backend
+
+## Migration Decision (November 16, 2025)
+
+After comprehensive research and analysis, we are **migrating from Svelte to React**:
+
+**Why Migrate**:
+- **SvelteFlow is alpha** (v0.1.28) with known drag-and-drop bugs
+- **React Flow is production-ready** (v11, 400k+ weekly downloads)
+- **Visual canvas is our CORE feature** - cannot compromise on stability
+- **Langflow uses React Flow** (closest comparable app)
+- **Perfect timing** - only ~1,215 LOC, 3-5 day migration cost
+
+**See Documentation**:
+- `backlog/06-spec-framework.md` - Comprehensive framework analysis (50 pages)
+- `backlog/05-spec-flow.md` - React Flow implementation guide with code examples
+
+**Migration Plan**:
+1. Create React + Vite + Tauri project (Day 1)
+2. Migrate components from Svelte to React (Days 2-4)
+3. Test and verify drag-and-drop works 100% (Day 5)
+4. Archive Svelte code, ship React version as 0.3.0
