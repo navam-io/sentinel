@@ -1,26 +1,34 @@
 # Sentinel Documentation
 
-**Version**: 0.1.0
+**Version**: 0.2.0
 **Last Updated**: November 15, 2025
 
 Welcome to the Sentinel documentation! Sentinel is a visual-first agent testing and evaluation platform for frontier AI labs, neo-labs, and AI research organizations.
 
-## What's Available in v0.1.0
+## What's New in v0.2.0
 
-This release provides the **DSL Schema & Parser Foundation** - the backend infrastructure for defining and managing AI agent test specifications.
+This release introduces the **Visual Canvas Foundation** - a complete visual-first interface for building AI agent tests without writing code!
 
 ### Key Features
 
-- **YAML/JSON Test Specifications**: Define tests in human-readable YAML or JSON format
-- **Pydantic-Based Validation**: Type-safe schema with comprehensive validation
-- **Round-Trip Conversion**: Parse and serialize with zero data loss
-- **8 Assertion Types**: Comprehensive test validation capabilities
-- **6 Example Templates**: Production-ready test examples to get started
-- **Python API**: Programmatic access to parser and schema
+- **🎨 Visual Canvas**: Drag-and-drop node-based test builder
+- **🖥️ Desktop App**: Tauri-powered native application
+- **🔄 Real-Time YAML**: Live YAML generation as you build
+- **📦 Component Palette**: Organized node types (Input, Model, Assertion)
+- **💾 Export/Download**: Save tests as YAML files
+- **🎯 Zero Code Required**: Build tests visually or with YAML - your choice!
+
+**Plus all v0.1.0 features:**
+- YAML/JSON parsing & validation
+- Pydantic-based type-safe schema
+- 8 assertion types
+- 6 example templates
+- Python API
 
 ## Documentation Structure
 
 ### Getting Started
+- **[Visual Canvas Guide](visual-canvas.md)** - Complete guide to the visual test builder ⭐ NEW
 - **[Getting Started Guide](getting-started.md)** - Installation and first steps
 - **[Quick Start](getting-started.md#quick-start)** - Create your first test in 5 minutes
 
@@ -131,13 +139,19 @@ With the current release, you can:
 
 ## What's Coming Next?
 
-🔜 **Visual Canvas Foundation (v0.2.0)**
-- Tauri desktop app with SvelteKit
-- Node-based visual test builder
-- Drag-and-drop component palette
-- Real-time YAML preview
-- Visual → YAML generation
-- YAML → Visual import
+🔜 **Visual Import & Bidirectional Sync (v0.3.0)**
+- YAML → Canvas import
+- Monaco editor integration
+- Bidirectional sync (Canvas ↔ YAML)
+- Split view mode
+- Undo/redo support
+
+🔜 **Model Providers & Execution (v0.4.0)**
+- Anthropic + OpenAI providers
+- Local test execution from canvas
+- Live execution dashboard
+- Result storage (SQLite/PostgreSQL)
+- Metrics collection & visualization
 
 See the [Roadmap](../backlog/active.md) for complete feature list.
 

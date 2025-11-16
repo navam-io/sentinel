@@ -4,12 +4,10 @@ Think harder when doing these tasks:
 
 1. Read blogs/ to understand if there are existing posts
 2. Understand this project backlog/ and docs/ to learn what was released recently
-3. Write a blog post explaining Navam Marketer product features released
-4. Use Playwright tool to take UI snapshots of the features to add to the blog post
+3. Write a blog post explaining Navam Sentinel product features released
+4. Use images available in the $ARGUMENTS folder for the blog post
 5. Create a "behind the scenes" section in the post sharing any unique learning when building this stage of the product using Claude Code
-6. Save the blog post with appropriate file name in SEO friendly kebab case as well formatted markdown in the blogs/ subfolder named after the blog post
-7. Save any image snapshots in the same folder
-8. Create a compelling LinkedIn post as markdown, inviting readers to read the blog pos, in the same folder
+6. Save the blog post with appropriate file name in SEO friendly kebab case as well formatted markdown in the $ARGUMENTS folder
 
 
 

@@ -4,7 +4,7 @@
 
 **Visual-first agent testing and evaluation platform for AI labs**
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/navam-io/sentinel/releases)
+[![Version](https://img.shields.io/badge/version-0.2.0-blue)](https://github.com/navam-io/sentinel/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-blue)](https://www.python.org)
 [![Tests](https://img.shields.io/badge/tests-70%20passing-success)](tests/)
@@ -22,9 +22,9 @@
 
 ## 🎯 What is Sentinel?
 
-Sentinel is a **visual-first agent testing platform** that makes AI agent testing as intuitive as Postman made API testing. Define tests in YAML, validate with type safety, and prepare for visual canvas workflows.
+Sentinel is a **visual-first agent testing platform** that makes AI agent testing as intuitive as Postman made API testing. Build tests with a drag-and-drop canvas, or write YAML directly—your choice.
 
-**Current Release (v0.1.0)**: Complete DSL foundation with schema validation and round-trip YAML/JSON parsing.
+**Current Release (v0.2.0)**: Visual canvas foundation with node-based test builder, real-time YAML generation, and desktop app.
 
 ### Core Philosophy
 
@@ -36,11 +36,23 @@ Sentinel makes AI agent testing accessible to everyone—from product managers t
 
 ## ✨ Features
 
-### Current (v0.1.0) ✅
+### Current (v0.2.0) ✅
 
 <table>
 <tr>
-<td width="50%">
+<td width="33%">
+
+**🎨 Visual Canvas**
+- Tauri desktop app
+- Node-based test builder
+- Drag-and-drop interface
+- Real-time YAML generation
+- 3 node types (Input, Model, Assertion)
+- Component palette
+- YAML preview panel
+
+</td>
+<td width="33%">
 
 **🔧 DSL Schema & Parser**
 - Pydantic-based type-safe schema
@@ -48,15 +60,16 @@ Sentinel makes AI agent testing accessible to everyone—from product managers t
 - Round-trip conversion (zero data loss)
 - 8 assertion types supported
 - Complete error messages
+- Visual → YAML generator
 
 </td>
-<td width="50%">
+<td width="33%">
 
 **📦 Production Ready**
 - 70 tests, 98% coverage
 - 6 example templates included
 - Python API for programmatic access
-- File I/O with auto-format detection
+- Sentinel design system (TailwindCSS)
 - Comprehensive documentation
 
 </td>
@@ -69,19 +82,19 @@ Sentinel makes AI agent testing accessible to everyone—from product managers t
 <tr>
 <td width="33%">
 
-**🎨 Visual Canvas**
-*(v0.2.0)*
+**🔄 Visual Import**
+*(v0.3.0)*
 
-- Tauri desktop app
-- Node-based test builder
-- Drag-and-drop interface
-- Real-time YAML generation
+- YAML → Canvas import
+- Monaco editor integration
+- Bidirectional sync
+- Split view mode
 
 </td>
 <td width="33%">
 
 **⚡ Test Execution**
-*(v0.3.0)*
+*(v0.4.0)*
 
 - Anthropic & OpenAI providers
 - Local execution engine
@@ -92,7 +105,7 @@ Sentinel makes AI agent testing accessible to everyone—from product managers t
 <td width="33%">
 
 **🔍 Regression Detection**
-*(v0.4.0+)*
+*(v0.5.0+)*
 
 - Visual comparison view
 - Metric deltas
@@ -107,7 +120,29 @@ Sentinel makes AI agent testing accessible to everyone—from product managers t
 
 ## 🚀 Quick Start
 
-### Installation
+### Option 1: Visual Canvas (Recommended)
+
+**Requirements**: Node.js 18+ and Rust (for Tauri)
+
+```bash
+# Clone the repository
+git clone https://github.com/navam-io/sentinel.git
+cd sentinel/frontend
+
+# Install dependencies
+npm install
+
+# Run desktop app (development mode)
+npm run tauri:dev
+```
+
+**That's it!** The visual canvas will open, and you can:
+1. Drag nodes from the left palette onto the canvas
+2. Connect nodes to build your test flow
+3. See real-time YAML generation on the right
+4. Export your test to a .yaml file
+
+### Option 2: DSL/Code-First
 
 **Requirements**: Python 3.10+
 
@@ -128,9 +163,7 @@ pytest tests/ -v
 # ✓ 70 tests passed, 98% coverage
 ```
 
-### Your First Test (5 minutes)
-
-**Step 1**: Create `my_test.yaml`
+**Create a test** (`my_test.yaml`):
 
 ```yaml
 name: "Simple Q&A Test"
@@ -140,34 +173,20 @@ inputs:
 assertions:
   - must_contain: "Paris"
   - output_type: "text"
-  - max_latency_ms: 2000
 tags:
   - geography
-  - quick
 ```
 
-**Step 2**: Parse and validate
+**Parse and validate**:
 
 ```python
 from backend.core.parser import TestSpecParser
 
-# Load and validate
 spec = TestSpecParser.parse_file("my_test.yaml")
-
 print(f"✓ Test loaded: {spec.name}")
-print(f"  Model: {spec.model}")
-print(f"  Assertions: {len(spec.assertions)}")
 ```
 
-**Step 3**: Output
-
-```
-✓ Test loaded: Simple Q&A Test
-  Model: gpt-4
-  Assertions: 3
-```
-
-**🎉 Congratulations!** You've created your first test.
+**🎉 Choose your style** - Visual or Code, both work perfectly!
 
 ---
 
@@ -380,16 +399,29 @@ graph TB
 |--------|-------|
 | **Tests** | 70 passing |
 | **Coverage** | 98% |
-| **Code Lines** | 160 (backend) |
+| **Backend Code** | 160 lines |
+| **Frontend Code** | 4,000+ lines (TypeScript/Svelte) |
+| **Node Types** | 3 (Input, Model, Assertion) |
 | **Templates** | 6 production-ready |
-| **Documentation** | 5,040 lines |
-| **Assertion Types** | 8 |
+| **Documentation** | 5,000+ lines |
+| **TypeScript Errors** | 0 |
 
 </div>
 
 ---
 
 ## 🗺️ Roadmap
+
+### ✅ v0.2.0 - Visual Canvas Foundation (Released Nov 15, 2025)
+
+- ✅ Tauri 2.0 desktop app infrastructure
+- ✅ SvelteKit 2.0 + @xyflow/svelte canvas
+- ✅ Drag-and-drop test builder
+- ✅ Visual → YAML generation
+- ✅ Component palette with 3 node types
+- ✅ Real-time YAML preview
+- ✅ Sentinel design system (TailwindCSS 4.0)
+- ✅ 0 TypeScript errors, full type safety
 
 ### ✅ v0.1.0 - DSL Foundation (Released Nov 15, 2025)
 
@@ -400,24 +432,23 @@ graph TB
 - ✅ 70 tests, 98% coverage
 - ✅ Complete documentation (8 guides)
 
-### 🚧 v0.2.0 - Visual Canvas Foundation (Q1 2026)
+### 🚧 v0.3.0 - Visual Import & Bidirectional Sync (Q1 2026)
 
-- Tauri desktop app (macOS, Windows, Linux)
-- SvelteKit + React Flow canvas
-- Drag-and-drop test builder
-- Visual → YAML generation
-- YAML → Visual import
-- Real-time preview
+- YAML → Canvas import
+- Monaco editor integration
+- Bidirectional sync (Canvas ↔ YAML)
+- Split view mode
+- Undo/redo support
 
-### 🔜 v0.3.0 - Model Providers & Execution (Q1-Q2 2026)
+### 🔜 v0.4.0 - Model Providers & Execution (Q1-Q2 2026)
 
 - Anthropic + OpenAI providers
-- Local test execution
+- Local test execution from canvas
 - Result storage (SQLite/PostgreSQL)
 - Live execution dashboard
-- Metrics collection
+- Metrics collection & visualization
 
-### 🔮 v0.4.0+ - Advanced Features (2026)
+### 🔮 v0.5.0+ - Advanced Features (2026)
 
 - Visual assertion builder
 - Regression detection & comparison
