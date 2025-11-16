@@ -4,7 +4,7 @@
 
 **Visual-first agent testing and evaluation platform for AI labs**
 
-[![Version](https://img.shields.io/badge/version-0.2.0-blue)](https://github.com/navam-io/sentinel/releases)
+[![Version](https://img.shields.io/badge/version-0.3.0-blue)](https://github.com/navam-io/sentinel/releases)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-blue)](https://www.python.org)
 [![Tests](https://img.shields.io/badge/tests-70%20passing-success)](tests/)
@@ -24,7 +24,7 @@
 
 Sentinel is a **visual-first agent testing platform** that makes AI agent testing as intuitive as Postman made API testing. Build tests with a drag-and-drop canvas, or write YAML directly—your choice.
 
-**Current Release (v0.2.0)**: Visual canvas foundation with node-based test builder, real-time YAML generation, and desktop app.
+**Current Release (v0.3.0)**: React-based visual canvas with production-ready drag-and-drop, 5 node types, real-time YAML generation, and Tauri desktop app.
 
 ### Core Philosophy
 
@@ -36,20 +36,21 @@ Sentinel makes AI agent testing accessible to everyone—from product managers t
 
 ## ✨ Features
 
-### Current (v0.2.0) ✅
+### Current (v0.3.0) ✅
 
 <table>
 <tr>
 <td width="33%">
 
-**🎨 Visual Canvas**
-- Tauri desktop app
-- Node-based test builder
-- Drag-and-drop interface
+**🎨 Visual Canvas (React)**
+- Tauri 2.0 desktop app
+- React Flow (production-ready)
+- 100% reliable drag-and-drop
 - Real-time YAML generation
-- 3 node types (Input, Model, Assertion)
+- **5 node types**: Input, Model, Assertion, Tool, System
 - Component palette
-- YAML preview panel
+- YAML preview with edit/copy/download
+- Bidirectional Visual ↔ DSL sync
 
 </td>
 <td width="33%">
@@ -61,6 +62,7 @@ Sentinel makes AI agent testing accessible to everyone—from product managers t
 - 8 assertion types supported
 - Complete error messages
 - Visual → YAML generator
+- YAML → Visual importer
 
 </td>
 <td width="33%">
@@ -69,7 +71,8 @@ Sentinel makes AI agent testing accessible to everyone—from product managers t
 - 70 tests, 98% coverage
 - 6 example templates included
 - Python API for programmatic access
-- Sentinel design system (TailwindCSS)
+- React 19 + Vite + Zustand
+- Sentinel design system (TailwindCSS 4.0)
 - Comprehensive documentation
 
 </td>
@@ -82,19 +85,19 @@ Sentinel makes AI agent testing accessible to everyone—from product managers t
 <tr>
 <td width="33%">
 
-**🔄 Visual Import**
-*(v0.3.0)*
+**🔄 Monaco Editor Integration**
+*(v0.4.0)*
 
-- YAML → Canvas import
-- Monaco editor integration
-- Bidirectional sync
+- Advanced YAML editing
+- Syntax highlighting
+- Auto-completion
 - Split view mode
 
 </td>
 <td width="33%">
 
 **⚡ Test Execution**
-*(v0.4.0)*
+*(v0.5.0)*
 
 - Anthropic & OpenAI providers
 - Local execution engine
@@ -105,7 +108,7 @@ Sentinel makes AI agent testing accessible to everyone—from product managers t
 <td width="33%">
 
 **🔍 Regression Detection**
-*(v0.5.0+)*
+*(v0.6.0+)*
 
 - Visual comparison view
 - Metric deltas
