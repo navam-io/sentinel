@@ -1,7 +1,7 @@
 # Building the Foundation: Sentinel v0.1.0 - A Type-Safe DSL for AI Agent Testing
 
 **Published**: November 15, 2025
-**Author**: Manav Sehgal
+**Author**: Navam Team
 **Reading Time**: 8 minutes
 
 ---
@@ -563,4 +563,4 @@ Let's make AI agent testing as intuitive as Postman made API testing.
 ---
 
 *Building in public, one feature at a time.*
-*- Manav*
+*- Navam Team*

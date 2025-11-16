@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "d40e467d3e42c9e9",
+        "id": "546526fd43e94fa2",
         "type": "tabs",
         "children": [
           {
-            "id": "563b209055879817",
+            "id": "7aac3eda99015490",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -162,12 +162,42 @@
       "bases:Create new base": false
     }
   },
-  "active": "563b209055879817",
+  "active": "7aac3eda99015490",
   "lastOpenFiles": [
-    "CLAUDE.md.tmp.91175.1763246399831",
-    "README.md.tmp.91175.1763246383471",
+    "assets/sentinel-square.png",
+    "assets/sentinel-round.png",
+    "assets",
+    "untitled folder",
+    "blogs/sentinel-v0-1-0-dsl-foundation/blog-post.md",
+    "blogs/sentinel-v0-1-0-dsl-foundation/social-media-summary.md",
+    "blogs/sentinel-v0-1-0-dsl-foundation/README.md",
+    "blogs/sentinel-v0-1-0-dsl-foundation/linkedin-post.md",
+    "docs/getting-started.md",
+    "blogs/README.md",
+    "blogs/sentinel-v0-1-0-dsl-foundation",
+    "blogs",
+    "README.md.tmp.91175.1763261983699",
+    "docs/examples.md",
+    "docs/dsl-reference.md",
+    "docs/best-practices.md",
+    "docs/api-reference.md",
+    "docs/README.md",
+    "docs/migration-guide.md",
+    "docs/schema-reference.md",
+    "docs",
+    "backlog/release-0.1.0.md",
+    "tests/integration/__pycache__/test_templates.cpython-313-pytest-9.0.1.pyc",
+    "tests/integration/__pycache__/__init__.cpython-313.pyc",
+    "tests/integration/__pycache__",
+    "tests/integration/test_templates.py",
+    "htmlcov/keybd_closed_cb_ce680311.png",
+    "htmlcov/favicon_32_cb_58284776.png",
+    "venv/lib/python3.13/site-packages/starlette-0.49.3.dist-info/licenses/LICENSE.md",
+    "venv/lib/python3.13/site-packages/uvicorn-0.38.0.dist-info/licenses/LICENSE.md",
+    "venv/lib/python3.13/site-packages/coverage/htmlfiles/keybd_closed.png",
+    "venv/lib/python3.13/site-packages/coverage/htmlfiles/favicon_32.png",
+    "venv/lib/python3.13/site-packages/idna-3.11.dist-info/licenses/LICENSE.md",
     "backlog/spec-04.md",
-    "docs/guides/quickstart.md",
-    "docs/README.md"
+    "docs/guides/quickstart.md"
   ]
 }
