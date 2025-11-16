@@ -1,41 +1,44 @@
 {
-	"name": "frontend",
+	"name": "sentinel-frontend",
 	"private": true,
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
+		"dev": "vite",
+		"build": "tsc && vite build",
 		"preview": "vite preview",
-		"prepare": "svelte-kit sync || echo ''",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"tauri": "tauri",
 		"tauri:dev": "tauri dev",
-		"tauri:build": "tauri build"
-	},
-	"devDependencies": {
-		"@sveltejs/adapter-auto": "^7.0.0",
-		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.47.1",
-		"@sveltejs/vite-plugin-svelte": "^6.2.1",
-		"@tailwindcss/postcss": "^4.1.17",
-		"@tailwindcss/typography": "^0.5.19",
-		"@tauri-apps/cli": "^2.1.0",
-		"autoprefixer": "^10.4.22",
-		"postcss": "^8.5.6",
-		"svelte": "^5.41.0",
-		"svelte-check": "^4.3.3",
-		"tailwindcss": "^4.1.17",
-		"typescript": "^5.9.3",
-		"vite": "^7.1.10"
+		"tauri:build": "tauri build",
+		"lint": "eslint .",
+		"type-check": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@tauri-apps/api": "^2.9.0",
 		"@tauri-apps/plugin-clipboard-manager": "^2.3.2",
-		"@xyflow/svelte": "^1.4.2",
+		"@xyflow/react": "^12.3.6",
+		"clsx": "^2.1.1",
 		"js-yaml": "^4.1.1",
-		"lucide-svelte": "^0.553.0",
-		"yaml": "^2.8.1"
+		"lucide-react": "^0.469.0",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"tailwind-merge": "^2.5.5",
+		"yaml": "^2.8.1",
+		"zustand": "^5.0.2"
+	},
+	"devDependencies": {
+		"@tailwindcss/postcss": "^4.1.17",
+		"@tailwindcss/typography": "^0.5.19",
+		"@tauri-apps/cli": "^2.1.0",
+		"@types/js-yaml": "^4.0.9",
+		"@types/node": "^22.10.5",
+		"@types/react": "^19.0.6",
+		"@types/react-dom": "^19.0.3",
+		"@vitejs/plugin-react": "^4.3.4",
+		"autoprefixer": "^10.4.22",
+		"postcss": "^8.5.6",
+		"tailwindcss": "^4.1.17",
+		"typescript": "^5.9.3",
+		"vite": "^7.1.10"
 	}
 }
