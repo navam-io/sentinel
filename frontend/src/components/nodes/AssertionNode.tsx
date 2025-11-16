@@ -3,6 +3,7 @@ import { Handle, Position } from '@xyflow/react';
 import type { NodeProps } from '@xyflow/react';
 import { CheckCircle2, X } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
+import { useHandleConnection } from '../../hooks/useHandleConnection';
 
 const assertionTypes = [
 	{ value: 'must_contain', label: 'Must Contain' },
@@ -16,6 +17,7 @@ function AssertionNode({ data, id }: NodeProps) {
 	const { updateNode, removeNode } = useCanvasStore();
 	const [assertionType, setAssertionType] = useState<string>((data?.assertionType as string) || 'must_contain');
 	const [assertionValue, setAssertionValue] = useState<string>((data?.assertionValue as string) || 'Paris');
+	const isTargetConnected = useHandleConnection(id, 'target');
 
 	const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const newType = e.target.value;
@@ -71,7 +73,23 @@ function AssertionNode({ data, id }: NodeProps) {
 					</div>
 				</div>
 			</div>
-			<Handle type="target" position={Position.Top} />
+			<Handle
+				type="target"
+				position={Position.Top}
+				isConnectable={true}
+				className={isTargetConnected ? 'connected' : ''}
+				style={{
+					width: '12px',
+					height: '12px',
+					borderRadius: '50%',
+					top: '-6px',
+					zIndex: 1000,
+					position: 'absolute',
+					left: '50%',
+					transform: 'translateX(-50%)',
+					cursor: 'crosshair'
+				}}
+			/>
 		</div>
 	);
 }

@@ -76,7 +76,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 
 	onConnect: (connection) => {
 		set({
-			edges: addEdge(connection, get().edges)
+			edges: addEdge({ ...connection, animated: true }, get().edges)
 		});
 	},
 

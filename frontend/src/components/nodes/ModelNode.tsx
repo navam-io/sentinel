@@ -3,6 +3,7 @@ import { Handle, Position } from '@xyflow/react';
 import type { NodeProps } from '@xyflow/react';
 import { Cpu, X } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
+import { useHandleConnection } from '../../hooks/useHandleConnection';
 
 const models = [
 	'gpt-4',
@@ -17,6 +18,8 @@ function ModelNode({ data, id }: NodeProps) {
 	const { updateNode, removeNode } = useCanvasStore();
 	const [selectedModel, setSelectedModel] = useState<string>((data?.model as string) || 'gpt-4');
 	const [temperature, setTemperature] = useState<number>((data?.temperature as number) || 0.7);
+	const isTargetConnected = useHandleConnection(id, 'target');
+	const isSourceConnected = useHandleConnection(id, 'source');
 
 	const handleModelChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const newModel = e.target.value;
@@ -76,8 +79,40 @@ function ModelNode({ data, id }: NodeProps) {
 					</div>
 				</div>
 			</div>
-			<Handle type="target" position={Position.Top} />
-			<Handle type="source" position={Position.Bottom} />
+			<Handle
+				type="target"
+				position={Position.Top}
+				isConnectable={true}
+				className={isTargetConnected ? 'connected' : ''}
+				style={{
+					width: '12px',
+					height: '12px',
+					borderRadius: '50%',
+					top: '-6px',
+					zIndex: 1000,
+					position: 'absolute',
+					left: '50%',
+					transform: 'translateX(-50%)',
+					cursor: 'crosshair'
+				}}
+			/>
+			<Handle
+				type="source"
+				position={Position.Bottom}
+				isConnectable={true}
+				className={isSourceConnected ? 'connected' : ''}
+				style={{
+					width: '12px',
+					height: '12px',
+					borderRadius: '50%',
+					bottom: '-6px',
+					zIndex: 1000,
+					position: 'absolute',
+					left: '50%',
+					transform: 'translateX(-50%)',
+					cursor: 'crosshair'
+				}}
+			/>
 		</div>
 	);
 }

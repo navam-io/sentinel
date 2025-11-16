@@ -33,9 +33,14 @@ function Canvas() {
 	const handlePaneClick = useCallback((event: React.MouseEvent) => {
 		const target = event.target as HTMLElement;
 		if (target.classList.contains('react-flow__pane')) {
-			setLastClickPosition({ x: event.clientX, y: event.clientY });
+			// Convert screen coordinates to flow coordinates
+			const position = screenToFlowPosition({
+				x: event.clientX,
+				y: event.clientY,
+			});
+			setLastClickPosition(position);
 		}
-	}, [setLastClickPosition]);
+	}, [screenToFlowPosition, setLastClickPosition]);
 
 	// Handle drag-and-drop from palette
 	const onDragOver = useCallback((event: React.DragEvent) => {

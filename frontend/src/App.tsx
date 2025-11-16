@@ -1,5 +1,4 @@
 import { ReactFlowProvider } from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
 import Canvas from './components/canvas/Canvas';
 import ComponentPalette from './components/palette/ComponentPalette';
 import YamlPreview from './components/yaml/YamlPreview';

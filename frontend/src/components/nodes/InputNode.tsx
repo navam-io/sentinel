@@ -3,10 +3,12 @@ import { Handle, Position } from '@xyflow/react';
 import type { NodeProps } from '@xyflow/react';
 import { MessageSquare, X } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
+import { useHandleConnection } from '../../hooks/useHandleConnection';
 
 function InputNode({ data, id }: NodeProps) {
 	const { updateNode, removeNode } = useCanvasStore();
 	const [query, setQuery] = useState<string>((data?.query as string) || 'What is the capital of France?');
+	const isSourceConnected = useHandleConnection(id, 'source');
 
 	const handleQueryChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		const newQuery = e.target.value;
@@ -36,7 +38,23 @@ function InputNode({ data, id }: NodeProps) {
 					placeholder="Enter your prompt..."
 				/>
 			</div>
-			<Handle type="source" position={Position.Bottom} />
+			<Handle
+				type="source"
+				position={Position.Bottom}
+				isConnectable={true}
+				className={isSourceConnected ? 'connected' : ''}
+				style={{
+					width: '12px',
+					height: '12px',
+					borderRadius: '50%',
+					bottom: '-6px',
+					zIndex: 1000,
+					position: 'absolute',
+					left: '50%',
+					transform: 'translateX(-50%)',
+					cursor: 'crosshair'
+				}}
+			/>
 		</div>
 	);
 }

@@ -3,11 +3,14 @@ import { Handle, Position } from '@xyflow/react';
 import type { NodeProps } from '@xyflow/react';
 import { Wrench, X } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
+import { useHandleConnection } from '../../hooks/useHandleConnection';
 
 function ToolNode({ data, id }: NodeProps) {
 	const { updateNode, removeNode } = useCanvasStore();
 	const [toolName, setToolName] = useState<string>((data?.toolName as string) || 'web_search');
 	const [toolDescription, setToolDescription] = useState<string>((data?.toolDescription as string) || '');
+	const isTargetConnected = useHandleConnection(id, 'target');
+	const isSourceConnected = useHandleConnection(id, 'source');
 
 	const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newName = e.target.value;
@@ -60,8 +63,40 @@ function ToolNode({ data, id }: NodeProps) {
 					</div>
 				</div>
 			</div>
-			<Handle type="target" position={Position.Top} />
-			<Handle type="source" position={Position.Bottom} />
+			<Handle
+				type="target"
+				position={Position.Top}
+				isConnectable={true}
+				className={isTargetConnected ? 'connected' : ''}
+				style={{
+					width: '12px',
+					height: '12px',
+					borderRadius: '50%',
+					top: '-6px',
+					zIndex: 1000,
+					position: 'absolute',
+					left: '50%',
+					transform: 'translateX(-50%)',
+					cursor: 'crosshair'
+				}}
+			/>
+			<Handle
+				type="source"
+				position={Position.Bottom}
+				isConnectable={true}
+				className={isSourceConnected ? 'connected' : ''}
+				style={{
+					width: '12px',
+					height: '12px',
+					borderRadius: '50%',
+					bottom: '-6px',
+					zIndex: 1000,
+					position: 'absolute',
+					left: '50%',
+					transform: 'translateX(-50%)',
+					cursor: 'crosshair'
+				}}
+			/>
 		</div>
 	);
 }
