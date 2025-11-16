@@ -2,19 +2,24 @@
 
 **Complete guide to using Sentinel's visual-first test builder**
 
+**Version**: 0.3.1 (React + React Flow)
+**Last Updated**: November 16, 2025
+
 ---
 
 ## Overview
 
-The Sentinel Visual Canvas is a drag-and-drop interface for building AI agent tests without writing code. It's designed to make agent testing as intuitive as Postman made API testing.
+The Sentinel Visual Canvas is a **click-to-add** interface for building AI agent tests without writing code. Built with React 19 and React Flow 12.3, it's designed to make agent testing as intuitive as Postman made API testing.
 
 **Key Features:**
-- 🎨 Node-based visual workflow builder
-- 🔄 Real-time YAML generation
-- 📦 Component palette with organized node types
-- ⚡ Live preview panel
-- 💾 Export to YAML files
+- 🎨 Node-based visual workflow builder (React Flow 12.3)
+- 🖱️ Click-to-add interaction (simplified UX)
+- 🔄 Real-time YAML generation with bidirectional sync
+- 📦 Component palette with 5 node types
+- ⚡ Live YAML preview panel
+- 💾 Export to YAML files (copy/download)
 - 🎯 Zero code required
+- 🧪 Production-ready with 12 passing tests
 
 ---
 
@@ -71,14 +76,16 @@ The visual canvas has three main sections:
 **Purpose**: Browse and add node types to your test
 
 **Categories:**
-- **Inputs**: Prompt and system message nodes
-- **Models**: AI model configuration
-- **Tools**: Agent tools (future)
-- **Assertions**: Test validation rules
+- **Inputs**: Prompt and system message nodes (Input node)
+- **Models**: AI model configuration (Model node)
+- **Tools**: Agent tools (Tool node)
+- **Assertions**: Test validation rules (Assertion node)
+- **System**: System prompts and configuration (System node)
 
-**Usage:**
-- **Click** to add a node at a random position
-- **Drag** onto canvas to place precisely
+**Usage (v0.3.1):**
+- **Click** a component button to add it to the canvas
+- Nodes are placed automatically with smart positioning
+- No drag-and-drop required - one click adds the node!
 
 ### 2. Canvas Area (Center)
 
@@ -110,13 +117,16 @@ The visual canvas has three main sections:
 
 ## Node Types
 
+Sentinel v0.3.1 includes **5 production-ready node types**:
+
 ### 💬 Input Node
 
-**Purpose**: Define the user's input prompt
+**Purpose**: Define the user's input prompt or query
 
 **Configuration:**
 - **Query**: The prompt text sent to the AI model
-- **Placeholder**: "What is the capital of France?"
+- **Example**: "What is the capital of France?"
+- **Supports**: Single-line and multi-line inputs
 
 **Example:**
 ```
@@ -217,24 +227,24 @@ Let's build a simple geography quiz test step-by-step.
 
 ### Step 1: Add an Input Node
 
-1. **Click** "💬 Prompt" in the Component Palette
-2. A new Input node appears on the canvas
+1. **Click** "Input" in the Component Palette (left panel)
+2. A new Input node appears on the canvas automatically
 3. **Click** the textarea inside the node
 4. **Type**: "What is the capital of France?"
 
 ### Step 2: Add a Model Node
 
-1. **Click** "🤖 Model" in the palette
-2. A Model node appears below the Input
-3. **Select** "gpt-4" from the dropdown (if not already selected)
-4. **Adjust** temperature slider to 0.7
+1. **Click** "Model" in the palette
+2. A Model node appears on the canvas (positioned below previous nodes)
+3. Node comes pre-configured with default model
+4. You can edit the model name if needed
 
 ### Step 3: Connect Input to Model
 
 1. **Hover** over the bottom of the Input node
-2. You'll see a small circle (○) - that's the connection point
-3. **Click and drag** from Input's bottom circle to Model's top circle
-4. An animated edge connects them
+2. You'll see a small handle - that's the connection point
+3. **Click and drag** from Input's bottom handle to Model's top handle
+4. An animated edge connects them, showing the data flow
 
 ### Step 4: Add Assertion Nodes
 
@@ -493,22 +503,29 @@ Input (Query)
 
 ## What's Next?
 
-### Coming in v0.3.0 (Q1 2026)
+### Coming in v0.4.0 - DSL Parser & Visual Importer (Q1 2026)
 
 - **YAML Import**: Load existing YAML files onto canvas
 - **Monaco Editor**: Edit YAML directly with syntax highlighting
-- **Bidirectional Sync**: Changes in YAML reflect on canvas
+- **Bidirectional Sync**: Changes in YAML reflect on canvas automatically
 - **Split View**: Side-by-side canvas and code editor
-- **Undo/Redo**: Full history management
+- **Advanced Editing**: Autocomplete, validation, error highlighting
 
-### Future Features
+### Coming in v0.5.0+ - Execution & Testing
 
-- **More Node Types**: Tools, Frameworks, Outputs
-- **Auto-Layout**: Automatic node positioning
-- **Templates**: Pre-built test patterns
-- **Collaboration**: Real-time multi-user editing
+- **Model Providers**: Anthropic, OpenAI integration
 - **Test Execution**: Run tests directly from canvas
-- **Live Results**: See pass/fail on canvas
+- **Live Results**: See pass/fail indicators on canvas
+- **Metrics Dashboard**: Real-time performance metrics
+- **Result History**: Store and compare test runs
+
+### Future Features (v0.6.0+)
+
+- **Auto-Layout**: Automatic node positioning and alignment
+- **Templates Gallery**: Pre-built test patterns
+- **Collaboration**: Real-time multi-user editing
+- **Regression Detection**: Visual comparison view
+- **AI-Assisted Test Generation**: Generate tests from descriptions
 
 ---
 

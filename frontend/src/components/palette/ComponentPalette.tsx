@@ -44,13 +44,6 @@ const nodeTypes: NodeCategory[] = [
 function ComponentPalette() {
 	const { addNode, lastCanvasClickPosition, setLastClickPosition } = useCanvasStore();
 
-	const handleDragStart = (event: React.DragEvent, nodeType: string, label: string) => {
-		event.dataTransfer.setData('application/reactflow', nodeType);
-		event.dataTransfer.setData('application/label', label);
-		event.dataTransfer.effectAllowed = 'move';
-		console.log('Drag started:', { nodeType, label });
-	};
-
 	const handleAddNode = (nodeType: string, label: string) => {
 		// Use last canvas click position
 		const position = { ...lastCanvasClickPosition };
@@ -80,7 +73,7 @@ function ComponentPalette() {
 			{/* Palette Header */}
 			<div className="p-4 border-b border-sentinel-border">
 				<h2 className="text-sm font-semibold text-sentinel-text">Components</h2>
-				<p className="text-[0.6rem] text-sentinel-text-muted mt-1">Drag & drop to canvas</p>
+				<p className="text-[0.6rem] text-sentinel-text-muted mt-1">Click to add to canvas</p>
 			</div>
 
 			{/* Component Categories */}
@@ -96,9 +89,7 @@ function ComponentPalette() {
 								return (
 									<button
 										key={node.type}
-										className="w-full text-left p-2 bg-sentinel-surface border border-sentinel-border rounded-md hover:bg-sentinel-hover hover:border-sentinel-primary transition-all duration-150 cursor-move"
-										draggable
-										onDragStart={(e) => handleDragStart(e, node.type, node.label)}
+										className="w-full text-left p-2 bg-sentinel-surface border border-sentinel-border rounded-md hover:bg-sentinel-hover hover:border-sentinel-primary transition-all duration-150 cursor-pointer"
 										onClick={() => handleAddNode(node.type, node.label)}
 									>
 										<div className="flex items-center gap-2">

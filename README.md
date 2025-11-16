@@ -1,20 +1,24 @@
 <div align="center">
 
-# 🛡️ Sentinel
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://via.placeholder.com/120x120/6EE3F6/000000?text=🛡️">
+  <img alt="Sentinel Logo" src="https://via.placeholder.com/120x120/6EE3F6/FFFFFF?text=🛡️" width="120">
+</picture>
 
-**Visual-first agent testing and evaluation platform for AI labs**
+# Sentinel
 
-[![Version](https://img.shields.io/badge/version-0.3.0-blue)](https://github.com/navam-io/sentinel/releases)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10+-blue)](https://www.python.org)
-[![Tests](https://img.shields.io/badge/tests-70%20passing-success)](tests/)
-[![Coverage](https://img.shields.io/badge/coverage-98%25-brightgreen)](tests/)
+### Visual-First Agent Testing for AI Labs
 
-[Quick Start](#-quick-start) •
-[Features](#-features) •
-[Documentation](#-documentation) •
-[Examples](#-examples) •
-[Roadmap](#-roadmap)
+**Make AI agent testing as intuitive as Postman made API testing**
+
+[![Version](https://img.shields.io/badge/version-0.3.1-blue?style=flat-square)](https://github.com/navam-io/sentinel/releases)
+[![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10+-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
+[![React](https://img.shields.io/badge/react-19.0-blue?style=flat-square&logo=react&logoColor=white)](https://react.dev)
+[![Tests](https://img.shields.io/badge/tests-82%20passing-success?style=flat-square)](tests/)
+[![Coverage](https://img.shields.io/badge/coverage-98%25-brightgreen?style=flat-square)](tests/)
+
+[Quick Start](#-quick-start) • [Features](#-key-features) • [Demo](#-visual-canvas-demo) • [Docs](#-documentation) • [Roadmap](#-roadmap)
 
 </div>
 
@@ -22,151 +26,144 @@
 
 ## 🎯 What is Sentinel?
 
-Sentinel is a **visual-first agent testing platform** that makes AI agent testing as intuitive as Postman made API testing. Build tests with a drag-and-drop canvas, or write YAML directly—your choice.
+**Sentinel** is a visual-first testing platform for AI agents, bringing the simplicity of **Postman** to agent development. Build tests with an intuitive **click-to-add canvas** or write declarative **YAML** specs—your choice.
 
-**Current Release (v0.3.0)**: React-based visual canvas with production-ready drag-and-drop, 5 node types, real-time YAML generation, and Tauri desktop app.
+<div align="center">
 
-### Core Philosophy
+```mermaid
+graph LR
+    A[👤 Click Components] --> B[🎨 Visual Canvas]
+    B --> C[📝 Auto-Generate YAML]
+    C --> D[✅ Run Tests]
+    D --> E[📊 See Results]
+    style B fill:#6EE3F6,stroke:#333,stroke-width:2px
+```
 
-> **"Point, Click, Test"** - Visual-first interface with round-trip DSL generation
+</div>
 
-Sentinel makes AI agent testing accessible to everyone—from product managers to model engineers—through an intuitive approach backed by a powerful YAML-based DSL for version control and CI/CD.
+### Why Sentinel?
+
+<table>
+<tr>
+<td width="33%" align="center">
+
+### 🎨 Visual First
+Build tests by clicking, not coding. No YAML knowledge required.
+
+</td>
+<td width="33%" align="center">
+
+### 🔄 Git Friendly
+Visual changes = clean YAML diffs. Perfect for version control.
+
+</td>
+<td width="33%" align="center">
+
+### 🧪 Research Grade
+Built for frontier AI labs with deterministic, repeatable testing.
+
+</td>
+</tr>
+</table>
+
+> **"Point, Click, Test"** - From product managers to model engineers, everyone can test agents visually.
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-### Current (v0.3.0) ✅
+### Current Release (v0.3.1)
 
 <table>
 <tr>
-<td width="33%">
+<td width="50%">
 
-**🎨 Visual Canvas (React)**
-- Tauri 2.0 desktop app
-- React Flow (production-ready)
-- 100% reliable drag-and-drop
-- Real-time YAML generation
-- **5 node types**: Input, Model, Assertion, Tool, System
-- Component palette
-- YAML preview with edit/copy/download
-- Bidirectional Visual ↔ DSL sync
+#### 🎨 **Visual Canvas**
+<sup>React 19 • React Flow 12.3 • Tauri 2.0</sup>
 
-</td>
-<td width="33%">
-
-**🔧 DSL Schema & Parser**
-- Pydantic-based type-safe schema
-- YAML/JSON parsing with validation
-- Round-trip conversion (zero data loss)
-- 8 assertion types supported
-- Complete error messages
-- Visual → YAML generator
-- YAML → Visual importer
+- ✅ **Click-to-add** node-based interface
+- ✅ **5 node types**: Input, Model, Assertion, Tool, System
+- ✅ **Real-time YAML** generation
+- ✅ **Smart positioning** with auto-layout
+- ✅ **Copy/download** YAML specs
+- ✅ **Production-ready** with 12 tests
 
 </td>
-<td width="33%">
+<td width="50%">
 
-**📦 Production Ready**
-- 70 tests, 98% coverage
-- 6 example templates included
-- Python API for programmatic access
-- React 19 + Vite + Zustand
-- Sentinel design system (TailwindCSS 4.0)
-- Comprehensive documentation
+#### 🔧 **Type-Safe DSL**
+<sup>Pydantic • YAML/JSON</sup>
+
+- ✅ **8 assertion types** (text, regex, tools, format, perf)
+- ✅ **Round-trip** conversion (zero data loss)
+- ✅ **Validation** with clear error messages
+- ✅ **70 backend tests**, 98% coverage
+- ✅ **6 templates** for common patterns
+- ✅ **Python API** for programmatic access
 
 </td>
 </tr>
 </table>
 
-### Coming Soon 🚀
+<details>
+<summary><b>📦 Tech Stack Details</b></summary>
 
-<table>
-<tr>
-<td width="33%">
+#### Frontend
+- **Framework**: React 19 + Vite
+- **Desktop**: Tauri 2.0 (Rust-powered)
+- **Canvas**: React Flow 12.3
+- **State**: Zustand 5.0
+- **Styling**: TailwindCSS 4.0
+- **Testing**: Vitest 4.0 + React Testing Library
+- **Type Safety**: TypeScript (0 errors)
 
-**🔄 Monaco Editor Integration**
-*(v0.4.0)*
+#### Backend
+- **Schema**: Pydantic v2
+- **Parser**: PyYAML + js-yaml
+- **API**: FastAPI (v0.5.0)
+- **Storage**: SQLite/PostgreSQL (v0.5.0)
+- **Testing**: pytest + pytest-cov
 
-- Advanced YAML editing
-- Syntax highlighting
-- Auto-completion
-- Split view mode
-
-</td>
-<td width="33%">
-
-**⚡ Test Execution**
-*(v0.5.0)*
-
-- Anthropic & OpenAI providers
-- Local execution engine
-- Live metrics dashboard
-- Result storage
-
-</td>
-<td width="33%">
-
-**🔍 Regression Detection**
-*(v0.6.0+)*
-
-- Visual comparison view
-- Metric deltas
-- Trend analysis
-- Automated alerts
-
-</td>
-</tr>
-</table>
+</details>
 
 ---
 
 ## 🚀 Quick Start
 
-### Option 1: Visual Canvas (Recommended)
-
-**Requirements**: Node.js 18+ and Rust (for Tauri)
+### Option 1: Visual Canvas (Desktop App)
 
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/navam-io/sentinel.git
 cd sentinel/frontend
 
 # Install dependencies
 npm install
 
-# Run desktop app (development mode)
+# Launch desktop app
 npm run tauri:dev
 ```
 
-**That's it!** The visual canvas will open, and you can:
-1. Drag nodes from the left palette onto the canvas
-2. Connect nodes to build your test flow
-3. See real-time YAML generation on the right
-4. Export your test to a .yaml file
+**🎉 That's it!** The visual canvas opens. Click components, connect nodes, see YAML generated in real-time.
 
-### Option 2: DSL/Code-First
-
-**Requirements**: Python 3.10+
+<details>
+<summary><b>Option 2: Code-First (Python DSL)</b></summary>
 
 ```bash
-# Clone the repository
+# Clone and setup Python environment
 git clone https://github.com/navam-io/sentinel.git
 cd sentinel
 
-# Create virtual environment
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 
-# Install dependencies
 pip install -r backend/requirements.txt
 
 # Verify installation
-pytest tests/ -v
-# ✓ 70 tests passed, 98% coverage
+pytest tests/ -v  # ✅ 70 tests pass
 ```
 
-**Create a test** (`my_test.yaml`):
+**Create your first test** (`my_test.yaml`):
 
 ```yaml
 name: "Simple Q&A Test"
@@ -176,8 +173,7 @@ inputs:
 assertions:
   - must_contain: "Paris"
   - output_type: "text"
-tags:
-  - geography
+  - max_latency_ms: 2000
 ```
 
 **Parse and validate**:
@@ -186,171 +182,160 @@ tags:
 from backend.core.parser import TestSpecParser
 
 spec = TestSpecParser.parse_file("my_test.yaml")
-print(f"✓ Test loaded: {spec.name}")
+print(f"✅ Test loaded: {spec.name}")
 ```
 
-**🎉 Choose your style** - Visual or Code, both work perfectly!
+</details>
 
 ---
 
-## 📚 Documentation
+## 🎬 Visual Canvas Demo
+
+### Building a Test in 60 Seconds
 
 <table>
 <tr>
-<td width="50%">
+<td width="25%">
 
-### Getting Started
-- **[Installation Guide](docs/getting-started.md)** - Setup and first steps
-- **[Quick Start](docs/getting-started.md#quick-start)** - Create test in 5 minutes
-- **[Examples](docs/examples.md)** - 6 template walkthroughs
+**1. Click "Input"**
+```
+💬 Input node appears
+Enter your prompt
+```
 
 </td>
-<td width="50%">
+<td width="25%">
 
-### Reference
-- **[DSL Reference](docs/dsl-reference.md)** - Complete specification
-- **[API Reference](docs/api-reference.md)** - Python API docs
-- **[Best Practices](docs/best-practices.md)** - Guidelines & patterns
+**2. Click "Model"**
+```
+🤖 Model node appears
+Pre-configured
+```
+
+</td>
+<td width="25%">
+
+**3. Click "Assertion"**
+```
+✅ Assertion node appears
+Configure validation
+```
+
+</td>
+<td width="25%">
+
+**4. Connect & Export**
+```
+🔗 Drag handles
+📥 Download YAML
+```
 
 </td>
 </tr>
 </table>
 
+```yaml
+# Generated YAML (automatically)
+name: "Geography Quiz"
+model: "gpt-4"
+inputs:
+  query: "What is the capital of France?"
+assertions:
+  - must_contain: "Paris"
+  - output_type: "text"
+tags:
+  - canvas-generated
+```
+
 ---
 
-## 💡 Examples
+## 💡 Use Cases
 
-### Example 1: Simple Q&A
+<table>
+<tr>
+<td width="33%">
+
+### 📝 Q&A Testing
+Test factual knowledge and reasoning
 
 ```yaml
-name: "Capital Cities Q&A"
-model: "gpt-4"
-seed: 123
-
-inputs:
-  query: "What is the capital of Japan?"
-  system_prompt: "Answer accurately and concisely."
-
 assertions:
-  - must_contain: "Tokyo"
-  - output_type: "text"
+  - must_contain: "Paris"
   - max_latency_ms: 2000
 ```
 
-### Example 2: Code Generation
+</td>
+<td width="33%">
+
+### 💻 Code Generation
+Validate code structure and syntax
 
 ```yaml
-name: "Python Function Generation"
-model: "claude-3-5-sonnet-20241022"
-
-inputs:
-  query: "Write a Python function to calculate fibonacci numbers"
-
 assertions:
-  - must_contain: "def"
-  - must_contain: "fibonacci"
-  - regex_match: "def\\s+\\w+\\([^)]*\\):"
+  - regex_match: "def\\s+\\w+"
   - output_type: "code"
 ```
 
-### Example 3: Browser Agent
+</td>
+<td width="33%">
+
+### 🤖 Agent Tools
+Verify tool calls and outputs
 
 ```yaml
-name: "Product Research Agent"
-model: "claude-3-5-sonnet-20241022"
-tools:
-  - browser
-  - scraper
-  - calculator
-
-inputs:
-  query: "Find top 3 laptops under $1000"
-
 assertions:
   - must_call_tool: ["browser"]
-  - must_contain: "price"
   - output_type: "json"
 ```
 
-### Example 4: Test Suite
+</td>
+</tr>
+</table>
 
-```yaml
-name: "E-commerce Test Suite"
-version: "1.0.0"
+<details>
+<summary><b>📚 See All 8 Assertion Types</b></summary>
 
-defaults:
-  model: "claude-3-5-sonnet-20241022"
-  provider: "anthropic"
-  timeout_ms: 30000
+| Type | Purpose | Example |
+|------|---------|---------|
+| `must_contain` | Text presence | `"Paris"` |
+| `must_not_contain` | Text absence | `"London"` |
+| `regex_match` | Pattern matching | `"def\\s+\\w+"` |
+| `must_call_tool` | Tool verification | `["browser", "calculator"]` |
+| `output_type` | Format validation | `"json"`, `"code"`, `"text"` |
+| `max_latency_ms` | Performance | `2000` |
+| `min_tokens` | Min output length | `50` |
+| `max_tokens` | Max output length | `500` |
 
-tests:
-  - name: "Product search"
-    inputs:
-      query: "Find laptops under $1000"
-    assertions:
-      - must_contain: "price"
-
-  - name: "Product comparison"
-    inputs:
-      query: "Compare top 2 gaming laptops"
-    assertions:
-      - must_contain: "comparison"
-```
-
-**[→ See all 6 templates](templates/)** with detailed explanations in [docs/examples.md](docs/examples.md)
+</details>
 
 ---
 
-## 🏗️ Architecture
-
-```mermaid
-graph TB
-    subgraph "Current: v0.1.0"
-        YAML[YAML/JSON Test Specs]
-        Parser[Pydantic Parser]
-        Schema[Type-Safe Schema]
-        YAML --> Parser --> Schema
-    end
-
-    subgraph "Coming: v0.2.0+"
-        Canvas[Visual Canvas]
-        Generator[YAML Generator]
-        Importer[Visual Importer]
-        Canvas --> Generator --> YAML
-        YAML --> Importer --> Canvas
-    end
-
-    subgraph "Coming: v0.3.0+"
-        Executor[Test Executor]
-        Providers[Model Providers]
-        Schema --> Executor --> Providers
-    end
-
-    style YAML fill:#6EE3F6
-    style Parser fill:#9B8CFF
-    style Schema fill:#9B8CFF
-```
-
-### Tech Stack
+## 📖 Documentation
 
 <table>
 <tr>
 <td width="50%">
 
-**Current (v0.1.0)**
-- **Schema**: Pydantic v2
-- **Parser**: PyYAML
-- **Testing**: pytest, pytest-cov
-- **Validation**: Type-safe with clear errors
+### 🚀 Getting Started
+- **[Installation Guide](docs/getting-started.md)** - Setup in 5 minutes
+- **[Visual Canvas Guide](docs/visual-canvas.md)** - Build tests visually
+- **[Quick Start](docs/getting-started.md#quick-start)** - Your first test
+
+### 📚 Examples
+- **[6 Templates](templates/)** - Production-ready examples
+- **[Examples Guide](docs/examples.md)** - Detailed walkthroughs
 
 </td>
 <td width="50%">
 
-**Planned (v0.2.0+)**
-- **Desktop**: Tauri 2.0 (Rust)
-- **Frontend**: SvelteKit + TypeScript
-- **Canvas**: React Flow
-- **API**: FastAPI + Python
+### 📘 Reference
+- **[DSL Reference](docs/dsl-reference.md)** - Complete YAML spec
+- **[API Reference](docs/api-reference.md)** - Python API docs
+- **[Schema Reference](docs/schema-reference.md)** - Pydantic models
+
+### 🔧 Development
+- **[Best Practices](docs/best-practices.md)** - Writing effective tests
+- **[Migration Guide](docs/migration-guide.md)** - Upgrade guides
 
 </td>
 </tr>
@@ -358,39 +343,151 @@ graph TB
 
 ---
 
-## 🎯 What Can You Build?
+## 🗺️ Roadmap
 
-### Supported Test Types
+### ✅ Released
 
-| Test Type | Description | Example |
-|-----------|-------------|---------|
-| **Q&A Testing** | Factual knowledge validation | Geography, math, general knowledge |
-| **Code Generation** | Validate generated code structure | Functions, classes, algorithms |
-| **Tool-Using Agents** | Test agent tool interactions | Browser, calculator, search |
-| **Multi-Turn Conversations** | Context retention testing | Customer support, chat |
-| **Framework Agents** | LangGraph, Claude SDK, etc. | Research agents, workflows |
-| **Performance Testing** | Latency and token thresholds | Speed benchmarks |
+<details open>
+<summary><b>v0.3.1 - Click-to-Add UX</b> (Nov 16, 2025)</summary>
 
-### Assertion Types (8 Supported)
+- ✅ Simplified click-to-add interaction
+- ✅ 12 comprehensive frontend tests
+- ✅ Smart node positioning
+- ✅ Production-ready testing infrastructure
 
-```python
-# Text matching
-{"must_contain": "Paris"}
-{"must_not_contain": "London"}
+</details>
 
-# Pattern matching
-{"regex_match": "def\\s+\\w+\\([^)]*\\):"}
+<details>
+<summary><b>v0.3.0 - React Migration</b> (Nov 16, 2025)</summary>
 
-# Tool validation
-{"must_call_tool": ["browser", "calculator"]}
+- ✅ Migrated Svelte → React 19
+- ✅ React Flow 12.3 (production-ready)
+- ✅ 5 node types
+- ✅ Real-time YAML generation
 
-# Format validation
-{"output_type": "json"}  # json, text, markdown, code, structured
+</details>
 
-# Performance
-{"max_latency_ms": 2000}
-{"min_tokens": 50, "max_tokens": 500}
+<details>
+<summary><b>v0.2.0 - Visual Canvas</b> (Nov 15, 2025)</summary>
+
+- ✅ Tauri 2.0 desktop app
+- ✅ Component palette
+- ✅ YAML preview panel
+- ✅ Sentinel design system
+
+</details>
+
+<details>
+<summary><b>v0.1.0 - DSL Foundation</b> (Nov 15, 2025)</summary>
+
+- ✅ Pydantic schema
+- ✅ YAML/JSON parser
+- ✅ 8 assertion types
+- ✅ 70 tests, 98% coverage
+
+</details>
+
+### 🚧 In Progress
+
+```mermaid
+gantt
+    title Sentinel Development Roadmap
+    dateFormat  YYYY-MM
+    section Q1 2026
+    DSL Parser & Import      :2026-01, 2m
+    Model Providers          :2026-02, 2m
+    section Q2 2026
+    Test Execution           :2026-04, 1m
+    Regression Detection     :2026-05, 2m
 ```
+
+<table>
+<tr>
+<td width="33%">
+
+**v0.4.0 - DSL Import**
+<sup>Q1 2026</sup>
+
+- YAML → Canvas import
+- Monaco editor
+- Bidirectional sync
+- Split view mode
+
+</td>
+<td width="33%">
+
+**v0.5.0 - Execution**
+<sup>Q1-Q2 2026</sup>
+
+- Anthropic + OpenAI
+- Live execution
+- Result storage
+- Metrics dashboard
+
+</td>
+<td width="33%">
+
+**v0.8.0 - Regression**
+<sup>Q2 2026</sup>
+
+- Visual comparison
+- Trend analysis
+- Automated alerts
+- Version tracking
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary><b>🔮 Future Features (v0.6.0 - v0.15.0)</b></summary>
+
+- **v0.6.0**: Record & replay test generation
+- **v0.7.0**: Visual assertion builder
+- **v0.9.0**: LangGraph framework support
+- **v0.10.0**: AI-assisted test generation
+- **v0.11.0**: Collaborative workspaces
+- **v0.12.0**: Additional providers (Bedrock, HuggingFace, Ollama)
+- **v0.13.0**: Safety scenarios & evaluation sets
+- **v0.14.0**: Dashboard & analytics
+- **v0.15.0**: CI/CD integration
+
+**[→ Full roadmap](backlog/active.md)**
+
+</details>
+
+---
+
+## 👥 Who Uses Sentinel?
+
+<table>
+<tr>
+<td width="50%">
+
+### 🎯 Primary Users
+**Visual-First Interface**
+
+- 📊 **Product Managers** - Validate agents without code
+- 🔬 **Research Scientists** - Build evaluation suites
+- 🧪 **QA Engineers** - Visual test creation
+- 🛡️ **Safety Teams** - Collaborative safety testing
+- 🏢 **Frontier Labs** - Test model releases
+
+</td>
+<td width="50%">
+
+### ⚡ Advanced Users
+**DSL Mode**
+
+- 💻 **Model Engineers** - Programmatic testing
+- ⚙️ **DevOps Engineers** - CI/CD integration
+- 🏗️ **Infrastructure Teams** - Enterprise testing
+- 🤖 **Agent Builders** - Production validation
+- 🔧 **Framework Developers** - Integration testing
+
+</td>
+</tr>
+</table>
 
 ---
 
@@ -398,129 +495,14 @@ graph TB
 
 <div align="center">
 
-| Metric | Value |
-|--------|-------|
-| **Tests** | 70 passing |
-| **Coverage** | 98% |
-| **Backend Code** | 160 lines |
-| **Frontend Code** | 4,000+ lines (TypeScript/Svelte) |
-| **Node Types** | 3 (Input, Model, Assertion) |
-| **Templates** | 6 production-ready |
-| **Documentation** | 5,000+ lines |
-| **TypeScript Errors** | 0 |
+| Metric | Value | Metric | Value |
+|--------|-------|--------|-------|
+| **Tests** | 82 passing | **Coverage** | 98% |
+| **Node Types** | 5 production | **Templates** | 6 ready-to-use |
+| **Frontend** | 1,500+ LOC | **Backend** | 160 LOC |
+| **TypeScript Errors** | 0 | **Documentation** | 6,000+ lines |
 
 </div>
-
----
-
-## 🗺️ Roadmap
-
-### ✅ v0.2.0 - Visual Canvas Foundation (Released Nov 15, 2025)
-
-- ✅ Tauri 2.0 desktop app infrastructure
-- ✅ SvelteKit 2.0 + @xyflow/svelte canvas
-- ✅ Drag-and-drop test builder
-- ✅ Visual → YAML generation
-- ✅ Component palette with 3 node types
-- ✅ Real-time YAML preview
-- ✅ Sentinel design system (TailwindCSS 4.0)
-- ✅ 0 TypeScript errors, full type safety
-
-### ✅ v0.1.0 - DSL Foundation (Released Nov 15, 2025)
-
-- ✅ Pydantic-based schema (TestSpec, TestSuite, InputSpec)
-- ✅ YAML/JSON parser with validation
-- ✅ 8 assertion types
-- ✅ 6 example templates
-- ✅ 70 tests, 98% coverage
-- ✅ Complete documentation (8 guides)
-
-### 🚧 v0.3.0 - Visual Import & Bidirectional Sync (Q1 2026)
-
-- YAML → Canvas import
-- Monaco editor integration
-- Bidirectional sync (Canvas ↔ YAML)
-- Split view mode
-- Undo/redo support
-
-### 🔜 v0.4.0 - Model Providers & Execution (Q1-Q2 2026)
-
-- Anthropic + OpenAI providers
-- Local test execution from canvas
-- Result storage (SQLite/PostgreSQL)
-- Live execution dashboard
-- Metrics collection & visualization
-
-### 🔮 v0.5.0+ - Advanced Features (2026)
-
-- Visual assertion builder
-- Regression detection & comparison
-- LangGraph framework support
-- Record & replay test generation
-- AI-assisted test creation
-- Collaborative workspaces
-- CI/CD integration
-
-**[→ Full roadmap](backlog/active.md)**
-
----
-
-## 👥 Who Is Sentinel For?
-
-<table>
-<tr>
-<td width="50%">
-
-### Primary Users
-
-✨ **Product Managers** - Validate agents without coding
-🔬 **Research Scientists** - Build evaluation suites
-🛡️ **Safety Teams** - Test safety scenarios
-🏢 **Frontier Labs** - Test model releases
-🤖 **Agent Builders** - Production testing
-
-</td>
-<td width="50%">
-
-### Advanced Users
-
-💻 **Model Engineers** - Programmatic testing
-⚙️ **DevOps Engineers** - CI/CD integration
-🏗️ **Infrastructure Teams** - Enterprise testing
-📊 **QA Engineers** - Comprehensive validation
-🔧 **Framework Developers** - Agent testing
-
-</td>
-</tr>
-</table>
-
----
-
-## 🎨 Design Principles
-
-### Visual-First, Git-Friendly
-- GUI is primary interface (coming v0.2.0)
-- DSL for version control and CI/CD (available now)
-- Round-trip conversion with zero data loss
-- Clean YAML diffs in git
-
-### Security & Privacy First
-- Desktop-first architecture (data stays local)
-- Optional self-hosted for teams
-- Air-gapped deployment support
-- No vendor lock-in
-
-### Deterministic & Reproducible
-- Seeded randomization
-- Prompt versioning
-- Structured validation
-- Repeatable environments
-
-### Research-Grade Rigor
-- Built for frontier AI labs
-- Safety testing capabilities
-- Comprehensive metrics
-- Regression detection
 
 ---
 
@@ -528,75 +510,96 @@ graph TB
 
 We welcome contributions! Sentinel is in active development.
 
+<table>
+<tr>
+<td width="33%">
+
+### 🐛 Report Bugs
+[GitHub Issues](https://github.com/navam-io/sentinel/issues)
+
+Find a bug? Let us know!
+
+</td>
+<td width="33%">
+
+### 💡 Suggest Features
+[Discussions](https://github.com/navam-io/sentinel/discussions)
+
+Have ideas? Start a discussion!
+
+</td>
+<td width="33%">
+
+### 📖 Improve Docs
+[Submit PRs](https://github.com/navam-io/sentinel/pulls)
+
+Help make docs better!
+
+</td>
+</tr>
+</table>
+
 ### Development Setup
 
 ```bash
-git clone https://github.com/navam-io/sentinel.git
-cd sentinel
-
 # Backend
+cd sentinel
 python -m venv venv
 source venv/bin/activate
 pip install -r backend/requirements.txt
-
-# Run tests
 pytest tests/ -v --cov=backend
 
-# Code quality
-black backend/ tests/
-ruff backend/ tests/
-mypy backend/
+# Frontend
+cd frontend
+npm install
+npm run tauri:dev
+npm run test
 ```
 
-### Ways to Contribute
+<details>
+<summary><b>📋 Contributing Guidelines</b></summary>
 
-- 🐛 **Report bugs** via [GitHub Issues](https://github.com/navam-io/sentinel/issues)
-- 💡 **Suggest features** in [Discussions](https://github.com/navam-io/sentinel/discussions)
-- 📖 **Improve docs** - Submit PRs for documentation
-- 🧪 **Add tests** - Increase coverage
-- 🎨 **Design contributions** - UI/UX improvements
-- 📦 **Share templates** - Example test specs
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
 
----
+**Code Style:**
+- Frontend: ESLint + Prettier
+- Backend: Black + Ruff + mypy
+- Tests: Required for all features
 
-## 📖 Resources
-
-### Documentation
-- **[Getting Started](docs/getting-started.md)** - Installation and tutorials
-- **[DSL Reference](docs/dsl-reference.md)** - Complete specification
-- **[Examples Guide](docs/examples.md)** - Template walkthroughs
-- **[API Reference](docs/api-reference.md)** - Python API docs
-- **[Best Practices](docs/best-practices.md)** - Guidelines and patterns
-- **[Migration Guide](docs/migration-guide.md)** - Version upgrades
-
-### Project Info
-- **[Active Backlog](backlog/active.md)** - Feature roadmap
-- **[Release Notes](backlog/release-0.1.0.md)** - v0.1.0 details
-- **[Design System](backlog/spec-03.md)** - Visual design spec (planned)
-- **[UI Specification](backlog/spec-04.md)** - Component specs (planned)
+</details>
 
 ---
 
-## 💬 Community & Support
+## 🎨 Design Principles
 
 <table>
 <tr>
-<td width="50%">
+<td width="25%" align="center">
 
-### Get Help
-- 📚 [Documentation](docs/README.md)
-- 🐛 [Report Issues](https://github.com/navam-io/sentinel/issues)
-- 💬 [Discussions](https://github.com/navam-io/sentinel/discussions)
-- 📧 Email: hello@navam.io
+### 🎯 Visual First
+GUI is primary, DSL is interoperability
 
 </td>
-<td width="50%">
+<td width="25%" align="center">
 
-### Stay Updated
-- ⭐ Star this repo
-- 👀 Watch releases
-- 🐦 Follow [@navam_io](https://twitter.com/navam_io)
-- 📰 Check [Release Notes](backlog/)
+### 🔒 Security First
+Desktop-first, self-hosted, air-gapped
+
+</td>
+<td width="25%" align="center">
+
+### 🔬 Research Grade
+Deterministic, reproducible, rigorous
+
+</td>
+<td width="25%" align="center">
+
+### ♿ Accessible
+No coding required for basic testing
 
 </td>
 </tr>
@@ -608,34 +611,90 @@ mypy backend/
 
 Sentinel's design is inspired by industry-leading tools:
 
-- **[Langflow](https://github.com/logspace-ai/langflow)** - Node-based LLM workflow builder
-- **[n8n](https://github.com/n8n-io/n8n)** - Visual workflow automation
-- **[Postman](https://www.postman.com/)** - API testing UX patterns
-- **[Playwright](https://playwright.dev/)** - Record/replay test generation
-- **[LangSmith](https://www.langchain.com/langsmith)** - Observability and tracing
+<table>
+<tr>
+<td width="20%" align="center">
 
-Special thanks to the Pydantic team for excellent validation tools.
+**[Langflow](https://github.com/logspace-ai/langflow)**
+<br>Node-based LLM workflows
+
+</td>
+<td width="20%" align="center">
+
+**[n8n](https://github.com/n8n-io/n8n)**
+<br>Visual automation
+
+</td>
+<td width="20%" align="center">
+
+**[Postman](https://www.postman.com/)**
+<br>API testing UX
+
+</td>
+<td width="20%" align="center">
+
+**[Playwright](https://playwright.dev/)**
+<br>Record/replay pattern
+
+</td>
+<td width="20%" align="center">
+
+**[LangSmith](https://www.langchain.com/langsmith)**
+<br>Observability
+
+</td>
+</tr>
+</table>
 
 ---
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+**MIT License** - see [LICENSE](LICENSE) file for details.
+
+```
+Copyright (c) 2025 Navam
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction...
+```
 
 ---
 
-## 📈 Project Status
+## 💬 Community & Support
 
 <div align="center">
 
-**Current Version**: 0.1.0 (Released November 15, 2025)
-**Status**: DSL Foundation Complete ✅
-**Next Milestone**: v0.2.0 - Visual Canvas Foundation
+[![Documentation](https://img.shields.io/badge/docs-read%20now-blue?style=for-the-badge&logo=readthedocs&logoColor=white)](docs/README.md)
+[![GitHub Issues](https://img.shields.io/badge/issues-report%20bug-red?style=for-the-badge&logo=github&logoColor=white)](https://github.com/navam-io/sentinel/issues)
+[![Discussions](https://img.shields.io/badge/discussions-join-green?style=for-the-badge&logo=github&logoColor=white)](https://github.com/navam-io/sentinel/discussions)
+[![Twitter](https://img.shields.io/badge/twitter-follow-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/navam_io)
+
+</div>
+
+### 📧 Contact
+
+- **Email**: hello@navam.io
+- **Twitter**: [@navam_io](https://twitter.com/navam_io)
+- **GitHub**: [navam-io/sentinel](https://github.com/navam-io/sentinel)
 
 ---
 
-**[⬆ Back to Top](#-sentinel)**
+<div align="center">
 
-Built with ❤️ for frontier AI labs, researchers, and agent builders
+### 📈 Current Status
+
+**Version**: 0.3.1 (Released November 16, 2025)
+**Status**: React Migration Complete + Production Testing ✅
+**Next Milestone**: v0.4.0 - DSL Parser & Visual Importer (Q1 2026)
+
+---
+
+**[⬆ Back to Top](#sentinel)**
+
+Built with ❤️ by the [Navam Team](https://navam.io) for frontier AI labs, researchers, and agent builders
+
+**Star ⭐ this repo if you find it helpful!**
 
 </div>

@@ -1,22 +1,32 @@
 # Sentinel Documentation
 
-**Version**: 0.2.0
-**Last Updated**: November 15, 2025
+**Version**: 0.3.1
+**Last Updated**: November 16, 2025
 
 Welcome to the Sentinel documentation! Sentinel is a visual-first agent testing and evaluation platform for frontier AI labs, neo-labs, and AI research organizations.
 
-## What's New in v0.2.0
+## What's New in v0.3.1
 
-This release introduces the **Visual Canvas Foundation** - a complete visual-first interface for building AI agent tests without writing code!
+This release completes the **React Migration** with production-ready infrastructure and a simplified click-to-add interaction model.
 
 ### Key Features
 
-- **🎨 Visual Canvas**: Drag-and-drop node-based test builder
-- **🖥️ Desktop App**: Tauri-powered native application
+- **🎨 Visual Canvas**: Click-to-add node-based test builder (React + React Flow)
+- **🖥️ Desktop App**: Tauri 2.0-powered native application
 - **🔄 Real-Time YAML**: Live YAML generation as you build
-- **📦 Component Palette**: Organized node types (Input, Model, Assertion)
+- **📦 Component Palette**: 5 node types (Input, Model, Assertion, Tool, System)
 - **💾 Export/Download**: Save tests as YAML files
 - **🎯 Zero Code Required**: Build tests visually or with YAML - your choice!
+- **🧪 Production Testing**: Vitest 4.0 + React Testing Library with 12 passing tests
+- **⚡ Simplified UX**: Click-to-add instead of drag-and-drop for better reliability
+
+**Tech Stack:**
+- React 19 + Vite + TypeScript
+- React Flow 12.3 (production-ready canvas)
+- Tauri 2.0 (desktop app framework)
+- Zustand 5.0 (state management)
+- TailwindCSS 4.0 (Sentinel design system)
+- Vitest 4.0 + React Testing Library (testing)
 
 **Plus all v0.1.0 features:**
 - YAML/JSON parsing & validation
@@ -139,19 +149,25 @@ With the current release, you can:
 
 ## What's Coming Next?
 
-🔜 **Visual Import & Bidirectional Sync (v0.3.0)**
+🔜 **DSL Parser & Visual Importer (v0.4.0)**
 - YAML → Canvas import
 - Monaco editor integration
 - Bidirectional sync (Canvas ↔ YAML)
 - Split view mode
-- Undo/redo support
+- Advanced YAML editing with syntax highlighting
 
-🔜 **Model Providers & Execution (v0.4.0)**
+🔜 **Model Providers & Execution (v0.5.0)**
 - Anthropic + OpenAI providers
 - Local test execution from canvas
 - Live execution dashboard
 - Result storage (SQLite/PostgreSQL)
 - Metrics collection & visualization
+
+🔜 **Regression Engine & Comparison (v0.8.0)**
+- Visual comparison view
+- Regression detection
+- Trend charts
+- Automated alerts
 
 See the [Roadmap](../backlog/active.md) for complete feature list.
 

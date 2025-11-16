@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
 	ReactFlow,
 	Background,
@@ -21,12 +21,10 @@ function Canvas() {
 		onNodesChange,
 		onEdgesChange,
 		onConnect,
-		addNode,
 		setLastClickPosition
 	} = useCanvasStore();
 
 	const { screenToFlowPosition } = useReactFlow();
-	const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
 	// Handle canvas clicks for positioning
 	const handlePaneClick = useCallback((event: React.MouseEvent) => {
@@ -41,38 +39,6 @@ function Canvas() {
 		}
 	}, [screenToFlowPosition, setLastClickPosition]);
 
-	// Handle drag-and-drop from palette
-	const onDragOver = useCallback((event: React.DragEvent) => {
-		event.preventDefault();
-		event.dataTransfer.dropEffect = 'move';
-	}, []);
-
-	const onDrop = useCallback((event: React.DragEvent) => {
-		event.preventDefault();
-
-		const nodeType = event.dataTransfer.getData('application/reactflow');
-		const label = event.dataTransfer.getData('application/label');
-
-		if (!nodeType) return;
-
-		// Convert screen coordinates to flow coordinates
-		const position = screenToFlowPosition({
-			x: event.clientX,
-			y: event.clientY,
-		});
-
-		// Create new node
-		const newNode = {
-			id: `${nodeType}-${Date.now()}`,
-			type: nodeType,
-			data: { label },
-			position
-		};
-
-		console.log('Dropped node:', newNode);
-		addNode(newNode);
-	}, [screenToFlowPosition, addNode]);
-
 	// Register custom node types
 	const nodeTypes = useMemo(() => ({
 		input: InputNode,
@@ -83,7 +49,7 @@ function Canvas() {
 	}), []);
 
 	return (
-		<div className="w-full h-full" ref={reactFlowWrapper}>
+		<div className="w-full h-full">
 			<ReactFlow
 				nodes={nodes}
 				edges={edges}
@@ -92,8 +58,6 @@ function Canvas() {
 				onEdgesChange={onEdgesChange}
 				onConnect={onConnect}
 				onPaneClick={handlePaneClick}
-				onDrop={onDrop}
-				onDragOver={onDragOver}
 				fitView
 			>
 				<Background

@@ -6,6 +6,12 @@ import path from 'path';
 export default defineConfig({
 	plugins: [react()],
 
+	test: {
+		globals: true,
+		environment: 'jsdom',
+		setupFiles: './src/test/setup.ts',
+	},
+
 	// Vite options for Tauri 2.0
 	clearScreen: false,
 

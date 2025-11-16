@@ -2,18 +2,28 @@
 
 This guide will help you install Sentinel and create your first agent test in under 10 minutes.
 
+**Version**: 0.3.1 (React + React Flow)
+**Last Updated**: November 16, 2025
+
 ## Table of Contents
 
 - [System Requirements](#system-requirements)
 - [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Your First Test](#your-first-test)
+- [Quick Start (Visual Canvas)](#quick-start-visual-canvas)
+- [Quick Start (Code-First)](#quick-start-code-first)
 - [Using Example Templates](#using-example-templates)
 - [Next Steps](#next-steps)
 
 ## System Requirements
 
-### Minimum Requirements
+### For Visual Canvas (Desktop App)
+
+- **Node.js**: 18.0 or higher ([Download](https://nodejs.org/))
+- **Rust**: Latest stable ([Install](https://www.rust-lang.org/tools/install))
+- **Operating System**: macOS, Linux, or Windows
+- **Disk Space**: ~200MB for installation
+
+### For Code-First / DSL Mode
 
 - **Python**: 3.10 or higher
 - **pip**: Python package manager (usually included with Python)
@@ -23,8 +33,9 @@ This guide will help you install Sentinel and create your first agent test in un
 ### Recommended
 
 - **Python 3.11+** for better performance
-- **Virtual environment** for isolated dependencies
-- **Git** for version control (optional)
+- **Node.js 20+** for latest features
+- **Virtual environment** for isolated Python dependencies
+- **Git** for version control
 
 ### Check Your Python Version
 
@@ -38,7 +49,58 @@ You should see `Python 3.10.x` or higher.
 
 ## Installation
 
-### Step 1: Clone the Repository
+### Option 1: Visual Canvas (Desktop App)
+
+**Step 1: Install Prerequisites**
+
+1. Install Node.js 18+ from [nodejs.org](https://nodejs.org/)
+2. Install Rust from [rustup.rs](https://rustup.rs/)
+
+**Step 2: Clone the Repository**
+
+```bash
+# Clone from GitHub
+git clone https://github.com/navam-io/sentinel.git
+
+# Navigate to frontend directory
+cd sentinel/frontend
+```
+
+**Step 3: Install Dependencies**
+
+```bash
+npm install
+```
+
+This installs:
+- React 19 + Vite
+- React Flow 12.3 (canvas)
+- Tauri 2.0 (desktop framework)
+- Zustand 5.0 (state management)
+- TailwindCSS 4.0 (styling)
+- Testing libraries (Vitest, React Testing Library)
+
+**Step 4: Launch Desktop App**
+
+```bash
+npm run tauri:dev
+```
+
+The Sentinel desktop app will open with the visual canvas! 🎉
+
+**Step 5: Verify Installation (Optional)**
+
+```bash
+# Run frontend tests
+npm run test
+
+# You should see:
+# ✓ 12 tests passed
+```
+
+### Option 2: Code-First / DSL Mode
+
+**Step 1: Clone the Repository**
 
 ```bash
 # Clone from GitHub
@@ -50,7 +112,7 @@ cd sentinel
 
 **Don't have Git?** Download the ZIP file from GitHub and extract it.
 
-### Step 2: Create a Virtual Environment
+**Step 2: Create a Virtual Environment**
 
 A virtual environment keeps Sentinel's dependencies isolated from your system Python.
 
@@ -68,7 +130,7 @@ venv\Scripts\activate
 
 You should see `(venv)` in your terminal prompt.
 
-### Step 3: Install Dependencies
+**Step 3: Install Dependencies**
 
 ```bash
 pip install -r backend/requirements.txt
@@ -80,7 +142,7 @@ This installs:
 - `pytest` - Testing framework
 - Other development tools
 
-### Step 4: Verify Installation
+**Step 4: Verify Installation**
 
 ```bash
 # Run the test suite
@@ -107,9 +169,49 @@ If all tests pass, you're ready to go! 🎉
 - Check Python version is 3.10+
 - Try `pip install --upgrade pip` then reinstall
 
-## Quick Start
+## Quick Start (Visual Canvas)
 
-Let's create and validate a simple test in 5 minutes.
+Build a test visually in 3 minutes!
+
+### 1. Launch the App
+
+```bash
+cd sentinel/frontend
+npm run tauri:dev
+```
+
+### 2. Build Your Test Visually
+
+1. **Click "Input"** in the left component palette
+   - A new Input node appears on the canvas
+   - Type your prompt: "What is the capital of France?"
+
+2. **Click "Model"** in the palette
+   - A Model node appears on the canvas
+   - It's pre-configured with a default model
+
+3. **Click "Assertion"** in the palette
+   - An Assertion node appears
+   - Configure it: Type "must_contain" and value "Paris"
+
+4. **Connect the nodes**
+   - Drag from Input's bottom handle to Model's top handle
+   - Drag from Model's bottom handle to Assertion's top handle
+
+5. **See YAML in real-time**
+   - Check the right panel - your YAML is generated automatically!
+
+6. **Export your test**
+   - Click "Download" or "Copy" in the YAML preview
+   - Save as `my-first-test.yaml`
+
+**🎉 Congratulations!** You've built your first visual test!
+
+---
+
+## Quick Start (Code-First)
+
+Create and validate a simple test in 5 minutes.
 
 ### 1. Create Your First Test File
 

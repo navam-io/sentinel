@@ -1,7 +1,7 @@
 {
 	"name": "sentinel-frontend",
 	"private": true,
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -11,7 +11,10 @@
 		"tauri:dev": "tauri dev",
 		"tauri:build": "tauri build",
 		"lint": "eslint .",
-		"type-check": "tsc --noEmit"
+		"type-check": "tsc --noEmit",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:ui": "vitest --ui"
 	},
 	"dependencies": {
 		"@tauri-apps/api": "^2.9.0",
@@ -30,15 +33,20 @@
 		"@tailwindcss/postcss": "^4.1.17",
 		"@tailwindcss/typography": "^0.5.19",
 		"@tauri-apps/cli": "^2.1.0",
+		"@testing-library/jest-dom": "^6.9.1",
+		"@testing-library/react": "^16.3.0",
+		"@testing-library/user-event": "^14.6.1",
 		"@types/js-yaml": "^4.0.9",
 		"@types/node": "^22.10.5",
 		"@types/react": "^19.0.6",
 		"@types/react-dom": "^19.0.3",
 		"@vitejs/plugin-react": "^4.3.4",
 		"autoprefixer": "^10.4.22",
+		"jsdom": "^27.2.0",
 		"postcss": "^8.5.6",
 		"tailwindcss": "^4.1.17",
 		"typescript": "^5.9.3",
-		"vite": "^7.1.10"
+		"vite": "^7.1.10",
+		"vitest": "^4.0.9"
 	}
 }
