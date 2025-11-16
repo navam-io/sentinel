@@ -150,6 +150,12 @@ export function generateYAML(nodes: Node[], _edges: Edge[]): string {
 				break;
 
 			case 'system':
+				// Map systemPrompt to inputs.system_prompt
+				if (node.data?.systemPrompt) {
+					if (!spec.inputs) spec.inputs = {};
+					spec.inputs.system_prompt = String(node.data.systemPrompt);
+				}
+				// Also support legacy fields for backward compatibility
 				if (node.data?.description) {
 					spec.description = String(node.data.description);
 				}
@@ -201,13 +207,14 @@ export function parseYAMLToNodes(yamlContent: string): { nodes: Node[]; edges: E
 		const xPosition = 250;
 		const spacing = 180;
 
-		// Create system/metadata node if we have description, timeout, or framework
-		if (spec.description || spec.timeout_ms || spec.framework) {
+		// Create system node if we have systemPrompt in inputs OR legacy system fields
+		if (spec.inputs?.system_prompt || spec.description || spec.timeout_ms || spec.framework) {
 			nodes.push({
 				id: 'system-1',
 				type: 'system',
 				data: {
-					label: 'System Config',
+					label: 'System',
+					systemPrompt: spec.inputs?.system_prompt || 'You are a helpful AI assistant.',
 					description: spec.description,
 					timeout_ms: spec.timeout_ms,
 					framework: spec.framework
@@ -221,7 +228,7 @@ export function parseYAMLToNodes(yamlContent: string): { nodes: Node[]; edges: E
 		if (spec.inputs) {
 			const inputData: any = { label: 'Input' };
 			if (spec.inputs.query) inputData.query = spec.inputs.query;
-			if (spec.inputs.system_prompt) inputData.system_prompt = spec.inputs.system_prompt;
+			// system_prompt is handled by System node now, not Input node
 			if (spec.inputs.context) inputData.context = spec.inputs.context;
 			if (spec.inputs.messages) inputData.messages = spec.inputs.messages;
 

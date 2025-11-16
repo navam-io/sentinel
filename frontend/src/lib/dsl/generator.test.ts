@@ -199,6 +199,7 @@ describe('DSL Generator', () => {
 					type: 'system',
 					data: {
 						label: 'System',
+						systemPrompt: 'You are a helpful AI assistant.',
 						description: 'System configuration',
 						timeout_ms: 30000,
 						framework: 'langgraph'
@@ -210,6 +211,7 @@ describe('DSL Generator', () => {
 
 			const yaml = generateYAML(nodes, edges);
 
+			expect(yaml).toContain('system_prompt: You are a helpful AI assistant.');
 			expect(yaml).toContain('description: System configuration');
 			expect(yaml).toContain('timeout_ms: 30000');
 			expect(yaml).toContain('framework: langgraph');
@@ -448,6 +450,37 @@ tags:
 			expect(regeneratedYaml).toContain('query: What is the capital of France?');
 			expect(regeneratedYaml).toContain('must_contain: Paris');
 			expect(regeneratedYaml).toContain('must_not_contain: London');
+		});
+
+		it('should handle system prompt in round-trip conversion', () => {
+			const originalYaml = `
+name: Test with System Prompt
+model: gpt-4
+provider: openai
+inputs:
+  query: What is AI?
+  system_prompt: You are a helpful AI assistant.
+assertions:
+  - must_contain: artificial intelligence
+timeout_ms: 30000
+framework: langgraph
+`;
+
+			// Parse YAML to nodes
+			const { nodes, edges } = parseYAMLToNodes(originalYaml);
+
+			// Should have a system node
+			const systemNode = nodes.find(n => n.type === 'system');
+			expect(systemNode).toBeDefined();
+			expect(systemNode?.data.systemPrompt).toBe('You are a helpful AI assistant.');
+
+			// Generate YAML from nodes
+			const regeneratedYaml = generateYAML(nodes, edges);
+
+			// Check that system_prompt is preserved
+			expect(regeneratedYaml).toContain('system_prompt: You are a helpful AI assistant.');
+			expect(regeneratedYaml).toContain('timeout_ms: 30000');
+			expect(regeneratedYaml).toContain('framework: langgraph');
 		});
 	});
 });

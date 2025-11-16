@@ -74,9 +74,10 @@ function ComponentPalette() {
 			case 'system':
 				nodeData = {
 					label,
-					description: 'System configuration',
+					systemPrompt: 'You are a helpful AI assistant.',
 					timeout_ms: 30000,
-					framework: 'langgraph'
+					framework: 'langgraph',
+					description: 'System configuration' // Legacy field for backward compatibility
 				};
 				break;
 
