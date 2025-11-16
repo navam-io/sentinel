@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
 	ReactFlow,
 	Background,
@@ -8,6 +8,11 @@ import {
 	BackgroundVariant
 } from '@xyflow/react';
 import { useCanvasStore } from '../../stores/canvasStore';
+import InputNode from '../nodes/InputNode';
+import ModelNode from '../nodes/ModelNode';
+import AssertionNode from '../nodes/AssertionNode';
+import ToolNode from '../nodes/ToolNode';
+import SystemNode from '../nodes/SystemNode';
 
 function Canvas() {
 	const {
@@ -27,11 +32,21 @@ function Canvas() {
 		}
 	}, [setLastClickPosition]);
 
+	// Register custom node types
+	const nodeTypes = useMemo(() => ({
+		input: InputNode,
+		model: ModelNode,
+		assertion: AssertionNode,
+		tool: ToolNode,
+		system: SystemNode
+	}), []);
+
 	return (
 		<div className="w-full h-full">
 			<ReactFlow
 				nodes={nodes}
 				edges={edges}
+				nodeTypes={nodeTypes}
 				onNodesChange={onNodesChange}
 				onEdgesChange={onEdgesChange}
 				onConnect={onConnect}
