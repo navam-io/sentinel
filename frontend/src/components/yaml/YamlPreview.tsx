@@ -3,6 +3,7 @@ import { Download, Upload, Edit3, Copy, Check, X } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import { generateYAML, parseYAMLToNodes } from '../../lib/dsl/generator';
 import { writeText } from '@tauri-apps/plugin-clipboard-manager';
+import MonacoYamlEditor from './MonacoYamlEditor';
 
 function YamlPreview() {
 	const { nodes, edges, setNodes, setEdges } = useCanvasStore();
@@ -187,28 +188,33 @@ function YamlPreview() {
 			</div>
 
 			{/* YAML Content */}
-			<div className="flex-1 overflow-y-auto p-4">
+			<div className="flex-1 overflow-hidden flex flex-col">
 				{isEditMode ? (
 					<>
-						<textarea
-							value={editedYaml}
-							onChange={(e) => setEditedYaml(e.target.value)}
-							className="w-full h-full text-[0.65rem] font-mono text-sentinel-text bg-sentinel-bg p-4 rounded-md border border-sentinel-border resize-none focus:outline-none focus:ring-2 focus:ring-sentinel-primary"
-							placeholder="Enter YAML here..."
-						/>
+						<div className="flex-1 overflow-hidden border border-sentinel-border rounded-md m-4">
+							<MonacoYamlEditor
+								value={editedYaml}
+								onChange={setEditedYaml}
+								readOnly={false}
+								onError={setErrorMessage}
+							/>
+						</div>
 						{errorMessage && (
-							<div className="mt-2 p-2 bg-sentinel-error bg-opacity-20 border border-sentinel-error rounded text-[0.6rem] text-sentinel-error">
+							<div className="mx-4 mb-4 p-2 bg-sentinel-error bg-opacity-20 border border-sentinel-error rounded text-[0.6rem] text-sentinel-error">
 								{errorMessage}
 							</div>
 						)}
 					</>
 				) : (
 					<>
-						<pre className="text-[0.65rem] font-mono text-sentinel-text bg-sentinel-bg p-4 rounded-md border border-sentinel-border overflow-x-auto">
-							{yaml}
-						</pre>
+						<div className="flex-1 overflow-hidden border border-sentinel-border rounded-md m-4">
+							<MonacoYamlEditor
+								value={yaml}
+								readOnly={true}
+							/>
+						</div>
 						{errorMessage && (
-							<div className="mt-2 p-2 bg-sentinel-error bg-opacity-20 border border-sentinel-error rounded text-[0.6rem] text-sentinel-error">
+							<div className="mx-4 mb-4 p-2 bg-sentinel-error bg-opacity-20 border border-sentinel-error rounded text-[0.6rem] text-sentinel-error">
 								{errorMessage}
 							</div>
 						)}
