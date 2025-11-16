@@ -60,7 +60,9 @@ export function generateYAML(nodes: Node[], _edges: Edge[]): string {
 	const spec: Partial<TestSpec> = {
 		name: 'Test from Canvas',
 		model: 'gpt-4',
-		inputs: {},
+		inputs: {
+			query: 'Enter your query here'  // Default query to satisfy backend validation
+		},
 		assertions: [],
 		tags: ['canvas-generated']
 	};
@@ -345,6 +347,46 @@ export function parseYAMLToNodes(yamlContent: string): { nodes: Node[]; edges: E
 		return { nodes, edges };
 	} catch (error) {
 		console.error('Error parsing YAML:', error);
+		throw new Error(`Failed to parse YAML: ${error instanceof Error ? error.message : String(error)}`);
+	}
+}
+
+/**
+ * Convert YAML string to TestSpec object for API execution.
+ *
+ * @param yamlString - YAML string representation of a test spec
+ * @returns TestSpec object ready for API execution
+ * @throws Error if YAML is invalid
+ */
+export function convertYAMLToTestSpec(yamlString: string): TestSpec {
+	try {
+		const parsed = yaml.parse(yamlString);
+
+		// Validate required fields
+		if (!parsed.name || !parsed.model) {
+			throw new Error('TestSpec must have name and model fields');
+		}
+
+		// Build TestSpec object
+		const testSpec: TestSpec = {
+			name: parsed.name,
+			model: parsed.model,
+			inputs: parsed.inputs || {},
+			assertions: parsed.assertions || []
+		};
+
+		// Add optional fields if present
+		if (parsed.description) testSpec.description = parsed.description;
+		if (parsed.tags) testSpec.tags = parsed.tags;
+		if (parsed.provider) testSpec.provider = parsed.provider;
+		if (parsed.seed !== undefined) testSpec.seed = parsed.seed;
+		if (parsed.model_config) testSpec.model_config = parsed.model_config;
+		if (parsed.tools) testSpec.tools = parsed.tools;
+		if (parsed.framework) testSpec.framework = parsed.framework;
+		if (parsed.framework_config) testSpec.framework_config = parsed.framework_config;
+
+		return testSpec;
+	} catch (error) {
 		throw new Error(`Failed to parse YAML: ${error instanceof Error ? error.message : String(error)}`);
 	}
 }

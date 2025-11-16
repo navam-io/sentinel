@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateYAML, parseYAMLToNodes } from './generator';
+import { generateYAML, parseYAMLToNodes, convertYAMLToTestSpec } from './generator';
 import type { Node, Edge } from '@xyflow/react';
 
 describe('DSL Generator', () => {
@@ -533,6 +533,43 @@ framework: langgraph
 			expect(regeneratedYaml).toContain('system_prompt: You are a helpful AI assistant.');
 			expect(regeneratedYaml).toContain('timeout_ms: 30000');
 			expect(regeneratedYaml).toContain('framework: langgraph');
+		});
+
+		it('should always generate inputs with at least a query field', () => {
+			// Empty canvas should have default query
+			const yaml1 = generateYAML([], []);
+			expect(yaml1).toContain('query: Enter your query here');
+
+			// Canvas with only model node should still have default query
+			const nodes: Node[] = [
+				{
+					id: '1',
+					type: 'model',
+					data: { label: 'Model', model: 'claude-3-5-sonnet-20241022' },
+					position: { x: 100, y: 100 }
+				}
+			];
+			const yaml2 = generateYAML(nodes, []);
+			expect(yaml2).toContain('query:');
+
+			// Verify the generated YAML can be converted to TestSpec
+			const testSpec = convertYAMLToTestSpec(yaml2);
+			expect(testSpec.inputs.query).toBeTruthy();
+		});
+
+		it('should override default query when input node has custom query', () => {
+			const nodes: Node[] = [
+				{
+					id: '1',
+					type: 'input',
+					data: { label: 'Input', query: 'Custom query from user' },
+					position: { x: 100, y: 100 }
+				}
+			];
+
+			const yaml = generateYAML(nodes, []);
+			expect(yaml).toContain('query: Custom query from user');
+			expect(yaml).not.toContain('Enter your query here');
 		});
 	});
 });

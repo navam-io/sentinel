@@ -6,10 +6,129 @@ This file tracks known issues and bugs in Navam Sentinel.
 
 ## Open Issues
 
+[ ] Research the latest model ids for the model providers being used and replace the existing model ids with latest.
+
+[ ] Fix this: [Error] Failed to load resource: the server responded with a status of 404 () (loader.js.map, line 0)
+
+[ ] Fix this: INFO:     127.0.0.1:52679 - "POST /api/execution/execute HTTP/1.1" 400 Bad Request
 
 ---
 
 ## Closed Issues
+
+### Issue #7: UI Reorganization - Consolidate Run Panel into Test Script Panel ✅
+**Priority**: Medium
+**Type**: Enhancement - UI/UX Improvement
+**Reported**: November 16, 2025
+**Status**: Closed
+**Affects**: v0.6.1
+**Fixed In**: v0.7.0
+**Closed**: November 16, 2025
+
+**Description**:
+The Run panel was displayed as a separate right-side panel (320px wide), separate from the Test Script panel. This created unnecessary horizontal space usage and separated related functionality (test script editing and execution).
+
+**User Request**:
+"Move the Run panel as a section within Test Script panel in its own section below the Monaco Editor"
+
+**Goals**:
+1. Consolidate test script and execution into a single cohesive panel
+2. Reduce horizontal space usage (from 2 panels to 1)
+3. Create better visual hierarchy with script editing above execution
+4. Improve vertical space utilization
+5. Make the workflow more intuitive (write script → run test → see results)
+
+**Implementation**:
+- ✅ Integrated execution functionality directly into YamlPreview component
+- ✅ Moved Run button below Monaco Editor
+- ✅ Execution results display in collapsible section with max-height scroll
+- ✅ Removed separate ExecutionPanel component from App layout
+- ✅ All execution features preserved (metrics, output, tool calls, metadata)
+- ✅ Maintained all existing functionality and styling
+
+**Technical Changes**:
+1. `YamlPreview.tsx`:
+   - Added execution imports (Play, CheckCircle2, XCircle, Clock, DollarSign, Zap icons)
+   - Added execution state (isExecuting, result, executionError)
+   - Added handleRun function for test execution
+   - Added Execution Section UI between Monaco Editor and Footer
+   - Added max-height scrolling for results (max-h-96)
+
+2. `App.tsx`:
+   - Removed ExecutionPanel import
+   - Removed ExecutionPanel from layout
+   - Reduced from 4 panels to 3 (ComponentPalette, Canvas, YamlPreview)
+
+**User Experience Improvements**:
+- ✅ More intuitive workflow: Edit script → Run test → View results (all in one place)
+- ✅ Better space utilization: Freed up 320px of horizontal space
+- ✅ Cleaner interface: One consolidated panel instead of two
+- ✅ Better vertical scrolling: Results scroll independently within fixed height
+- ✅ Consistent styling: Execution UI matches Test Script panel design
+
+**Files Modified**:
+- `frontend/src/components/yaml/YamlPreview.tsx` - Integrated execution UI (~180 lines added)
+- `frontend/src/App.tsx` - Removed ExecutionPanel from layout (2 lines removed)
+
+**Testing**:
+- ✅ All 46 existing tests passing
+- ✅ 0 TypeScript errors
+- ✅ Production build successful
+- ✅ No test regressions (ExecutionPanel had no tests)
+- ✅ Functionality verified manually
+
+**Impact**: Improved user experience with consolidated, intuitive interface. Users can now edit scripts and run tests from a single panel with better vertical space utilization.
+
+---
+
+### Issue #6: Empty Canvas Execution Returns 400 Bad Request ✅
+**Priority**: High
+**Type**: Bug - API Validation
+**Reported**: November 16, 2025
+**Status**: Closed
+**Affects**: v0.6.0
+**Fixed In**: v0.6.1
+**Closed**: November 16, 2025
+
+**Description**:
+When attempting to execute a test from an empty canvas (or canvas with no input nodes), the backend API returned a 400 Bad Request error. This prevented users from testing the execution flow with default values.
+
+**Error Message**:
+```
+POST /api/execution/execute HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:52046 - "POST /api/execution/execute HTTP/1.1" 400 Bad Request
+```
+
+**Root Cause**:
+The frontend's `generateYAML()` function initialized the `inputs` object as empty (`inputs: {}`). When this was sent to the backend, Pydantic's `check_at_least_one_input` validator rejected it because none of the required fields (query, messages, system_prompt, context) were present.
+
+**Investigation Steps**:
+1. Examined backend/core/schema.py - found `InputSpec` validator requiring at least one field
+2. Traced frontend YAML generation in generator.ts
+3. Identified empty `inputs: {}` initialization on line 63
+4. Confirmed empty inputs would fail backend validation
+
+**Resolution**:
+- ✅ Modified generator.ts to initialize inputs with default query
+- ✅ Default query: "Enter your query here" satisfies backend validation
+- ✅ Custom input nodes override the default (lines 74-76)
+- ✅ Added 2 comprehensive tests to verify fix
+- ✅ All 46 tests passing
+- ✅ 0 TypeScript errors
+- ✅ Production build successful
+
+**Files Modified**:
+- `frontend/src/lib/dsl/generator.ts` - Added default query initialization (line 64)
+- `frontend/src/lib/dsl/generator.test.ts` - Added 2 validation tests + import fix
+
+**New Tests**:
+1. Test: Empty canvas generates default query
+2. Test: Custom input node overrides default query
+3. Test: Generated YAML validates against backend TestSpec schema
+
+**Impact**: Users can now execute tests from any canvas state, including empty canvases. The default query provides a valid starting point while being easily overridable.
+
+---
 
 ### Issue #1: YAML Preview Panel Icon Inconsistency ✅
 **Priority**: Medium
