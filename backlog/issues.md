@@ -6,11 +6,107 @@ This file tracks known issues and bugs in Navam Sentinel.
 
 ## Open Issues
 
-None. All known issues have been resolved! 🎉
+[ ] Anthropic API calls are working. OpenAI API calls are returning - INFO:     127.0.0.1:57575 - "POST /api/execution/execute HTTP/1.1" 400 Bad Request.
+
+[ ] When the app loads the default model in dropdown is different from the one in YAML.
 
 ---
 
 ## Closed Issues
+
+### Issue #11: Update Model Dropdown with Latest OpenAI and Remove Legacy Models ✅
+**Priority**: Medium
+**Type**: Enhancement - Model Support + Cleanup
+**Reported**: November 16, 2025
+**Status**: Closed
+**Affects**: v0.8.2
+**Fixed In**: v0.9.0
+**Closed**: November 16, 2025
+
+**Description**:
+The model dropdown in the model node showed the latest Claude/Anthropic models but displayed outdated OpenAI models (gpt-4, gpt-4-turbo, gpt-3.5-turbo) which are either retired or superseded. Additionally, the dropdown included legacy Anthropic models (Claude 3.x, Claude 4.0) that should be removed to keep the UI focused on latest models only.
+
+**Referenced Documentation**:
+- Claude models: https://docs.claude.com/en/docs/about-claude/models/overview
+- OpenAI models: https://platform.openai.com/docs/models
+
+**User Request**:
+"Only use latest models from providers"
+
+**Implementation**:
+
+**1. Added Latest OpenAI GPT-5.1 and GPT-5 Models**:
+
+GPT-5.1 Series (Latest, Recommended):
+- `gpt-5-1` - Latest GPT-5.1 with dynamic thinking
+- `gpt-5-1-codex` - Code-specialized model
+- `gpt-5-1-codex-mini` - Fast coding model
+
+GPT-5 Series:
+- `gpt-5-2025-08-07` - GPT-5 (Latest)
+- `gpt-5-mini-2025-08-07` - GPT-5 Mini (Fast)
+- `gpt-5-nano-2025-08-07` - GPT-5 Nano (Fastest)
+
+**2. Created OpenAI Provider**:
+- New file: `backend/providers/openai_provider.py`
+- Full OpenAI API integration using `openai>=1.0.0`
+- Async execution with `AsyncOpenAI`
+- Cost calculation for all GPT-5.1 and GPT-5 models
+- Tool calling support
+
+**3. Removed Legacy Models**:
+
+Removed from Anthropic:
+- ❌ `claude-sonnet-4-20250514` (Claude Sonnet 4)
+- ❌ `claude-opus-4-20250514` (Claude Opus 4)
+- ❌ `claude-3-7-sonnet-20250219` (Claude Sonnet 3.7)
+- ❌ `claude-3-5-haiku-20241022` (Claude Haiku 3.5)
+- ❌ `claude-3-haiku-20240307` (Claude Haiku 3 - Deprecated)
+
+Removed from OpenAI:
+- ❌ `gpt-4` (Retired April 30, 2025)
+- ❌ `gpt-4-turbo` (Superseded by GPT-5)
+- ❌ `gpt-3.5-turbo` (Superseded by GPT-5)
+
+**4. Updated Defaults**:
+- Default model changed from `claude-sonnet-4-5-20250929` to `gpt-5-1`
+- Default provider changed from `anthropic` to `openai`
+
+**Files Modified**:
+- `frontend/src/components/nodes/ModelNode.tsx` - Updated model list (9 models total)
+- `frontend/src/components/palette/ComponentPalette.tsx` - Changed defaults to GPT-5.1
+- `frontend/src/lib/dsl/generator.ts` - Changed default YAML model to GPT-5.1
+- `backend/providers/openai_provider.py` - **NEW** - OpenAI provider implementation
+- `backend/providers/__init__.py` - Added OpenAIProvider export
+- `backend/providers/anthropic_provider.py` - Removed legacy models (3 models remaining)
+- `backend/requirements.txt` - Added `openai>=1.0.0` dependency
+- `frontend/package.json` - Version bump to 0.9.0
+- `README.md` - Version badge updated to 0.9.0
+- All test files updated for new model IDs
+
+**Testing**:
+- ✅ All 46 frontend tests passing
+- ✅ All 15 backend tests passing (53% coverage)
+- ✅ 0 TypeScript errors
+- ✅ Production build successful
+- ✅ OpenAI provider tested with AsyncOpenAI client
+- ✅ Model dropdown verified to show only latest models
+
+**User Benefits**:
+- ✅ Access to latest GPT-5.1 and GPT-5 series models
+- ✅ Cleaner model dropdown (9 models vs 15+ before)
+- ✅ Only latest, most capable models shown
+- ✅ Full OpenAI provider support with cost tracking
+- ✅ Better default model (GPT-5.1)
+
+**Breaking Changes**:
+⚠️ Tests using deprecated models will need to update model IDs. See migration guide in `backlog/release-0.9.0.md`.
+
+**Impact**: Users now have access to the latest OpenAI GPT-5.1 and GPT-5 models, with a cleaner UI showing only the most recent and capable models from both providers.
+
+**See Also**: Full release notes in `backlog/release-0.9.0.md`
+
+---
 
 ### Issue #10: Backend Execution Failures (Multiple Errors) ✅
 **Priority**: Critical

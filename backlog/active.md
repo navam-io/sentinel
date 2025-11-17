@@ -979,6 +979,127 @@ Run Sentinel tests in CI/CD pipelines.
 
 ---
 
+### Feature 16: Backend Bundling for Desktop App
+**Status**: Not Started
+**Priority**: P2 - Extended Value (Post-V1)
+**Semver Impact**: minor (0.16.0 - 0.18.0)
+**Target Timeline**: 3-4 sprints
+
+**Description**:
+Bundle the Python FastAPI backend with the Tauri desktop app to provide a seamless single-application experience. Users will no longer need to manually start the backend server - it will be automatically managed by the desktop app.
+
+**Goal**: One-click launch, zero configuration, no visible backend server.
+
+**See**: `backlog/07-spec-bundle.md` for comprehensive implementation plan
+
+**Requirements**:
+
+**Phase 1 (v0.16.0): Backend Executable Creation**
+- Build standalone Python executable using PyInstaller/PyOxidizer
+- Cross-platform builds (macOS ARM64/Intel, Windows, Linux)
+- Test executable runs independently
+- Size optimization (~30-80MB per platform)
+
+**Phase 2 (v0.17.0): Tauri Sidecar Integration**
+- Integrate backend as Tauri sidecar
+- Auto-start/stop lifecycle management
+- Backend health monitoring and crash recovery
+- Unified logging (backend + frontend)
+- Environment variable passing (API keys, config)
+
+**Phase 3 (v0.17.0): Configuration & Setup**
+- First-run setup wizard for API keys
+- Platform-specific secure config storage:
+  - macOS: `~/Library/Application Support/com.navam.sentinel/config.env`
+  - Windows: `%APPDATA%\com.navam.sentinel\config.env`
+  - Linux: `~/.config/sentinel/config.env`
+- Config persistence across restarts
+- Backend restart with new config
+
+**Phase 4 (v0.18.0): Build & Distribution**
+- Automated build scripts for all platforms
+- GitHub Actions CI/CD pipeline
+- Bundle size < 100MB
+- Automated release publishing
+
+**Architecture Decision**: Tauri Sidecar (Recommended)
+- Uses PyInstaller to build standalone Python binary
+- Tauri manages backend lifecycle automatically
+- Clean separation, easy debugging
+- Cross-platform support
+
+**User Experience Transformation**:
+
+Before (Current):
+- ❌ Two terminals to open
+- ❌ Manual backend startup (`./start.sh`)
+- ❌ Visible backend process
+- ❌ Manual dependency installation
+
+After (v0.16+):
+- ✅ Double-click Sentinel.app
+- ✅ Backend auto-starts (hidden)
+- ✅ One-click launch (< 3 seconds)
+- ✅ Zero configuration
+
+**Deliverables**:
+- `scripts/build-backend.sh`: Backend executable build script
+- `frontend/src-tauri/src/backend_manager.rs`: Rust backend lifecycle manager
+- `frontend/src-tauri/src/config_manager.rs`: Config storage and loading
+- `frontend/src/components/setup/FirstRunSetup.tsx`: Setup wizard UI
+- `frontend/src/services/api.ts`: Auto-connection to bundled backend
+- `.github/workflows/build-desktop.yml`: CI/CD pipeline
+- PyInstaller configuration and hooks
+- Cross-platform binaries in `frontend/src-tauri/binaries/`
+- Documentation: Bundling guide and deployment docs
+
+**Success Criteria**:
+
+Phase 1:
+- ✅ Backend builds as standalone executable
+- ✅ Executable runs on macOS, Windows, Linux
+- ✅ All API calls work from executable
+
+Phase 2:
+- ✅ Tauri sidecar integration complete
+- ✅ Backend auto-starts on app launch
+- ✅ Frontend connects automatically
+- ✅ No manual backend startup needed
+
+Phase 3:
+- ✅ First-run setup dialog works
+- ✅ API keys saved securely
+- ✅ Config persists across restarts
+
+Phase 4:
+- ✅ Automated builds for all platforms
+- ✅ Bundle size < 100MB
+- ✅ CI/CD pipeline working
+- ✅ Releases published automatically
+
+User Experience:
+- ✅ One-click launch
+- ✅ < 3 second startup time
+- ✅ Zero configuration needed
+- ✅ No visible backend process
+- ✅ Graceful error handling
+
+**Development Workflow**:
+- Development mode: Keep using separate processes (recommended for hot reload)
+- Production mode: Test bundled app periodically
+- Build command: `npm run build:all` (builds backend + frontend)
+
+**Known Limitations**:
+1. Bundle size: 35-85MB (acceptable for desktop)
+2. First launch: Slightly slower (~3-5s vs ~1-2s)
+3. Python version: Locked to bundled version
+4. Dependencies: Must rebuild executable for updates
+5. Debugging: Slightly harder than separate processes
+
+**All acceptable tradeoffs for improved UX**
+
+---
+
 ## Notes
 
 - **Visual-first from day 1**: GUI is the primary interface, DSL is the interoperability format

@@ -85,9 +85,9 @@ class TestTestExecutor:
 
         test_spec = TestSpec(
             name="Test",
-            model="claude-3-5-sonnet-20241022",
+            model="claude-sonnet-4-5-20250929",
             inputs=InputSpec(query="Hello"),
-            assertions=[],
+            assertions=[{"must_contain": "test"}],
         )
 
         with pytest.raises(ValueError, match="No provider configured"):
@@ -101,9 +101,9 @@ class TestTestExecutor:
 
         test_spec = TestSpec(
             name="Test",
-            model="claude-3-5-sonnet-20241022",
+            model="claude-sonnet-4-5-20250929",
             inputs=InputSpec(query="Hello"),
-            assertions=[],
+            assertions=[{"must_contain": "test"}],
         )
 
         result = await executor.execute(test_spec)

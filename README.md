@@ -11,7 +11,7 @@
 
 **Make AI agent testing as intuitive as Postman made API testing**
 
-[![Version](https://img.shields.io/badge/version-0.3.1-blue?style=flat-square)](https://github.com/navam-io/sentinel/releases)
+[![Version](https://img.shields.io/badge/version-0.9.0-blue?style=flat-square)](https://github.com/navam-io/sentinel/releases)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
 [![React](https://img.shields.io/badge/react-19.0-blue?style=flat-square&logo=react&logoColor=white)](https://react.dev)

@@ -46,8 +46,9 @@ class TestAnthropicProvider:
 
         models = provider.list_models()
         assert len(models) > 0
-        assert "claude-3-5-sonnet-20241022" in models
-        assert "claude-3-opus-20240229" in models
+        assert "claude-sonnet-4-5-20250929" in models
+        assert "claude-haiku-4-5-20251001" in models
+        assert "claude-opus-4-1-20250805" in models
 
     def test_cost_calculation(self):
         """Test cost calculation for different models."""

@@ -16,15 +16,6 @@ class AnthropicProvider(ModelProvider):
         "claude-sonnet-4-5-20250929",      # Claude Sonnet 4.5 (Latest, best balance)
         "claude-haiku-4-5-20251001",       # Claude Haiku 4.5 (Fast, cost-effective)
         "claude-opus-4-1-20250805",        # Claude Opus 4.1 (Most capable)
-
-        # Legacy (Still Available)
-        "claude-sonnet-4-20250514",        # Claude Sonnet 4
-        "claude-opus-4-20250514",          # Claude Opus 4
-        "claude-3-7-sonnet-20250219",      # Claude Sonnet 3.7
-        "claude-3-5-haiku-20241022",       # Claude Haiku 3.5
-
-        # Deprecated (Will be removed in future)
-        "claude-3-haiku-20240307",         # Claude Haiku 3 (Deprecated)
     ]
 
     def __init__(self, config: ProviderConfig):

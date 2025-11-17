@@ -11,18 +11,15 @@ const models = [
 	'claude-haiku-4-5-20251001',       // Claude Haiku 4.5 (Fast)
 	'claude-opus-4-1-20250805',        // Claude Opus 4.1 (Most capable)
 
-	// Claude 4.0
-	'claude-sonnet-4-20250514',        // Claude Sonnet 4
-	'claude-opus-4-20250514',          // Claude Opus 4
+	// Latest OpenAI GPT-5.1 (Recommended)
+	'gpt-5-1',                         // GPT-5.1 (Latest, dynamic thinking)
+	'gpt-5-1-codex',                   // GPT-5.1 Codex (Code-specialized)
+	'gpt-5-1-codex-mini',              // GPT-5.1 Codex Mini (Fast coding)
 
-	// Claude 3.x (Legacy)
-	'claude-3-7-sonnet-20250219',      // Claude Sonnet 3.7
-	'claude-3-5-haiku-20241022',       // Claude Haiku 3.5
-
-	// OpenAI (Placeholder - not yet implemented)
-	'gpt-4',
-	'gpt-4-turbo',
-	'gpt-3.5-turbo'
+	// OpenAI GPT-5 Series
+	'gpt-5-2025-08-07',                // GPT-5 (Latest)
+	'gpt-5-mini-2025-08-07',           // GPT-5 Mini (Fast)
+	'gpt-5-nano-2025-08-07',           // GPT-5 Nano (Fastest)
 ];
 
 function ModelNode({ data, id }: NodeProps) {
