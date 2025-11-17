@@ -1,7 +1,7 @@
 import { ReactFlowProvider } from '@xyflow/react';
 import Canvas from './components/canvas/Canvas';
 import ComponentPalette from './components/palette/ComponentPalette';
-import YamlPreview from './components/yaml/YamlPreview';
+import RightPanel from './components/RightPanel';
 
 function App() {
 	return (
@@ -9,7 +9,7 @@ function App() {
 			<div className="w-full h-screen bg-sentinel-bg flex">
 				<ComponentPalette />
 				<Canvas />
-				<YamlPreview />
+				<RightPanel />
 			</div>
 		</ReactFlowProvider>
 	);
