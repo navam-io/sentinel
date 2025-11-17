@@ -5,6 +5,10 @@ pyyaml>=6.0.0
 fastapi>=0.104.0
 uvicorn>=0.24.0
 
+# Database
+sqlalchemy>=2.0.0
+alembic>=1.12.0
+
 # Model providers
 anthropic>=0.40.0
 openai>=1.0.0

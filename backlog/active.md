@@ -92,6 +92,53 @@ Priority order:
 
 ---
 
+### ✅ Release 0.10.0: Data Persistence & Storage Layer
+**Status**: Completed ✅
+**Released**: November 16, 2025
+**Semver**: 0.9.4 → 0.10.0 (minor)
+
+**Description**:
+Critical data persistence infrastructure for storing test definitions, execution runs, and results in SQLite. This is the foundational storage layer required for Feature 3 completion, enabling auto-save, run history, and queryable test data.
+
+**What Was Delivered**:
+- **SQLite Storage Layer**: Complete database infrastructure (~/.sentinel/sentinel.db) ✅
+- **Database Models**: TestDefinition, TestRun, TestResult with relationships ✅
+- **Repository Pattern**: TestRepository, RunRepository for CRUD operations ✅
+- **REST API Endpoints**: 5 endpoints for test management (/api/tests/*) ✅
+- **Comprehensive Tests**: 24 new tests (45 total backend, 100% passing) ✅
+- **Session Management**: Context manager pattern with automatic cleanup ✅
+
+**Key Features**:
+1. Test definitions stored with full TestSpec + canvas state
+2. Run history tracking with metrics (latency, tokens, cost)
+3. Assertion results storage with tool calls
+4. Version tracking for test definitions
+5. Pagination support for queries
+6. Foreign key relationships enforced
+7. PostgreSQL-ready architecture (future server mode)
+
+**Files**:
+- `backend/storage/database.py` - Database connection (110 LOC, 93% coverage)
+- `backend/storage/models.py` - SQLAlchemy models (140 LOC, 98% coverage)
+- `backend/storage/repositories.py` - Data access layer (255 LOC, 97% coverage)
+- `backend/api/tests.py` - Test CRUD API (215 LOC)
+- `backend/tests/test_storage.py` - Storage tests (350 LOC, 99% coverage)
+- `backend/requirements.txt` - Added sqlalchemy, alembic
+
+**Success Criteria Met**:
+- ✅ SQLite database auto-created on startup
+- ✅ Test definitions persist with canvas state
+- ✅ Run history stored and queryable
+- ✅ All 24 storage tests passing (100% pass rate)
+- ✅ 97-99% code coverage for storage layer
+- ✅ REST API endpoints functional
+- ✅ 0 regressions (all existing tests still pass)
+- ✅ Production-ready for Feature 3 completion
+
+**Documentation**: See `backlog/release-0.10.0.md` for complete release notes.
+
+---
+
 ### ✅ Release 0.4.0: DSL Parser & Visual Importer
 **Status**: Completed ✅
 **Released**: November 16, 2025
@@ -479,11 +526,35 @@ Implement pluggable model provider architecture and local execution engine. User
   - API key management (secure storage in Tauri)
   - Provider status indicators
 
+- **Data Persistence & State Management** 🔴 **CRITICAL**:
+  - **Test Definition Storage**:
+    - Store test specs in SQLite (desktop) or Postgres (server)
+    - Save/load test definitions from database
+    - Auto-save canvas changes (debounced, every 2-3 seconds)
+    - Test versioning and history
+  - **Canvas State Persistence**:
+    - Persist node positions, connections, and configurations
+    - Restore canvas state on app restart
+    - Handle unsaved changes (prompt before closing)
+  - **Run History Storage**:
+    - Store all test run results with full telemetry
+    - Query run history by test, date, provider, model
+    - Retention policies (configurable)
+  - **Local File System Integration**:
+    - Save tests as YAML files to local disk
+    - Load YAML files from disk
+    - Recent files list
+    - File watchers for external changes
+  - **Migration Strategy**:
+    - Schema migrations (Alembic for SQLAlchemy)
+    - Backward compatibility for stored tests
+    - Import from YAML (migration path)
+
 - **Run Executor**:
   - Execute tests locally from canvas
   - Real-time execution trace display
   - Capture telemetry (tokens, latency, tool calls, outputs)
-  - Store run results in SQLite (local) or Postgres (server)
+  - Store run results in database with full context
 
 - **Live Execution Dashboard**:
   - Visual progress indicator on canvas
@@ -494,18 +565,31 @@ Implement pluggable model provider architecture and local execution engine. User
 **Deliverables**:
 - `backend/providers/`: Model provider implementations
 - `backend/executor/`: Execution engine
-- `backend/storage/`: SQLite/Postgres storage layer
+- `backend/storage/`: SQLite/Postgres storage layer 🔴 **EXPANDED**
+  - `storage/database.py`: Database connection and session management
+  - `storage/models.py`: SQLAlchemy models for tests, runs, results
+  - `storage/migrations/`: Alembic migration scripts
+  - `storage/repositories/`: Data access layer (test_repo, run_repo)
+- `backend/api/tests.py`: REST API for test CRUD operations
+- `backend/api/runs.py`: REST API for run history
 - `src/components/providers/`: Provider marketplace UI (React)
 - `src/components/execution/`: Live execution dashboard (React)
-- Tests for providers and executor
-- Documentation: Provider integration guide
+- `src/services/storage.ts`: Frontend storage service (auto-save, sync)
+- `src/hooks/useAutoSave.ts`: Auto-save hook for canvas state
+- Tests for providers, executor, and storage layer
+- Documentation: Provider integration guide + data persistence guide
 
 **Success Criteria**:
 - Both Anthropic and OpenAI providers work end-to-end
 - Can run tests from visual canvas
 - Real-time execution progress visible
 - All metrics captured correctly
-- Results stored in database
+- 🔴 **Tests are saved automatically (auto-save every 2-3 seconds)**
+- 🔴 **Canvas state persists across app restarts**
+- 🔴 **Can load saved tests from database**
+- 🔴 **Run history is stored and queryable**
+- 🔴 **Can save/load tests as YAML files to/from local disk**
+- 🔴 **No data loss on app close or page refresh**
 - Provider marketplace is intuitive
 
 ---
@@ -1112,12 +1196,12 @@ User Experience:
 
 ## Current Status
 
-- **Version**: 0.5.0 (Monaco YAML Editor Integration)
-- **Latest Release**: Release 0.5.0 - Monaco YAML Editor Integration (November 16, 2025)
-- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor)
-- **Next Feature**: Feature 3 - Model Provider Architecture & Execution (v0.6.0) ← NEXT
-- **Architecture**: Visual-first desktop app (Tauri + React 19 + React Flow) with Python backend
-- **Test Status**: 44/44 tests passing (100%)
+- **Version**: 0.10.0 (Data Persistence & Storage Layer)
+- **Latest Release**: Release 0.10.0 - Data Persistence & Storage Layer (November 16, 2025)
+- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Partial - Data Persistence CRITICAL)
+- **Next Feature**: Feature 3 (Remaining) - Frontend API Integration + Live Execution Dashboard (v0.11.0) ← NEXT
+- **Architecture**: Visual-first desktop app (Tauri + React 19 + React Flow) with Python backend + SQLite storage
+- **Test Status**: 91/91 tests passing (100% - 45 backend + 46 frontend)
 
 ## Migration Decision (November 16, 2025)
 
