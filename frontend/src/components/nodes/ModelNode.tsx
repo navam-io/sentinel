@@ -11,17 +11,21 @@ const models = [
 	'claude-haiku-4-5-20251001',       // Claude Haiku 4.5 (Fast)
 	'claude-opus-4-1-20250805',        // Claude Opus 4.1 (Most capable)
 
-	// OpenAI Frontier Models (Latest, Recommended)
-	'gpt-5.1',                         // GPT-5.1 (Best for coding and agentic tasks)
-	'gpt-5-pro',                       // GPT-5 Pro (Smarter, more precise responses)
-	'gpt-5',                           // GPT-5 (Previous reasoning model)
+	// GPT-5 Series (Latest Frontier Models - August 2025+)
+	'gpt-5.1',                         // GPT-5.1 (Latest, best for coding and agentic tasks)
+	'gpt-5',                           // GPT-5 (Reasoning model)
 	'gpt-5-mini',                      // GPT-5 Mini (Faster, cost-efficient)
 	'gpt-5-nano',                      // GPT-5 Nano (Fastest, most cost-efficient)
 
-	// OpenAI Non-Reasoning Models
+	// GPT-4 Series (Widely Used)
 	'gpt-4.1',                         // GPT-4.1 (Smartest non-reasoning model)
-	'gpt-4o',                          // GPT-4o (Multimodal)
-	'gpt-4o-mini',                     // GPT-4o Mini (Fast, affordable)
+	'gpt-4o',                          // GPT-4o (Multimodal, most popular)
+	'gpt-4o-mini',                     // GPT-4o Mini (Cost-effective, fast)
+	'gpt-4-turbo',                     // GPT-4 Turbo
+	'gpt-4',                           // GPT-4 (Classic)
+
+	// GPT-3.5 Series (Most cost-effective)
+	'gpt-3.5-turbo',                   // GPT-3.5 Turbo (Cheapest, fast)
 ];
 
 function ModelNode({ data, id }: NodeProps) {

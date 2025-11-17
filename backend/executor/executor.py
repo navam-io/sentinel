@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from ..core.schema import TestSpec, InputSpec
 from ..providers.base import ModelProvider, ExecutionResult, ProviderConfig
 from ..providers.anthropic_provider import AnthropicProvider
+from ..providers.openai_provider import OpenAIProvider
 
 
 class ExecutorConfig(BaseModel):
@@ -33,6 +34,11 @@ class TestExecutor:
             anthropic_config = ProviderConfig(api_key=config.anthropic_api_key)
             self.providers["anthropic"] = AnthropicProvider(anthropic_config)
 
+        # Initialize OpenAI provider if API key is provided
+        if config.openai_api_key:
+            openai_config = ProviderConfig(api_key=config.openai_api_key)
+            self.providers["openai"] = OpenAIProvider(openai_config)
+
     def _get_provider_for_model(self, model: str) -> Optional[ModelProvider]:
         """Get the appropriate provider for a model.
 
@@ -46,7 +52,7 @@ class TestExecutor:
         if model.startswith("claude-"):
             return self.providers.get("anthropic")
 
-        # OpenAI models (future)
+        # OpenAI models
         if model.startswith("gpt-"):
             return self.providers.get("openai")
 

@@ -12,17 +12,21 @@ class OpenAIProvider(ModelProvider):
     """Provider for OpenAI's GPT models."""
 
     AVAILABLE_MODELS = [
-        # OpenAI Frontier Models (Latest, Recommended)
-        "gpt-5.1",                         # GPT-5.1 (Best for coding and agentic tasks)
-        "gpt-5-pro",                       # GPT-5 Pro (Smarter, more precise responses)
-        "gpt-5",                           # GPT-5 (Previous reasoning model)
+        # GPT-5 Series (Latest Frontier Models - August 2025+)
+        "gpt-5.1",                         # GPT-5.1 (Latest, best for coding and agentic tasks)
+        "gpt-5",                           # GPT-5 (Reasoning model)
         "gpt-5-mini",                      # GPT-5 Mini (Faster, cost-efficient)
         "gpt-5-nano",                      # GPT-5 Nano (Fastest, most cost-efficient)
 
-        # OpenAI Non-Reasoning Models
+        # GPT-4 Series (Widely Used)
         "gpt-4.1",                         # GPT-4.1 (Smartest non-reasoning model)
-        "gpt-4o",                          # GPT-4o (Multimodal)
-        "gpt-4o-mini",                     # GPT-4o Mini (Fast, affordable)
+        "gpt-4o",                          # GPT-4o (Multimodal, most popular)
+        "gpt-4o-mini",                     # GPT-4o Mini (Cost-effective, fast)
+        "gpt-4-turbo",                     # GPT-4 Turbo
+        "gpt-4",                           # GPT-4 (Classic)
+
+        # GPT-3.5 Series (Most cost-effective)
+        "gpt-3.5-turbo",                   # GPT-3.5 Turbo (Cheapest, fast)
     ]
 
     def __init__(self, config: ProviderConfig):
@@ -76,12 +80,22 @@ class OpenAIProvider(ModelProvider):
             request_params: Dict[str, Any] = {
                 "model": model,
                 "messages": messages,
-                "temperature": min(max(temperature, 0.0), 2.0),  # GPT: 0.0-2.0
             }
 
+            # Temperature support varies by model
+            # gpt-5, gpt-5-mini, gpt-5-nano: Don't support custom temperature
+            # gpt-5.1, gpt-4.x, gpt-3.5-turbo: Support temperature (0.0-2.0)
+            models_without_temperature = ["gpt-5", "gpt-5-mini", "gpt-5-nano"]
+            if model not in models_without_temperature:
+                request_params["temperature"] = min(max(temperature, 0.0), 2.0)
+
             # Add max_tokens if specified
+            # Note: GPT-5 series use 'max_completion_tokens' exclusively
+            # GPT-4/3.5 series support both, but max_completion_tokens is universal
             if max_tokens:
-                request_params["max_tokens"] = max_tokens
+                # Use max_completion_tokens for GPT-5 series (required)
+                # Also works for all other models, so use it universally for consistency
+                request_params["max_completion_tokens"] = max_tokens
 
             # Add tools if present
             if tools:
@@ -159,15 +173,17 @@ class OpenAIProvider(ModelProvider):
     def _calculate_cost(self, model: str, input_tokens: int, output_tokens: int) -> float:
         """Calculate approximate cost in USD.
 
-        Pricing as of November 2025 (subject to change):
+        Pricing as of November 2025 (approximate, verify at https://openai.com/api/pricing/):
         - GPT-5.1: $3.00/MTok input, $12/MTok output
-        - GPT-5 Pro: $4.00/MTok input, $16/MTok output
-        - GPT-5: $2.50/MTok input, $10/MTok output
+        - GPT-5: $1.25/MTok input, $10/MTok output
         - GPT-5 Mini: $0.30/MTok input, $1.20/MTok output
         - GPT-5 Nano: $0.10/MTok input, $0.40/MTok output
         - GPT-4.1: $2.50/MTok input, $10/MTok output
         - GPT-4o: $2.50/MTok input, $10/MTok output
         - GPT-4o Mini: $0.15/MTok input, $0.60/MTok output
+        - GPT-4 Turbo: $10/MTok input, $30/MTok output
+        - GPT-4: $30/MTok input, $60/MTok output
+        - GPT-3.5 Turbo: $0.50/MTok input, $1.50/MTok output
 
         Args:
             model: Model identifier
@@ -178,18 +194,23 @@ class OpenAIProvider(ModelProvider):
             Cost in USD
         """
         # Pricing per million tokens (input, output)
+        # Source: https://platform.openai.com/docs/pricing (November 2025)
         pricing = {
-            # OpenAI Frontier Models
+            # GPT-5 Series
             "gpt-5.1": (3.00, 12.0),
-            "gpt-5-pro": (4.00, 16.0),
-            "gpt-5": (2.50, 10.0),
+            "gpt-5": (1.25, 10.0),
             "gpt-5-mini": (0.30, 1.20),
             "gpt-5-nano": (0.10, 0.40),
 
-            # OpenAI Non-Reasoning Models
+            # GPT-4 Series
             "gpt-4.1": (2.50, 10.0),
             "gpt-4o": (2.50, 10.0),
             "gpt-4o-mini": (0.15, 0.60),
+            "gpt-4-turbo": (10.0, 30.0),
+            "gpt-4": (30.0, 60.0),
+
+            # GPT-3.5 Series
+            "gpt-3.5-turbo": (0.50, 1.50),
         }
 
         input_price, output_price = pricing.get(model, (3.00, 12.0))  # Default to GPT-5.1 pricing

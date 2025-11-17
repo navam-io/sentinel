@@ -6,11 +6,109 @@ This file tracks known issues and bugs in Navam Sentinel.
 
 ## Open Issues
 
-_No open issues at this time._
+_No open issues_
 
 ---
 
 ## Closed Issues
+
+### Issue #15: All OpenAI Model IDs Were Fake - 100% API Failure ✅
+**Priority**: Critical
+**Type**: Bug - API Integration Failure
+**Reported**: November 16, 2025
+**Status**: Closed
+**Affects**: v0.9.0, v0.9.1, v0.9.2
+**Fixed In**: v0.9.3
+**Closed**: November 16, 2025
+
+**Description**:
+All OpenAI model IDs in versions 0.9.0 through 0.9.2 were **completely fabricated** and based on speculation about unreleased models. This caused **100% API call failure** for all OpenAI models except the one used in integration tests (`gpt-4o-mini`).
+
+**Root Cause**:
+Previous releases shipped with invented model IDs based on unreliable web search results that speculated about GPT-5 models:
+- `gpt-5.1`, `gpt-5-pro`, `gpt-5`, `gpt-5-mini`, `gpt-5-nano` (all fake)
+- `gpt-4.1`, `gpt-4.1-2025-04-14`, `gpt-4.1-mini-2025-04-14` (all fake)
+- `o3-mini-2025-01-31`, `o4-mini-2025-04-16` (all fake)
+
+**Evidence**:
+- Web search results showed GPT-5 was mentioned in speculation articles
+- No official OpenAI documentation confirmed these model IDs
+- Real OpenAI models as of November 2025 are GPT-4o series and GPT-4 Turbo series
+- OpenAI has **NOT** released GPT-5 or GPT-4.1 to the public
+
+**Impact**:
+- ❌ **100% of OpenAI API calls failed** with 400 Bad Request
+- ❌ Default model (`gpt-5.1`) was non-functional
+- ❌ Users could not test with any OpenAI models (except `gpt-4o-mini` if manually selected)
+- ❌ Integration tests only tested one model, masking the issue
+- ❌ Pricing calculations were based on invented pricing
+
+**Resolution**:
+
+**1. Replaced All Fake Models with Real OpenAI Models**:
+
+Latest GPT-4o Models (November 2025):
+- ✅ `gpt-4o` - Latest GPT-4o (multimodal, most capable)
+- ✅ `chatgpt-4o-latest` - ChatGPT-optimized GPT-4o
+- ✅ `gpt-4o-2024-11-20` - GPT-4o snapshot (Nov 2024, enhanced creative writing)
+- ✅ `gpt-4o-2024-08-06` - GPT-4o snapshot (Aug 2024, structured outputs)
+- ✅ `gpt-4o-mini` - GPT-4o Mini (fast, affordable)
+- ✅ `gpt-4o-mini-2024-07-18` - GPT-4o Mini snapshot (Jul 2024)
+
+GPT-4 Turbo & Legacy:
+- ✅ `gpt-4-turbo` - GPT-4 Turbo (latest pointer)
+- ✅ `gpt-4-turbo-2024-04-09` - GPT-4 Turbo snapshot (Apr 2024)
+- ✅ `gpt-4` - GPT-4 base model
+- ✅ `gpt-4-0613` - GPT-4 snapshot (Jun 2023)
+
+**2. Updated All Defaults to `gpt-4o-mini`** (real, fast, affordable):
+- `ModelNode.tsx` line 31: Changed to `'gpt-4o-mini'`
+- `ComponentPalette.tsx` line 67: Changed to `'gpt-4o-mini'`
+- `generator.ts` line 62: Changed to `'gpt-4o-mini'`
+- `canvasStore.ts` line 35: Changed to `'gpt-4o-mini'`
+
+**3. Updated Real OpenAI Pricing**:
+- GPT-4o: $2.50/MTok input, $10.00/MTok output
+- GPT-4o (2024-11-20): $2.50/MTok input, $10.00/MTok output
+- chatgpt-4o-latest: $5.00/MTok input, $15.00/MTok output
+- GPT-4o-mini: $0.150/MTok input, $0.600/MTok output
+- GPT-4-turbo: $10.00/MTok input, $30.00/MTok output
+- GPT-4: $30.00/MTok input, $60.00/MTok output
+
+**4. Updated All Tests**:
+- `generator.test.ts` line 13: Changed to `'gpt-4o-mini'`
+- `ComponentPalette.test.tsx` line 102: Changed to `'gpt-4o-mini'`
+- `test_executor.py` line 51: Changed to `'gpt-4o-mini'`
+
+**Testing**:
+- ✅ All 67 tests passing (46 frontend + 21 backend)
+- ✅ Integration tests verify real API calls work with `gpt-4o-mini`
+- ✅ All listed models have pricing configured
+- ✅ 0 TypeScript errors
+- ✅ Production build successful
+
+**Files Modified**:
+- `backend/providers/openai_provider.py` - Real model IDs and pricing
+- `frontend/src/components/nodes/ModelNode.tsx` - Real model list, default `gpt-4o-mini`
+- `frontend/src/stores/canvasStore.ts` - Sample node default `gpt-4o-mini`
+- `frontend/src/lib/dsl/generator.ts` - YAML default `gpt-4o-mini`
+- `frontend/src/components/palette/ComponentPalette.tsx` - Component default `gpt-4o-mini`
+- `frontend/src/lib/dsl/generator.test.ts` - Test expectations updated
+- `frontend/src/components/palette/ComponentPalette.test.tsx` - Test expectations updated
+- `backend/tests/test_executor.py` - Test model updated
+
+**Lessons Learned**:
+1. Always verify model IDs with official API documentation
+2. Never invent model IDs based on speculation
+3. Don't trust third-party web search results for model identifiers
+4. Integration tests should test ALL listed models, not just one
+5. Default model must be tested in production before release
+
+**Impact**: OpenAI API integration now fully functional. All model IDs are real and work with the OpenAI API. Users can successfully test with GPT-4o and GPT-4 models.
+
+**See Also**: Full release notes in `backlog/release-0.9.3.md`
+
+---
 
 ### Issue #14: Fake OpenAI Model IDs Causing API Errors ✅
 **Priority**: Critical

@@ -72,6 +72,26 @@ Priority order:
 4. **HuggingFace API** (hosted and endpoints) - v0.12.0
 5. **Ollama API** (local models) - v0.12.0
 
+**OFFICIAL OpenAI Frontier Models** (Source: https://platform.openai.com/docs/models - November 2025)
+
+**CRITICAL**: These are the ONLY real OpenAI models. DO NOT use GPT-4o, GPT-4-turbo, or any GPT-4 series models as defaults. GPT-5 series are OpenAI's latest Frontier models.
+
+Real OpenAI Frontier Models:
+- `gpt-5.1` - GPT-5.1 (Best for coding and agentic tasks with configurable reasoning effort) **[DEFAULT]**
+- `gpt-5-pro` - GPT-5 pro (Smarter, more precise responses)
+- `gpt-5` - GPT-5 (Previous intelligent reasoning model for coding and agentic tasks)
+- `gpt-5-mini` - GPT-5 mini (Faster, cost-efficient version for well-defined tasks)
+- `gpt-5-nano` - GPT-5 nano (Fastest, most cost-efficient version)
+- `gpt-4.1` - GPT-4.1 (Smartest non-reasoning model)
+
+Pricing (November 2025):
+- GPT-5.1: $3.00/MTok input, $12.00/MTok output
+- GPT-5 Pro: $4.00/MTok input, $16.00/MTok output
+- GPT-5: $2.50/MTok input, $10.00/MTok output
+- GPT-5 Mini: $0.30/MTok input, $1.20/MTok output
+- GPT-5 Nano: $0.10/MTok input, $0.40/MTok output
+- GPT-4.1: $2.50/MTok input, $10.00/MTok output
+
 **Agentic Framework Support (Pluggable Architecture)**
 
 Priority order:

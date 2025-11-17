@@ -30,17 +30,17 @@ class TestOpenAIProviderIntegration:
 
     @pytest.mark.asyncio
     @pytest.mark.integration
-    async def test_real_api_call_gpt4_mini(self, provider):
-        """Test real API call with GPT-4o-mini (cheapest model)."""
+    async def test_real_api_call_gpt5_nano(self, provider):
+        """Test real API call with GPT-5 nano (cheapest Frontier model)."""
         messages = [
             {"role": "user", "content": "What is 2+2? Answer with just the number."}
         ]
 
         result = await provider.execute(
-            model="gpt-4o-mini",
+            model="gpt-5-nano",
             messages=messages,
-            temperature=0.0,
-            max_tokens=10
+            # Note: gpt-5-nano doesn't support custom temperature
+            max_tokens=100
         )
 
         # Verify successful response
@@ -49,7 +49,7 @@ class TestOpenAIProviderIntegration:
         assert result.output is not None
         assert "4" in result.output
         assert result.provider == "openai"
-        assert result.model == "gpt-4o-mini"
+        assert result.model == "gpt-5-nano"
         assert result.latency_ms > 0
         assert result.tokens_input > 0
         assert result.tokens_output > 0
@@ -65,10 +65,10 @@ class TestOpenAIProviderIntegration:
         ]
 
         result = await provider.execute(
-            model="gpt-4o-mini",
+            model="gpt-5-nano",
             messages=messages,
-            temperature=0.0,
-            max_tokens=10
+            # Note: gpt-5-nano doesn't support custom temperature
+            max_tokens=100
         )
 
         assert result.success is True
@@ -103,14 +103,14 @@ class TestOpenAIProviderIntegration:
         assert len(models) > 0
 
         # Spot check: Try to use one of the listed models
-        # Use gpt-4o-mini as it's cheapest
-        assert "gpt-4o-mini" in models
+        # Use gpt-5-nano as it's cheapest Frontier model
+        assert "gpt-5-nano" in models
 
         messages = [{"role": "user", "content": "Hi"}]
         result = await provider.execute(
-            model="gpt-4o-mini",
+            model="gpt-5-nano",
             messages=messages,
-            max_tokens=5
+            max_tokens=20  # Minimum ~10-15 tokens needed for GPT-5 models
         )
 
         assert result.success is True
@@ -124,13 +124,13 @@ class TestOpenAIProviderIntegration:
         ]
 
         result = await provider.execute(
-            model="gpt-4o-mini",
+            model="gpt-5-nano",
             messages=messages,
             max_tokens=20
         )
 
         assert result.success is True
-        # GPT-4o-mini is very cheap, should be fractions of a cent
+        # GPT-5-nano is very cheap, should be fractions of a cent
         assert result.cost_usd < 0.01  # Should be way less than 1 cent
         assert result.cost_usd > 0  # But should be greater than zero
 

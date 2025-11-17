@@ -64,7 +64,7 @@ function ComponentPalette() {
 			case 'model':
 				nodeData = {
 					label,
-					model: 'gpt-5.1',  // Default to latest GPT-5.1
+					model: 'gpt-5.1',  // Default to GPT-5.1 (OpenAI Frontier model)
 					provider: 'openai',
 					temperature: 0.7,
 					max_tokens: 1000

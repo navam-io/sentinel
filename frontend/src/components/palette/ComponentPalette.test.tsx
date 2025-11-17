@@ -99,7 +99,7 @@ describe('ComponentPalette', () => {
 					type: 'model',
 					data: expect.objectContaining({
 						label: 'Model',
-						model: 'gpt-4.1-2025-04-14',
+						model: 'gpt-5.1',
 						provider: 'openai'
 					})
 				})
