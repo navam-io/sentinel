@@ -11,7 +11,7 @@ describe('DSL Generator', () => {
 			const yaml = generateYAML(nodes, edges);
 
 			expect(yaml).toContain('name: Test from Canvas');
-			expect(yaml).toContain('model: gpt-5-1');
+			expect(yaml).toContain('model: gpt-4.1-2025-04-14');
 			expect(yaml).toContain('query: Enter your query here');
 			expect(yaml).toContain('must_contain: result');
 		});

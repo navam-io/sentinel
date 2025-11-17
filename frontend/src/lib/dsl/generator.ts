@@ -59,7 +59,7 @@ export interface TestSpec {
 export function generateYAML(nodes: Node[], _edges: Edge[]): string {
 	const spec: Partial<TestSpec> = {
 		name: 'Test from Canvas',
-		model: 'gpt-5-1',  // Default to latest GPT-5.1
+		model: 'gpt-4.1-2025-04-14',  // Default to latest GPT-4.1
 		inputs: {
 			query: 'Enter your query here'  // Default query to satisfy backend validation
 		},

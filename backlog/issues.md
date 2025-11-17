@@ -6,13 +6,183 @@ This file tracks known issues and bugs in Navam Sentinel.
 
 ## Open Issues
 
-[ ] Anthropic API calls are working. OpenAI API calls are returning - INFO:     127.0.0.1:57575 - "POST /api/execution/execute HTTP/1.1" 400 Bad Request.
-
-[ ] When the app loads the default model in dropdown is different from the one in YAML.
+_No open issues at this time._
 
 ---
 
 ## Closed Issues
+
+### Issue #13: Default Model in Dropdown Differs from YAML ✅
+**Priority**: Medium
+**Type**: Bug - UI Consistency
+**Reported**: November 16, 2025
+**Status**: Closed
+**Affects**: v0.9.0
+**Fixed In**: v0.9.1
+**Closed**: November 16, 2025
+
+**Description**:
+When the app loads, the default model selected in the dropdown (`ModelNode.tsx`) was different from the default model used in generated YAML (`generator.ts`). This caused confusion as the visual state didn't match the actual test specification.
+
+**Root Cause**:
+- `ModelNode.tsx` line 31: `useState` initialized with `'claude-sonnet-4-5-20250929'`
+- `generator.ts` line 62: YAML default set to `'gpt-5-1'` (later changed to `'gpt-4.1-2025-04-14'`)
+- `ComponentPalette.tsx` line 67: New model nodes created with `'gpt-5-1'` (later changed to `'gpt-4.1-2025-04-14'`)
+
+**Impact**:
+- Confusing UX: Dropdown shows one model, YAML shows another
+- Inconsistent test creation: Click vs. generated YAML had different models
+- Minor impact but affected user trust in the UI
+
+**Resolution**:
+Updated `ModelNode.tsx` line 31 to use the same default as `generator.ts` and `ComponentPalette.tsx`:
+
+```typescript
+// Before (v0.9.0)
+const [selectedModel, setSelectedModel] = useState<string>(
+  (data?.model as string) || 'claude-sonnet-4-5-20250929'
+);
+
+// After (v0.9.1)
+const [selectedModel, setSelectedModel] = useState<string>(
+  (data?.model as string) || 'gpt-4.1-2025-04-14'
+);
+```
+
+**Testing**:
+- ✅ Verified dropdown default matches YAML default
+- ✅ Verified ComponentPalette creates nodes with same default
+- ✅ All frontend tests passing (46/46)
+
+**Files Modified**:
+- `frontend/src/components/nodes/ModelNode.tsx` - Line 31 default value
+
+**Impact**: Dropdown and YAML now show consistent defaults. Users will see `gpt-4.1-2025-04-14` in both places.
+
+**See Also**: Full fix in `backlog/release-0.9.1.md`
+
+---
+
+### Issue #12: OpenAI API Calls Returning 400 Bad Request ✅
+**Priority**: Critical
+**Type**: Bug - API Integration
+**Reported**: November 16, 2025
+**Status**: Closed
+**Affects**: v0.9.0
+**Fixed In**: v0.9.1
+**Closed**: November 16, 2025
+
+**Description**:
+Anthropic API calls were working correctly, but all OpenAI API calls were failing with HTTP 400 Bad Request errors.
+
+**Error Message**:
+```
+INFO: 127.0.0.1:57575 - "POST /api/execution/execute HTTP/1.1" 400 Bad Request
+```
+
+**Root Cause**:
+Version 0.9.0 shipped with **fake, non-existent OpenAI model IDs** that were based on incorrect web search results:
+- `gpt-5-1`, `gpt-5-1-codex`, `gpt-5-1-codex-mini`
+- `gpt-5-2025-08-07`, `gpt-5-mini-2025-08-07`, `gpt-5-nano-2025-08-07`
+
+These models **do not exist** in the OpenAI API. The information came from unreliable third-party sources that speculated about GPT-5 models.
+
+**Actual State**:
+- OpenAI has **NOT** released GPT-5 publicly
+- Latest available models are **GPT-4.1** and **GPT-4o** series
+- o-series reasoning models (o3-mini, o4-mini) are available
+
+**Impact**:
+- ❌ **100% of OpenAI API calls failed** in v0.9.0
+- ❌ Default model (`gpt-5-1`) was completely non-functional
+- ❌ Users could not test with any OpenAI models
+- ✅ Anthropic calls unaffected (Claude models worked fine)
+
+**Resolution**:
+
+**1. Corrected Model IDs**:
+
+Removed (fake, non-existent):
+- ❌ `gpt-5-1`, `gpt-5-1-codex`, `gpt-5-1-codex-mini`
+- ❌ `gpt-5-2025-08-07`, `gpt-5-mini-2025-08-07`, `gpt-5-nano-2025-08-07`
+
+Added (real, verified):
+- ✅ `gpt-4.1-2025-04-14` (Latest GPT-4.1)
+- ✅ `gpt-4.1-mini-2025-04-14` (Fast, cost-effective)
+- ✅ `gpt-4.1-nano-2025-04-14` (Fastest, cheapest)
+- ✅ `gpt-4o` (Latest pointer)
+- ✅ `chatgpt-4o-latest` (Latest improvements)
+- ✅ `gpt-4o-mini` (Fast, affordable)
+- ✅ `o3-mini-2025-01-31` (Reasoning, fast)
+- ✅ `o4-mini-2025-04-16` (Latest reasoning)
+
+**2. Updated Pricing**:
+
+Fixed cost calculations to match real OpenAI pricing (38-70% cheaper than fake v0.9.0 pricing):
+
+| Model | Input | Output |
+|-------|--------|--------|
+| GPT-4.1 | $2.50/MTok | $10/MTok |
+| GPT-4o-mini | $0.15/MTok | $0.60/MTok |
+
+**3. Created Production Integration Tests**:
+
+New file: `backend/tests/test_openai_integration.py`
+- Real API call tests with GPT-4o-mini
+- System message support verification
+- Invalid model error handling
+- Cost calculation verification
+- Model list accuracy spot checks
+
+**Testing**:
+- ✅ All 46 frontend tests passing
+- ✅ All 15 backend tests passing
+- ✅ Integration tests pass with real OpenAI API calls
+- ✅ Verified with production API: `gpt-4o-mini` returns successful responses
+
+**Files Modified**:
+- `backend/providers/openai_provider.py` - Model IDs and pricing
+- `backend/tests/test_openai_integration.py` - **NEW** - Production tests
+- `frontend/src/components/nodes/ModelNode.tsx` - Model list
+- `frontend/src/components/palette/ComponentPalette.tsx` - Default model
+- `frontend/src/lib/dsl/generator.ts` - Default YAML model
+- `frontend/src/lib/dsl/generator.test.ts` - Test expectations
+- `frontend/src/components/palette/ComponentPalette.test.tsx` - Test expectations
+
+**Verification**:
+Successfully executed real OpenAI API call:
+```bash
+curl -X POST http://localhost:8000/api/execution/execute \
+  -H "Content-Type: application/json" \
+  -d '{"test_spec": {"name": "Test", "model": "gpt-4o-mini",
+       "inputs": {"query": "2+2?"}, "assertions": [{"must_contain": "4"}]}}'
+```
+
+Response:
+```json
+{
+  "result": {
+    "success": true,
+    "output": "4",
+    "model": "gpt-4o-mini",
+    "provider": "openai",
+    "latency_ms": 800,
+    "cost_usd": 0.000003
+  }
+}
+```
+
+**Lessons Learned**:
+1. Always verify model IDs with official API documentation
+2. Test with real API calls before shipping (integration tests)
+3. Don't trust third-party speculation about unreleased models
+4. Created comprehensive test suite to prevent similar issues
+
+**Impact**: OpenAI API integration now fully functional. Users can test with real, working GPT-4.1 and GPT-4o models.
+
+**See Also**: Full release notes in `backlog/release-0.9.1.md`
+
+---
 
 ### Issue #11: Update Model Dropdown with Latest OpenAI and Remove Legacy Models ✅
 **Priority**: Medium

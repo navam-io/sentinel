@@ -12,15 +12,19 @@ class OpenAIProvider(ModelProvider):
     """Provider for OpenAI's GPT models."""
 
     AVAILABLE_MODELS = [
-        # Latest (Recommended - GPT-5.1)
-        "gpt-5-1",                         # GPT-5.1 (Latest, dynamic thinking)
-        "gpt-5-1-codex",                   # GPT-5.1 Codex (Code-specialized)
-        "gpt-5-1-codex-mini",              # GPT-5.1 Codex Mini (Fast coding)
+        # Latest (Recommended - GPT-4.1)
+        "gpt-4.1-2025-04-14",              # GPT-4.1 (Latest, best performance)
+        "gpt-4.1-mini-2025-04-14",         # GPT-4.1 Mini (Fast, cost-effective)
+        "gpt-4.1-nano-2025-04-14",         # GPT-4.1 Nano (Fastest, cheapest)
 
-        # GPT-5 Series
-        "gpt-5-2025-08-07",                # GPT-5 (Latest)
-        "gpt-5-mini-2025-08-07",           # GPT-5 Mini (Fast)
-        "gpt-5-nano-2025-08-07",           # GPT-5 Nano (Fastest)
+        # GPT-4o Series
+        "gpt-4o",                          # GPT-4o (Latest pointer)
+        "chatgpt-4o-latest",               # ChatGPT-4o (Latest improvements)
+        "gpt-4o-mini",                     # GPT-4o Mini (Fast, affordable)
+
+        # o-series (Reasoning Models)
+        "o3-mini-2025-01-31",              # o3-mini (Reasoning, fast)
+        "o4-mini-2025-04-16",              # o4-mini (Latest reasoning)
     ]
 
     def __init__(self, config: ProviderConfig):
@@ -158,12 +162,13 @@ class OpenAIProvider(ModelProvider):
         """Calculate approximate cost in USD.
 
         Pricing as of November 2025 (subject to change):
-        - GPT-5.1: $4/MTok input, $16/MTok output
-        - GPT-5.1 Codex: $5/MTok input, $20/MTok output
-        - GPT-5.1 Codex Mini: $2/MTok input, $8/MTok output
-        - GPT-5: $3/MTok input, $12/MTok output
-        - GPT-5 Mini: $1.5/MTok input, $6/MTok output
-        - GPT-5 Nano: $0.5/MTok input, $2/MTok output
+        - GPT-4.1: $2.50/MTok input, $10/MTok output
+        - GPT-4.1 Mini: $0.30/MTok input, $1.20/MTok output
+        - GPT-4.1 Nano: $0.15/MTok input, $0.60/MTok output
+        - GPT-4o: $2.50/MTok input, $10/MTok output
+        - GPT-4o Mini: $0.15/MTok input, $0.60/MTok output
+        - o3-mini: $1.10/MTok input, $4.40/MTok output
+        - o4-mini: $1.10/MTok input, $4.40/MTok output
 
         Args:
             model: Model identifier
@@ -175,18 +180,22 @@ class OpenAIProvider(ModelProvider):
         """
         # Pricing per million tokens (input, output)
         pricing = {
-            # Latest (GPT-5.1)
-            "gpt-5-1": (4.0, 16.0),
-            "gpt-5-1-codex": (5.0, 20.0),
-            "gpt-5-1-codex-mini": (2.0, 8.0),
+            # Latest (GPT-4.1)
+            "gpt-4.1-2025-04-14": (2.50, 10.0),
+            "gpt-4.1-mini-2025-04-14": (0.30, 1.20),
+            "gpt-4.1-nano-2025-04-14": (0.15, 0.60),
 
-            # GPT-5 Series
-            "gpt-5-2025-08-07": (3.0, 12.0),
-            "gpt-5-mini-2025-08-07": (1.5, 6.0),
-            "gpt-5-nano-2025-08-07": (0.5, 2.0),
+            # GPT-4o Series
+            "gpt-4o": (2.50, 10.0),
+            "chatgpt-4o-latest": (2.50, 10.0),
+            "gpt-4o-mini": (0.15, 0.60),
+
+            # o-series (Reasoning)
+            "o3-mini-2025-01-31": (1.10, 4.40),
+            "o4-mini-2025-04-16": (1.10, 4.40),
         }
 
-        input_price, output_price = pricing.get(model, (4.0, 16.0))  # Default to GPT-5.1 pricing
+        input_price, output_price = pricing.get(model, (2.50, 10.0))  # Default to GPT-4.1 pricing
 
         input_cost = (input_tokens / 1_000_000) * input_price
         output_cost = (output_tokens / 1_000_000) * output_price
