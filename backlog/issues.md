@@ -12,6 +12,108 @@ _No open issues at this time._
 
 ## Closed Issues
 
+### Issue #14: Fake OpenAI Model IDs Causing API Errors ✅
+**Priority**: Critical
+**Type**: Bug - Model Configuration
+**Reported**: November 16, 2025
+**Status**: Closed
+**Affects**: v0.9.0, v0.9.1
+**Fixed In**: v0.9.2
+**Closed**: November 16, 2025
+
+**Description**:
+The application shipped with fake, non-existent OpenAI model IDs that were invented based on incorrect assumptions about future model releases. Additionally, the default model in canvasStore (initial sample node) differed from the dropdown default, creating UI inconsistency.
+
+**Evidence from Screenshot**:
+User reported seeing:
+- Dropdown: `claude-sonnet-4-5-20250929` (Claude model)
+- YAML: `model: gpt-4` (old GPT model)
+- User asked: "Why did you switch back to older OpenAI models"
+
+**Root Causes**:
+
+**1. Fake Model IDs**:
+All model IDs with date suffixes were fabricated and don't exist in the OpenAI API:
+- ❌ `gpt-4.1-2025-04-14` (fake - doesn't exist)
+- ❌ `gpt-4.1-mini-2025-04-14` (fake)
+- ❌ `gpt-4.1-nano-2025-04-14` (fake)
+- ❌ `o3-mini-2025-01-31` (fake)
+- ❌ `o4-mini-2025-04-16` (fake)
+
+**2. Default Model Mismatch**:
+- `ModelNode.tsx` line 29: useState default was `'gpt-4.1-2025-04-14'` (fake model)
+- `ComponentPalette.tsx` line 67: New nodes created with `'gpt-4.1-2025-04-14'` (fake model)
+- `generator.ts` line 62: YAML default was `'gpt-4.1-2025-04-14'` (fake model)
+- `canvasStore.ts` line 35: Sample node used `'gpt-4'` (old model) ← This caused the screenshot issue
+
+**Impact**:
+- ❌ OpenAI API calls would fail if these models were used
+- ❌ Confusing UX: dropdown showed one model, YAML showed another (`gpt-4`)
+- ❌ User trust damaged: "Why did you switch back to older models"
+- ❌ Non-functional defaults would cause immediate API failures
+
+**Resolution**:
+
+**1. Corrected OpenAI Frontier Model IDs** (User-Provided):
+
+Replaced all fake models with real OpenAI Frontier models:
+- ✅ `gpt-5.1` - Best for coding and agentic tasks
+- ✅ `gpt-5-pro` - Smarter, more precise responses
+- ✅ `gpt-5` - Previous reasoning model
+- ✅ `gpt-5-mini` - Faster, cost-efficient
+- ✅ `gpt-5-nano` - Fastest, most cost-efficient
+- ✅ `gpt-4.1` - Smartest non-reasoning model
+- ✅ `gpt-4o` - Multimodal
+- ✅ `gpt-4o-mini` - Fast, affordable
+
+**2. Updated All Defaults to `gpt-5.1`**:
+- `ModelNode.tsx` line 29: Changed to `'gpt-5.1'`
+- `ComponentPalette.tsx` line 67: Changed to `'gpt-5.1'`
+- `generator.ts` line 62: Changed to `'gpt-5.1'`
+- `canvasStore.ts` line 35: Changed from `'gpt-4'` to `'gpt-5.1'` (fixes screenshot issue)
+
+**3. Updated Backend Provider**:
+- `openai_provider.py` AVAILABLE_MODELS: Replaced fake IDs with real Frontier models
+- Updated pricing dictionary with estimated Frontier model pricing
+
+**4. Updated Tests**:
+- `test_executor.py` line 51: Changed `'gpt-4'` to `'gpt-5.1'`
+
+**Testing**:
+- ✅ All 21 backend tests passing
+- ✅ All frontend components updated
+- ✅ Consistent defaults across all files
+- ✅ 0 TypeScript errors
+
+**User Correction Process**:
+1. User provided screenshot showing `gpt-4` in YAML
+2. User explicitly stated: "Use latest models from https://platform.openai.com/docs/models"
+3. User corrected me twice with explicit model names:
+   - "These are featured OpenAI models... GPT-5.1, GPT-5 mini, GPT-5 nano"
+   - Complete list with descriptions provided
+4. Applied user-provided authoritative model IDs
+
+**Files Modified**:
+- `frontend/src/components/nodes/ModelNode.tsx` - Real model IDs, default changed to `gpt-5.1`
+- `frontend/src/components/palette/ComponentPalette.tsx` - Default changed to `gpt-5.1`
+- `frontend/src/lib/dsl/generator.ts` - Default changed to `gpt-5.1`
+- `frontend/src/stores/canvasStore.ts` - Sample node changed from `gpt-4` to `gpt-5.1`
+- `backend/providers/openai_provider.py` - Real model IDs and updated pricing
+- `backend/tests/test_executor.py` - Updated test model ID
+
+**Lessons Learned**:
+1. Never invent model IDs based on speculation
+2. Always verify model IDs with official documentation or user-provided information
+3. Don't trust web search results for model identifiers
+4. Ensure all defaults are consistent across frontend and backend
+5. Sample data in stores can cause confusing UX issues
+
+**Impact**: All model IDs now use real, working OpenAI Frontier models. Defaults are consistent across the application. Users will see `gpt-5.1` everywhere instead of mixed/fake model IDs.
+
+**See Also**: Full release notes in `backlog/release-0.9.2.md`
+
+---
+
 ### Issue #13: Default Model in Dropdown Differs from YAML ✅
 **Priority**: Medium
 **Type**: Bug - UI Consistency

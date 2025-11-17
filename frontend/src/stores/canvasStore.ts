@@ -32,7 +32,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 		{
 			id: '2',
 			type: 'model',
-			data: { label: 'Model: GPT-4', model: 'gpt-4', temperature: 0.7 },
+			data: { label: 'Model: GPT-5.1', model: 'gpt-5.1', temperature: 0.7 },
 			position: { x: 100, y: 300 }
 		},
 		{

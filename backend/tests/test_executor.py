@@ -48,7 +48,7 @@ class TestTestExecutor:
         config = ExecutorConfig(anthropic_api_key="test_key")
         executor = TestExecutor(config)
 
-        provider = executor._get_provider_for_model("gpt-4")
+        provider = executor._get_provider_for_model("gpt-5.1")
         assert provider is None  # OpenAI not configured
 
     def test_build_messages_from_simple_query(self):

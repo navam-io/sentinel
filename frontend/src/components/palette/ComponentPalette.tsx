@@ -64,7 +64,7 @@ function ComponentPalette() {
 			case 'model':
 				nodeData = {
 					label,
-					model: 'gpt-4.1-2025-04-14',  // Default to latest GPT-4.1
+					model: 'gpt-5.1',  // Default to latest GPT-5.1
 					provider: 'openai',
 					temperature: 0.7,
 					max_tokens: 1000
