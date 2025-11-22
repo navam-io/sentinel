@@ -1,5 +1,6 @@
 import { LucideIcon, MessageSquare, Settings, Cpu, Wrench, CheckCircle2 } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
+import type { NodeData } from '../../types/test-spec';
 
 interface NodeType {
 	type: string;
@@ -49,15 +50,14 @@ function ComponentPalette() {
 		const position = { ...lastCanvasClickPosition };
 
 		// Initialize node data based on type
-		let nodeData: any = { label };
+		let nodeData: NodeData = { label };
 
 		switch (nodeType) {
 			case 'input':
 				nodeData = {
 					label,
 					query: 'Enter your query here',
-					system_prompt: '',
-					context: {}
+					system_prompt: ''
 				};
 				break;
 

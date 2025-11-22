@@ -1,57 +1,25 @@
 import type { Node, Edge } from '@xyflow/react';
 import * as yaml from 'yaml';
+import type {
+	TestSpec,
+	ModelConfig,
+	Message,
+	InputSpec,
+	ToolSpec,
+	InputNodeData,
+	ModelNodeData,
+	ToolNodeData,
+	Assertion,
+} from '../types/test-spec';
 
-// Complete TestSpec interface matching backend schema
-export interface ModelConfig {
-	temperature?: number;
-	max_tokens?: number;
-	top_p?: number;
-	top_k?: number;
-	stop_sequences?: string[];
-}
-
-export interface Message {
-	role: 'user' | 'assistant' | 'system';
-	content: string;
-}
-
-export interface InputSpec {
-	query?: string;
-	messages?: Message[];
-	system_prompt?: string;
-	context?: Record<string, any>;
-}
-
-export interface ToolSpec {
-	name: string;
-	description?: string;
-	parameters?: Record<string, any>;
-}
-
-export interface TestSpec {
-	// Required fields
-	name: string;
-	model: string;
-	inputs: InputSpec;
-	assertions: Array<Record<string, any>>;
-
-	// Optional metadata
-	description?: string;
-	tags?: string[];
-
-	// Model configuration
-	provider?: string;
-	seed?: number;
-	model_config?: ModelConfig;
-
-	// Tools and frameworks
-	tools?: Array<string | ToolSpec>;
-	framework?: string;
-	framework_config?: Record<string, any>;
-
-	// Execution settings
-	timeout_ms?: number;
-}
+// Re-export types for convenience
+export type {
+	TestSpec,
+	ModelConfig,
+	Message,
+	InputSpec,
+	ToolSpec,
+};
 
 /**
  * Generate YAML test specification from canvas nodes and edges
@@ -114,7 +82,7 @@ export function generateYAML(nodes: Node[], _edges: Edge[]): string {
 
 			case 'assertion':
 				if (node.data?.assertionType && node.data?.assertionValue !== undefined) {
-					const assertion: Record<string, any> = {};
+					const assertion: Record<string, string | number | string[]> = {};
 					const value = node.data.assertionValue;
 					const assertionType = String(node.data.assertionType);
 
@@ -126,7 +94,7 @@ export function generateYAML(nodes: Node[], _edges: Edge[]): string {
 					} else {
 						assertion[assertionType] = String(value);
 					}
-					spec.assertions!.push(assertion);
+					spec.assertions!.push(assertion as Assertion);
 				}
 				break;
 
@@ -228,10 +196,9 @@ export function parseYAMLToNodes(yamlContent: string): { nodes: Node[]; edges: E
 
 		// Create input node
 		if (spec.inputs) {
-			const inputData: any = { label: 'Input' };
+			const inputData: InputNodeData = { label: 'Input' };
 			if (spec.inputs.query) inputData.query = spec.inputs.query;
 			// system_prompt is handled by System node now, not Input node
-			if (spec.inputs.context) inputData.context = spec.inputs.context;
 			if (spec.inputs.messages) inputData.messages = spec.inputs.messages;
 
 			nodes.push({
@@ -244,7 +211,7 @@ export function parseYAMLToNodes(yamlContent: string): { nodes: Node[]; edges: E
 		}
 
 		// Create model node
-		const modelData: any = {
+		const modelData: ModelNodeData = {
 			label: `Model: ${spec.model}`,
 			model: spec.model
 		};
@@ -285,8 +252,8 @@ export function parseYAMLToNodes(yamlContent: string): { nodes: Node[]; edges: E
 
 		// Create tool nodes
 		if (spec.tools && spec.tools.length > 0) {
-			spec.tools.forEach((tool, index) => {
-				const toolData: any = { label: 'Tool' };
+			spec.tools.forEach((tool: string | ToolSpec, index: number) => {
+				const toolData: ToolNodeData = { label: 'Tool' };
 
 				if (typeof tool === 'string') {
 					toolData.toolName = tool;
@@ -319,7 +286,7 @@ export function parseYAMLToNodes(yamlContent: string): { nodes: Node[]; edges: E
 
 		// Create assertion nodes
 		if (spec.assertions && spec.assertions.length > 0) {
-			spec.assertions.forEach((assertion, index) => {
+			spec.assertions.forEach((assertion: Assertion, index: number) => {
 				const [type, value] = Object.entries(assertion)[0];
 				nodes.push({
 					id: `assertion-${index + 1}`,

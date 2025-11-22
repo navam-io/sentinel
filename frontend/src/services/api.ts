@@ -1,68 +1,40 @@
 /**
  * API client for Sentinel backend.
+ *
+ * All types are imported from types/test-spec to ensure
+ * consistency with backend schema and eliminate any usage.
  */
+
+import type {
+	TestSpec,
+	ExecutionResult,
+	AssertionResult,
+	ExecuteResponse,
+	ProviderInfo,
+	ProvidersResponse,
+	CanvasState,
+	TestDefinition,
+	CreateTestRequest,
+	UpdateTestRequest,
+	TestListResponse,
+} from '../types/test-spec';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-export interface TestSpec {
-	name: string;
-	model: string;
-	inputs: {
-		query?: string;
-		system_prompt?: string;
-		messages?: Array<{ role: string; content: string }>;
-	};
-	model_config?: {
-		temperature?: number;
-		max_tokens?: number;
-		top_p?: number;
-		top_k?: number;
-		stop_sequences?: string[];
-	};
-	tools?: Array<string | { name: string; description?: string; parameters?: any }>;
-	assertions?: Array<{ [key: string]: any }>;
-	tags?: string[];
-}
-
-export interface ExecutionResult {
-	success: boolean;
-	output: string;
-	model: string;
-	provider: string;
-	latency_ms: number;
-	tokens_input?: number;
-	tokens_output?: number;
-	cost_usd?: number;
-	tool_calls?: Array<{ id: string; name: string; input: any }>;
-	error?: string;
-	timestamp: string;
-	raw_response?: any;
-}
-
-export interface AssertionResult {
-	assertion_type: string;
-	passed: boolean;
-	message: string;
-	expected?: any;
-	actual?: any;
-	details?: { [key: string]: any };
-}
-
-export interface ExecuteResponse {
-	result: ExecutionResult;
-	assertions: AssertionResult[];
-	all_assertions_passed: boolean;
-}
-
-export interface ProviderInfo {
-	name: string;
-	configured: boolean;
-	models: string[];
-}
-
-export interface ProvidersResponse {
-	providers: ProviderInfo[];
-}
+// Re-export types for convenience
+export type {
+	TestSpec,
+	ExecutionResult,
+	AssertionResult,
+	ExecuteResponse,
+	ProviderInfo,
+	ProvidersResponse,
+	CanvasState,
+	TestDefinition,
+	CreateTestRequest,
+	UpdateTestRequest,
+	TestListResponse,
+};
 
 /**
  * Execute a test specification.
@@ -111,47 +83,7 @@ export async function checkHealth(): Promise<boolean> {
 	}
 }
 
-// Test Storage API Types and Functions
-
-export interface CanvasState {
-	nodes: any[];
-	edges: any[];
-}
-
-export interface TestDefinition {
-	id: number;
-	name: string;
-	description?: string;
-	spec: any;
-	spec_yaml?: string;
-	canvas_state?: CanvasState;
-	provider?: string;
-	model?: string;
-	created_at?: string;
-	updated_at?: string;
-	version: number;
-}
-
-export interface CreateTestRequest {
-	name: string;
-	spec: any;
-	spec_yaml?: string;
-	canvas_state?: CanvasState;
-	description?: string;
-}
-
-export interface UpdateTestRequest {
-	name?: string;
-	spec?: any;
-	spec_yaml?: string;
-	canvas_state?: CanvasState;
-	description?: string;
-}
-
-export interface TestListResponse {
-	tests: TestDefinition[];
-	total: number;
-}
+// Test Storage API Functions
 
 /**
  * Create a new test definition.
