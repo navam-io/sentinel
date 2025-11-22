@@ -3,8 +3,9 @@ Tests for model providers.
 """
 
 import pytest
-from backend.providers.base import ProviderConfig, ModelProvider
+
 from backend.providers.anthropic_provider import AnthropicProvider
+from backend.providers.base import ProviderConfig
 
 
 class TestProviderConfig:

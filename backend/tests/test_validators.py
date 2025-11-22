@@ -2,13 +2,12 @@
 Tests for assertion validation.
 """
 
-import pytest
+from backend.providers.base import ExecutionResult
 from backend.validators.assertion_validator import (
     AssertionValidator,
     ValidationResult,
     validate_assertions,
 )
-from backend.providers.base import ExecutionResult
 
 
 class TestValidationResult:

@@ -171,6 +171,8 @@
   },
   "active": "9cb05beeb1db922e",
   "lastOpenFiles": [
+    "backlog/release-0.14.4.md",
+    "backend/pyproject.toml",
     "frontend/dist/assets/index-COz0nZcl.js",
     "frontend/dist/assets/index-fmQSQPk_.css",
     "backlog/release-0.14.3.md",
@@ -186,8 +188,6 @@
     "backlog/08-spec-code-quality.md",
     "metrics/report-2025-11-22-110439.md",
     "metrics/report-2025-11-22-110439-with-libs.md",
-    "metrics",
-    "frontend/src-tauri/target/debug/incremental/sentinel-17ustt512vt9z/s-hd87ngv541-1ftl8qh-4nc3v1rn3zwcwshrsrh1w8xdo/work-products.bin",
     "releases/release-0.14.0.md",
     "backlog/release-0.14.0.md",
     "backlog/release-0.13.0.md",

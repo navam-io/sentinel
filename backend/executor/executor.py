@@ -2,19 +2,20 @@
 Core test execution engine.
 """
 
-from typing import Dict, Optional
+
 from pydantic import BaseModel
-from ..core.schema import TestSpec, InputSpec
-from ..providers.base import ModelProvider, ExecutionResult, ProviderConfig
+
+from ..core.schema import InputSpec, TestSpec
 from ..providers.anthropic_provider import AnthropicProvider
+from ..providers.base import ExecutionResult, ModelProvider, ProviderConfig
 from ..providers.openai_provider import OpenAIProvider
 
 
 class ExecutorConfig(BaseModel):
     """Configuration for the test executor."""
 
-    anthropic_api_key: Optional[str] = None
-    openai_api_key: Optional[str] = None
+    anthropic_api_key: str | None = None
+    openai_api_key: str | None = None
 
 
 class TestExecutor:
@@ -27,7 +28,7 @@ class TestExecutor:
             config: Executor configuration with API keys
         """
         self.config = config
-        self.providers: Dict[str, ModelProvider] = {}
+        self.providers: dict[str, ModelProvider] = {}
 
         # Initialize Anthropic provider if API key is provided
         if config.anthropic_api_key:
@@ -39,7 +40,7 @@ class TestExecutor:
             openai_config = ProviderConfig(api_key=config.openai_api_key)
             self.providers["openai"] = OpenAIProvider(openai_config)
 
-    def _get_provider_for_model(self, model: str) -> Optional[ModelProvider]:
+    def _get_provider_for_model(self, model: str) -> ModelProvider | None:
         """Get the appropriate provider for a model.
 
         Args:
@@ -58,7 +59,7 @@ class TestExecutor:
 
         return None
 
-    def _build_messages_from_input(self, inputs: InputSpec) -> list[Dict[str, str]]:
+    def _build_messages_from_input(self, inputs: InputSpec) -> list[dict[str, str]]:
         """Build messages array from InputSpec.
 
         Args:

@@ -2,16 +2,18 @@
 Tests for storage layer (database, models, repositories).
 """
 
-import pytest
-import tempfile
 import os
+import tempfile
 from pathlib import Path
+
+import pytest
+
 from ..storage import (
     Database,
+    RunRepository,
+    TestRepository,
     get_database,
     reset_database,
-    TestRepository,
-    RunRepository,
 )
 
 
@@ -342,9 +344,7 @@ class TestRunRepository:
         run_repo = RunRepository(session)
         run = run_repo.create(test.id, "openai", "gpt-5.1")
 
-        tool_calls = [
-            {"id": "1", "name": "search", "arguments": '{"query": "test"}'}
-        ]
+        tool_calls = [{"id": "1", "name": "search", "arguments": '{"query": "test"}'}]
 
         result = run_repo.create_result(
             run_id=run.id,

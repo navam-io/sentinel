@@ -3,9 +3,11 @@ Anthropic (Claude) provider implementation.
 """
 
 import time
-from typing import Any, Dict, List, Optional
-from anthropic import Anthropic, AsyncAnthropic
-from .base import ModelProvider, ProviderConfig, ExecutionResult
+from typing import Any
+
+from anthropic import AsyncAnthropic
+
+from .base import ExecutionResult, ModelProvider, ProviderConfig
 
 
 class AnthropicProvider(ModelProvider):
@@ -13,9 +15,9 @@ class AnthropicProvider(ModelProvider):
 
     AVAILABLE_MODELS = [
         # Latest (Recommended - Claude 4.x)
-        "claude-sonnet-4-5-20250929",      # Claude Sonnet 4.5 (Latest, best balance)
-        "claude-haiku-4-5-20251001",       # Claude Haiku 4.5 (Fast, cost-effective)
-        "claude-opus-4-1-20250805",        # Claude Opus 4.1 (Most capable)
+        "claude-sonnet-4-5-20250929",  # Claude Sonnet 4.5 (Latest, best balance)
+        "claude-haiku-4-5-20251001",  # Claude Haiku 4.5 (Fast, cost-effective)
+        "claude-opus-4-1-20250805",  # Claude Opus 4.1 (Most capable)
     ]
 
     def __init__(self, config: ProviderConfig):
@@ -32,7 +34,7 @@ class AnthropicProvider(ModelProvider):
         """Get provider name."""
         return "anthropic"
 
-    def list_models(self) -> List[str]:
+    def list_models(self) -> list[str]:
         """List available Claude models.
 
         Returns:
@@ -43,10 +45,10 @@ class AnthropicProvider(ModelProvider):
     async def execute(
         self,
         model: str,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
-        tools: Optional[List[Dict[str, Any]]] = None,
+        max_tokens: int | None = None,
+        tools: list[dict[str, Any]] | None = None,
         **kwargs,
     ) -> ExecutionResult:
         """Execute a test against a Claude model.
@@ -80,7 +82,7 @@ class AnthropicProvider(ModelProvider):
                 raise ValueError("Conversation must start with a user message")
 
             # Build request parameters
-            request_params: Dict[str, Any] = {
+            request_params: dict[str, Any] = {
                 "model": model,
                 "messages": conversation_messages,
                 "max_tokens": max_tokens or 1024,
@@ -193,16 +195,13 @@ class AnthropicProvider(ModelProvider):
             "claude-sonnet-4-5-20250929": (3.0, 15.0),
             "claude-haiku-4-5-20251001": (1.0, 5.0),
             "claude-opus-4-1-20250805": (15.0, 75.0),
-
             # Legacy (Still Available)
             "claude-sonnet-4-20250514": (3.0, 15.0),
             "claude-opus-4-20250514": (15.0, 75.0),
             "claude-3-7-sonnet-20250219": (3.0, 15.0),
             "claude-3-5-haiku-20241022": (0.80, 4.0),
-
             # Deprecated
             "claude-3-haiku-20240307": (0.25, 1.25),
-
             # Legacy models (for backward compatibility)
             "claude-3-5-sonnet-20241022": (3.0, 15.0),
             "claude-3-opus-20240229": (15.0, 75.0),

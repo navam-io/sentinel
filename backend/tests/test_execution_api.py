@@ -4,8 +4,8 @@ Tests for execution API with assertion validation.
 
 import pytest
 from fastapi.testclient import TestClient
+
 from backend.main import app
-from backend.core.schema import TestSpec, InputSpec
 
 
 @pytest.fixture
@@ -142,8 +142,12 @@ class TestExecutionAPIWithValidation:
         assert len(data["assertions"]) == 2
 
         # Both token assertions should pass for a simple "hello" response
-        min_tokens_assertion = next(a for a in data["assertions"] if a["assertion_type"] == "min_tokens")
-        max_tokens_assertion = next(a for a in data["assertions"] if a["assertion_type"] == "max_tokens")
+        min_tokens_assertion = next(
+            a for a in data["assertions"] if a["assertion_type"] == "min_tokens"
+        )
+        max_tokens_assertion = next(
+            a for a in data["assertions"] if a["assertion_type"] == "max_tokens"
+        )
 
         assert min_tokens_assertion["passed"] is True
         assert max_tokens_assertion["passed"] is True

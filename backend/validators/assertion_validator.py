@@ -11,10 +11,12 @@ Supports 8 assertion types:
   - min_tokens / max_tokens: Length validation
 """
 
-import re
 import json
-from typing import Any, Dict, List, Optional
+import re
+from typing import Any
+
 from pydantic import BaseModel
+
 from ..providers.base import ExecutionResult
 
 
@@ -24,9 +26,9 @@ class ValidationResult(BaseModel):
     assertion_type: str
     passed: bool
     message: str
-    expected: Optional[Any] = None
-    actual: Optional[Any] = None
-    details: Optional[Dict[str, Any]] = None
+    expected: Any | None = None
+    actual: Any | None = None
+    details: dict[str, Any] | None = None
 
 
 class AssertionValidator:
@@ -46,8 +48,8 @@ class AssertionValidator:
         }
 
     def validate(
-        self, assertions: List[Dict[str, Any]], result: ExecutionResult
-    ) -> List[ValidationResult]:
+        self, assertions: list[dict[str, Any]], result: ExecutionResult
+    ) -> list[ValidationResult]:
         """Validate all assertions against execution result.
 
         Args:
@@ -107,9 +109,7 @@ class AssertionValidator:
     # Text Matching Validators
     # ========================================================================
 
-    def _validate_must_contain(
-        self, expected: str, result: ExecutionResult
-    ) -> ValidationResult:
+    def _validate_must_contain(self, expected: str, result: ExecutionResult) -> ValidationResult:
         """Validate that output contains expected text.
 
         Args:
@@ -127,7 +127,9 @@ class AssertionValidator:
             assertion_type="must_contain",
             passed=passed,
             message=(
-                f"Output contains '{expected}'" if passed else f"Output does not contain '{expected}'"
+                f"Output contains '{expected}'"
+                if passed
+                else f"Output does not contain '{expected}'"
             ),
             expected=expected,
             actual=result.output[:200] + "..." if len(result.output) > 200 else result.output,
@@ -153,15 +155,15 @@ class AssertionValidator:
             assertion_type="must_not_contain",
             passed=passed,
             message=(
-                f"Output does not contain '{expected}'" if passed else f"Output contains '{expected}'"
+                f"Output does not contain '{expected}'"
+                if passed
+                else f"Output contains '{expected}'"
             ),
             expected=expected,
             actual=result.output[:200] + "..." if len(result.output) > 200 else result.output,
         )
 
-    def _validate_regex_match(
-        self, pattern: str, result: ExecutionResult
-    ) -> ValidationResult:
+    def _validate_regex_match(self, pattern: str, result: ExecutionResult) -> ValidationResult:
         """Validate that output matches regex pattern.
 
         Args:
@@ -291,7 +293,9 @@ class AssertionValidator:
                 assertion_type="output_type",
                 passed=has_markdown,
                 message=(
-                    "Output appears to be markdown" if has_markdown else "Output does not appear to be markdown"
+                    "Output appears to be markdown"
+                    if has_markdown
+                    else "Output does not appear to be markdown"
                 ),
                 expected="markdown",
                 actual="markdown" if has_markdown else "text",
@@ -310,7 +314,9 @@ class AssertionValidator:
             return ValidationResult(
                 assertion_type="output_type",
                 passed=has_code,
-                message="Output appears to be code" if has_code else "Output does not appear to be code",
+                message=(
+                    "Output appears to be code" if has_code else "Output does not appear to be code"
+                ),
                 expected="code",
                 actual="code" if has_code else "text",
             )
@@ -327,9 +333,7 @@ class AssertionValidator:
     # Performance Validators
     # ========================================================================
 
-    def _validate_max_latency(
-        self, max_ms: int, result: ExecutionResult
-    ) -> ValidationResult:
+    def _validate_max_latency(self, max_ms: int, result: ExecutionResult) -> ValidationResult:
         """Validate that latency is below threshold.
 
         Args:
@@ -358,9 +362,7 @@ class AssertionValidator:
     # Token Count Validators
     # ========================================================================
 
-    def _validate_min_tokens(
-        self, min_tokens: int, result: ExecutionResult
-    ) -> ValidationResult:
+    def _validate_min_tokens(self, min_tokens: int, result: ExecutionResult) -> ValidationResult:
         """Validate that output has at least min tokens.
 
         Args:
@@ -393,9 +395,7 @@ class AssertionValidator:
             details={"difference": result.tokens_output - min_tokens},
         )
 
-    def _validate_max_tokens(
-        self, max_tokens: int, result: ExecutionResult
-    ) -> ValidationResult:
+    def _validate_max_tokens(self, max_tokens: int, result: ExecutionResult) -> ValidationResult:
         """Validate that output does not exceed max tokens.
 
         Args:
@@ -435,8 +435,8 @@ class AssertionValidator:
 
 
 def validate_assertions(
-    assertions: List[Dict[str, Any]], result: ExecutionResult
-) -> List[ValidationResult]:
+    assertions: list[dict[str, Any]], result: ExecutionResult
+) -> list[ValidationResult]:
     """Validate assertions against execution result.
 
     Convenience function that creates a validator and runs validations.

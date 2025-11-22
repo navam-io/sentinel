@@ -4,9 +4,11 @@ SQLAlchemy models for test definitions, runs, and results.
 
 import json
 from datetime import datetime
-from typing import Any, Dict
-from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKey, Boolean
+from typing import Any
+
+from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
+
 from .database import Base
 
 
@@ -21,7 +23,7 @@ class TestDefinition(Base):
 
     # Test specification (stored as JSON)
     spec_json = Column(Text, nullable=False)  # Full TestSpec as JSON
-    spec_yaml = Column(Text, nullable=True)   # Optional YAML representation
+    spec_yaml = Column(Text, nullable=True)  # Optional YAML representation
 
     # Canvas state (stored as JSON)
     canvas_state = Column(Text, nullable=True)  # React Flow nodes and edges
@@ -38,7 +40,7 @@ class TestDefinition(Base):
     # Relationships
     runs = relationship("TestRun", back_populates="test_definition", cascade="all, delete-orphan")
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "id": self.id,
@@ -61,7 +63,9 @@ class TestRun(Base):
     __tablename__ = "test_runs"
 
     id = Column(Integer, primary_key=True, index=True)
-    test_definition_id = Column(Integer, ForeignKey("test_definitions.id"), nullable=False, index=True)
+    test_definition_id = Column(
+        Integer, ForeignKey("test_definitions.id"), nullable=False, index=True
+    )
 
     # Execution metadata
     started_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
@@ -85,7 +89,7 @@ class TestRun(Base):
     test_definition = relationship("TestDefinition", back_populates="runs")
     results = relationship("TestResult", back_populates="test_run", cascade="all, delete-orphan")
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "id": self.id,
@@ -128,7 +132,7 @@ class TestResult(Base):
     # Relationships
     test_run = relationship("TestRun", back_populates="results")
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "id": self.id,

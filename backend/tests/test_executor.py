@@ -3,8 +3,9 @@ Tests for test executor.
 """
 
 import pytest
-from backend.executor import TestExecutor, ExecutorConfig
-from backend.core.schema import TestSpec, InputSpec
+
+from backend.core.schema import InputSpec, TestSpec
+from backend.executor import ExecutorConfig, TestExecutor
 
 
 class TestExecutorConfig:

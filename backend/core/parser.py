@@ -10,12 +10,11 @@ This module provides parsing and serialization for test specs, enabling:
 
 import json
 from pathlib import Path
-from typing import Union
 
 import yaml
 from pydantic import ValidationError
 
-from .schema import TestSpec, TestSuite, TestSpecOrSuite
+from .schema import TestSpec, TestSpecOrSuite, TestSuite
 
 
 class ParsingError(Exception):
@@ -124,7 +123,7 @@ class TestSpecParser:
         return TestSpecParser._parse_dict(data)
 
     @staticmethod
-    def parse_file(file_path: Union[str, Path]) -> TestSpecOrSuite:
+    def parse_file(file_path: str | Path) -> TestSpecOrSuite:
         """Parse a test specification file (YAML or JSON).
 
         Args:
@@ -204,14 +203,12 @@ class TestSpecParser:
             JSON string representation
         """
         # Use Pydantic's built-in JSON serialization
-        return spec.model_dump_json(
-            exclude_none=True, by_alias=True, indent=indent
-        )
+        return spec.model_dump_json(exclude_none=True, by_alias=True, indent=indent)
 
     @staticmethod
     def write_file(
         spec: TestSpecOrSuite,
-        file_path: Union[str, Path],
+        file_path: str | Path,
         format: str = None,
     ) -> None:
         """Write a TestSpec or TestSuite to a file.

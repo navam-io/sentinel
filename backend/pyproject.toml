@@ -1,0 +1,123 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentinel-backend"
+version = "0.14.4"
+description = "Sentinel Backend - Visual-first agent testing platform"
+authors = [
+    {name = "Navam", email = "noreply@navam.ai"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.115.6",
+    "uvicorn>=0.34.0",
+    "pydantic>=2.10.5",
+    "python-dotenv>=1.0.1",
+    "anthropic>=0.43.1",
+    "openai>=1.59.6",
+    "pyyaml>=6.0.2",
+    "sqlalchemy>=2.0.37",
+    "alembic>=1.14.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
+    "pytest-asyncio>=0.24.0",
+    "black>=25.11.0",
+    "ruff>=0.14.5",
+    "mypy>=1.18.2",
+]
+
+# Black Configuration
+[tool.black]
+line-length = 100
+target-version = ['py313']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | venv
+  | __pycache__
+  | \.pytest_cache
+  | htmlcov
+)/
+'''
+
+# Ruff Configuration
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle errors
+  "W",   # pycodestyle warnings
+  "F",   # pyflakes
+  "I",   # isort
+  "N",   # pep8-naming
+  "UP",  # pyupgrade
+  "B",   # flake8-bugbear
+  "C4",  # flake8-comprehensions
+  "SIM", # flake8-simplify
+]
+
+ignore = [
+  "E501",  # line too long (handled by black)
+  "B008",  # FastAPI Depends() in function defaults is standard pattern
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Allow unused imports in __init__.py
+"tests/*" = ["E501", "E722", "SIM105", "UP028"]  # Allow longer lines, bare except, try-except-pass, and for-yield in tests
+"api/*" = ["B904"]  # Allow raising without 'from' in API routes for cleaner HTTP exceptions
+"core/*" = ["B904"]  # Allow raising without 'from' in core parser for cleaner error messages
+
+# MyPy Configuration
+[tool.mypy]
+python_version = "3.13"
+strict = false  # Start with false, gradually enable
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false  # Gradually enable
+disallow_incomplete_defs = false  # Gradually enable
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = false  # Start lenient
+warn_no_return = true
+warn_unreachable = true
+
+# Per-module options
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+# Pytest Configuration
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q --strict-markers --cov=. --cov-report=term-missing --cov-report=html"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+# Coverage Configuration
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    "*/__pycache__/*",
+    "*/htmlcov/*",
+]
+
+[tool.coverage.report]
+precision = 0
+show_missing = true
+skip_covered = false

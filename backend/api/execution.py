@@ -2,9 +2,10 @@
 Test execution API endpoints.
 """
 
+
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
-from typing import List, Optional
+
 from ..core.schema import TestSpec
 from ..providers.base import ExecutionResult
 from ..validators.assertion_validator import ValidationResult, validate_assertions
@@ -16,14 +17,14 @@ class ExecuteRequest(BaseModel):
     """Request to execute a test."""
 
     test_spec: TestSpec
-    provider: Optional[str] = None  # Future: override provider selection
+    provider: str | None = None  # Future: override provider selection
 
 
 class ExecuteResponse(BaseModel):
     """Response from test execution with assertion validation results."""
 
     result: ExecutionResult
-    assertions: List[ValidationResult]
+    assertions: list[ValidationResult]
     all_assertions_passed: bool
 
 
@@ -51,9 +52,7 @@ async def execute_test(request: ExecuteRequest, app_request: Request):
         # Validate assertions if any
         assertion_results = []
         if request.test_spec.assertions:
-            assertion_results = validate_assertions(
-                request.test_spec.assertions, result
-            )
+            assertion_results = validate_assertions(request.test_spec.assertions, result)
 
         # Check if all assertions passed
         all_passed = all(ar.passed for ar in assertion_results) if assertion_results else True

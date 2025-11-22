@@ -3,16 +3,17 @@ Base provider interface for all model providers.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
-from pydantic import BaseModel
 from datetime import datetime
+from typing import Any
+
+from pydantic import BaseModel
 
 
 class ProviderConfig(BaseModel):
     """Configuration for a model provider."""
 
     api_key: str
-    base_url: Optional[str] = None
+    base_url: str | None = None
     timeout: int = 60
     max_retries: int = 3
 
@@ -25,13 +26,13 @@ class ExecutionResult(BaseModel):
     model: str
     provider: str
     latency_ms: int
-    tokens_input: Optional[int] = None
-    tokens_output: Optional[int] = None
-    cost_usd: Optional[float] = None
-    tool_calls: List[Dict[str, Any]] = []
-    error: Optional[str] = None
+    tokens_input: int | None = None
+    tokens_output: int | None = None
+    cost_usd: float | None = None
+    tool_calls: list[dict[str, Any]] = []
+    error: str | None = None
     timestamp: str = datetime.now().isoformat()
-    raw_response: Optional[Dict[str, Any]] = None
+    raw_response: dict[str, Any] | None = None
 
 
 class ModelProvider(ABC):
@@ -49,10 +50,10 @@ class ModelProvider(ABC):
     async def execute(
         self,
         model: str,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
-        tools: Optional[List[Dict[str, Any]]] = None,
+        max_tokens: int | None = None,
+        tools: list[dict[str, Any]] | None = None,
         **kwargs,
     ) -> ExecutionResult:
         """Execute a test against the model.
@@ -71,7 +72,7 @@ class ModelProvider(ABC):
         pass
 
     @abstractmethod
-    def list_models(self) -> List[str]:
+    def list_models(self) -> list[str]:
         """List available models for this provider.
 
         Returns:

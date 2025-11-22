@@ -2,12 +2,13 @@
 Test management API endpoints (CRUD operations).
 """
 
-from fastapi import APIRouter, HTTPException, Depends
+from typing import Any
+
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
-from ..storage import get_database, TestRepository
-from ..storage.database import Database
+
+from ..storage import TestRepository, get_database
 
 router = APIRouter()
 
@@ -16,20 +17,20 @@ class CreateTestRequest(BaseModel):
     """Request to create a test."""
 
     name: str
-    spec: Dict[str, Any]
-    spec_yaml: Optional[str] = None
-    canvas_state: Optional[Dict[str, Any]] = None
-    description: Optional[str] = None
+    spec: dict[str, Any]
+    spec_yaml: str | None = None
+    canvas_state: dict[str, Any] | None = None
+    description: str | None = None
 
 
 class UpdateTestRequest(BaseModel):
     """Request to update a test."""
 
-    name: Optional[str] = None
-    spec: Optional[Dict[str, Any]] = None
-    spec_yaml: Optional[str] = None
-    canvas_state: Optional[Dict[str, Any]] = None
-    description: Optional[str] = None
+    name: str | None = None
+    spec: dict[str, Any] | None = None
+    spec_yaml: str | None = None
+    canvas_state: dict[str, Any] | None = None
+    description: str | None = None
 
 
 class TestResponse(BaseModel):
@@ -37,29 +38,28 @@ class TestResponse(BaseModel):
 
     id: int
     name: str
-    description: Optional[str]
-    spec: Optional[Dict[str, Any]]
-    spec_yaml: Optional[str]
-    canvas_state: Optional[Dict[str, Any]]
-    provider: Optional[str]
-    model: Optional[str]
-    created_at: Optional[str]
-    updated_at: Optional[str]
+    description: str | None
+    spec: dict[str, Any] | None
+    spec_yaml: str | None
+    canvas_state: dict[str, Any] | None
+    provider: str | None
+    model: str | None
+    created_at: str | None
+    updated_at: str | None
     version: int
 
 
 class TestListResponse(BaseModel):
     """List of tests response."""
 
-    tests: List[TestResponse]
+    tests: list[TestResponse]
     total: int
 
 
 def get_db_session():
     """Dependency to get database session."""
     db = get_database()
-    for session in db.get_session():
-        yield session
+    yield from db.get_session()
 
 
 @router.post("/create", response_model=TestResponse)

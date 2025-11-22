@@ -4,10 +4,12 @@ Data access layer (repositories) for tests and runs.
 
 import json
 from datetime import datetime
-from typing import List, Optional, Dict, Any
-from sqlalchemy.orm import Session
+from typing import Any
+
 from sqlalchemy import desc
-from .models import TestDefinition, TestRun, TestResult
+from sqlalchemy.orm import Session
+
+from .models import TestDefinition, TestResult, TestRun
 
 
 class TestRepository:
@@ -24,10 +26,10 @@ class TestRepository:
     def create(
         self,
         name: str,
-        spec: Dict[str, Any],
-        spec_yaml: Optional[str] = None,
-        canvas_state: Optional[Dict[str, Any]] = None,
-        description: Optional[str] = None,
+        spec: dict[str, Any],
+        spec_yaml: str | None = None,
+        canvas_state: dict[str, Any] | None = None,
+        description: str | None = None,
     ) -> TestDefinition:
         """Create a new test definition.
 
@@ -55,7 +57,7 @@ class TestRepository:
         self.session.refresh(test)
         return test
 
-    def get_by_id(self, test_id: int) -> Optional[TestDefinition]:
+    def get_by_id(self, test_id: int) -> TestDefinition | None:
         """Get test definition by ID.
 
         Args:
@@ -66,7 +68,7 @@ class TestRepository:
         """
         return self.session.query(TestDefinition).filter(TestDefinition.id == test_id).first()
 
-    def get_by_name(self, name: str) -> Optional[TestDefinition]:
+    def get_by_name(self, name: str) -> TestDefinition | None:
         """Get test definition by name.
 
         Args:
@@ -77,7 +79,7 @@ class TestRepository:
         """
         return self.session.query(TestDefinition).filter(TestDefinition.name == name).first()
 
-    def get_all(self, limit: int = 100, offset: int = 0) -> List[TestDefinition]:
+    def get_all(self, limit: int = 100, offset: int = 0) -> list[TestDefinition]:
         """Get all test definitions.
 
         Args:
@@ -98,12 +100,12 @@ class TestRepository:
     def update(
         self,
         test_id: int,
-        name: Optional[str] = None,
-        spec: Optional[Dict[str, Any]] = None,
-        spec_yaml: Optional[str] = None,
-        canvas_state: Optional[Dict[str, Any]] = None,
-        description: Optional[str] = None,
-    ) -> Optional[TestDefinition]:
+        name: str | None = None,
+        spec: dict[str, Any] | None = None,
+        spec_yaml: str | None = None,
+        canvas_state: dict[str, Any] | None = None,
+        description: str | None = None,
+    ) -> TestDefinition | None:
         """Update test definition.
 
         Args:
@@ -201,12 +203,12 @@ class RunRepository:
         self,
         run_id: int,
         status: str,
-        latency_ms: Optional[int] = None,
-        tokens_input: Optional[int] = None,
-        tokens_output: Optional[int] = None,
-        cost_usd: Optional[float] = None,
-        error_message: Optional[str] = None,
-    ) -> Optional[TestRun]:
+        latency_ms: int | None = None,
+        tokens_input: int | None = None,
+        tokens_output: int | None = None,
+        cost_usd: float | None = None,
+        error_message: str | None = None,
+    ) -> TestRun | None:
         """Update test run status.
 
         Args:
@@ -244,7 +246,7 @@ class RunRepository:
         self.session.refresh(run)
         return run
 
-    def get_by_id(self, run_id: int) -> Optional[TestRun]:
+    def get_by_id(self, run_id: int) -> TestRun | None:
         """Get test run by ID.
 
         Args:
@@ -260,7 +262,7 @@ class RunRepository:
         test_definition_id: int,
         limit: int = 50,
         offset: int = 0,
-    ) -> List[TestRun]:
+    ) -> list[TestRun]:
         """Get runs for a specific test.
 
         Args:
@@ -280,7 +282,7 @@ class RunRepository:
             .all()
         )
 
-    def get_all(self, limit: int = 100, offset: int = 0) -> List[TestRun]:
+    def get_all(self, limit: int = 100, offset: int = 0) -> list[TestRun]:
         """Get all test runs.
 
         Args:
@@ -303,12 +305,12 @@ class RunRepository:
         run_id: int,
         assertion_type: str,
         passed: bool,
-        assertion_value: Optional[str] = None,
-        actual_value: Optional[str] = None,
-        failure_reason: Optional[str] = None,
-        output_text: Optional[str] = None,
-        tool_calls: Optional[List[Dict[str, Any]]] = None,
-        raw_response: Optional[Dict[str, Any]] = None,
+        assertion_value: str | None = None,
+        actual_value: str | None = None,
+        failure_reason: str | None = None,
+        output_text: str | None = None,
+        tool_calls: list[dict[str, Any]] | None = None,
+        raw_response: dict[str, Any] | None = None,
     ) -> TestResult:
         """Create assertion result for a run.
 
@@ -342,7 +344,7 @@ class RunRepository:
         self.session.refresh(result)
         return result
 
-    def get_results_by_run(self, run_id: int) -> List[TestResult]:
+    def get_results_by_run(self, run_id: int) -> list[TestResult]:
         """Get all results for a test run.
 
         Args:

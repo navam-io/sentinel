@@ -3,9 +3,11 @@ OpenAI provider implementation.
 """
 
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any
+
 from openai import AsyncOpenAI
-from .base import ModelProvider, ProviderConfig, ExecutionResult
+
+from .base import ExecutionResult, ModelProvider, ProviderConfig
 
 
 class OpenAIProvider(ModelProvider):
@@ -13,20 +15,18 @@ class OpenAIProvider(ModelProvider):
 
     AVAILABLE_MODELS = [
         # GPT-5 Series (Latest Frontier Models - August 2025+)
-        "gpt-5.1",                         # GPT-5.1 (Latest, best for coding and agentic tasks)
-        "gpt-5",                           # GPT-5 (Reasoning model)
-        "gpt-5-mini",                      # GPT-5 Mini (Faster, cost-efficient)
-        "gpt-5-nano",                      # GPT-5 Nano (Fastest, most cost-efficient)
-
+        "gpt-5.1",  # GPT-5.1 (Latest, best for coding and agentic tasks)
+        "gpt-5",  # GPT-5 (Reasoning model)
+        "gpt-5-mini",  # GPT-5 Mini (Faster, cost-efficient)
+        "gpt-5-nano",  # GPT-5 Nano (Fastest, most cost-efficient)
         # GPT-4 Series (Widely Used)
-        "gpt-4.1",                         # GPT-4.1 (Smartest non-reasoning model)
-        "gpt-4o",                          # GPT-4o (Multimodal, most popular)
-        "gpt-4o-mini",                     # GPT-4o Mini (Cost-effective, fast)
-        "gpt-4-turbo",                     # GPT-4 Turbo
-        "gpt-4",                           # GPT-4 (Classic)
-
+        "gpt-4.1",  # GPT-4.1 (Smartest non-reasoning model)
+        "gpt-4o",  # GPT-4o (Multimodal, most popular)
+        "gpt-4o-mini",  # GPT-4o Mini (Cost-effective, fast)
+        "gpt-4-turbo",  # GPT-4 Turbo
+        "gpt-4",  # GPT-4 (Classic)
         # GPT-3.5 Series (Most cost-effective)
-        "gpt-3.5-turbo",                   # GPT-3.5 Turbo (Cheapest, fast)
+        "gpt-3.5-turbo",  # GPT-3.5 Turbo (Cheapest, fast)
     ]
 
     def __init__(self, config: ProviderConfig):
@@ -43,7 +43,7 @@ class OpenAIProvider(ModelProvider):
         """Get provider name."""
         return "openai"
 
-    def list_models(self) -> List[str]:
+    def list_models(self) -> list[str]:
         """List available GPT models.
 
         Returns:
@@ -54,10 +54,10 @@ class OpenAIProvider(ModelProvider):
     async def execute(
         self,
         model: str,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
-        tools: Optional[List[Dict[str, Any]]] = None,
+        max_tokens: int | None = None,
+        tools: list[dict[str, Any]] | None = None,
         **kwargs,
     ) -> ExecutionResult:
         """Execute a test against a GPT model.
@@ -77,7 +77,7 @@ class OpenAIProvider(ModelProvider):
 
         try:
             # Build request parameters
-            request_params: Dict[str, Any] = {
+            request_params: dict[str, Any] = {
                 "model": model,
                 "messages": messages,
             }
@@ -201,14 +201,12 @@ class OpenAIProvider(ModelProvider):
             "gpt-5": (1.25, 10.0),
             "gpt-5-mini": (0.30, 1.20),
             "gpt-5-nano": (0.10, 0.40),
-
             # GPT-4 Series
             "gpt-4.1": (2.50, 10.0),
             "gpt-4o": (2.50, 10.0),
             "gpt-4o-mini": (0.15, 0.60),
             "gpt-4-turbo": (10.0, 30.0),
             "gpt-4": (30.0, 60.0),
-
             # GPT-3.5 Series
             "gpt-3.5-turbo": (0.50, 1.50),
         }

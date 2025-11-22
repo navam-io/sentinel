@@ -9,9 +9,9 @@ This module defines the schema for YAML/JSON test specifications that can be:
 5. Run in CI/CD pipelines
 """
 
-from typing import Any, Dict, List, Literal, Optional, Union
-from pydantic import BaseModel, Field, field_validator, model_validator
+from typing import Any, Literal
 
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 # ============================================================================
 # Model Configuration
@@ -30,11 +30,13 @@ class ModelConfig(BaseModel):
         ```
     """
 
-    temperature: Optional[float] = Field(None, ge=0.0, le=2.0, description="Sampling temperature (0.0-2.0)")
-    max_tokens: Optional[int] = Field(None, gt=0, description="Maximum tokens to generate")
-    top_p: Optional[float] = Field(None, ge=0.0, le=1.0, description="Nucleus sampling threshold")
-    top_k: Optional[int] = Field(None, gt=0, description="Top-k sampling parameter")
-    stop_sequences: Optional[List[str]] = Field(None, description="Sequences that stop generation")
+    temperature: float | None = Field(
+        None, ge=0.0, le=2.0, description="Sampling temperature (0.0-2.0)"
+    )
+    max_tokens: int | None = Field(None, gt=0, description="Maximum tokens to generate")
+    top_p: float | None = Field(None, ge=0.0, le=1.0, description="Nucleus sampling threshold")
+    top_k: int | None = Field(None, gt=0, description="Top-k sampling parameter")
+    stop_sequences: list[str] | None = Field(None, description="Sequences that stop generation")
 
 
 # ============================================================================
@@ -64,8 +66,8 @@ class ToolSpec(BaseModel):
     """
 
     name: str = Field(..., min_length=1, description="Tool identifier")
-    description: Optional[str] = Field(None, description="Human-readable description")
-    parameters: Optional[Dict[str, Any]] = Field(None, description="JSON Schema for parameters")
+    description: str | None = Field(None, description="Human-readable description")
+    parameters: dict[str, Any] | None = Field(None, description="JSON Schema for parameters")
 
 
 # ============================================================================
@@ -109,16 +111,18 @@ class InputSpec(BaseModel):
         ```
     """
 
-    query: Optional[str] = Field(None, description="Primary query/prompt")
-    messages: Optional[List[Message]] = Field(None, description="Conversation history")
-    system_prompt: Optional[str] = Field(None, description="System instructions")
-    context: Optional[Dict[str, Any]] = Field(None, description="Additional context data")
+    query: str | None = Field(None, description="Primary query/prompt")
+    messages: list[Message] | None = Field(None, description="Conversation history")
+    system_prompt: str | None = Field(None, description="System instructions")
+    context: dict[str, Any] | None = Field(None, description="Additional context data")
 
     @model_validator(mode="after")
     def check_at_least_one_input(self) -> "InputSpec":
         """Ensure at least one input field is provided."""
         if not any([self.query, self.messages, self.system_prompt, self.context]):
-            raise ValueError("At least one input field (query, messages, system_prompt, or context) must be provided")
+            raise ValueError(
+                "At least one input field (query, messages, system_prompt, or context) must be provided"
+            )
         return self
 
 
@@ -174,30 +178,46 @@ class TestSpec(BaseModel):
 
     # Required fields
     name: str = Field(..., min_length=1, description="Test case name")
-    model: str = Field(..., min_length=1, description="Model identifier (e.g., 'gpt-4', 'claude-3-5-sonnet-20241022')")
+    model: str = Field(
+        ...,
+        min_length=1,
+        description="Model identifier (e.g., 'gpt-4', 'claude-3-5-sonnet-20241022')",
+    )
     inputs: InputSpec = Field(..., description="Test inputs")
-    assertions: List[Dict[str, Any]] = Field(..., min_length=1, description="Validation assertions")
+    assertions: list[dict[str, Any]] = Field(..., min_length=1, description="Validation assertions")
 
     # Optional metadata
-    description: Optional[str] = Field(None, description="Detailed test description")
-    tags: Optional[List[str]] = Field(None, description="Categorization tags")
+    description: str | None = Field(None, description="Detailed test description")
+    tags: list[str] | None = Field(None, description="Categorization tags")
 
     # Model configuration
-    provider: Optional[str] = Field(None, description="Model provider (anthropic, openai, bedrock, etc.)")
-    seed: Optional[int] = Field(None, description="Random seed for deterministic execution")
-    model_config_params: Optional[ModelConfig] = Field(None, alias="model_config", description="Model parameters")
+    provider: str | None = Field(
+        None, description="Model provider (anthropic, openai, bedrock, etc.)"
+    )
+    seed: int | None = Field(None, description="Random seed for deterministic execution")
+    model_config_params: ModelConfig | None = Field(
+        None, alias="model_config", description="Model parameters"
+    )
 
     # Tools and frameworks
-    tools: Optional[List[Union[str, ToolSpec]]] = Field(None, description="Available tools")
-    framework: Optional[str] = Field(None, description="Agentic framework (langgraph, claude_sdk, etc.)")
-    framework_config: Optional[Dict[str, Any]] = Field(None, description="Framework-specific configuration")
+    tools: list[str | ToolSpec] | None = Field(None, description="Available tools")
+    framework: str | None = Field(
+        None, description="Agentic framework (langgraph, claude_sdk, etc.)"
+    )
+    framework_config: dict[str, Any] | None = Field(
+        None, description="Framework-specific configuration"
+    )
 
     # Execution settings
-    timeout_ms: Optional[int] = Field(None, gt=0, description="Maximum execution timeout in milliseconds")
+    timeout_ms: int | None = Field(
+        None, gt=0, description="Maximum execution timeout in milliseconds"
+    )
 
     @field_validator("tools")
     @classmethod
-    def validate_tools(cls, v: Optional[List[Union[str, ToolSpec]]]) -> Optional[List[Union[str, ToolSpec]]]:
+    def validate_tools(
+        cls, v: list[str | ToolSpec] | None
+    ) -> list[str | ToolSpec] | None:
         """Validate tools field."""
         if v is None:
             return v
@@ -263,15 +283,15 @@ class TestSuite(BaseModel):
 
     # Required fields
     name: str = Field(..., min_length=1, description="Suite name")
-    tests: List[TestSpec] = Field(..., min_length=1, description="List of test specifications")
+    tests: list[TestSpec] = Field(..., min_length=1, description="List of test specifications")
 
     # Optional metadata
-    description: Optional[str] = Field(None, description="Suite description")
-    version: Optional[str] = Field(None, description="Suite version")
-    tags: Optional[List[str]] = Field(None, description="Suite-level tags")
+    description: str | None = Field(None, description="Suite description")
+    version: str | None = Field(None, description="Suite version")
+    tags: list[str] | None = Field(None, description="Suite-level tags")
 
     # Defaults applied to all tests (metadata only, not actually applied by the model)
-    defaults: Optional[Dict[str, Any]] = Field(None, description="Default values for tests")
+    defaults: dict[str, Any] | None = Field(None, description="Default values for tests")
 
 
 # ============================================================================
@@ -279,5 +299,5 @@ class TestSuite(BaseModel):
 # ============================================================================
 
 
-TestSpecOrSuite = Union[TestSpec, TestSuite]
+TestSpecOrSuite = TestSpec | TestSuite
 """A test specification or test suite."""

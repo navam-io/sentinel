@@ -6,15 +6,16 @@ They are marked as integration tests and can be skipped if OPENAI_API_KEY is not
 """
 
 import os
-import pytest
-from backend.providers.openai_provider import OpenAIProvider
-from backend.providers.base import ProviderConfig
 
+import pytest
+
+from backend.providers.base import ProviderConfig
+from backend.providers.openai_provider import OpenAIProvider
 
 # Skip all tests in this module if OPENAI_API_KEY is not set
 pytestmark = pytest.mark.skipif(
     not os.getenv("OPENAI_API_KEY"),
-    reason="OPENAI_API_KEY environment variable not set. Skipping OpenAI integration tests."
+    reason="OPENAI_API_KEY environment variable not set. Skipping OpenAI integration tests.",
 )
 
 
@@ -32,15 +33,13 @@ class TestOpenAIProviderIntegration:
     @pytest.mark.integration
     async def test_real_api_call_gpt5_nano(self, provider):
         """Test real API call with GPT-5 nano (cheapest Frontier model)."""
-        messages = [
-            {"role": "user", "content": "What is 2+2? Answer with just the number."}
-        ]
+        messages = [{"role": "user", "content": "What is 2+2? Answer with just the number."}]
 
         result = await provider.execute(
             model="gpt-5-nano",
             messages=messages,
             # Note: gpt-5-nano doesn't support custom temperature
-            max_tokens=500  # Increased from 100 to avoid max_tokens limit errors
+            max_tokens=500,  # Increased from 100 to avoid max_tokens limit errors
         )
 
         # Verify successful response
@@ -61,14 +60,14 @@ class TestOpenAIProviderIntegration:
         """Test API call with system message."""
         messages = [
             {"role": "system", "content": "You are a helpful math tutor."},
-            {"role": "user", "content": "What is 5+3? Just the number."}
+            {"role": "user", "content": "What is 5+3? Just the number."},
         ]
 
         result = await provider.execute(
             model="gpt-5-nano",
             messages=messages,
             # Note: gpt-5-nano doesn't support custom temperature
-            max_tokens=500  # Increased from 100 to avoid max_tokens limit errors
+            max_tokens=500,  # Increased from 100 to avoid max_tokens limit errors
         )
 
         assert result.success is True
@@ -79,13 +78,10 @@ class TestOpenAIProviderIntegration:
     @pytest.mark.integration
     async def test_invalid_model_returns_error(self, provider):
         """Test that invalid model ID returns error result."""
-        messages = [
-            {"role": "user", "content": "Hello"}
-        ]
+        messages = [{"role": "user", "content": "Hello"}]
 
         result = await provider.execute(
-            model="gpt-fake-model-12345",  # Non-existent model
-            messages=messages
+            model="gpt-fake-model-12345", messages=messages  # Non-existent model
         )
 
         # Should return error result, not raise exception
@@ -110,7 +106,7 @@ class TestOpenAIProviderIntegration:
         result = await provider.execute(
             model="gpt-5-nano",
             messages=messages,
-            max_tokens=20  # Minimum ~10-15 tokens needed for GPT-5 models
+            max_tokens=20,  # Minimum ~10-15 tokens needed for GPT-5 models
         )
 
         assert result.success is True
@@ -119,15 +115,9 @@ class TestOpenAIProviderIntegration:
     @pytest.mark.integration
     async def test_cost_calculation_realistic(self, provider):
         """Verify cost calculation produces realistic values."""
-        messages = [
-            {"role": "user", "content": "Hello"}
-        ]
+        messages = [{"role": "user", "content": "Hello"}]
 
-        result = await provider.execute(
-            model="gpt-5-nano",
-            messages=messages,
-            max_tokens=20
-        )
+        result = await provider.execute(model="gpt-5-nano", messages=messages, max_tokens=20)
 
         assert result.success is True
         # GPT-5-nano is very cheap, should be fractions of a cent

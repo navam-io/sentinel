@@ -5,12 +5,14 @@ FastAPI application for test execution and provider management.
 """
 
 import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from .api.execution import router as execution_router
 from .api.providers import router as providers_router
 from .api.tests import router as tests_router
-from .executor import TestExecutor, ExecutorConfig
+from .executor import ExecutorConfig, TestExecutor
 from .storage import get_database
 
 # Initialize FastAPI app

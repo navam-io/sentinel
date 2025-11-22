@@ -4,12 +4,11 @@ Database connection and session management.
 Supports SQLite for local/desktop mode and PostgreSQL for server mode.
 """
 
-import os
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator
+
 from sqlalchemy import create_engine, event
-from sqlalchemy.engine import Engine
-from sqlalchemy.orm import sessionmaker, Session, declarative_base
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 # Create base class for models
 Base = declarative_base()
@@ -65,7 +64,7 @@ class Database:
         """Drop all database tables (use with caution!)."""
         Base.metadata.drop_all(bind=self.engine)
 
-    def get_session(self) -> Generator[Session, None, None]:
+    def get_session(self) -> Generator[Session]:
         """Get database session with automatic cleanup.
 
         Yields:

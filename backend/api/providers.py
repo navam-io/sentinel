@@ -2,9 +2,9 @@
 Provider management API endpoints.
 """
 
+
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
-from typing import List, Dict
 
 router = APIRouter()
 
@@ -14,13 +14,13 @@ class ProviderInfo(BaseModel):
 
     name: str
     configured: bool
-    models: List[str]
+    models: list[str]
 
 
 class ProvidersResponse(BaseModel):
     """Response with list of available providers."""
 
-    providers: List[ProviderInfo]
+    providers: list[ProviderInfo]
 
 
 @router.get("/list", response_model=ProvidersResponse)
