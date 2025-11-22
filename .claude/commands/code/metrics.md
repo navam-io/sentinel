@@ -387,62 +387,81 @@ Create a comprehensive markdown report at `metrics/report-{timestamp}.md` with t
 
 ## 1. Code Volume Metrics
 
-### Lines of Code by Language
-| Language   | Files | Blank | Comment | Code  | Total  |
-|------------|-------|-------|---------|-------|--------|
-| Python     | ...   | ...   | ...     | ...   | ...    |
-| Markdown   | ...   | ...   | ...     | ...   | ...    |
-| TOML       | ...   | ...   | ...     | ...   | ...    |
-| JSON       | ...   | ...   | ...     | ...   | ...    |
-| YAML       | ...   | ...   | ...     | ...   | ...    |
+### Lines of Code by Language (Project Only)
+| Language   | Files | Blank | Comment | Code  | Total  | % of Code |
+|------------|-------|-------|---------|-------|--------|-----------|
+| Markdown   | ...   | ...   | 0       | ...   | ...    | ...%      |
+| JSON       | ...   | ...   | 0       | ...   | ...    | ...%      |
+| TypeScript | ...   | ...   | ...     | ...   | ...    | ...%      |
+| Python     | ...   | ...   | ...     | ...   | ...    | ...%      |
+| CSS        | ...   | ...   | ...     | ...   | ...    | ...%      |
+| JavaScript | ...   | ...   | ...     | ...   | ...    | ...%      |
+| YAML       | ...   | ...   | 0       | ...   | ...    | ...%      |
+| HTML       | ...   | ...   | 0       | ...   | ...    | ...%      |
+| Rust       | ...   | ...   | ...     | ...   | ...    | ...%      |
+| **TOTAL**  | ...   | ...   | ...     | ...   | ...    | **100%**  |
 
-### Lines of Code by Module
-| Module               | Files | Lines | Percentage |
-|----------------------|-------|-------|------------|
-| Agents               | ...   | ...   | ...%       |
-| API Tools            | ...   | ...   | ...%       |
-| Workflows            | ...   | ...   | ...%       |
-| TUI/CLI              | ...   | ...   | ...%       |
-| Cache                | ...   | ...   | ...%       |
-| Config               | ...   | ...   | ...%       |
-| Utils                | ...   | ...   | ...%       |
-| Tests                | ...   | ...   | ...%       |
-| Documentation        | ...   | ...   | ...%       |
+**Key Insights:**
+- Documentation-rich: High percentage of Markdown (specs, guides, roadmap)
+- Lean codebase: Application code in TypeScript + Python
+- TypeScript-heavy: Frontend larger than backend
+- Well-documented: Comment lines across codebase
 
-### Agent Breakdown
-| Agent              | Lines | Purpose                                    |
-|--------------------|-------|--------------------------------------------|
-| quill.py           | ...   | Fundamental equity analysis                |
-| earnings_whisperer.py | ... | Earnings report analysis                   |
-| screen_forge.py    | ...   | Stock screening and idea generation        |
-| macro_lens.py      | ...   | Macroeconomic analysis and sector rotation |
-| news_sentry.py     | ...   | Market news monitoring and filtering       |
-| risk_shield.py     | ...   | Portfolio risk assessment                  |
-| tax_scout.py       | ...   | Tax-loss harvesting optimization           |
-| hedge_smith.py     | ...   | Options hedging strategies                 |
-| portfolio.py       | ...   | Portfolio management                       |
-| research.py        | ...   | General research agent                     |
-| router.py          | ...   | Agent selection and orchestration          |
+### Lines of Code by Module (Sentinel Application)
+| Module                | Files | Lines | Purpose                                    |
+|-----------------------|-------|-------|--------------------------------------------|
+| **Frontend**          |       |       |                                            |
+| Components            | ...   | ...   | React UI components (canvas, palette, nodes, templates, UI) |
+| Services              | ...   | ...   | API client, template service, storage client |
+| Hooks                 | ...   | ...   | Custom React hooks (useExecution, useTemplates) |
+| Stores                | ...   | ...   | Zustand state management |
+| Lib (DSL)             | ...   | ...   | YAML/JSON generation and parsing |
+| Other Frontend        | ...   | ...   | Main app, types, config |
+| **Frontend Subtotal** | ...   | ...   | **All TypeScript/React code** |
+|                       |       |       |                                            |
+| **Backend**           |       |       |                                            |
+| API                   | ...   | ...   | FastAPI REST endpoints |
+| Providers             | ...   | ...   | Model provider integrations (Anthropic, OpenAI, etc.) |
+| Validators            | ...   | ...   | Assertion validation logic |
+| Storage               | ...   | ...   | SQLite database layer |
+| Tests                 | ...   | ...   | pytest test suite |
+| Core/Utils            | ...   | ...   | Schema, config, utilities |
+| **Backend Subtotal**  | ...   | ...   | **All Python code** |
+|                       |       |       |                                            |
+| **Other**             |       |       |                                            |
+| Tauri (Rust)          | ...   | ...   | Desktop app initialization |
+| Templates (YAML)      | ...   | ...   | Built-in test templates |
+| Documentation         | ...   | ...   | Specs, roadmap, guides (backlog/, README, etc.) |
+| Config (JSON/TOML)    | ...   | ...   | package.json, tsconfig, Cargo.toml, etc. |
 
-### API Tool Breakdown
-| Tool                | Lines | Provider                | Purpose                |
-|---------------------|-------|-------------------------|------------------------|
-| alpha_vantage.py    | ...   | Alpha Vantage           | Stock prices, technicals |
-| fred.py             | ...   | Federal Reserve         | Economic indicators    |
-| sec_edgar.py        | ...   | SEC EDGAR               | Company filings        |
-| fmp.py              | ...   | Financial Modeling Prep | Financial statements   |
-| finnhub.py          | ...   | Finnhub                 | Market data            |
-| tiingo.py           | ...   | Tiingo                  | Price data             |
-| newsapi.py          | ...   | NewsAPI                 | News aggregation       |
-| yahoo_finance.py    | ...   | Yahoo Finance           | Market data            |
-| treasury.py         | ...   | US Treasury             | Bond rates             |
+### Frontend Component Breakdown
+**React Components:**
+- **Canvas:** React Flow canvas component
+- **Palette:** Component palette (drag-drop)
+- **Nodes:** Node type components (InputNode, ModelNode, AssertionNode, ToolNode, SystemNode)
+- **Execution:** Execution panel
+- **Templates:** Template gallery and management
+- **UI:** Shared UI components (buttons, cards, modals, sidebars)
+- **Icons:** Icon components
+- **YAML:** Monaco editor, preview, export
+
+### Backend Module Breakdown
+**Python Modules:**
+- **Providers:** Model provider integrations (base, Anthropic, OpenAI, Bedrock, HuggingFace, Ollama)
+- **Validators:** Assertion validation (base, assertion validator)
+- **Storage:** Database layer (models, repositories, database)
+- **API:** FastAPI endpoints (execution, providers, tests)
+- **Tests:** pytest test suite
+- **Core:** Schema, config, utilities
 
 ## 2. File and Module Metrics
 
-- **Total Python Files:** {number}
-- **Average File Size:** {number} lines
-- **Median File Size:** {number} lines
-- **Package Size:** {size} MB (wheel + sdist)
+- **Total Files (Project Only):** {number}
+- **Frontend Files (TS/TSX):** {number}
+- **Backend Files (Python):** {number}
+- **Average TypeScript File Size:** {number} lines
+- **Average Python File Size:** {number} lines
+- **Average Component Size:** {number} lines
 
 ### Largest Files (Top 10)
 | File | Lines | Type | Purpose |
@@ -458,148 +477,173 @@ Create a comprehensive markdown report at `metrics/report-{timestamp}.md` with t
 | .json     | ...   | ...%       |
 | .yaml     | ...   | ...%       |
 
-## 3. Agent Architecture
+## 3. Frontend Architecture (React 19 + Vite + Tauri)
 
-### Agent Implementations
-| Agent | System Prompt Length | Tools Used | LOC | Test Coverage |
-|-------|---------------------|------------|-----|---------------|
-| Quill | ... chars | ... tools | ... | ✅/{count} tests |
-| Earnings Whisperer | ... | ... | ... | ✅/{count} tests |
-| Screen Forge | ... | ... | ... | ✅/{count} tests |
-| Macro Lens | ... | ... | ... | ✅/{count} tests |
-| News Sentry | ... | ... | ... | ✅/{count} tests |
-| Risk Shield | ... | ... | ... | ✅/{count} tests |
-| Tax Scout | ... | ... | ... | ✅/{count} tests |
-| Hedge Smith | ... | ... | ... | ✅/{count} tests |
-| Portfolio | ... | ... | ... | ✅/{count} tests |
-| Research | ... | ... | ... | ✅/{count} tests |
+### Frontend Code Distribution
+| Category      | Files | Lines | % of Frontend | Purpose |
+|---------------|-------|-------|---------------|---------|
+| Components    | ...   | ...   | ...%          | React UI components |
+| Services      | ...   | ...   | ...%          | API client, templates, storage |
+| Hooks         | ...   | ...   | ...%          | Custom React hooks |
+| Stores        | ...   | ...   | ...%          | Zustand state management |
+| Lib (DSL)     | ...   | ...   | ...%          | YAML/JSON DSL generator/parser |
+| Other         | ...   | ...   | ...%          | App, types, config |
 
-### Agent Architecture Metrics
-- **Total Agent Lines:** {sum of all agent files}
-- **Average Agent Size:** {average lines per agent}
-- **Router Complexity:** {lines in router.py}
-- **Agent Selection Logic:** {count of routing rules}
-- **Tool Binding Patterns:** {consistency analysis}
+### React Component Breakdown
+| Component Category | Count | Lines | Test Coverage |
+|--------------------|-------|-------|---------------|
+| Canvas             | ...   | ...   | ✅/❌ {count} tests |
+| Palette            | ...   | ...   | ✅/❌ {count} tests |
+| Nodes (5 types)    | ...   | ...   | ✅/❌ {count} tests |
+| Execution          | ...   | ...   | ✅/❌ {count} tests |
+| Templates          | ...   | ...   | ✅/❌ {count} tests |
+| UI Components      | ...   | ...   | ✅/❌ {count} tests |
+| Icons              | ...   | ...   | N/A |
+| YAML               | ...   | ...   | ✅/❌ {count} tests |
 
-### Multi-Agent Workflows
-| Workflow | Agents Involved | Purpose | LOC |
-|----------|-----------------|---------|-----|
-| /analyze | Quill + others | Comprehensive stock analysis | ... |
-| Tax optimization | Tax Scout + Portfolio | Tax-loss harvesting | ... |
-| Risk assessment | Risk Shield + Portfolio | Portfolio risk analysis | ... |
+### Visual Canvas & DSL Metrics
+- **React Flow Integration:** Custom nodes, edges, canvas components
+- **Node Types Implemented:** InputNode, ModelNode, AssertionNode, ToolNode, SystemNode
+- **DSL Generator:** YAML/JSON generation from canvas (lines: {number})
+- **DSL Parser:** Canvas import from YAML/JSON (lines: {number})
+- **Round-Trip Fidelity:** Visual ↔ DSL conversion accuracy
+- **Template System:** Built-in templates, search, filter (lines: {number})
 
-## 4. API Integration Architecture
+### Frontend Dependencies
+- **React:** {version} - UI framework
+- **@xyflow/react:** {version} - React Flow for node-based canvas
+- **Zustand:** {version} - State management
+- **@tauri-apps/api:** {version} - Tauri desktop integration
+- **Monaco Editor:** {version} - Code editor
+- **TailwindCSS:** {version} - Styling
+- **shadcn/ui:** Components library
+- **Vite:** {version} - Build tool
 
-### API Tool Implementations
-| Provider | Endpoints | LOC | Caching | Rate Limits | Retry Logic |
-|----------|-----------|-----|---------|-------------|-------------|
-| Alpha Vantage | ... | ... | ✅ | ✅ | ✅ |
-| FRED | ... | ... | ✅ | ✅ | ✅ |
-| SEC EDGAR | ... | ... | ✅ | ✅ | ✅ |
-| FMP | ... | ... | ✅ | ✅ | ✅ |
-| Finnhub | ... | ... | ✅ | ✅ | ✅ |
-| Tiingo | ... | ... | ✅ | ✅ | ✅ |
-| NewsAPI | ... | ... | ✅ | ✅ | ✅ |
-| Yahoo Finance | ... | ... | ✅ | ✅ | ✅ |
-| Treasury | ... | ... | ✅ | ✅ | ✅ |
+## 4. Backend Architecture (Python FastAPI)
 
-### API Architecture Metrics
-- **Total Tool Lines:** {sum of all tool files}
-- **Average Tool Size:** {average lines per tool}
-- **API Endpoints:** {total count}
-- **Cache Hit Rate:** {percentage}% (if measurable)
-- **Error Handler Coverage:** {percentage}%
+### Backend Code Distribution
+| Module      | Files | Lines | % of Backend | Purpose |
+|-------------|-------|-------|--------------|---------|
+| API         | ...   | ...   | ...%         | FastAPI REST endpoints |
+| Providers   | ...   | ...   | ...%         | Model provider integrations |
+| Validators  | ...   | ...   | ...%         | Assertion validation |
+| Storage     | ...   | ...   | ...%         | SQLite database layer |
+| Tests       | ...   | ...   | ...%         | pytest test suite |
+| Core/Utils  | ...   | ...   | ...%         | Schema, config, utilities |
 
-### Caching Strategy
-- **Cache Implementation:** {cache manager LOC}
-- **Cache Types:** SQLite, in-memory
-- **Common Queries:** {count in common_queries.py}
-- **TTL Strategy:** {description}
+### Model Provider Integrations
+| Provider | LOC | Status | API Endpoints | Test Coverage |
+|----------|-----|--------|---------------|---------------|
+| Base (Abstract) | ... | ✅ Active | Provider interface | ✅/{count} tests |
+| Anthropic | ... | ✅ Active | Claude models | ✅/{count} tests |
+| OpenAI | ... | ✅ Active | GPT models | ✅/{count} tests |
+| Bedrock | ... | 🚧 Future | Multi-model | ❌ Not implemented |
+| HuggingFace | ... | 🚧 Future | Hosted endpoints | ❌ Not implemented |
+| Ollama | ... | 🚧 Future | Local models | ❌ Not implemented |
 
-## 5. LLM Integration Architecture
+### API Endpoints
+| Endpoint Category | Count | Purpose |
+|-------------------|-------|---------|
+| Execution | ... | Test execution, results, streaming |
+| Providers | ... | List providers, models, configuration |
+| Tests | ... | CRUD operations for test specs |
+| Templates | ... | Template gallery, import/export |
 
-### LLM Provider Support
-| Provider | Primary | Streaming | Token Counting | Cost Tracking |
-|----------|---------|-----------|----------------|---------------|
-| Anthropic Claude | ✅ | ✅ | ✅ | ✅ |
-| OpenAI | ✅ | ✅ | ✅ | ✅ |
-| Google Gemini | ✅ | ✅ | ✅ | ✅ |
-| DeepSeek | ✅ | ✅ | ✅ | ✅ |
-| Ollama (Local) | ✅ | ✅ | ✅ | N/A |
+### Storage Layer (SQLite)
+- **Database Models:** Test specs, execution history, templates
+- **Repositories:** Data access layer
+- **Migrations:** Schema versioning
+- **Test Data:** Fixtures and seeds
 
-### Prompt Engineering Metrics
-- **System Prompts:** {count} agent prompts
-- **Average Prompt Length:** {chars}
-- **Few-shot Examples:** {count if any}
-- **Prompt Templates:** {count}
+### Backend Dependencies
+- **FastAPI:** {version} - Web framework
+- **Pydantic:** {version} - Schema validation
+- **anthropic:** {version} - Anthropic Claude SDK
+- **openai:** {version} - OpenAI GPT SDK
+- **SQLAlchemy:** {version} - Database ORM
+- **pytest:** {version} - Testing framework
 
-### Token Management
-- **Token Counting Implementation:** {LOC}
-- **Context Window Optimization:** {strategies used}
-- **Token Usage Tracking:** {implementation status}
+## 5. Test Coverage Metrics
 
-## 6. Test Coverage Metrics
+### Frontend Tests (Vitest)
+- **Test Files:** {number}
+- **Test Suites:** {number} (describe blocks)
+- **Test Cases:** {number} (it/test blocks)
+- **Test Lines:** {number}
+- **Coverage Percentage:** {percentage}% (if available)
 
+### Backend Tests (pytest)
 - **Test Files:** {number}
 - **Test Functions:** {number}
 - **Test Lines:** {number}
-- **Test-to-Code Ratio:** {ratio}:1
 - **Coverage Percentage:** {percentage}% (if pytest-cov available)
 
 ### Test Distribution
-| Test Category | Files | Tests | Purpose |
-|---------------|-------|-------|---------|
-| Agent Tests | ... | ... | Agent functionality |
-| Tool Tests | ... | ... | API integration |
-| Workflow Tests | ... | ... | Multi-agent workflows |
-| TUI Tests | ... | ... | User interface |
-| Integration Tests | ... | ... | End-to-end scenarios |
+| Test Category | Frontend | Backend | Purpose |
+|---------------|----------|---------|---------|
+| Component Tests | {count} files | N/A | React component behavior |
+| Service Tests | {count} files | N/A | API client, templates, storage |
+| Hook Tests | {count} files | N/A | Custom React hooks |
+| Provider Tests | N/A | {count} files | Model provider integrations |
+| Validator Tests | N/A | {count} files | Assertion validation logic |
+| Storage Tests | N/A | {count} files | Database operations |
+| API Tests | N/A | {count} files | FastAPI endpoints |
+| Integration Tests | {count} files | {count} files | End-to-end workflows |
 
-### Agent Test Coverage
-| Agent | Unit Tests | Integration Tests | Status |
-|-------|------------|-------------------|--------|
-| Quill | ... | ... | ✅/❌ |
-| Earnings Whisperer | ... | ... | ✅/❌ |
-| Screen Forge | ... | ... | ✅/❌ |
-| Macro Lens | ... | ... | ✅/❌ |
-| News Sentry | ... | ... | ✅/❌ |
-| Risk Shield | ... | ... | ✅/❌ |
-| Tax Scout | ... | ... | ✅/❌ |
-| Hedge Smith | ... | ... | ✅/❌ |
-| Portfolio | ... | ... | ✅/❌ |
-| Research | ... | ... | ✅/❌ |
+### Component Test Coverage
+| Component Category | Test Files | Status | Priority |
+|--------------------|------------|--------|----------|
+| Canvas             | ...        | ✅/❌  | P0 Critical |
+| Palette            | ...        | ✅/❌  | P1 High |
+| Nodes (5 types)    | ...        | ✅/❌  | P0 Critical |
+| Execution          | ...        | ✅/❌  | P1 High |
+| Templates          | ...        | ✅/❌  | P1 High |
+| UI Components      | ...        | ✅/❌  | P2 Medium |
+| YAML Preview       | ...        | ✅/❌  | P1 High |
 
-### Tool Test Coverage
-| Tool | Unit Tests | API Mocking | Status |
-|------|------------|-------------|--------|
-| Alpha Vantage | ... | ✅/❌ | ✅/❌ |
-| FRED | ... | ✅/❌ | ✅/❌ |
-| SEC EDGAR | ... | ✅/❌ | ✅/❌ |
-| FMP | ... | ✅/❌ | ✅/❌ |
-| Finnhub | ... | ✅/❌ | ✅/❌ |
-| Tiingo | ... | ✅/❌ | ✅/❌ |
-| NewsAPI | ... | ✅/❌ | ✅/❌ |
-| Yahoo Finance | ... | ✅/❌ | ✅/❌ |
-| Treasury | ... | ✅/❌ | ✅/❌ |
+### Backend Test Coverage
+| Module      | Test Files | Status | Priority |
+|-------------|------------|--------|----------|
+| Providers   | ...        | ✅/❌  | P0 Critical |
+| Validators  | ...        | ✅/❌  | P0 Critical |
+| Storage     | ...        | ✅/❌  | P1 High |
+| API         | ...        | ✅/❌  | P1 High |
+
+### Test Quality Metrics
+- **Test-to-Code Ratio:** {ratio}:1 (target: 1:1)
+- **Test Passing Rate:** {percentage}% (target: 100%)
+- **Average Test File Size:** {number} lines
+- **Flaky Tests:** {count} (target: 0)
 
 ### Coverage Gaps
-{List of untested modules or features}
+{List of untested modules or features requiring P0/P1 attention}
 
-## 7. Code Quality Metrics
+## 6. Code Quality Metrics
 
-- **Total Docstrings:** {number}
-- **Docstring Coverage:** {percentage}%
-- **Type Hint Coverage:** {percentage}%
-- **Function Count:** {number}
+### Frontend Code Quality (TypeScript)
+- **TypeScript Strict Mode:** {enabled/disabled}
+- **Type Annotations:** {count} interfaces, types, enums
+- **any Usage:** {count} instances (target: 0)
+- **TSDoc Comments:** {count}
+- **React Components:** {count}
+- **Custom Hooks:** {count}
+- **ESLint Compliance:** {status}
+
+### Backend Code Quality (Python)
+- **Docstrings:** {count} (target: 100% of public APIs)
+- **Type Hints:** {count} (target: 100% of functions)
+- **Pydantic Models:** {count} (strong typing)
+- **Functions:** {count} total
 - **Average Function Length:** {number} lines
 - **Error Handling Blocks:** {count} try-except blocks
 
 ### Code Complexity
-- **Total Functions:** {number}
+- **Total Functions (Backend):** {number}
 - **Average Function Length:** {number} lines
 - **Longest Function:** {number} lines in {file}
 - **Class Count:** {number}
 - **Average Class Length:** {number} lines
+- **Cyclomatic Complexity:** {average} (target: < 10 per function)
 
 ### Error Handling
 - **Try-Except Blocks:** {count}
@@ -608,203 +652,237 @@ Create a comprehensive markdown report at `metrics/report-{timestamp}.md` with t
 - **Error Logging:** {count} logger calls
 
 ### Code Style Compliance
-- **Black Formatting:** {status}
-- **Ruff Linting:** {status}
-- **MyPy Type Checking:** {status}
-- **Disallow Untyped Defs:** {status}
+- **Frontend (ESLint):** {status} - {error count} errors, {warning count} warnings
+- **Backend (Black):** {status} - Code formatting
+- **Backend (Ruff):** {status} - Linting
+- **Backend (MyPy):** {status} - Type checking (strict mode)
 
-## 8. Feature Completeness Metrics
+## 7. Feature Completeness Metrics (V1 Roadmap: 15 Features)
 
-### Investment Analysis Features
-- **Fundamental Analysis:** ✅ Quill agent
-- **Earnings Analysis:** ✅ Earnings Whisperer
-- **Stock Screening:** ✅ Screen Forge
-- **Macro Analysis:** ✅ Macro Lens
-- **News Monitoring:** ✅ News Sentry
-- **Risk Assessment:** ✅ Risk Shield
-- **Tax Optimization:** ✅ Tax Scout
-- **Options Hedging:** ✅ Hedge Smith
+### P0 - Foundation (Features 1-4)
+- **Feature 1: Visual Canvas Foundation** - {status} v0.3.0
+  - React + Vite + Tauri setup
+  - Node-based canvas (React Flow)
+  - Component palette (drag-drop)
+  - Visual → YAML generator
+  - 5 node types implemented
 
-### Portfolio Management
-- **Holdings Tracking:** ✅ Portfolio agent
-- **Allocation Analysis:** {status}
-- **Rebalancing:** {status}
-- **Performance Tracking:** {status}
+- **Feature 2: DSL Parser & Visual Importer** - {status} v0.4.0
+  - YAML/JSON parser (Pydantic)
+  - YAML → Visual importer
+  - Bidirectional sync
+  - Monaco editor integration
 
-### Data Integration
-- **Market Data:** ✅ Alpha Vantage, Yahoo Finance, Tiingo, Finnhub
-- **Economic Data:** ✅ FRED, US Treasury
-- **Company Filings:** ✅ SEC EDGAR
-- **Financial Statements:** ✅ FMP
-- **News Data:** ✅ NewsAPI
+- **Feature 3: Model Provider Architecture** - {status} v0.3.0
+  - Anthropic + OpenAI providers active
+  - Provider marketplace UI
+  - Local execution engine
+  - Live execution dashboard
 
-### User Interface
-- **TUI (Textual):** ✅ Interactive chat interface
-- **CLI (Typer):** ✅ Command-line interface
-- **Streaming Responses:** ✅ Real-time LLM output
-- **Session Persistence:** {status}
-- **Slash Commands:** ✅ /analyze, /research, etc.
+- **Feature 4: Assertion Builder & Validation** - {status} v0.4.0
+  - Visual assertion builder
+  - 8 assertion types
+  - Validation engine
+  - Visual pass/fail indicators
 
-### Multi-Agent Workflows
-- **Agent Collaboration:** ✅ Router orchestration
-- **Task Delegation:** ✅ Specialized agents
-- **Result Aggregation:** {status}
-- **Workflow Persistence:** {status}
+### P1 - Core Value (Features 5-8)
+- **Feature 5: Design System** - {status} v0.5.0
+- **Feature 6: Record & Replay** - {status} v0.6.0
+- **Feature 7: Template Gallery** - {status} v0.7.0
+- **Feature 8: Regression Engine** - {status} v0.8.0
 
-## 9. Dependency Analysis
+### P2 - Extended Value (Features 9-15)
+- **Feature 9: Agentic Framework Support (LangGraph)** - {status} v0.9.0
+- **Feature 10: AI-Assisted Test Generation** - {status} v0.10.0
+- **Feature 11: Collaborative Workspaces** - {status} v0.11.0
+- **Feature 12: Additional Providers (Bedrock, HF, Ollama)** - {status} v0.12.0
+- **Feature 13: Safety Scenarios** - {status} v0.13.0
+- **Feature 14: Dashboard & Analytics** - {status} v0.14.0
+- **Feature 15: CI/CD Integration** - {status} v0.15.0
 
-### Core Dependencies
-- **anthropic:** {version} - Claude AI integration
-- **langchain-core:** {version} - LLM abstraction
-- **langchain-anthropic:** {version} - Anthropic provider
-- **langgraph:** {version} - Agent orchestration
-- **textual:** {version} - TUI framework
-- **typer:** {version} - CLI framework
+### Core Capabilities Status
+- **Visual Test Builder:** {percentage}% complete
+- **DSL Bidirectional Sync:** {percentage}% complete
+- **Model Provider Support:** {count}/5 providers active
+- **Assertion Types:** {count}/8 implemented
+- **Template Library:** {count} built-in templates
+- **Storage & Persistence:** {percentage}% complete
+- **Desktop App (Tauri):** {percentage}% complete
 
-### Financial Data Dependencies
-- **pandas:** {version} - Data analysis
-- **numpy:** {version} - Numerical computing
-- **requests:** {version} - HTTP client
+## 8. Dependency Analysis
+
+### Frontend Dependencies (npm)
+- **React:** {version} - UI framework
+- **@xyflow/react:** {version} - React Flow (node-based canvas)
+- **Zustand:** {version} - State management
+- **@tauri-apps/api:** {version} - Tauri desktop integration
+- **@monaco-editor/react:** {version} - Code editor
+- **TailwindCSS:** {version} - Styling framework
+- **shadcn/ui:** Components library
+- **lucide-react:** {version} - Icons
+- **Vite:** {version} - Build tool
+- **TypeScript:** {version} - Type system
+
+### Backend Dependencies (pip)
+- **FastAPI:** {version} - Web framework
+- **Pydantic:** {version} - Schema validation
+- **anthropic:** {version} - Anthropic Claude SDK
+- **openai:** {version} - OpenAI GPT SDK
+- **SQLAlchemy:** {version} - Database ORM
+- **pytest:** {version} - Testing framework
+- **uvicorn:** {version} - ASGI server
+
+### Tauri Dependencies (Rust/Cargo)
+- **tauri:** {version} - Desktop app framework
+- **Rust toolchain:** {version}
 
 ### Development Dependencies
-- **pytest:** {version} - Testing framework
-- **pytest-cov:** {version} - Coverage reporting
-- **black:** {version} - Code formatting
-- **ruff:** {version} - Linting
-- **mypy:** {version} - Type checking
+- **Frontend:**
+  - **Vitest:** {version} - Testing framework
+  - **@testing-library/react:** {version} - Component testing
+  - **ESLint:** {version} - Linting
+  - **TypeScript:** {version} - Type checking
+
+- **Backend:**
+  - **pytest:** {version} - Testing framework
+  - **pytest-cov:** {version} - Coverage reporting
+  - **black:** {version} - Code formatting
+  - **ruff:** {version} - Linting
+  - **mypy:** {version} - Type checking
 
 ### Dependency Health
-- **Outdated Packages:** {number}
-- **Security Vulnerabilities:** {number}
+- **Frontend (npm):**
+  - Outdated packages: {number}
+  - Security vulnerabilities: {number}
+  - Total dependencies: {number}
+
+- **Backend (pip):**
+  - Outdated packages: {number}
+  - Security vulnerabilities: {number}
+  - Total dependencies: {number}
+
 - **License Compatibility:** {analysis}
 
-## 10. Package Quality Metrics
+## 9. Application Quality Metrics
 
-### PyPI Package Metadata
-- **Package Name:** navam-invest
-- **Version:** {version from pyproject.toml}
-- **License:** {license}
-- **Python Requires:** >=3.9, <3.13
-- **Entry Points:** {count CLI commands}
-- **Keywords:** {list from pyproject.toml}
-- **Classifiers:** {count}
+### Desktop App (Tauri)
+- **Startup Performance:** {seconds}s time to interactive (target: < 2s)
+- **Memory Footprint:** {MB} typical usage (target: < 200MB)
+- **Bundle Size:** {MB} compressed (target: < 50MB)
+- **Platform Support:** macOS, Linux, Windows
 
-### Distribution Quality
-- **Wheel Size:** {size} MB
-- **Sdist Size:** {size} MB
-- **Installation Size:** {estimated size}
-- **Included Files:** {count}
-- **Excluded Files:** {patterns in .gitignore}
+### Build Performance
+- **Frontend Build Time:** {seconds}s (target: < 10s)
+- **Tauri Build Time:** {seconds}s (target: < 2min)
+- **Hot Module Reload:** {milliseconds}ms (target: < 1s)
+
+### Runtime Performance
+- **Canvas Rendering:** {fps} with {count} nodes (target: 60fps @ 100+ nodes)
+- **DSL Generation Speed:** {milliseconds}ms for typical spec (target: < 100ms)
+- **Storage Operations:** {milliseconds}ms save/load (target: < 100ms)
+- **Test Execution:** {seconds}s for simple tests (target: < 5s)
 
 ### Documentation Quality
-- **README.md:** {lines} - User guide
-- **CLAUDE.md:** {lines} - Development guide
-- **docs/:** {count} files - Comprehensive docs
-- **FAQ.md:** {count} Q&A
-- **Docstrings:** {percentage}% coverage
+- **README.md:** {lines} lines - User guide and quickstart
+- **CLAUDE.md:** {lines} lines - Development guide and architecture
+- **Backlog/Specs:** {count} files - Feature specifications and roadmap
+- **Release Notes:** {count} files - Version history
+- **Code Comments:** {percentage}% coverage
 
-## 11. TUI/CLI Architecture
+## 10. Historical Trends
 
-### TUI Implementation (Textual)
-- **App Class:** {LOC}
-- **Widgets:** {count}
-- **Screens:** {count}
-- **Event Handlers:** {count}
-- **Streaming Integration:** ✅ Real-time LLM responses
+{If previous metrics reports exist in metrics/ directory, show trends}
 
-### CLI Implementation (Typer)
-- **Commands:** {count}
-- **Options:** {count}
-- **Help Text Quality:** {analysis}
-
-### User Experience Features
-- **Chat Interface:** ✅ Conversational AI
-- **Slash Commands:** ✅ Quick actions
-- **Real-time Streaming:** ✅ Token-by-token display
-- **Error Messages:** {user-friendly status}
-- **Progress Indicators:** {status}
-
-## 12. Historical Trends
-
-{If previous reports exist, show trends}
-
-### Growth Metrics
-- **LOC Growth:** +{number} lines since last report
-- **Feature Additions:** +{count} features
+### Growth Metrics (Since Last Report)
+- **LOC Growth:** +{number} lines
+- **Feature Additions:** +{count} features (V1 roadmap)
 - **Test Coverage Change:** +/-{percentage}%
-- **Agent Additions:** +{count} agents
-- **Tool Additions:** +{count} tools
+- **Component Additions:** +{count} React components
+- **Provider Additions:** +{count} model providers
+- **Template Additions:** +{count} built-in templates
 
-## 13. Recommendations
+### Code Quality Trends
+- **TypeScript any Usage:** {current} instances (previous: {prev})
+- **Test Passing Rate:** {current}% (previous: {prev}%)
+- **Documentation:** {current} lines (previous: {prev} lines)
 
-Based on the analysis:
+## 11. Recommendations
 
-### Code Quality
-- [ ] Increase test coverage to 80%+ (currently {current}%)
-- [ ] Add type hints to all functions (currently {current}%)
-- [ ] Add docstrings to public APIs (currently {current}%)
-- [ ] Refactor files over 500 lines (if any)
-- [ ] Run Black formatter on all files
-- [ ] Fix all MyPy type errors
+Based on the metrics analysis:
 
-### Agent Architecture
-- [ ] Standardize agent interface patterns
-- [ ] Extract common agent utilities
-- [ ] Add more integration tests for multi-agent workflows
-- [ ] Implement agent performance benchmarks
-- [ ] Add agent-specific error types
+### P0 - Critical (Address Immediately)
+- [ ] **Frontend Test Coverage:** Increase to 80%+ (currently {current}%)
+  - Add Canvas component tests
+  - Add Node component tests (5 types)
+  - Add DSL generator/parser tests
+- [ ] **TypeScript any Usage:** Eliminate all instances (currently {count})
+- [ ] **Backend Test Coverage:** Increase to 90%+ (currently {current}%)
+  - Complete provider test coverage
+  - Add API integration tests
 
-### API Integration
-- [ ] Implement comprehensive API mocking for tests
-- [ ] Add rate limit monitoring and alerts
-- [ ] Improve cache hit rate metrics
-- [ ] Add fallback providers for critical data
-- [ ] Document all API endpoints
+### P1 - High Priority (Address This Sprint)
+- [ ] **Code Quality:**
+  - Run Black formatter on all Python files
+  - Fix all Ruff linting errors
+  - Enable MyPy strict mode and fix errors
+  - Add TSDoc comments to public React components
+- [ ] **Testing:**
+  - Add E2E tests for core user workflows (create test, execute, save)
+  - Test Visual ↔ DSL round-trip conversion
+  - Test provider error scenarios
+- [ ] **Documentation:**
+  - Complete API documentation for all endpoints
+  - Add architecture diagrams (Visual Canvas, Backend, DSL)
+  - Update README with latest features
 
-### Testing
-- [ ] Add E2E tests for complete user workflows
-- [ ] Increase agent test coverage to 100%
-- [ ] Add tool integration tests with live APIs
-- [ ] Test offline/error scenarios
-- [ ] Add performance regression tests
+### P2 - Medium Priority (Address Next Sprint)
+- [ ] **Performance:**
+  - Benchmark canvas rendering at 100+ nodes
+  - Profile DSL generation performance
+  - Optimize storage operations
+  - Measure and optimize test execution times
+- [ ] **Features:**
+  - Complete remaining V1 roadmap features (backlog/active.md)
+  - Implement additional model providers (Bedrock, HuggingFace, Ollama)
+  - Add agentic framework support (LangGraph)
+- [ ] **Code Organization:**
+  - Refactor files over 300 lines (if any)
+  - Extract shared utilities and helpers
+  - Standardize error handling patterns
 
-### Documentation
-- [ ] Add API documentation for all agents
-- [ ] Document multi-agent workflow patterns
-- [ ] Create architecture diagrams
-- [ ] Add inline code examples
-- [ ] Update FAQ with new features
+### P3 - Nice to Have (Future Considerations)
+- [ ] **Developer Experience:**
+  - Add pre-commit hooks (ESLint, Black, tests)
+  - Set up CI/CD pipeline (GitHub Actions)
+  - Add automated release notes generation
+- [ ] **Monitoring:**
+  - Add performance regression tests
+  - Set up dependency vulnerability scanning
+  - Track bundle size over time
+- [ ] **Community:**
+  - Add contributing guidelines
+  - Create issue templates
+  - Set up discussions/community forum
 
-### Performance
-- [ ] Profile agent execution times
-- [ ] Optimize LLM token usage
-- [ ] Implement more aggressive caching
-- [ ] Monitor memory usage in long sessions
-- [ ] Add lazy loading for heavy operations
-
-### Features
-- [ ] Complete remaining roadmap items (backlog/active.md)
-- [ ] Add more financial data providers
-- [ ] Implement portfolio backtesting
-- [ ] Add data export functionality
-- [ ] Enhance TUI with more widgets
-
-## 14. Appendices
+## 12. Appendices
 
 ### A. Detailed File Listing
-{Full file tree with line counts}
+{Full file tree with line counts from cloc analysis}
 
-### B. Agent Comparison Matrix
-{Detailed comparison of agent implementations}
+### B. Component Architecture Map
+{Detailed breakdown of React components and their relationships}
 
-### C. API Tool Reference
-{Complete list of APIs and endpoints}
+### C. Backend API Reference
+{Complete list of FastAPI endpoints and their purposes}
 
 ### D. Test Coverage Report
-{Detailed test coverage by module}
+{Detailed test coverage by module - frontend and backend}
 
 ### E. Dependency Tree
-{Full dependency graph}
+{Full dependency graph - npm and pip}
+
+### F. Model Provider Comparison
+{Comparison of implemented model providers}
 
 ---
 
