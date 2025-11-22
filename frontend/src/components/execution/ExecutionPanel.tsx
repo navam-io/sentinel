@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Play, CheckCircle2, XCircle, Clock, DollarSign, Zap, AlertCircle } from 'lucide-react';
+import { Play, CheckCircle2, XCircle, Clock, DollarSign, Zap } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import { generateYAML, convertYAMLToTestSpec } from '../../lib/dsl/generator';
 import { executeTest, type ExecuteResponse } from '../../services/api';

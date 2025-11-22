@@ -12,19 +12,21 @@ export default {
         'sentinel-secondary': '#9B8CFF',
         'sentinel-secondary-dark': '#6C5AE0',
 
-        // Neutral Palette - Infra-grade
+        // Neutral Palette - Infra-grade (spec-03.md)
         'sentinel-bg': '#0C0F12',
         'sentinel-bg-elevated': '#14181D',
         'sentinel-surface': '#1C2026',
         'sentinel-border': '#2C323A',
-        'sentinel-text': '#E8EAED',
-        'sentinel-text-muted': '#9CA3AF',
+        'sentinel-text': '#E2E5E9',
+        'sentinel-text-dim': '#A0A4A9',
+        'sentinel-text-muted': '#A0A4A9',  // Alias for text-dim
 
-        // Semantic - Test Results
-        'sentinel-success': '#10B981',
-        'sentinel-error': '#EF4444',
-        'sentinel-warning': '#F59E0B',
-        'sentinel-info': '#3B82F6',
+        // Semantic - Test Results (spec-03.md)
+        'sentinel-success': '#4ADE80',
+        'sentinel-danger': '#F87171',
+        'sentinel-error': '#F87171',   // Alias for danger
+        'sentinel-warning': '#FBBF24',
+        'sentinel-info': '#38BDF8',
 
         // State Colors
         'sentinel-hover': 'rgba(110, 227, 246, 0.1)',

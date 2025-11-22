@@ -92,6 +92,60 @@ Priority order:
 
 ---
 
+### ✅ Release 0.14.0: Template Gallery & Built-in Templates
+**Status**: Completed ✅
+**Released**: November 22, 2025
+**Semver**: 0.13.0 → 0.14.0 (minor)
+
+**Description**:
+Template Gallery feature providing users with a library of pre-built test templates that can be browsed, previewed, and loaded to the canvas with one click. Includes 6 built-in templates covering common testing scenarios from simple Q&A to complex LangGraph agents.
+
+**What Was Delivered**:
+- **Template Gallery UI**: Grid layout with search and category filtering ✅
+- **6 Built-in Templates**: Simple Q&A, Code Generation, Browser Agent, Multi-turn, LangGraph, Test Suite ✅
+- **Template Service & Hook**: loadTemplates(), useTemplates() hook ✅
+- **One-Click Load to Canvas**: Component ready for integration ✅
+- **Comprehensive Tests**: 31 new tests (31 template tests, 100% passing) ✅
+- **Production Ready**: 0 TypeScript errors, 0 build errors ✅
+
+**Key Features**:
+1. Template Gallery with responsive grid (1/2/3 columns)
+2. Search functionality (searches name, description, tags)
+3. Category filtering (Q&A, Code Generation, Browser, Multi-turn, LangGraph, Safety)
+4. Template count display ("Showing X of Y templates")
+5. Empty state when no matches
+6. Color-coded category badges (Sentinel design system)
+7. Template metadata display (name, description, model, provider, tags)
+8. Preview button (optional)
+9. Load to Canvas button (primary action)
+
+**Files**:
+- `frontend/src/components/templates/TemplateGallery.tsx` - Gallery component (140 LOC)
+- `frontend/src/components/templates/TemplateCard.tsx` - Card component (130 LOC)
+- `frontend/src/components/templates/index.tsx` - Export file
+- `frontend/src/services/templates.ts` - Template service (300+ LOC)
+- `frontend/src/hooks/useTemplates.ts` - Template hook (30 LOC)
+- `frontend/src/components/templates/TemplateCard.test.tsx` - 9 tests
+- `frontend/src/components/templates/TemplateGallery.test.tsx` - 11 tests
+- `frontend/src/services/templates.test.ts` - 11 tests
+
+**Success Criteria Met**:
+- ✅ Template Gallery UI complete with search and filtering
+- ✅ 6 high-quality built-in templates embedded
+- ✅ One-click load to canvas (component ready, integration pending)
+- ✅ Category filtering with 6 categories
+- ✅ All 223 tests passing (135 frontend + 88 backend)
+- ✅ 0 TypeScript errors
+- ✅ Production-ready quality
+
+**Documentation**: See `releases/release-0.14.0.md` for complete release notes.
+
+**Feature 7 Status**: Partially Complete
+- ✅ Template Gallery (delivered in v0.14.0)
+- ⏳ Test Suite Organizer (deferred to future release)
+
+---
+
 ### ✅ Release 0.10.0: Data Persistence & Storage Layer
 **Status**: Completed ✅
 **Released**: November 16, 2025
@@ -884,47 +938,57 @@ Auto-generate tests by recording agent interactions (inspired by Playwright Code
 ---
 
 ### Feature 7: Template Gallery & Test Suites
-**Status**: Not Started
+**Status**: Partially Complete (Template Gallery ✅, Test Suite Organizer ⏳)
 **Priority**: P1 - Core Value
-**Semver Impact**: minor (0.9.0)
+**Semver Impact**: minor (0.14.0 - Template Gallery, 0.15.0 - Test Suite Organizer)
+**Template Gallery Released**: v0.14.0 (November 22, 2025)
 
 **Description**:
 Pre-built test templates and test suite organization.
 
 **Requirements**:
-- **Template Gallery**:
-  - Browse pre-built templates
-  - Categories: Q&A, Code Gen, Browser Agent, Safety, etc.
-  - One-click use (load to canvas)
-  - Preview before using
-  - Community sharing (future)
+- **Template Gallery**: ✅ COMPLETE (v0.14.0)
+  - ✅ Browse pre-built templates (grid layout with responsive design)
+  - ✅ Categories: Q&A, Code Gen, Browser Agent, Multi-turn, LangGraph, Safety
+  - ✅ One-click use (load to canvas component ready)
+  - ✅ Preview before using (UI component ready)
+  - ✅ Search functionality (name, description, tags)
+  - ✅ Category filtering
+  - ⏳ Community sharing (future)
 
-- **Test Suite Organizer**:
-  - Folder-based test organization
-  - Drag-and-drop test management
-  - Bulk operations (run all, delete, export)
-  - Visual indicators (pass/fail status)
-  - Suite-level defaults
+- **Test Suite Organizer**: ⏳ DEFERRED (v0.15.0)
+  - ⏳ Folder-based test organization
+  - ⏳ Drag-and-drop test management
+  - ⏳ Bulk operations (run all, delete, export)
+  - ⏳ Visual indicators (pass/fail status)
+  - ⏳ Suite-level defaults
 
-- **Built-in Templates**:
-  - Simple Q&A
-  - Code generation
-  - Multi-turn conversation
-  - Browser agent (product search)
-  - Safety testing (jailbreak, PII)
-  - RAG agent
+- **Built-in Templates**: ✅ COMPLETE (v0.14.0)
+  - ✅ Simple Q&A - Capital Cities
+  - ✅ Code generation - Python Function
+  - ✅ Multi-turn conversation - Technical Support
+  - ✅ Browser agent - Product Research
+  - ✅ LangGraph Multi-Step Agent
+  - ✅ Complete Test Suite - Model Evaluation
+  - ⏳ Safety testing (jailbreak, PII) - future
+  - ⏳ RAG agent - future
 
 **Deliverables**:
-- `src/components/templates/`: Template gallery UI (React)
-- `src/components/suites/`: Test suite organizer (React)
-- `templates/`: Built-in template YAML files
-- Documentation: Templates and suites guide
+- ✅ `frontend/src/components/templates/`: Template gallery UI (React) - COMPLETE
+- ✅ `frontend/src/services/templates.ts`: Template service with 6 embedded templates - COMPLETE
+- ✅ `frontend/src/hooks/useTemplates.ts`: Template management hook - COMPLETE
+- ✅ 31 comprehensive tests (100% passing) - COMPLETE
+- ⏳ `frontend/src/components/suites/`: Test suite organizer (React) - DEFERRED
+- ⏳ Documentation: Templates and suites guide - PARTIAL (Template Gallery documented in release-0.14.0.md)
 
 **Success Criteria**:
-- At least 6 high-quality templates
-- Template gallery is easy to browse
-- Suite organization is intuitive
-- Can drag-and-drop tests between suites
+- ✅ At least 6 high-quality templates (6 delivered)
+- ✅ Template gallery is easy to browse (search + filter working)
+- ✅ One-click load to canvas (component ready)
+- ⏳ Suite organization is intuitive (deferred)
+- ⏳ Can drag-and-drop tests between suites (deferred)
+
+**Documentation**: See `releases/release-0.14.0.md` for Template Gallery implementation details.
 
 ---
 
@@ -1343,12 +1407,12 @@ User Experience:
 
 ## Current Status
 
-- **Version**: 0.12.1 (Execution Panel UI/UX Polish & Test Fixes)
-- **Latest Release**: Release 0.12.1 - Execution Panel UI/UX Polish & Test Fixes (November 22, 2025)
-- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish)
-- **Next Feature**: Feature 5 - Design System Implementation (v0.13.0) ← NEXT
-- **Architecture**: Visual-first desktop app (Tauri + React 19 + React Flow) with Python backend + SQLite storage + Auto-save + Assertion Validation + WCAG AAA UI
-- **Test Status**: 161/161 tests passing (100% - 88 backend + 73 frontend) ✅
+- **Version**: 0.14.0 (Template Gallery & Built-in Templates)
+- **Latest Release**: Release 0.14.0 - Template Gallery & Built-in Templates (November 22, 2025)
+- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish) + Feature 7 Partial (Template Gallery ✅ - Test Suite Organizer deferred)
+- **Next Feature**: Feature 5 - Design System Implementation (v0.15.0) OR Feature 6 - Record & Replay Test Generation (v0.15.0) OR Feature 7 Complete - Test Suite Organizer (v0.15.0) ← TO BE DECIDED
+- **Architecture**: Visual-first desktop app (Tauri + React 19 + React Flow) with Python backend + SQLite storage + Auto-save + Assertion Validation + WCAG AAA UI + Template Gallery
+- **Test Status**: 223/223 tests passing (100% - 88 backend + 135 frontend including 31 template tests) ✅
 
 ## Migration Decision (November 16, 2025)
 
