@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sentinel-backend"
-version = "0.14.4"
+version = "0.14.5"
 description = "Sentinel Backend - Visual-first agent testing platform"
 authors = [
     {name = "Navam", email = "noreply@navam.ai"}
