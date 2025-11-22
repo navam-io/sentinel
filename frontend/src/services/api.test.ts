@@ -29,28 +29,39 @@ describe('API Client', () => {
 				inputs: {
 					query: 'Hello',
 				},
+				assertions: [{ must_contain: 'hello' }],
 			};
 
-			const mockResult = {
-				success: true,
-				output: 'Hello there!',
-				model: 'gpt-5.1',
-				provider: 'openai',
-				latency_ms: 500,
-				tokens_input: 10,
-				tokens_output: 20,
-				cost_usd: 0.001,
-				timestamp: '2025-11-16T10:00:00Z',
+			const mockResponse = {
+				result: {
+					success: true,
+					output: 'Hello there!',
+					model: 'gpt-5.1',
+					provider: 'openai',
+					latency_ms: 500,
+					tokens_input: 10,
+					tokens_output: 20,
+					cost_usd: 0.001,
+					timestamp: '2025-11-16T10:00:00Z',
+				},
+				assertions: [
+					{
+						assertion_type: 'must_contain',
+						passed: true,
+						message: "Output contains 'hello'",
+					},
+				],
+				all_assertions_passed: true,
 			};
 
 			(global.fetch as any).mockResolvedValueOnce({
 				ok: true,
-				json: async () => ({ result: mockResult }),
+				json: async () => mockResponse,
 			});
 
 			const result = await executeTest(testSpec);
 
-			expect(result).toEqual(mockResult);
+			expect(result).toEqual(mockResponse);
 			expect(global.fetch).toHaveBeenCalledWith(
 				'http://localhost:8000/api/execution/execute',
 				{

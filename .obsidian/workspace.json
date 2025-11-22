@@ -11,10 +11,14 @@
             "id": "9cb05beeb1db922e",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "blogs/visual-first-design/blog-post.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "blog-post"
             }
           }
         ]
@@ -167,17 +171,25 @@
   },
   "active": "9cb05beeb1db922e",
   "lastOpenFiles": [
+    "backlog/release-0.12.1.md",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3spp1jxtnuc1y/s-hd83z023jm-0zw2z8e-7gsy62u24c6ej4flhlj92tfzp/work-products.bin",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3spp1jxtnuc1y/s-hd83z023jm-0zw2z8e-7gsy62u24c6ej4flhlj92tfzp/query-cache.bin",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3spp1jxtnuc1y/s-hd83z023jm-0zw2z8e-7gsy62u24c6ej4flhlj92tfzp/f47m47qoghv38xjv8ve0feqef.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3spp1jxtnuc1y/s-hd83z023jm-0zw2z8e-7gsy62u24c6ej4flhlj92tfzp/f1e55hijqggm86jwhlaf68j7o.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3spp1jxtnuc1y/s-hd83z023jm-0zw2z8e-7gsy62u24c6ej4flhlj92tfzp/eyr6r911q5ifid669ha3r4r4e.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3spp1jxtnuc1y/s-hd83z023jm-0zw2z8e-7gsy62u24c6ej4flhlj92tfzp/eyhbp09f2984eqgxvfp0ii7hk.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3spp1jxtnuc1y/s-hd83z023jm-0zw2z8e-7gsy62u24c6ej4flhlj92tfzp/exnr3hufkom0idx6er3fwscxi.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3spp1jxtnuc1y/s-hd83z023jm-0zw2z8e-7gsy62u24c6ej4flhlj92tfzp/eqc3goh7dyfzv3avntyny7gbn.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3spp1jxtnuc1y/s-hd83z023jm-0zw2z8e-7gsy62u24c6ej4flhlj92tfzp/epc9eij45av0yu88rg8gylgw7.o",
+    "frontend/src-tauri/target/debug/incremental/sentinel-3spp1jxtnuc1y/s-hd83z023jm-0zw2z8e-7gsy62u24c6ej4flhlj92tfzp/eopro6qrvw6yiw1j5ii42xj3b.o",
+    "backlog/hotfix-0.12.1-badge-contrast.md",
+    "backlog/hotfix-0.12.1-final-improvements.md",
+    "backlog/hotfix-0.12.1-ui-improvements.md",
+    "backlog/release-0.12.0.md",
+    "blogs/visual-first-design/canvas-palette-react.png",
+    "blogs/visual-first-design/blog-post.md",
+    "blogs/sentinel-dsl-foundation/blog-post.md",
     "backlog/release-0.11.0.md",
-    "frontend/dist/assets/index-B4xQl0SW.css",
-    "frontend/dist/assets/index-B-XYPHfp.js",
-    "frontend/dist/assets",
-    "frontend/src/hooks/useAutoSave.test.ts.tmp.26306.1763361033206",
-    "frontend/src/hooks/useAutoSave.test.ts",
-    "frontend/src/services/api.test.ts",
-    "frontend/src/App.tsx.tmp.26306.1763360832633",
-    "frontend/src/components/RightPanel.tsx",
-    "frontend/src/components/RightPanel.tsx.tmp.26306.1763360826523",
-    "frontend/src/components/tests/TestManager.tsx",
     "backlog/release-0.10.0.md",
     "backlog/release-0.9.3.md",
     "backlog/AUDIT-fake-features.md",
@@ -200,18 +212,10 @@
     "backend/venv/lib/python3.13/site-packages/coverage/htmlfiles/keybd_closed.png",
     "backend/venv/lib/python3.13/site-packages/coverage/htmlfiles/favicon_32.png",
     "backend/venv/lib/python3.13/site-packages/docstring_parser-0.17.0.dist-info/licenses/LICENSE.md",
-    "backend/venv/lib/python3.13/site-packages/idna-3.11.dist-info/licenses/LICENSE.md",
-    "backend/README.md",
-    "backlog/release-0.6.0.md",
-    "backlog/release-0.5.0.md",
-    "frontend/node_modules/monaco-editor/README.md",
-    "frontend/node_modules/monaco-editor/CHANGELOG.md",
-    "frontend/node_modules/@monaco-editor/react/v4.changes.md",
     "blogs/visual-first-design/canvas-palette-svelte.png",
     "frontend/src-svelte-backup/lib/assets/favicon.svg",
     "frontend/src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher.png",
     "frontend/src-tauri/icons/android/mipmap-xxxhdpi/ic_launcher_round.png",
-    "frontend/src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png",
-    "frontend/src-tauri/icons/android/mipmap-xxhdpi/ic_launcher_round.png"
+    "frontend/src-tauri/icons/android/mipmap-xxhdpi/ic_launcher.png"
   ]
 }

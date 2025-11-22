@@ -4,9 +4,10 @@ Test execution API endpoints.
 
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
 from ..core.schema import TestSpec
 from ..providers.base import ExecutionResult
+from ..validators.assertion_validator import ValidationResult, validate_assertions
 
 router = APIRouter()
 
@@ -19,21 +20,23 @@ class ExecuteRequest(BaseModel):
 
 
 class ExecuteResponse(BaseModel):
-    """Response from test execution."""
+    """Response from test execution with assertion validation results."""
 
     result: ExecutionResult
+    assertions: List[ValidationResult]
+    all_assertions_passed: bool
 
 
 @router.post("/execute", response_model=ExecuteResponse)
 async def execute_test(request: ExecuteRequest, app_request: Request):
-    """Execute a test specification.
+    """Execute a test specification and validate assertions.
 
     Args:
         request: Test execution request with test specification
         app_request: FastAPI request object to access app state
 
     Returns:
-        ExecuteResponse with execution results
+        ExecuteResponse with execution results and assertion validations
 
     Raises:
         HTTPException: If execution fails or provider is not configured
@@ -45,7 +48,21 @@ async def execute_test(request: ExecuteRequest, app_request: Request):
         # Execute the test
         result = await executor.execute(request.test_spec)
 
-        return ExecuteResponse(result=result)
+        # Validate assertions if any
+        assertion_results = []
+        if request.test_spec.assertions:
+            assertion_results = validate_assertions(
+                request.test_spec.assertions, result
+            )
+
+        # Check if all assertions passed
+        all_passed = all(ar.passed for ar in assertion_results) if assertion_results else True
+
+        return ExecuteResponse(
+            result=result,
+            assertions=assertion_results,
+            all_assertions_passed=all_passed,
+        )
 
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

@@ -10,7 +10,7 @@ function RightPanel() {
 	const [activeTab, setActiveTab] = useState<Tab>('yaml');
 
 	return (
-		<div className="flex flex-col h-full bg-sentinel-bg-elevated border-l border-sentinel-border">
+		<div className="w-96 flex flex-col h-full bg-sentinel-bg-elevated border-l border-sentinel-border flex-shrink-0">
 			{/* Tab Navigation */}
 			<div className="flex border-b border-sentinel-border bg-sentinel-bg">
 				<button
@@ -53,7 +53,7 @@ function RightPanel() {
 			{/* Tab Content */}
 			<div className="flex-1 overflow-hidden">
 				{activeTab === 'yaml' && <YamlPreview />}
-				{activeTab === 'tests' && <TestManager />}
+				{activeTab === 'tests' && <TestManager onTestLoaded={() => setActiveTab('yaml')} />}
 				{activeTab === 'execution' && <ExecutionPanel />}
 			</div>
 		</div>

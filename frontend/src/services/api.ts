@@ -39,8 +39,19 @@ export interface ExecutionResult {
 	raw_response?: any;
 }
 
+export interface AssertionResult {
+	assertion_type: string;
+	passed: boolean;
+	message: string;
+	expected?: any;
+	actual?: any;
+	details?: { [key: string]: any };
+}
+
 export interface ExecuteResponse {
 	result: ExecutionResult;
+	assertions: AssertionResult[];
+	all_assertions_passed: boolean;
 }
 
 export interface ProviderInfo {
@@ -56,7 +67,7 @@ export interface ProvidersResponse {
 /**
  * Execute a test specification.
  */
-export async function executeTest(testSpec: TestSpec): Promise<ExecutionResult> {
+export async function executeTest(testSpec: TestSpec): Promise<ExecuteResponse> {
 	const response = await fetch(`${API_BASE_URL}/api/execution/execute`, {
 		method: 'POST',
 		headers: {
@@ -71,7 +82,7 @@ export async function executeTest(testSpec: TestSpec): Promise<ExecutionResult> 
 	}
 
 	const data: ExecuteResponse = await response.json();
-	return data.result;
+	return data;
 }
 
 /**

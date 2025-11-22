@@ -1,19 +1,19 @@
 import { useState } from 'react';
-import { Play, CheckCircle2, XCircle, Clock, DollarSign, Zap } from 'lucide-react';
+import { Play, CheckCircle2, XCircle, Clock, DollarSign, Zap, AlertCircle } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import { generateYAML, convertYAMLToTestSpec } from '../../lib/dsl/generator';
-import { executeTest, type ExecutionResult } from '../../services/api';
+import { executeTest, type ExecuteResponse } from '../../services/api';
 
 function ExecutionPanel() {
 	const { nodes, edges } = useCanvasStore();
 	const [isExecuting, setIsExecuting] = useState(false);
-	const [result, setResult] = useState<ExecutionResult | null>(null);
+	const [response, setResponse] = useState<ExecuteResponse | null>(null);
 	const [error, setError] = useState<string | null>(null);
 
 	const handleRun = async () => {
 		setIsExecuting(true);
 		setError(null);
-		setResult(null);
+		setResponse(null);
 
 		try {
 			// Generate YAML from canvas
@@ -23,9 +23,9 @@ function ExecutionPanel() {
 			const testSpec = convertYAMLToTestSpec(yaml);
 
 			// Execute the test
-			const executionResult = await executeTest(testSpec);
+			const executeResponse = await executeTest(testSpec);
 
-			setResult(executionResult);
+			setResponse(executeResponse);
 		} catch (err) {
 			setError(err instanceof Error ? err.message : 'Execution failed');
 		} finally {
@@ -33,8 +33,10 @@ function ExecutionPanel() {
 		}
 	};
 
+	const result = response?.result;
+
 	return (
-		<div className="w-80 bg-sentinel-bg-elevated border-l border-sentinel-border flex flex-col h-full">
+		<div className="h-full bg-sentinel-bg-elevated flex flex-col">
 			{/* Header */}
 			<div className="p-4 border-b border-sentinel-border">
 				<h2 className="text-sm font-semibold text-sentinel-text mb-2">Test Execution</h2>
@@ -64,25 +66,162 @@ function ExecutionPanel() {
 
 				{result && (
 					<div className="space-y-4">
-						{/* Status */}
-						<div
-							className={`p-3 rounded border ${
-								result.success
-									? 'bg-sentinel-success bg-opacity-10 border-sentinel-success'
-									: 'bg-sentinel-error bg-opacity-10 border-sentinel-error'
-							}`}
-						>
-							<div className="flex items-center gap-2">
-								{result.success ? (
-									<CheckCircle2 size={16} className="text-sentinel-success" />
-								) : (
-									<XCircle size={16} className="text-sentinel-error" />
-								)}
-								<span className="text-xs font-semibold">
-									{result.success ? 'Success' : 'Failed'}
-								</span>
+						{/* Overall Test Status (Assertions First, then Execution) */}
+						{response.assertions && response.assertions.length > 0 ? (
+							<>
+								{/* Assertion Status - PRIMARY */}
+								<div
+									className={`p-3 rounded border ${
+										response.all_assertions_passed
+											? 'bg-sentinel-success bg-opacity-10 border-sentinel-success'
+											: 'bg-sentinel-error bg-opacity-10 border-sentinel-error'
+									}`}
+								>
+									<div className="flex items-center justify-between">
+										<div className="flex items-center gap-2">
+											{response.all_assertions_passed ? (
+												<CheckCircle2 size={16} className="text-sentinel-success" />
+											) : (
+												<XCircle size={16} className="text-white" />
+											)}
+											<span className="text-sm font-semibold text-white">
+												{response.all_assertions_passed ? 'Test Passed' : 'Test Failed'}
+											</span>
+										</div>
+										<span
+											className={`text-xs font-semibold ${
+												response.all_assertions_passed
+													? 'text-sentinel-success opacity-80'
+													: 'text-white opacity-90'
+											}`}
+										>
+											{response.assertions.filter((a) => a.passed).length}/
+											{response.assertions.length} assertions passed
+										</span>
+									</div>
+								</div>
+
+								{/* Execution Status - SECONDARY */}
+								<div className="p-2 bg-sentinel-surface rounded border border-sentinel-border">
+									<div className="flex items-center gap-2">
+										{result.success ? (
+											<CheckCircle2 size={12} className="text-sentinel-success" />
+										) : (
+											<XCircle size={12} className="text-sentinel-error" />
+										)}
+										<span className="text-[0.65rem] text-sentinel-text-muted">
+											Model execution: {result.success ? 'Success' : 'Failed'}
+										</span>
+									</div>
+								</div>
+							</>
+						) : (
+							/* No assertions - show execution status only */
+							<div
+								className={`p-3 rounded border ${
+									result.success
+										? 'bg-sentinel-success bg-opacity-10 border-sentinel-success'
+										: 'bg-sentinel-error bg-opacity-10 border-sentinel-error'
+								}`}
+							>
+								<div className="flex items-center gap-2">
+									{result.success ? (
+										<CheckCircle2 size={16} className="text-sentinel-success" />
+									) : (
+										<XCircle size={16} className="text-sentinel-error" />
+									)}
+									<span className="text-xs font-semibold">
+										{result.success ? 'Success' : 'Failed'}
+									</span>
+								</div>
 							</div>
-						</div>
+						)}
+
+						{/* Assertion Results - MOVED TO TOP FOR VISIBILITY */}
+						{response.assertions && response.assertions.length > 0 && (
+							<div className="p-3 bg-sentinel-surface rounded border border-sentinel-border">
+								<div className="flex items-center justify-between mb-3">
+									<h3 className="text-sm text-sentinel-text font-semibold">
+										Assertion Details ({response.assertions.length})
+									</h3>
+								</div>
+								<div className="space-y-3">
+									{response.assertions.map((assertion, idx) => (
+										<div
+											key={idx}
+											className={`p-3 rounded border ${
+												assertion.passed
+													? 'bg-sentinel-success bg-opacity-5 border-sentinel-success border-opacity-30'
+													: 'bg-sentinel-error bg-opacity-5 border-sentinel-error border-opacity-30'
+											}`}
+										>
+											<div className="flex items-start justify-between gap-2">
+												<div className="flex-1 min-w-0">
+													<div className="flex items-center gap-2 mb-2">
+														{assertion.passed ? (
+															<CheckCircle2
+																size={14}
+																className="text-white flex-shrink-0"
+															/>
+														) : (
+															<XCircle size={14} className="text-white flex-shrink-0" />
+														)}
+														<span
+															className={`text-xs font-bold px-2 py-0.5 rounded ${
+																assertion.passed
+																	? 'text-white bg-sentinel-success bg-opacity-30'
+																	: 'text-white bg-sentinel-error bg-opacity-30'
+															}`}
+														>
+															{assertion.assertion_type.replace(/_/g, ' ')}
+														</span>
+													</div>
+													<p
+														className={`text-sm mb-1 ${
+															assertion.passed
+																? 'text-sentinel-text font-medium'
+																: 'text-white font-medium'
+														}`}
+													>
+														{assertion.message}
+													</p>
+													{!assertion.passed && (assertion.expected || assertion.actual) && (
+														<div className="mt-2 text-xs space-y-1.5 bg-black bg-opacity-30 p-2.5 rounded">
+															{assertion.expected !== undefined && (
+																<div className="text-white">
+																	<span className="font-semibold opacity-90">
+																		Expected:{' '}
+																	</span>
+																	<span className="font-mono font-medium">
+																		{typeof assertion.expected === 'string'
+																			? assertion.expected
+																			: JSON.stringify(assertion.expected)}
+																	</span>
+																</div>
+															)}
+															{assertion.actual !== undefined && (
+																<div className="text-white">
+																	<span className="font-semibold opacity-90">
+																		Actual:{' '}
+																	</span>
+																	<span className="font-mono font-medium">
+																		{typeof assertion.actual === 'string'
+																			? assertion.actual.length > 60
+																				? assertion.actual.substring(0, 60) + '...'
+																				: assertion.actual
+																			: JSON.stringify(assertion.actual)}
+																	</span>
+																</div>
+															)}
+														</div>
+													)}
+												</div>
+											</div>
+										</div>
+									))}
+								</div>
+							</div>
+						)}
 
 						{/* Metrics */}
 						<div className="grid grid-cols-2 gap-2">

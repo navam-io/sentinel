@@ -5,7 +5,11 @@ import { useAutoSave } from '../../hooks/useAutoSave';
 import { listTests, deleteTest, getTest, type TestDefinition } from '../../services/api';
 import { parseYAMLToNodes } from '../../lib/dsl/generator';
 
-function TestManager() {
+interface TestManagerProps {
+	onTestLoaded?: () => void;
+}
+
+function TestManager({ onTestLoaded }: TestManagerProps) {
 	const { setNodes, setEdges } = useCanvasStore();
 
 	const [testName, setTestName] = useState('Untitled Test');
@@ -59,6 +63,14 @@ function TestManager() {
 			setTestName(test.name);
 			setDescription(test.description || '');
 			setTestId(id);
+
+			// Switch to YAML tab to show loaded test
+			// Small delay to ensure canvas has updated before switching tabs
+			setTimeout(() => {
+				if (onTestLoaded) {
+					onTestLoaded();
+				}
+			}, 100);
 		} catch (err) {
 			console.error('Failed to load test:', err);
 		}
@@ -89,7 +101,7 @@ function TestManager() {
 	};
 
 	return (
-		<div className="w-80 bg-sentinel-bg-elevated border-l border-sentinel-border flex flex-col h-full">
+		<div className="h-full bg-sentinel-bg-elevated flex flex-col">
 			{/* Header */}
 			<div className="p-4 border-b border-sentinel-border">
 				<h2 className="text-sm font-semibold text-sentinel-text mb-3">Test Manager</h2>

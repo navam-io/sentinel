@@ -40,7 +40,7 @@ class TestOpenAIProviderIntegration:
             model="gpt-5-nano",
             messages=messages,
             # Note: gpt-5-nano doesn't support custom temperature
-            max_tokens=100
+            max_tokens=500  # Increased from 100 to avoid max_tokens limit errors
         )
 
         # Verify successful response
@@ -68,7 +68,7 @@ class TestOpenAIProviderIntegration:
             model="gpt-5-nano",
             messages=messages,
             # Note: gpt-5-nano doesn't support custom temperature
-            max_tokens=100
+            max_tokens=500  # Increased from 100 to avoid max_tokens limit errors
         )
 
         assert result.success is True

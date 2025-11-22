@@ -1,6 +1,6 @@
 [package]
 name = "sentinel"
-version = "0.5.0"
+version = "0.12.1"
 description = "Visual-first AI agent testing and evaluation platform"
 authors = ["Navam Team"]
 edition = "2021"
