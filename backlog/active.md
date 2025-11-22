@@ -332,6 +332,200 @@ Complete DSL schema and parser implementation as the backend foundation for visu
 
 ---
 
+## 🔴 CRITICAL: Code Quality & Testing Initiative
+
+**Status**: Active (November 22, 2025)
+**Priority**: P0 - Critical (Parallel to Feature Development)
+**Timeline**: 8 weeks (4 phases)
+**Specification**: See `backlog/08-spec-code-quality.md` for complete details
+
+### Overview
+
+Based on comprehensive code metrics analysis ([metrics report](../metrics/report-2025-11-22-110439.md)), we have identified critical testing gaps and code quality issues that must be addressed to ensure production readiness. This is a **parallel initiative** that runs alongside feature development.
+
+### Critical Issues Identified
+
+**Testing Gaps (🔴 High Risk):**
+- **DSL Generator/Parser**: 0% test coverage (785 LOC of critical code untested!)
+- **Canvas Component**: 0% test coverage (TestCanvas.tsx - primary UI)
+- **Node Components**: 0% test coverage (all 5 node types untested)
+- **Frontend Coverage**: Only 30% (target: 80%)
+- **Backend Coverage**: 54% (target: 80%)
+- **E2E Tests**: 0% (no user workflow validation)
+
+**Code Quality Issues:**
+- **TypeScript `any` Usage**: 17 instances (target: 0)
+- **Backend Code Style**: Black, Ruff, MyPy compliance not confirmed
+- **Performance**: No benchmarks run (canvas, DSL, build times)
+- **Security**: pip-audit not run, API key storage not verified
+
+### Implementation Phases
+
+#### **Phase 1 (Week 1-2): Critical Tests** 🔴 P0
+**Focus**: Test the most critical, untested code
+
+1. **DSL Generator/Parser Tests** (2-3 days)
+   - Test Visual → YAML conversion
+   - Test YAML → Visual import
+   - Test round-trip fidelity (zero data loss)
+   - Test edge cases
+   - **Impact**: 785 LOC of core feature tested
+
+2. **Canvas Component Tests** (3-4 days)
+   - Test drag-and-drop functionality
+   - Test node creation/deletion
+   - Test edge connections
+   - Test canvas state management
+   - **Impact**: Primary UI fully tested
+
+3. **Node Component Tests** (4-5 days)
+   - Test all 5 node types (Input, Model, Assertion, Tool, System)
+   - Test user interactions
+   - Test data validation
+   - **Impact**: 800 LOC of critical components tested
+
+4. **TypeScript `any` Elimination** (1-2 days)
+   - Replace 17 `any` instances with proper types
+   - Enable strict TypeScript checks
+   - **Impact**: Improved type safety and maintainability
+
+**Milestone**: Critical code tested, type safety improved
+
+#### **Phase 2 (Week 3-4): Code Quality** 🟡 P1
+**Focus**: Establish quality standards and increase coverage
+
+5. **Frontend Test Coverage 50%+** (1 week)
+   - Add service tests (API, storage, templates)
+   - Add hook tests (useExecution, useTemplates, useStorage, useCanvas)
+   - Add UI component tests (12 untested components)
+   - **Impact**: 3,000+ test lines (from ~1,800)
+
+6. **Backend Code Style Compliance** (2-3 days)
+   - Black formatting (100% compliance)
+   - Ruff linting (0 errors)
+   - MyPy type checking (strict mode)
+   - **Impact**: Professional code quality standards
+
+7. **Backend Test Coverage 80%+** (3-4 days)
+   - Add Anthropic integration test
+   - Add core/utils tests
+   - Enhance provider tests
+   - **Impact**: Production-ready backend
+
+**Milestone**: Code quality standards enforced, coverage targets hit
+
+#### **Phase 3 (Week 5-6): E2E & Performance** 🟡 P1
+**Focus**: Validate user journeys and measure performance
+
+8. **E2E Tests** (1 week)
+   - Create test from scratch workflow
+   - Load template and execute workflow
+   - Visual ↔ YAML round-trip workflow
+   - **Impact**: User journeys validated
+
+9. **Performance Benchmarking** (2-3 days)
+   - Canvas rendering (60fps @ 100 nodes)
+   - DSL generation (< 100ms @ 100 nodes)
+   - Build times, bundle size
+   - **Impact**: Performance baseline established
+
+10. **Code Complexity Analysis** (1-2 days)
+    - Python cyclomatic complexity (< 10 avg)
+    - TypeScript complexity (ESLint rules)
+    - **Impact**: Maintainability measured
+
+**Milestone**: User journeys validated, performance measured
+
+#### **Phase 4 (Week 7-8): Security & Dependencies** 🟢 P2
+**Focus**: Harden security and manage dependencies
+
+11. **Security Audit & Hardening** (2-3 days)
+    - Run pip-audit (backend dependencies)
+    - Verify API key storage (OS keychain)
+    - Add input sanitization (XSS prevention)
+    - Review OWASP Top 10 compliance
+    - **Impact**: Security hardened
+
+12. **Dependency Updates** (1-2 days)
+    - Update 7 outdated npm packages
+    - Migrate to pyproject.toml
+    - Configure Dependabot
+    - **Impact**: Dependencies managed
+
+**Milestone**: Security hardened, dependencies managed
+
+### Success Criteria (8 Weeks)
+
+By end of implementation:
+
+**Testing:**
+- ✅ Frontend test coverage: 50%+
+- ✅ Backend test coverage: 80%+
+- ✅ E2E tests: 3+ workflows
+- ✅ Critical code tested: DSL, Canvas, Nodes
+
+**Code Quality:**
+- ✅ TypeScript `any` usage: 0
+- ✅ Black compliance: 100%
+- ✅ Ruff errors: 0
+- ✅ MyPy errors: 0
+- ✅ Cyclomatic complexity: < 10 avg
+
+**Performance:**
+- ✅ Canvas rendering: 60fps @ 100 nodes
+- ✅ DSL generation: < 100ms @ 100 nodes
+- ✅ Frontend build: < 10s
+- ✅ Bundle size: < 50MB
+
+**Security:**
+- ✅ npm vulnerabilities: 0
+- ✅ pip vulnerabilities: 0
+- ✅ OWASP Top 10: Reviewed
+- ✅ API keys: Securely stored
+
+**Process:**
+- ✅ Pre-commit hooks: Configured
+- ✅ CI/CD quality gates: Passing
+- ✅ Dependabot: Configured
+- ✅ Monthly reviews: Scheduled
+
+### Continuous Quality Process
+
+**Pre-Commit Hooks** (husky + lint-staged):
+- Frontend: lint, type-check, test
+- Backend: black, ruff, mypy, pytest
+
+**CI/CD Quality Gates** (GitHub Actions):
+- Code quality checks on all PRs
+- Test coverage reporting
+- Security audits
+- Build verification
+
+**Monthly Quality Reviews**:
+- Run `/code:metrics` analysis
+- Review quality scorecard
+- Update 08-spec-code-quality.md
+- Prioritize technical debt
+
+### Integration with Feature Development
+
+**This initiative runs in parallel** with feature development:
+- **Week 1-2 (Phase 1)**: Can proceed alongside any feature work
+- **Week 3-4 (Phase 2)**: Coordinates with feature testing
+- **Week 5-6 (Phase 3)**: E2E tests cover existing features
+- **Week 7-8 (Phase 4)**: Security hardening benefits all features
+
+**Resources**: 1 dedicated engineer + support from feature developers for testing their components.
+
+### References
+
+- **Code Metrics Report**: `metrics/report-2025-11-22-110439.md`
+- **Quality Specification**: `backlog/08-spec-code-quality.md` (comprehensive 800+ line spec)
+- **Active Backlog**: This file
+- **Development Guide**: `CLAUDE.md`
+
+---
+
 ### Feature 1: Visual Canvas Foundation 🔄 IN PROGRESS (React Migration)
 **Status**: Migrating from Svelte to React
 **Priority**: P0 - Foundation
@@ -1404,6 +1598,7 @@ User Experience:
 - **Incremental delivery**: Each feature should be completable and deliverable independently
 - **Testing is mandatory**: All features require tests
 - **Documentation is required**: Each feature needs user documentation
+- **🔴 Code quality is critical**: All developers must follow the Code Quality & Testing Initiative (see above and `backlog/08-spec-code-quality.md`). Testing gaps in critical code (DSL, Canvas, Nodes) must be addressed in Phase 1.
 
 ## Current Status
 
@@ -1411,8 +1606,15 @@ User Experience:
 - **Latest Release**: Release 0.14.0 - Template Gallery & Built-in Templates (November 22, 2025)
 - **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish) + Feature 7 Partial (Template Gallery ✅ - Test Suite Organizer deferred)
 - **Next Feature**: Feature 5 - Design System Implementation (v0.15.0) OR Feature 6 - Record & Replay Test Generation (v0.15.0) OR Feature 7 Complete - Test Suite Organizer (v0.15.0) ← TO BE DECIDED
+- **🔴 Critical Initiative**: Code Quality & Testing (8-week program, see above) - **ACTIVE**
 - **Architecture**: Visual-first desktop app (Tauri + React 19 + React Flow) with Python backend + SQLite storage + Auto-save + Assertion Validation + WCAG AAA UI + Template Gallery
 - **Test Status**: 223/223 tests passing (100% - 88 backend + 135 frontend including 31 template tests) ✅
+- **Code Quality Status**:
+  - Frontend Coverage: ~30% (Target: 80% by Phase 2)
+  - Backend Coverage: ~54% (Target: 80% by Phase 2)
+  - Critical Code Untested: DSL (785 LOC), Canvas, Nodes (1,735 LOC total) 🔴
+  - TypeScript `any` Usage: 17 instances (Target: 0 by Phase 1)
+  - See `metrics/report-2025-11-22-110439.md` for full analysis
 
 ## Migration Decision (November 16, 2025)
 

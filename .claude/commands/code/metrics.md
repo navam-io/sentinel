@@ -1,90 +1,97 @@
 ---
-description: Generate comprehensive static code analysis metrics report for navam-invest Python package
+description: Generate comprehensive static code analysis metrics report for Sentinel visual-first agent testing platform
 ---
 
 # Metrics Analysis Command
 
-You are a code metrics analyst specializing in Python packages and AI agent systems. Your task is to perform comprehensive static code analysis on the navam-invest package and generate a detailed metrics report.
+You are a code metrics analyst specializing in full-stack applications with React/TypeScript frontends and Python backends. Your task is to perform comprehensive static code analysis on the Sentinel platform and generate a detailed metrics report.
 
 ## Analysis Scope
 
-Analyze the following aspects of the navam-invest Python package:
+Analyze the following aspects of the Sentinel platform (Tauri desktop app + React frontend + Python backend):
 
 ### 1. Code Volume Metrics
 - **Total Lines of Code (LOC)**: Count all lines in source files
 - **Source Lines of Code (SLOC)**: Exclude blank lines and comments
-- **Lines by Language**: Break down by Python, Markdown, TOML, JSON, YAML
-- **Lines by Module**: Agents, tools, workflows, TUI, cache, config, utils, tests
+- **Lines by Language**: Break down by TypeScript, Python, Rust, Markdown, TOML, JSON, YAML
+- **Lines by Module**: Frontend (React components, services, hooks), Backend (FastAPI, providers, validators), Tauri (Rust)
 
 ### 2. File and Module Metrics
-- **Total Files**: Count by type (.py, .md, .toml, .json, .yaml)
+- **Total Files**: Count by type (.ts, .tsx, .py, .rs, .md, .toml, .json, .yaml)
 - **Average File Size**: Mean lines per file
 - **Largest Files**: Top 10 files by line count
-- **Module Distribution**: Agents vs tools vs workflows vs TUI vs tests
+- **Module Distribution**: Frontend vs Backend vs Tauri vs Tests vs Documentation
 
 ### 3. Test Coverage Metrics
-- **Test Files**: Count of test files in tests/ directory
+- **Frontend Tests**: React component tests, service tests, hook tests (Vitest)
+- **Backend Tests**: Python unit tests, API tests (pytest)
 - **Test Lines**: Total lines in test files
 - **Test-to-Code Ratio**: Test LOC / Source LOC
-- **Agent Test Coverage**: Each agent's test status
-- **Tool Test Coverage**: Each API tool's test status
-- **Integration Tests**: Workflow and multi-agent tests
+- **Component Test Coverage**: Each React component's test status
+- **Backend Module Coverage**: Providers, validators, storage test status
+- **Integration Tests**: End-to-end workflow tests
 
 ### 4. Code Quality Metrics
 - **Comment Density**: Comment lines / Total lines
-- **Documentation**: Docstrings, inline comments, README files
-- **Type Hints Coverage**: Functions with type annotations
+- **Documentation**: TSDoc comments, Python docstrings, README files
+- **TypeScript Coverage**: Proper typing vs any usage
+- **Python Type Hints**: Functions with type annotations
 - **Function Complexity**: Average function length (lines per function)
-- **Error Handling**: Try-except blocks, error validation patterns
-- **Code Style Compliance**: Black, Ruff, MyPy checks
+- **Error Handling**: Try-catch blocks, error validation patterns
+- **Code Style Compliance**: Frontend (TypeScript/ESLint), Backend (Black, Ruff, MyPy)
 
-### 5. Agent Architecture Metrics
-- **Agent Implementations**: Count of agent files (7+ specialized agents)
-- **Agent Interface Compliance**: Consistent API patterns
-- **Agent-specific Code**: Lines per agent implementation
-- **Tool Integration**: Tools used per agent
-- **System Prompts**: Prompt engineering quality and length
-- **Router Complexity**: Agent selection and delegation logic
+### 5. Frontend Architecture Metrics
+- **React Components**: Count of component files (.tsx)
+- **Component Categories**: Canvas, Palette, Nodes, Execution, Templates, UI
+- **Custom Hooks**: Hook implementations and usage
+- **Services**: API services, template service, storage service
+- **State Management**: Zustand stores and usage
+- **React Flow Integration**: Custom nodes, edges, and canvas features
+- **Component Complexity**: Average component size and prop count
 
-### 6. API Integration Metrics
-- **API Tool Implementations**: Financial data providers (FRED, SEC EDGAR, Alpha Vantage, etc.)
-- **Tool Interface Patterns**: Unified tool API adherence
-- **API Endpoints**: Count of unique endpoints per provider
-- **Rate Limiting**: Implementation of rate limit handling
-- **Caching Strategy**: Cache hit rates and efficiency
-- **Error Recovery**: Retry logic and fallback mechanisms
+### 6. Backend Architecture Metrics
+- **FastAPI Endpoints**: Count of API routes and endpoints
+- **Model Providers**: Anthropic, OpenAI, Bedrock, HuggingFace, Ollama
+- **Provider Interface**: Consistent provider API patterns
+- **Validators**: Assertion validation implementations
+- **Storage Layer**: SQLite operations, schema definitions
+- **Error Handling**: Provider error recovery, validation errors
+- **API Response Times**: Endpoint performance metrics
 
-### 7. LLM Integration Metrics
-- **LLM Providers**: Anthropic (primary), OpenAI, Gemini, DeepSeek, Ollama support
-- **Prompt Templates**: System prompts, few-shot examples
-- **Token Management**: Token counting, context window optimization
-- **Streaming Support**: Real-time response handling
-- **Cost Tracking**: API usage monitoring
-- **Model Selection**: Configuration flexibility
+### 7. Visual Canvas Metrics
+- **Node Types**: Input, Model, Assertion, Tool, System nodes
+- **React Flow Components**: Custom nodes, edges, controls
+- **DSL Generator**: YAML/JSON generation from canvas
+- **DSL Parser**: Import canvas from YAML/JSON
+- **Round-Trip Fidelity**: Visual ↔ DSL conversion accuracy
+- **Canvas Performance**: Node rendering performance at scale
+- **Component Reusability**: Shared component usage
 
 ### 8. Feature Completeness Metrics
-- **Investment Analysis**: Equity research, fundamental analysis, technical analysis
-- **Portfolio Management**: Holdings tracking, allocation analysis, rebalancing
-- **Risk Assessment**: Risk metrics, drawdown analysis, VAR calculations
-- **Tax Optimization**: Tax-loss harvesting, wash-sale detection, lot selection
-- **Multi-Agent Workflows**: Collaboration patterns, task delegation
-- **TUI/CLI Interface**: Interactive chat, command system, real-time streaming
-- **Data Persistence**: SQLite storage, session management, audit trails
+- **Visual Canvas**: Node-based test builder, drag-and-drop palette
+- **DSL Support**: YAML/JSON import/export, Monaco editor
+- **Model Providers**: Multi-provider architecture (5+ providers)
+- **Execution Engine**: Test running, live execution dashboard
+- **Assertion Builder**: Visual assertion creation (8+ assertion types)
+- **Template Gallery**: Pre-built templates, search/filter
+- **Storage**: SQLite persistence, auto-save, test history
+- **Desktop App**: Tauri integration, native performance
 
 ### 9. Dependency Analysis
-- **Production Dependencies**: Count from pyproject.toml
-- **Core Dependencies**: anthropic, langchain, langgraph, textual
-- **Financial APIs**: pandas, numpy, requests dependencies
-- **Build Tools**: hatchling, setuptools
-- **Dev Dependencies**: pytest, black, ruff, mypy
+- **Frontend Dependencies**: React, React Flow, Zustand, TailwindCSS, shadcn/ui
+- **Backend Dependencies**: FastAPI, Pydantic, SQLAlchemy, pytest
+- **Tauri Dependencies**: Rust crates for desktop functionality
+- **Model SDKs**: anthropic, openai, boto3 (Bedrock), huggingface_hub
+- **Build Tools**: Vite, TypeScript, Cargo
+- **Dev Dependencies**: Vitest, ESLint, Black, Ruff, MyPy
 - **Version Constraints**: Compatibility ranges
 
-### 10. Package Quality Metrics
-- **PyPI Compatibility**: Package metadata completeness
-- **Distribution Size**: Wheel and sdist sizes
-- **Entry Points**: CLI commands and their implementations
-- **Installation Requirements**: Python version support (3.9-3.12)
-- **Documentation Quality**: README, CLAUDE.md, docs/ completeness
+### 10. Application Quality Metrics
+- **Desktop App Size**: Tauri bundle sizes (macOS, Linux, Windows)
+- **Startup Performance**: Time to interactive
+- **Memory Footprint**: Typical usage memory
+- **Build Performance**: Frontend and backend build times
+- **Documentation Quality**: README, CLAUDE.md, release notes completeness
 - **License and Legal**: License file, copyright notices
 
 ## Implementation Steps
@@ -93,197 +100,264 @@ Analyze the following aspects of the navam-invest Python package:
 ```bash
 mkdir -p metrics
 # Ensure you're in the project root directory
-cd /path/to/navam-invest
+cd /Users/manavsehgal/Developer/sentinel
 ```
 
 ### Step 2: Count Lines of Code
 ```bash
-# Install cloc if needed
+# Install cloc if needed (should already be installed)
 # brew install cloc (macOS)
-# sudo apt-get install cloc (Linux)
 
-# Run analysis for navam-invest project structure
-cloc --json --exclude-dir=.venv,.git,dist,metrics,node_modules,__pycache__,.mypy_cache,.pytest_cache . > /tmp/cloc-total.json
+# Run analysis for Sentinel project structure
+cloc --json --exclude-dir=node_modules,.venv,.git,dist,metrics,target,__pycache__,.mypy_cache,.pytest_cache,htmlcov,src-svelte-backup . > /tmp/cloc-total.json
 
-# Analyze major modules separately
-cloc --json src/navam_invest/agents/ > /tmp/cloc-agents.json
-cloc --json src/navam_invest/tools/ > /tmp/cloc-tools.json
-cloc --json src/navam_invest/workflows/ > /tmp/cloc-workflows.json
-cloc --json src/navam_invest/tui/ > /tmp/cloc-tui.json
-cloc --json src/navam_invest/cache/ > /tmp/cloc-cache.json
-cloc --json src/navam_invest/config/ > /tmp/cloc-config.json
-cloc --json tests/ > /tmp/cloc-tests.json
-cloc --json docs/ > /tmp/cloc-docs.json
+# Analyze frontend modules separately
+cloc --json frontend/src/components/ > /tmp/cloc-frontend-components.json
+cloc --json frontend/src/services/ > /tmp/cloc-frontend-services.json
+cloc --json frontend/src/hooks/ > /tmp/cloc-frontend-hooks.json
+cloc --json frontend/src/stores/ > /tmp/cloc-frontend-stores.json
+cloc --json frontend/src/lib/ > /tmp/cloc-frontend-lib.json
+
+# Analyze backend modules separately
+cloc --json backend/api/ > /tmp/cloc-backend-api.json
+cloc --json backend/providers/ > /tmp/cloc-backend-providers.json
+cloc --json backend/validators/ > /tmp/cloc-backend-validators.json
+cloc --json backend/storage/ > /tmp/cloc-backend-storage.json
+cloc --json backend/tests/ > /tmp/cloc-backend-tests.json
+
+# Analyze Tauri Rust code
+cloc --json frontend/src-tauri/src/ > /tmp/cloc-tauri.json
+
+# Documentation
+cloc --json backlog/ > /tmp/cloc-docs.json
 ```
 
 ### Step 3: Analyze File Structure
 ```bash
 # Count files by type
-find src tests -name "*.py" | wc -l
+find frontend/src backend -name "*.ts" -o -name "*.tsx" | wc -l
+find backend -name "*.py" | wc -l
+find frontend/src-tauri -name "*.rs" | wc -l
 find . -name "*.md" | wc -l
 find . -name "*.toml" | wc -l
 find . -name "*.json" | wc -l
 find . -name "*.yaml" -o -name "*.yml" | wc -l
 
 # Analyze directory structure
-tree -L 3 src/navam_invest/ > /tmp/structure.txt
-ls -lR src/navam_invest/agents/ > /tmp/agents-structure.txt
-ls -lR src/navam_invest/tools/ > /tmp/tools-structure.txt
-ls -lR tests/ > /tmp/tests-structure.txt
+tree -L 3 frontend/src/ > /tmp/structure-frontend.txt
+tree -L 3 backend/ > /tmp/structure-backend.txt
+tree -L 2 frontend/src-tauri/ > /tmp/structure-tauri.txt
 ```
 
-### Step 4: Package Metadata Analysis
+### Step 4: Application Metadata Analysis
 ```bash
-# Parse pyproject.toml
-cat pyproject.toml | grep "^version" | cut -d'"' -f2
-cat pyproject.toml | grep "^name" | cut -d'"' -f2
+# Parse frontend package.json
+cat frontend/package.json | grep '"version"' | cut -d'"' -f4
+cat frontend/package.json | grep '"name"' | cut -d'"' -f4
 
-# Count dependencies
-grep "^[a-zA-Z]" pyproject.toml | grep -A 100 "\[project.dependencies\]" | grep "=" | wc -l
-grep "^[a-zA-Z]" pyproject.toml | grep -A 100 "\[project.optional-dependencies.dev\]" | grep "=" | wc -l
+# Count frontend dependencies
+cat frontend/package.json | jq '.dependencies | length'
+cat frontend/package.json | jq '.devDependencies | length'
 
-# Check package distribution
-ls -lh dist/ 2>/dev/null || echo "Run 'python -m build' first"
+# Parse backend pyproject.toml
+cat backend/pyproject.toml | grep "^version" | cut -d'"' -f2
+
+# Parse Tauri config
+cat frontend/src-tauri/Cargo.toml | grep "^version" | cut -d'"' -f2
+
+# Check build outputs
+ls -lh frontend/dist/ 2>/dev/null || echo "Run 'npm run build' first"
+ls -lh frontend/src-tauri/target/release/ 2>/dev/null || echo "Run 'npm run tauri:build' first"
 ```
 
-### Step 5: Agent Architecture Analysis
+### Step 5: Frontend Component Analysis
 ```bash
-# Count agent implementations
-ls -1 src/navam_invest/agents/*.py | grep -v "__" | wc -l
+# Count React components
+find frontend/src/components -name "*.tsx" | wc -l
 
-# Analyze agent file sizes
-for agent in src/navam_invest/agents/*.py; do
-  if [[ "$(basename $agent)" != "__init__.py" ]]; then
-    lines=$(wc -l < "$agent")
-    echo "$(basename $agent .py): $lines lines"
+# Analyze component categories
+for category in canvas palette nodes execution templates ui icons; do
+  count=$(find frontend/src/components/$category -name "*.tsx" 2>/dev/null | wc -l)
+  echo "$category: $count component(s)"
+done
+
+# Count custom hooks
+find frontend/src/hooks -name "*.ts" | wc -l
+
+# Count services
+find frontend/src/services -name "*.ts" | wc -l
+
+# Count Zustand stores
+find frontend/src/stores -name "*.ts" | wc -l
+
+# Analyze component sizes
+for component in frontend/src/components/**/*.tsx; do
+  if [[ -f "$component" ]]; then
+    lines=$(wc -l < "$component")
+    echo "$(basename $component .tsx): $lines lines"
+  fi
+done | sort -t: -k2 -n -r | head -10
+```
+
+### Step 6: Backend Module Analysis
+```bash
+# Count FastAPI endpoints
+grep -r "@app\.\|@router\." backend/api/ | wc -l
+
+# Count model providers
+ls -1 backend/providers/*.py | grep -v "__init__" | wc -l
+
+# Analyze provider file sizes
+for provider in backend/providers/*.py; do
+  if [[ "$(basename $provider)" != "__init__.py" ]]; then
+    lines=$(wc -l < "$provider")
+    echo "$(basename $provider .py): $lines lines"
   fi
 done
 
-# Count system prompts
-grep -r "system_prompt\|SYSTEM_PROMPT" src/navam_invest/agents/ | wc -l
+# Count validators
+ls -1 backend/validators/*.py 2>/dev/null | wc -l
 
-# Analyze router complexity
-wc -l < src/navam_invest/agents/router.py
-grep -c "def.*agent" src/navam_invest/agents/router.py
-```
+# Storage layer analysis
+ls -1 backend/storage/*.py 2>/dev/null | wc -l
+grep -c "CREATE TABLE\|class.*Base" backend/storage/*.py 2>/dev/null
 
-### Step 6: API Tool Analysis
-```bash
-# Count tool implementations
-ls -1 src/navam_invest/tools/*.py | grep -v "__init__" | wc -l
-
-# Analyze tool file sizes
-for tool in src/navam_invest/tools/*.py; do
-  if [[ "$(basename $tool)" != "__init__.py" ]]; then
-    lines=$(wc -l < "$tool")
-    echo "$(basename $tool .py): $lines lines"
-  fi
-done
-
-# Count API endpoints per tool
-for tool in src/navam_invest/tools/*.py; do
-  endpoint_count=$(grep -c "https://\|http://" "$tool" 2>/dev/null || echo "0")
-  echo "$(basename $tool .py): $endpoint_count endpoint(s)"
-done
-
-# Check caching implementation
-grep -r "cache\|Cache" src/navam_invest/cache/ | wc -l
-grep -c "@cache\|@lru_cache" src/navam_invest/tools/*.py
+# Count Pydantic models
+grep -r "class.*BaseModel" backend/ | wc -l
 ```
 
 ### Step 7: Test Coverage Analysis
 ```bash
-# Find all test files
-find tests -name "test_*.py" -o -name "*_test.py" | wc -l
+# Frontend tests (Vitest)
+find frontend/src -name "*.test.ts" -o -name "*.test.tsx" | wc -l
 
-# Count test functions
-grep -r "^def test_\|^async def test_" tests/ | wc -l
+# Count frontend test suites
+grep -r "describe\|it\|test" frontend/src/**/*.test.* | wc -l
 
-# Agent test coverage
-for agent in quill earnings_whisperer screen_forge macro_lens news_sentry portfolio research risk_shield tax_scout hedge_smith; do
-  test_files=$(find tests -name "*${agent}*" 2>/dev/null | wc -l)
-  echo "$agent: $test_files test file(s)"
+# Backend tests (pytest)
+find backend/tests -name "test_*.py" | wc -l
+
+# Count backend test functions
+grep -r "^def test_\|^async def test_" backend/tests/ | wc -l
+
+# Component test coverage
+for category in canvas palette nodes execution templates ui; do
+  test_files=$(find frontend/src/components/$category -name "*.test.tsx" 2>/dev/null | wc -l)
+  echo "$category: $test_files test file(s)"
 done
 
-# Tool test coverage
-for tool in alpha_vantage fred sec_edgar fmp finnhub tiingo newsapi yahoo_finance treasury; do
-  test_files=$(find tests -name "*${tool}*" 2>/dev/null | wc -l)
-  echo "$tool: $test_files test file(s)"
+# Backend module test coverage
+for module in providers validators storage api; do
+  test_files=$(find backend/tests -name "*${module}*" 2>/dev/null | wc -l)
+  echo "$module: $test_files test file(s)"
 done
 
-# Integration vs unit tests
-find tests -name "*integration*" -o -name "*workflow*" | wc -l
-find tests -name "test_*.py" | wc -l
+# Run tests and capture results
+cd frontend && npm test -- --run 2>&1 | tee /tmp/frontend-test-results.txt
+cd ../backend && source venv/bin/activate && pytest -v 2>&1 | tee /tmp/backend-test-results.txt
 ```
 
 ### Step 8: Code Quality Analysis
 ```bash
+# Frontend TypeScript quality
+# Count type annotations (interface, type, enum)
+grep -r "^interface \|^type \|^enum " frontend/src/ | wc -l
+
+# Count any usage (should be minimal)
+grep -r ": any\|<any>" frontend/src/ | wc -l
+
+# Count JSDoc/TSDoc comments
+grep -r "\/\*\*" frontend/src/ | wc -l
+
+# Count React components
+grep -r "^export \(default \)\?function\|^const.*=.*function\|^const.*=.*=>" frontend/src/components/ | wc -l
+
+# Backend Python quality
 # Count docstrings
-grep -r '"""' src/navam_invest/ | wc -l
-grep -r "'''" src/navam_invest/ | wc -l
+grep -r '"""' backend/ | wc -l
 
 # Count type hints
-grep -r ": str\|: int\|: float\|: bool\|: List\|: Dict\|: Optional\|-> " src/navam_invest/ | wc -l
+grep -r ": str\|: int\|: float\|: bool\|: List\|: Dict\|: Optional\|-> " backend/ | wc -l
 
 # Count functions
-grep -r "^def \|^async def " src/navam_invest/ | wc -l
+grep -r "^def \|^async def " backend/ | wc -l
 
 # Error handling patterns
-grep -r "try:" src/navam_invest/ | wc -l
-grep -r "except " src/navam_invest/ | wc -l
-grep -r "raise " src/navam_invest/ | wc -l
+grep -r "try:" backend/ | wc -l
+grep -r "except " backend/ | wc -l
+grep -r "raise " backend/ | wc -l
 
-# Import statements
-grep -r "^from \|^import " src/navam_invest/ | wc -l
+# Count Pydantic models (strong typing)
+grep -r "class.*BaseModel" backend/ | wc -l
 ```
 
-### Step 9: LLM Integration Analysis
+### Step 9: Model Provider Integration Analysis
 ```bash
-# Check LLM provider usage
-grep -r "ChatAnthropic\|ChatOpenAI\|ChatGoogleGenerativeAI" src/navam_invest/ | wc -l
+# Count provider implementations
+ls -1 backend/providers/*.py | grep -v "__init__\|base" | wc -l
 
-# Count prompt templates
-find src/navam_invest/agents -name "*.py" -exec grep -l "system_prompt\|SYSTEM_PROMPT" {} \; | wc -l
+# Analyze provider patterns
+for provider in anthropic openai bedrock huggingface ollama; do
+  if [[ -f "backend/providers/${provider}.py" ]]; then
+    lines=$(wc -l < "backend/providers/${provider}.py")
+    echo "$provider: $lines lines"
+  fi
+done
 
-# Token management
-grep -r "token\|Token\|max_tokens" src/navam_invest/ | wc -l
+# Check provider API usage
+grep -r "anthropic\|openai\|boto3\|huggingface_hub" backend/providers/ | wc -l
 
-# Streaming implementation
-grep -r "astream\|stream\|StreamingResponse" src/navam_invest/ | wc -l
+# Test execution patterns
+grep -r "execute_test\|run_test" backend/ | wc -l
 
-# Cost tracking
-grep -r "cost\|usage\|tokens_used" src/navam_invest/ | wc -l
+# Assertion validation
+grep -r "validate.*assertion\|AssertionValidator" backend/ | wc -l
 ```
 
-### Step 10: Feature Completeness Analysis
+### Step 10: Visual Canvas & DSL Analysis
 ```bash
-# Workflow implementations
-ls -1 src/navam_invest/workflows/*.py | wc -l
+# React Flow integration
+grep -r "ReactFlow\|useNodesState\|useEdgesState" frontend/src/ | wc -l
 
-# CLI commands
-grep -c "@click.command\|@typer.command" src/navam_invest/cli.py
+# Node type implementations
+ls -1 frontend/src/components/nodes/*.tsx 2>/dev/null | wc -l
 
-# TUI components
-find src/navam_invest/tui -name "*.py" | wc -l
-grep -c "class.*App\|class.*Widget" src/navam_invest/tui/*.py
+# DSL generator
+grep -r "generateYAML\|generateJSON\|toYAML" frontend/src/lib/dsl/ | wc -l
 
-# Database/storage
-grep -r "sqlite\|SQLite\|database" src/navam_invest/ | wc -l
-grep -r "cache\|Cache" src/navam_invest/ | wc -l
+# DSL parser
+grep -r "parseYAML\|parseJSON\|fromYAML" frontend/src/lib/dsl/ | wc -l
+
+# Template system
+grep -r "template\|Template" frontend/src/services/templates.ts | wc -l
+grep -r "loadTemplate\|useTemplates" frontend/src/ | wc -l
+
+# Storage integration
+grep -r "saveTest\|loadTest\|deleteTest" frontend/src/services/ | wc -l
 ```
 
 ### Step 11: Dependency Health Check
 ```bash
-# Check for outdated packages (requires pip-audit or similar)
-pip list --outdated 2>/dev/null | grep "navam\|anthropic\|langchain\|textual" || echo "No outdated core packages"
+# Frontend dependencies
+cd frontend && npm outdated 2>/dev/null || echo "All packages up to date"
+cd frontend && npm audit --audit-level=moderate 2>/dev/null || echo "No vulnerabilities found"
 
-# Security vulnerabilities (requires pip-audit)
-pip-audit 2>/dev/null || echo "Install pip-audit: pip install pip-audit"
+# Backend dependencies
+cd backend && source venv/bin/activate && pip list --outdated 2>/dev/null | head -20
+cd backend && source venv/bin/activate && pip-audit 2>/dev/null || echo "Install pip-audit: pip install pip-audit"
 
-# Check dependency versions
-grep "anthropic" pyproject.toml
-grep "langchain" pyproject.toml
-grep "textual" pyproject.toml
+# Check key dependency versions
+echo "=== Frontend Core Dependencies ==="
+grep -A 1 '"react":' frontend/package.json
+grep -A 1 '"@xyflow/react":' frontend/package.json
+grep -A 1 '"zustand":' frontend/package.json
+grep -A 1 '"@tauri-apps/api":' frontend/package.json
+
+echo "=== Backend Core Dependencies ==="
+grep "fastapi" backend/pyproject.toml
+grep "anthropic" backend/pyproject.toml
+grep "openai" backend/pyproject.toml
+grep "pydantic" backend/pyproject.toml
 ```
 
 ## Report Generation
@@ -291,23 +365,25 @@ grep "textual" pyproject.toml
 Create a comprehensive markdown report at `metrics/report-{timestamp}.md` with the following structure:
 
 ```markdown
-# navam-invest - Python Package - Code Metrics Report
+# Sentinel - Visual-First Agent Testing Platform - Code Metrics Report
 
 **Generated:** {timestamp}
-**Version:** {pyproject.toml version}
+**Version:** {package.json version}
 **Branch:** {git branch}
 **Commit:** {git commit hash}
-**Python:** 3.9-3.12 compatible
+**Architecture:** Tauri Desktop App (React + TypeScript + Python)
 
 ## Executive Summary
 
 - **Total Lines of Code:** {number}
-- **Python Files:** {number}
-- **Investment Agents:** {count} specialized agents
-- **API Tools:** {count} financial data integrations
-- **Test Coverage:** {percentage}%
-- **Type Hint Coverage:** {percentage}%
-- **LLM Providers:** Anthropic (primary), OpenAI, Gemini, DeepSeek, Ollama
+- **Frontend Files (TS/TSX):** {number}
+- **Backend Files (Python):** {number}
+- **Tauri Files (Rust):** {number}
+- **React Components:** {count} components
+- **Model Providers:** {count} provider integrations (Anthropic, OpenAI, Bedrock, HuggingFace, Ollama)
+- **Test Coverage:** {percentage}% (Frontend: {f_pct}%, Backend: {b_pct}%)
+- **TypeScript Strict Mode:** {yes/no}
+- **Features Completed:** {count}/15 V1 features
 
 ## 1. Code Volume Metrics
 
@@ -734,22 +810,21 @@ Based on the analysis:
 
 **Report Hash:** {sha256 of report content}
 **Analysis Duration:** {seconds}s
-**Generated By:** Claude Code Metrics Analyzer v1.0 (navam-invest)
+**Generated By:** Claude Code Metrics Analyzer v2.0 (Sentinel)
 ```
 
 ## Execution Instructions
 
 1. **Install Required Tools:**
    ```bash
-   # Install cloc for line counting
+   # Install cloc for line counting (should already be installed)
    brew install cloc  # macOS
-   # OR
-   sudo apt-get install cloc  # Linux
 
    # Install tree for directory visualization
    brew install tree  # macOS
-   # OR
-   sudo apt-get install tree  # Linux
+
+   # Install jq for JSON parsing
+   brew install jq  # macOS
 
    # Optional: pip-audit for security checks
    pip install pip-audit
@@ -758,7 +833,7 @@ Based on the analysis:
 2. **Run Analysis:**
    ```bash
    # Ensure you're in the project root directory
-   cd /path/to/navam-invest
+   cd /Users/manavsehgal/Developer/sentinel
 
    # Execute all bash commands from Step 2-11
    # Collect metrics into /tmp/ directory
@@ -774,95 +849,118 @@ Based on the analysis:
 4. **Validate Results:**
    - Verify all sections completed
    - Check accuracy of counts
-   - Validate agent and tool metrics
-   - Confirm test coverage stats
+   - Validate frontend component metrics
+   - Validate backend provider metrics
+   - Confirm test coverage stats (frontend + backend)
    - Review recommendations
 
 5. **Archive and Version:**
    - Commit metrics report to git
    - Tag with version number
-   - Update documentation with findings
+   - Update CLAUDE.md and backlog/active.md with findings
    - Share summary in release notes
 
 ## Success Criteria
 
 The report should include:
-- ✅ All 14 sections completed
-- ✅ Accurate line counts and file statistics
-- ✅ Complete agent architecture analysis
-- ✅ API tool integration metrics
-- ✅ Test coverage breakdown
-- ✅ Feature completeness assessment
-- ✅ Dependency analysis
+- ✅ All 10+ sections completed
+- ✅ Accurate line counts and file statistics (TypeScript, Python, Rust)
+- ✅ Complete frontend component analysis
+- ✅ Complete backend provider and API analysis
+- ✅ Visual canvas and DSL metrics
+- ✅ Test coverage breakdown (frontend + backend)
+- ✅ Feature completeness assessment (15 V1 features)
+- ✅ Dependency analysis (npm + pip + cargo)
 - ✅ Actionable recommendations
 - ✅ Professional formatting
 - ✅ Timestamp and metadata
 
 ## Key Metrics to Watch
 
-**IMPORTANT:** Think harder about the metrics that matter most for the navam-invest package:
+**IMPORTANT:** Focus on the metrics that matter most for the Sentinel visual-first agent testing platform:
 
-### Agent Architecture Quality
-- **Agent Independence:** Minimal cross-agent dependencies
-- **Tool Integration:** Clean agent-tool binding patterns
-- **Router Efficiency:** Fast agent selection with minimal overhead
-- **System Prompt Quality:** Clear, focused prompts under 2000 chars
-- **Test Coverage:** Each agent must have dedicated test suite
+### Frontend Component Quality
+- **Component Independence:** Minimal prop drilling, proper component boundaries
+- **React Flow Integration:** Smooth canvas performance with 100+ nodes
+- **Type Safety:** Strict TypeScript, minimal any usage
+- **Component Reusability:** Shared UI components across features
+- **Test Coverage:** Each component should have dedicated test file
 
-### API Integration Health
-- **Rate Limit Handling:** Graceful degradation, exponential backoff
-- **Cache Efficiency:** High cache hit rates (target >70%)
-- **Error Recovery:** Comprehensive retry logic with fallbacks
-- **API Key Management:** Secure storage, validation
-- **Cost Control:** Token usage monitoring, optimization
+### Visual Canvas Architecture
+- **Round-Trip Fidelity:** Zero data loss in Visual ↔ DSL conversion
+- **Node Rendering Performance:** 60fps with 100+ nodes on canvas
+- **DSL Generation Speed:** < 100ms for typical test specs
+- **Canvas Responsiveness:** Drag-and-drop works reliably
+- **Memory Management:** No memory leaks during long editing sessions
 
-### LLM Integration Efficiency
-- **Token Usage:** Optimize context, minimize waste
-- **Streaming Performance:** Low latency, smooth UX
-- **Cost Tracking:** Monitor API usage per agent
+### Backend Provider Integration
+- **Provider Abstraction:** Consistent interface across all providers
+- **API Response Times:** < 2s for typical test execution
+- **Error Recovery:** Comprehensive retry logic and fallbacks
+- **Provider Testing:** Mock all external API calls in tests
+- **Rate Limit Handling:** Graceful degradation for rate limits
+
+### Model Provider Health
+- **Provider Availability:** Support for 5+ model providers
+- **Execution Success Rate:** > 95% successful test runs
+- **Cost Tracking:** Monitor token usage per provider
 - **Provider Flexibility:** Easy switching between providers
-- **Error Handling:** Graceful LLM failure recovery
+- **Error Handling:** Graceful provider failure recovery
 
 ### Code Health Indicators
-- **Type Hint Coverage:** 100% target for public APIs
-- **Docstring Coverage:** 100% for agents and tools
-- **Test-to-Code Ratio:** Target 1:2 or better
-- **Error Handling:** Try-except in all API calls
-- **Code Style:** Black/Ruff/MyPy compliance
+- **TypeScript Strict Mode:** Enabled with zero errors
+- **Python Type Hints:** 100% coverage for backend public APIs
+- **Test-to-Code Ratio:** Target 1:1 or better
+- **Test Passing Rate:** 100% of tests passing always
+- **Code Style:** ESLint (frontend), Black/Ruff/MyPy (backend) compliance
 
-### Package Quality
-- **PyPI Compliance:** Complete metadata, correct classifiers
-- **Installation UX:** Fast install, minimal dependencies
-- **CLI Usability:** Intuitive commands, helpful errors
-- **TUI Performance:** Responsive, no blocking operations
-- **Documentation:** Comprehensive README, FAQ, guides
+### Application Quality
+- **Desktop App Startup:** < 2s time to interactive
+- **Build Performance:** Frontend build < 10s, Tauri build < 2min
+- **Bundle Size:** Desktop app < 50MB (compressed)
+- **Memory Footprint:** < 200MB typical usage
+- **Documentation:** Complete CLAUDE.md, feature specs, release notes
 
-### Financial Data Quality
-- **Data Freshness:** Real-time when needed, cached when appropriate
-- **Data Accuracy:** Validation, sanity checks
-- **Provider Diversity:** Multiple sources for critical data
-- **Coverage:** All major asset classes, markets, indicators
-- **Reliability:** Fallback providers, error handling
+### Test Coverage Metrics
+- **Frontend Coverage:** Target 80%+ component test coverage
+- **Backend Coverage:** Target 90%+ API and provider coverage
+- **E2E Test Coverage:** Core user journeys covered
+- **Integration Tests:** Canvas ↔ Backend integration tested
+- **Test Reliability:** Zero flaky tests
+
+### Feature Completeness
+- **V1 Features:** Track completion of 15 core features
+- **Visual-First:** All features accessible via GUI
+- **DSL Bidirectional:** Full YAML/JSON import/export support
+- **Template Library:** 6+ high-quality built-in templates
+- **Storage Layer:** Auto-save, test history, persistence working
 
 ### User Experience
-- **Response Time:** Agent queries complete within 10s
-- **Streaming Quality:** Smooth token-by-token display
+- **Canvas Responsiveness:** Drag-drop works 100% reliably
+- **Test Execution:** Real-time progress updates
 - **Error Messages:** User-friendly, actionable guidance
-- **Multi-Agent Coordination:** Seamless handoffs, clear status
-- **Session Persistence:** Reliable state management
+- **Visual Feedback:** Clear state indicators (loading, success, failure)
+- **Keyboard Shortcuts:** Power user workflows supported
 
 ### Performance Indicators
-- **Startup Time:** CLI/TUI launch < 2s
-- **Memory Footprint:** < 100MB typical usage
-- **Cache Performance:** 70%+ hit rate for common queries
-- **Token Efficiency:** Optimize context windows
-- **Concurrent Requests:** Support multiple API calls
+- **Canvas Rendering:** 60fps with 100+ nodes
+- **Test Execution:** < 5s for simple tests
+- **Storage Operations:** < 100ms save/load
+- **Monaco Editor:** Syntax highlighting < 50ms
+- **Hot Module Reload:** < 1s frontend dev rebuilds
 
 ### Security & Privacy
-- **API Key Storage:** Secure, never in code/logs
-- **Data Privacy:** User data stays local
-- **Dependency Security:** No known vulnerabilities
-- **Code Injection Prevention:** Input sanitization
-- **Audit Trail:** Log critical operations
+- **API Key Storage:** Secure local storage, never in code
+- **Data Privacy:** All data stored locally (desktop-first)
+- **Dependency Security:** No critical vulnerabilities
+- **Input Validation:** All user inputs sanitized
+- **Audit Trail:** Test runs and changes logged
+
+### Development Velocity
+- **Feature Delivery:** Consistent release cadence
+- **Bug Fix Time:** Critical bugs fixed within 24h
+- **Technical Debt:** Address debt before adding features
+- **Code Review:** All PRs reviewed before merge
+- **CI/CD:** Automated tests on all commits
 
 Run this analysis monthly or after major feature additions to track project health and guide development priorities.
