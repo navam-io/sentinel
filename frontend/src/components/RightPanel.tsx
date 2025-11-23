@@ -283,12 +283,6 @@ function RightPanel() {
 	const handleAddTestToSuite = (suiteId: string, testId: string) => {
 		const testIdNum = parseInt(testId);
 
-		// Check if it's a template (negative IDs)
-		if (testIdNum < 0) {
-			alert('Please save this template as a test first before adding it to a suite.\n\nClick "Save" button in the Test tab to save it.');
-			return;
-		}
-
 		// Find the test from saved tests
 		const test = savedTests.find((t) => t.id === testIdNum);
 

@@ -187,50 +187,52 @@ export function LibraryCard({
           <Eye className="w-4 h-4 text-sentinel-text-muted" />
         </button>
 
-        {/* Add to Suite (Dropdown) */}
-        <div className="relative">
-          <button
-            onClick={() => setAddToSuiteOpen(!addToSuiteOpen)}
-            className="p-1.5 hover:bg-sentinel-hover rounded transition-colors flex items-center gap-0.5"
-            title="Add to suite"
-            data-testid={`add-to-suite-${test.id}`}
-          >
-            <Plus className="w-4 h-4 text-sentinel-primary" />
-            <ChevronDown className="w-3 h-3 text-sentinel-primary" />
-          </button>
+        {/* Add to Suite (Dropdown) - Only for user tests */}
+        {!isTemplate && (
+          <div className="relative">
+            <button
+              onClick={() => setAddToSuiteOpen(!addToSuiteOpen)}
+              className="p-1.5 hover:bg-sentinel-hover rounded transition-colors flex items-center gap-0.5"
+              title="Add to suite"
+              data-testid={`add-to-suite-${test.id}`}
+            >
+              <Plus className="w-4 h-4 text-sentinel-primary" />
+              <ChevronDown className="w-3 h-3 text-sentinel-primary" />
+            </button>
 
-          {addToSuiteOpen && (
-            <>
-              <div
-                className="fixed inset-0 z-10"
-                onClick={() => setAddToSuiteOpen(false)}
-              />
-              <div className="absolute left-0 top-full mt-1 w-48 bg-sentinel-surface border border-sentinel-border rounded-md shadow-lg z-20">
-                <div className="py-1 max-h-48 overflow-y-auto">
-                  {suites.length === 0 ? (
-                    <div className="px-3 py-2 text-xs text-sentinel-text-muted">
-                      No suites available
-                    </div>
-                  ) : (
-                    suites.map((suite) => (
-                      <button
-                        key={suite.id}
-                        onClick={() => {
-                          onAddToSuite(test.id, suite.id);
-                          setAddToSuiteOpen(false);
-                        }}
-                        className="w-full text-left px-3 py-2 text-sm text-sentinel-text hover:bg-sentinel-hover transition-colors"
-                        data-testid={`suite-option-${suite.id}`}
-                      >
-                        {suite.name}
-                      </button>
-                    ))
-                  )}
+            {addToSuiteOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setAddToSuiteOpen(false)}
+                />
+                <div className="absolute left-0 top-full mt-1 w-48 bg-sentinel-surface border border-sentinel-border rounded-md shadow-lg z-20">
+                  <div className="py-1 max-h-48 overflow-y-auto">
+                    {suites.length === 0 ? (
+                      <div className="px-3 py-2 text-xs text-sentinel-text-muted">
+                        No suites available
+                      </div>
+                    ) : (
+                      suites.map((suite) => (
+                        <button
+                          key={suite.id}
+                          onClick={() => {
+                            onAddToSuite(test.id, suite.id);
+                            setAddToSuiteOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2 text-sm text-sentinel-text hover:bg-sentinel-hover transition-colors"
+                          data-testid={`suite-option-${suite.id}`}
+                        >
+                          {suite.name}
+                        </button>
+                      ))
+                    )}
+                  </div>
                 </div>
-              </div>
-            </>
-          )}
-        </div>
+              </>
+            )}
+          </div>
+        )}
 
         {/* Rename (only for user tests) */}
         {!isTemplate && onRename && (
