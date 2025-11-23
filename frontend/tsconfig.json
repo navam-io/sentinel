@@ -8,7 +8,7 @@
 
 		/* Bundler mode */
 		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": false,
+		"allowImportingTsExtensions": true,
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
@@ -26,7 +26,7 @@
 			"@/*": ["./src/*"]
 		}
 	},
-	"include": ["src"],
-	"exclude": ["**/*.test.ts", "**/*.test.tsx"],
+	"include": ["src", "benchmarks"],
+	"exclude": ["**/*.test.ts", "**/*.test.tsx", "**/*.bench.ts"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

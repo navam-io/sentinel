@@ -1,0 +1,40 @@
+
+> sentinel-frontend@0.15.0 bench
+> vitest bench --run
+
+[33mBenchmarking is an experimental feature.
+Breaking changes might not follow SemVer, please pin Vitest's version when using it.[39m
+
+[1m[46m RUN [49m[22m [36mv4.0.9 [39m[90m/Users/manavsehgal/Developer/sentinel/frontend[39m
+
+
+ [32m✓[39m benchmarks/canvas-rendering.bench.ts[2m > [22mCanvas Rendering Performance[33m 2472[2mms[22m[39m
+     [1mname                                          [22m  [1m        hz[22m  [1m   min[22m  [1m   max[22m  [1m  mean[22m  [1m   p75[22m  [1m   p99[22m  [1m  p995[22m  [1m  p999[22m  [1m   rme[22m  [1msamples[22m
+   [32m·[39m Render 10 nodes                                 [34m319,369.26[39m  [36m0.0027[39m  [36m1.7075[39m  [36m0.0031[39m  [36m0.0031[39m  [36m0.0041[39m  [36m0.0042[39m  [36m0.0094[39m  [2m±0.74%[22m  [2m 159685[22m
+   [32m·[39m Render 50 nodes                                 [34m 61,884.87[39m  [36m0.0142[39m  [36m0.2675[39m  [36m0.0162[39m  [36m0.0160[39m  [36m0.0210[39m  [36m0.0229[39m  [36m0.1227[39m  [2m±0.37%[22m  [2m  30943[22m
+   [32m·[39m Render 100 nodes (target: < 16.67ms for 60fps)  [34m 31,142.97[39m  [36m0.0284[39m  [36m0.2971[39m  [36m0.0321[39m  [36m0.0318[39m  [36m0.0412[39m  [36m0.0460[39m  [36m0.1684[39m  [2m±0.38%[22m  [2m  15572[22m
+   [32m·[39m Render 200 nodes                                [34m 15,409.04[39m  [36m0.0573[39m  [36m0.3311[39m  [36m0.0649[39m  [36m0.0645[39m  [36m0.0861[39m  [36m0.1700[39m  [36m0.2715[39m  [2m±0.45%[22m  [2m   7705[22m
+
+ [32m✓[39m benchmarks/canvas-rendering.bench.ts[2m > [22mNode Data Processing Performance[33m 1875[2mms[22m[39m
+     [1mname                         [22m  [1m        hz[22m  [1m   min[22m  [1m   max[22m  [1m  mean[22m  [1m   p75[22m  [1m   p99[22m  [1m  p995[22m  [1m  p999[22m  [1m   rme[22m  [1msamples[22m
+   [32m·[39m Process 100 node data objects  [34m 82,268.30[39m  [36m0.0105[39m  [36m0.2483[39m  [36m0.0122[39m  [36m0.0118[39m  [36m0.0160[39m  [36m0.0192[39m  [36m0.1219[39m  [2m±0.49%[22m  [2m  41135[22m
+   [32m·[39m Deep clone 100 nodes           [34m 10,101.04[39m  [36m0.0880[39m  [36m0.3935[39m  [36m0.0990[39m  [36m0.0993[39m  [36m0.1288[39m  [36m0.1577[39m  [36m0.3097[39m  [2m±0.39%[22m  [2m   5051[22m
+   [32m·[39m Filter 100 nodes by type       [34m376,489.73[39m  [36m0.0022[39m  [36m0.1680[39m  [36m0.0027[39m  [36m0.0025[39m  [36m0.0034[39m  [36m0.0045[39m  [36m0.0762[39m  [2m±0.59%[22m  [2m 188245[22m
+
+[1m[46m BENCH [49m[22m [36mSummary
+[39m
+  Render 10 nodes[2m - benchmarks/canvas-rendering.bench.ts[2m > [22m[2mCanvas Rendering Performance[22m
+[32m    5.16x [39m[90mfaster than [39mRender 50 nodes
+[32m    10.25x [39m[90mfaster than [39mRender 100 nodes (target: < 16.67ms for 60fps)
+[32m    20.73x [39m[90mfaster than [39mRender 200 nodes
+
+  Generate YAML from 10 nodes[2m - benchmarks/canvas-rendering.bench.ts[2m > [22m[2mDSL Generation Performance[22m
+[32m    NaNx [39m[90mfaster than [39mGenerate YAML from 50 nodes
+[32m    NaNx [39m[90mfaster than [39mGenerate YAML from 100 nodes (target: < 100ms)
+[32m    NaNx [39m[90mfaster than [39mGenerate YAML from 200 nodes
+[32m    NaNx [39m[90mfaster than [39mGenerate YAML from 500 nodes (stress test)
+
+  Filter 100 nodes by type[2m - benchmarks/canvas-rendering.bench.ts[2m > [22m[2mNode Data Processing Performance[22m
+[32m    4.58x [39m[90mfaster than [39mProcess 100 node data objects
+[32m    37.27x [39m[90mfaster than [39mDeep clone 100 nodes
+

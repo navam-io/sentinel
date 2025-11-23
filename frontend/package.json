@@ -1,7 +1,7 @@
 {
 	"name": "sentinel-frontend",
 	"private": true,
-	"version": "0.15.0",
+	"version": "0.16.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
@@ -19,7 +19,12 @@
 		"test:e2e:ui": "playwright test --ui",
 		"test:e2e:headed": "playwright test --headed",
 		"test:e2e:debug": "playwright test --debug",
-		"test:all": "npm test && npm run test:e2e"
+		"test:all": "npm test && npm run test:e2e",
+		"bench": "vitest bench --run",
+		"bench:watch": "vitest bench",
+		"bench:ui": "vitest bench --ui",
+		"bench:build": "tsx benchmarks/build-performance.ts",
+		"bench:all": "tsx benchmarks/run-all-benchmarks.ts"
 	},
 	"dependencies": {
 		"@monaco-editor/react": "^4.7.0",
@@ -53,6 +58,7 @@
 		"jsdom": "^27.2.0",
 		"postcss": "^8.5.6",
 		"tailwindcss": "^4.1.17",
+		"tsx": "^4.20.6",
 		"typescript": "^5.9.3",
 		"vite": "^7.1.10",
 		"vitest": "^4.0.9"

@@ -1,1 +1,1 @@
-Create or update a professionally designed README.md based on popular GitHub repos. Use advanced GitHub markdown. The README.md should have updated information about the project. Prioritze readability, usability, information design, visual appeal, and progressive disclosure of information about the project.
+Create or update a professionally designed README.md based on popular GitHub repos. The README.md should have updated information about the project. Prioritze readability, usability, information design, visual appeal when presenting information about the project.
