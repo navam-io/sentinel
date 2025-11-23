@@ -9,7 +9,7 @@ export interface LibraryCardProps {
   onLoad: (testId: number) => void;
   onRun: (testId: number) => void;
   onAddToSuite: (testId: number, suiteId: string) => void;
-  onRename?: (testId: number, newName: string, category?: TestCategory) => void;
+  onRename?: (testId: number, newName: string, newDescription: string, category?: TestCategory) => void;
   onDelete?: (testId: number) => void;
 }
 
@@ -26,6 +26,7 @@ export function LibraryCard({
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [isRenaming, setIsRenaming] = useState(false);
   const [newName, setNewName] = useState(test.name);
+  const [newDescription, setNewDescription] = useState(test.description || '');
   const [newCategory, setNewCategory] = useState<TestCategory | undefined>(test.category);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
 
@@ -41,9 +42,12 @@ export function LibraryCard({
 
   const handleSaveRename = () => {
     if (newName.trim() && onRename) {
-      const hasChanges = newName !== test.name || newCategory !== test.category;
+      const hasChanges =
+        newName !== test.name ||
+        newDescription !== (test.description || '') ||
+        newCategory !== test.category;
       if (hasChanges) {
-        onRename(test.id, newName.trim(), newCategory);
+        onRename(test.id, newName.trim(), newDescription.trim(), newCategory);
       }
     }
     setIsRenaming(false);
@@ -52,6 +56,7 @@ export function LibraryCard({
 
   const handleCancelRename = () => {
     setNewName(test.name);
+    setNewDescription(test.description || '');
     setNewCategory(test.category);
     setIsRenaming(false);
     setCategoryDropdownOpen(false);
@@ -97,6 +102,22 @@ export function LibraryCard({
               >
                 <X className="w-4 h-4 text-red-500" />
               </button>
+            </div>
+
+            {/* Description Input */}
+            <div className="ml-6">
+              <textarea
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.ctrlKey) handleSaveRename();
+                  if (e.key === 'Escape') handleCancelRename();
+                }}
+                placeholder="Add description (optional)"
+                className="w-full px-2 py-1 text-xs bg-sentinel-bg border border-sentinel-border rounded text-sentinel-text focus:outline-none focus:border-sentinel-primary resize-none"
+                rows={2}
+                data-testid={`description-input-${test.id}`}
+              />
             </div>
 
             {/* Category Dropdown */}
@@ -254,6 +275,7 @@ export function LibraryCard({
             onClick={() => {
               setIsRenaming(true);
               setNewName(test.name);
+              setNewDescription(test.description || '');
               setNewCategory(test.category);
             }}
             className="p-1.5 hover:bg-sentinel-hover rounded transition-colors"

@@ -378,9 +378,9 @@ function RightPanel() {
 		}
 	};
 
-	const handleRenameTest = async (testId: number, newName: string, category?: TestDefinition['category']) => {
+	const handleRenameTest = async (testId: number, newName: string, newDescription: string, category?: TestDefinition['category']) => {
 		try {
-			const updates: any = { name: newName };
+			const updates: any = { name: newName, description: newDescription };
 			if (category !== undefined) {
 				updates.category = category;
 			}

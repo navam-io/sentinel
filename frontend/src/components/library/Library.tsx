@@ -12,7 +12,7 @@ export interface LibraryProps {
   onLoadTest: (testId: number) => void;
   onRunTest: (testId: number) => void;
   onAddToSuite: (testId: number, suiteId: string) => void;
-  onRenameTest: (testId: number, newName: string, category?: TestCategory) => void;
+  onRenameTest: (testId: number, newName: string, newDescription: string, category?: TestCategory) => void;
   onDeleteTest: (testId: number) => void;
 }
 
