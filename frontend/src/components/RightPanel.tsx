@@ -4,6 +4,8 @@ import YamlPreview from './yaml/YamlPreview';
 import TestManager from './tests/TestManager';
 import ExecutionPanel from './execution/ExecutionPanel';
 import { TemplateGallery } from './templates';
+import { TestSuiteOrganizer } from './suites';
+import type { TestSuite } from './suites';
 import { useTemplates } from '../hooks/useTemplates';
 import { useCanvasStore } from '../stores/canvasStore';
 import { parseYAMLToNodes } from '../lib/dsl/generator';
@@ -13,6 +15,7 @@ type Tab = 'yaml' | 'tests' | 'templates' | 'execution';
 
 function RightPanel() {
 	const [activeTab, setActiveTab] = useState<Tab>('yaml');
+	const [suites, setSuites] = useState<TestSuite[]>([]);
 	const { templates, loading: templatesLoading } = useTemplates();
 	const { nodes, setNodes, setEdges } = useCanvasStore();
 
@@ -54,6 +57,80 @@ function RightPanel() {
 		} catch (err) {
 			alert(`Error loading template: ${err instanceof Error ? err.message : String(err)}`);
 		}
+	};
+
+	// Test Suite handlers
+	const handleCreateSuite = (name: string, description?: string) => {
+		const newSuite: TestSuite = {
+			id: `suite-${Date.now()}`,
+			name,
+			description,
+			tests: [],
+			isExpanded: false,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		};
+		setSuites([...suites, newSuite]);
+	};
+
+	const handleRenameSuite = (id: string, newName: string) => {
+		setSuites(
+			suites.map((suite) =>
+				suite.id === id
+					? { ...suite, name: newName, updatedAt: new Date() }
+					: suite
+			)
+		);
+	};
+
+	const handleDeleteSuite = (id: string) => {
+		setSuites(suites.filter((suite) => suite.id !== id));
+	};
+
+	const handleRunSuite = (id: string) => {
+		const suite = suites.find((s) => s.id === id);
+		if (suite) {
+			alert(`Running all tests in suite: ${suite.name}`);
+			// TODO: Implement actual suite execution
+		}
+	};
+
+	const handleExportSuite = (id: string) => {
+		const suite = suites.find((s) => s.id === id);
+		if (suite) {
+			alert(`Exporting suite: ${suite.name}`);
+			// TODO: Implement actual suite export
+		}
+	};
+
+	const handleLoadTest = (testId: string) => {
+		alert(`Loading test: ${testId}`);
+		// TODO: Load test to canvas
+		setActiveTab('yaml');
+	};
+
+	const handleRunTest = (suiteId: string, testId: string) => {
+		alert(`Running test: ${testId} in suite: ${suiteId}`);
+		// TODO: Implement test execution
+	};
+
+	const handleAddTestToSuite = (suiteId: string, testId: string) => {
+		alert(`Adding test ${testId} to suite ${suiteId}`);
+		// TODO: Implement adding test to suite
+	};
+
+	const handleRemoveTestFromSuite = (suiteId: string, testId: string) => {
+		setSuites(
+			suites.map((suite) =>
+				suite.id === suiteId
+					? {
+							...suite,
+							tests: suite.tests.filter((test) => test.id !== testId),
+							updatedAt: new Date(),
+					  }
+					: suite
+			)
+		);
 	};
 
 	return (
@@ -116,7 +193,24 @@ function RightPanel() {
 			{/* Tab Content */}
 			<div className="flex-1 overflow-hidden" data-testid="tab-content">
 				{activeTab === 'yaml' && <YamlPreview />}
-				{activeTab === 'tests' && <TestManager onTestLoaded={() => setActiveTab('yaml')} />}
+				{activeTab === 'tests' && (
+					<div className="h-full overflow-y-auto">
+						<div className="p-4">
+							<TestSuiteOrganizer
+								suites={suites}
+								onCreateSuite={handleCreateSuite}
+								onRenameSuite={handleRenameSuite}
+								onDeleteSuite={handleDeleteSuite}
+								onAddTestToSuite={handleAddTestToSuite}
+								onRemoveTestFromSuite={handleRemoveTestFromSuite}
+								onRunSuite={handleRunSuite}
+								onRunTest={handleRunTest}
+								onExportSuite={handleExportSuite}
+								onLoadTest={handleLoadTest}
+							/>
+						</div>
+					</div>
+				)}
 				{activeTab === 'templates' && (
 					<div className="h-full overflow-y-auto">
 						{templatesLoading ? (

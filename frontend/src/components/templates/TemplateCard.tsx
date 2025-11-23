@@ -32,12 +32,12 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
   className = '',
 }) => {
   const categoryColors = {
-    'qa': 'bg-sentinel-info bg-opacity-20 text-sentinel-info',
-    'code-generation': 'bg-sentinel-secondary bg-opacity-20 text-sentinel-secondary',
-    'browser': 'bg-sentinel-warning bg-opacity-20 text-sentinel-warning',
-    'multi-turn': 'bg-sentinel-primary bg-opacity-20 text-sentinel-primary',
-    'langgraph': 'bg-sentinel-success bg-opacity-20 text-sentinel-success',
-    'safety': 'bg-sentinel-danger bg-opacity-20 text-sentinel-danger',
+    'qa': 'bg-blue-500/20 text-blue-400 border border-blue-500/30',
+    'code-generation': 'bg-purple-500/20 text-purple-400 border border-purple-500/30',
+    'browser': 'bg-orange-500/20 text-orange-400 border border-orange-500/30',
+    'multi-turn': 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30',
+    'langgraph': 'bg-green-500/20 text-green-400 border border-green-500/30',
+    'safety': 'bg-red-500/20 text-red-400 border border-red-500/30',
   };
 
   return (
@@ -54,11 +54,11 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
         <FileText size={16} className="text-sentinel-primary flex-shrink-0" />
         <span
           className={`
-            px-1.5 py-0.5 rounded text-[0.65rem] font-medium
+            px-2 py-1 rounded text-[0.7rem] font-semibold uppercase tracking-wide
             ${categoryColors[template.category]}
           `}
         >
-          {template.category}
+          {template.category.replace('-', ' ')}
         </span>
       </div>
 

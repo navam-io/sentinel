@@ -88,13 +88,15 @@ describe('TemplateCard', () => {
     const onLoad = vi.fn();
     render(<TemplateCard template={mockTemplate} onLoad={onLoad} />);
 
-    const categoryBadges = screen.getAllByText('qa');
-    // The category badge is the one with both bg and text classes
-    const categoryBadge = categoryBadges.find((el) =>
-      el.className.includes('text-sentinel-info') && el.className.includes('bg-sentinel-info')
-    );
+    // Get all elements with 'qa' text and find the category badge (has uppercase class)
+    const elements = screen.getAllByText('qa');
+    const categoryBadge = elements.find(el => el.className.includes('uppercase'));
+
     expect(categoryBadge).toBeDefined();
-    expect(categoryBadge).toHaveClass('text-sentinel-info');
+    expect(categoryBadge).toHaveClass('text-blue-400');
+    expect(categoryBadge).toHaveClass('uppercase'); // CSS uppercase class
+    expect(categoryBadge?.className).toContain('bg-blue-500');
+    expect(categoryBadge?.className).toContain('border-blue-500');
   });
 
   it('applies custom className', () => {
