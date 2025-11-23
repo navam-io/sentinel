@@ -6,6 +6,7 @@ import type {
 	Message,
 	InputSpec,
 	ToolSpec,
+	ToolParameters,
 	InputNodeData,
 	ModelNodeData,
 	ToolNodeData,
@@ -49,7 +50,7 @@ export function generateYAML(nodes: Node[], _edges: Edge[]): string {
 				}
 				if (node.data?.context) {
 					if (!spec.inputs) spec.inputs = {};
-					spec.inputs.context = node.data.context;
+					spec.inputs.context = node.data.context as Record<string, unknown>;
 				}
 				break;
 
@@ -94,7 +95,7 @@ export function generateYAML(nodes: Node[], _edges: Edge[]): string {
 					} else {
 						assertion[assertionType] = String(value);
 					}
-					spec.assertions!.push(assertion as Assertion);
+					spec.assertions!.push(assertion as unknown as Assertion);
 				}
 				break;
 
@@ -110,7 +111,7 @@ export function generateYAML(nodes: Node[], _edges: Edge[]): string {
 							toolSpec.description = String(node.data.toolDescription);
 						}
 						if (node.data.toolParameters) {
-							toolSpec.parameters = node.data.toolParameters;
+							toolSpec.parameters = node.data.toolParameters as ToolParameters;
 						}
 						spec.tools.push(toolSpec);
 					} else {
@@ -350,8 +351,7 @@ export function convertYAMLToTestSpec(yamlString: string): TestSpec {
 		if (parsed.model_config) testSpec.model_config = parsed.model_config;
 		if (parsed.tools) testSpec.tools = parsed.tools;
 		if (parsed.framework) testSpec.framework = parsed.framework;
-		if (parsed.framework_config) testSpec.framework_config = parsed.framework_config;
-
+	
 		return testSpec;
 	} catch (error) {
 		throw new Error(`Failed to parse YAML: ${error instanceof Error ? error.message : String(error)}`);
