@@ -10,7 +10,7 @@ import type {
 	ModelNodeData,
 	ToolNodeData,
 	Assertion,
-} from '../types/test-spec';
+} from '@/types/test-spec';
 
 // Re-export types for convenience
 export type {

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sentinel-backend"
-version = "0.14.5"
+version = "0.19.0"
 description = "Sentinel Backend - Visual-first agent testing platform"
 authors = [
     {name = "Navam", email = "noreply@navam.ai"}
@@ -31,6 +31,8 @@ dev = [
     "black>=25.11.0",
     "ruff>=0.14.5",
     "mypy>=1.18.2",
+    "radon>=6.0.1",
+    "pip-audit>=2.9.0",
 ]
 
 # Black Configuration
