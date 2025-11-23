@@ -4,10 +4,10 @@ Core test execution engine.
 
 from pydantic import BaseModel
 
-from ..core.schema import InputSpec, TestSpec
-from ..providers.anthropic_provider import AnthropicProvider
-from ..providers.base import ExecutionResult, ModelProvider, ProviderConfig
-from ..providers.openai_provider import OpenAIProvider
+from core.schema import InputSpec, TestSpec
+from providers.anthropic_provider import AnthropicProvider
+from providers.base import ExecutionResult, ModelProvider, ProviderConfig
+from providers.openai_provider import OpenAIProvider
 
 
 class ExecutorConfig(BaseModel):
