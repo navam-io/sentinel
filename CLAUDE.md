@@ -118,21 +118,22 @@ sentinel/                      # Project root
 │   │   ├── main.tsx          # React entry point
 │   │   ├── App.tsx           # Main app component
 │   │   ├── index.css         # Global styles + Sentinel theme
-│   │   ├── components/       # React components (57 files, 6,659 LOC)
-│   │   │   ├── canvas/       # React Flow canvas (2 files)
-│   │   │   ├── palette/      # Component palette (2 files)
-│   │   │   ├── nodes/        # Node types (10 components)
-│   │   │   ├── execution/    # Execution panel (1 file)
-│   │   │   ├── templates/    # Template gallery (5 files)
-│   │   │   ├── ui/           # Shared UI components (19 files)
-│   │   │   ├── icons/        # Icon components (13 files)
-│   │   │   └── yaml/         # YAML editor/preview (3 files)
-│   │   ├── hooks/            # Custom React hooks (6 files, 753 LOC)
-│   │   ├── services/         # API client, templates, storage (4 files, 738 LOC)
-│   │   ├── stores/           # Zustand state management (2 files, 542 LOC)
-│   │   ├── lib/dsl/          # DSL generator & parser (2 files, 765 LOC)
+│   │   ├── components/       # React components
+│   │   │   ├── canvas/       # React Flow canvas
+│   │   │   ├── palette/      # Component palette
+│   │   │   ├── nodes/        # Node types (Input, Model, Assertion, Tool, System)
+│   │   │   ├── execution/    # Execution panel
+│   │   │   ├── library/      # Library tab (templates + user tests)
+│   │   │   ├── suites/       # Test suite organizer
+│   │   │   ├── ui/           # Shared UI components
+│   │   │   ├── icons/        # Icon components
+│   │   │   └── yaml/         # YAML editor/preview
+│   │   ├── hooks/            # Custom React hooks
+│   │   ├── services/         # API client, templates, storage
+│   │   ├── stores/           # Zustand state management
+│   │   ├── lib/              # Utilities (DSL, category config, etc.)
 │   │   ├── types/            # TypeScript types
-│   │   └── test/             # Test setup
+│   │   └── test/             # Test setup and utilities
 │   ├── src-tauri/            # Tauri Rust backend
 │   │   ├── src/main.rs       # Tauri desktop app entry
 │   │   ├── Cargo.toml
@@ -143,101 +144,41 @@ sentinel/                      # Project root
 │   └── tsconfig.json         # TypeScript configuration
 │
 ├── backend/                   # Python FastAPI (sibling to frontend/)
-│   ├── api/                  # REST API endpoints (4 files, 208 LOC)
+│   ├── api/                  # REST API endpoints
 │   ├── core/                 # Pydantic schema & parser
-│   ├── providers/            # Model providers (4 files, 297 LOC)
+│   ├── providers/            # Model providers
 │   │   ├── base.py           # Abstract provider
 │   │   ├── anthropic.py      # Anthropic Claude provider
 │   │   └── openai.py         # OpenAI GPT provider
-│   ├── validators/           # Assertion validation (2 files, 272 LOC)
-│   ├── storage/              # SQLite database layer (4 files, 339 LOC)
+│   ├── validators/           # Assertion validation
+│   ├── storage/              # SQLite database layer
 │   ├── executor/             # Test execution engine
-│   ├── tests/                # pytest test suite (7 files, 1,114 LOC)
+│   ├── tests/                # pytest test suite
 │   ├── main.py               # FastAPI app entry
 │   ├── pyproject.toml        # Python project config + tools (Black, Ruff, MyPy)
 │   ├── requirements.txt      # Python dependencies
 │   └── start.sh              # Backend startup script
 │
 ├── tests/                    # Root-level backend tests (pytest)
-├── backlog/                  # Specs, roadmap, release notes (45 files)
+├── backlog/                  # Specs, roadmap, planning
 │   ├── active.md             # Feature roadmap
 │   ├── 03-spec-design-system.md  # Design system specs
-│   ├── 02-spec-visual-first.md   # Visual UI component specs
-│   └── release-*.md          # Release notes (v0.1.0 - v0.14.5)
+│   └── 02-spec-visual-first.md   # Visual UI component specs
+├── releases/                 # Release notes
 ├── templates/                # Built-in YAML test templates
 ├── docs/                     # User documentation
 ├── .env.example              # Environment variables template
 ├── pytest.ini                # Pytest configuration (root level)
 ├── .gitignore
 ├── CLAUDE.md                 # This file
+├── CHANGELOG.md              # Release history summary
 ├── README.md
 └── LICENSE
 ```
 
-## V1 Feature Slices (15 Total)
+## Feature Roadmap
 
-See `backlog/active.md` for complete feature specifications.
-
-### P0 - Foundation (Features 1-4)
-
-1. **Visual Canvas Foundation** (v0.3.0) ✅ COMPLETE (React Migration)
-   - Tauri + React + Vite setup
-   - Node-based canvas (React Flow v12.3)
-   - Component palette (drag-drop)
-   - Visual → YAML generator
-   - YAML preview with edit/copy/download
-   - 5 node types: Input, Model, Assertion, Tool, System
-
-2. **DSL Parser & Visual Importer** (v0.4.0) ← NEXT
-   - YAML/JSON parser (Pydantic)
-   - YAML → Visual importer
-   - Bidirectional sync
-   - Monaco editor integration
-
-3. **Model Provider Architecture & Execution** (v0.3.0)
-   - Anthropic + OpenAI providers
-   - Visual provider marketplace
-   - Local execution engine
-   - Live execution dashboard
-
-4. **Assertion Builder & Validation** (v0.4.0)
-   - Visual assertion builder
-   - All assertion types (8 total)
-   - Validation engine
-   - Visual pass/fail indicators
-
-### P1 - Core Value (Features 5-8)
-
-5. **Design System Implementation** (v0.5.0)
-   - Tailwind theme (Sentinel colors)
-   - Icon system (30+ icons)
-   - Core UI components
-   - Motion/interactions
-
-6. **Record & Replay Test Generation** (v0.6.0)
-   - Recording mode
-   - Smart detection (tools, outputs, patterns)
-   - Auto-generate tests from interactions
-
-7. **Template Gallery & Test Suites** (v0.7.0)
-   - Template gallery (6+ templates)
-   - Test suite organizer
-   - Drag-drop management
-
-8. **Regression Engine & Comparison View** (v0.8.0)
-   - Visual comparison view
-   - Regression detection
-   - Trend charts
-
-### P2 - Extended Value (Features 9-15)
-
-9. **Agentic Framework Support** (v0.9.0) - LangGraph
-10. **AI-Assisted Test Generation** (v0.10.0)
-11. **Collaborative Workspaces** (v0.11.0)
-12. **Additional Model Providers** (v0.12.0) - Bedrock, HuggingFace, Ollama
-13. **Safety Scenarios & Eval Set Builder** (v0.13.0)
-14. **Dashboard & Analytics** (v0.14.0)
-15. **CI/CD Integration & Export** (v0.15.0)
+See `backlog/active.md` for complete V1 feature roadmap and specifications (15 total features across 3 priority tiers).
 
 ## Design References
 
@@ -282,75 +223,20 @@ See `backlog/active.md` for complete feature specifications.
 
 **Current Version**: 0.22.0 (November 23, 2025)
 
-**Status**: Library Tab & Category System COMPLETE ✅
-
 **Latest Release**: v0.22.0 - Unified Library Tab with Category System and Tab Restructure
 
 **Architecture**:
 - Frontend: React 19 + Vite + Tauri 2.0 + React Flow 12.3
 - Backend: FastAPI + Pydantic + SQLite
-- Testing: 24 frontend test files (389 unit tests), 3 E2E test files (21 E2E tests), 7 backend test files (70 tests)
+- Testing: Vitest (frontend unit), Playwright (E2E), pytest (backend)
 
-**Key Metrics (Current)**:
-- Frontend: 76 TypeScript files, ~9,700 LOC
-- Backend: 18 Python files, ~1,400 LOC
-- Components: 57 React components across 8 categories
-- Test Coverage: Frontend 50%+, Backend 85%+
-- Tests: 459 total (389 frontend unit + 70 backend + 21 E2E), 100% pass rate
-- TypeScript Errors: 0
+**Quality Standards**:
+- TypeScript: 0 errors with strict mode enabled
 - Code Quality: Black ✅, Ruff ✅, MyPy ✅, ESLint ✅, Playwright ✅
+- Test Coverage: Frontend 50%+, Backend 85%+
+- All tests passing (459 total)
 
-### Recent Milestones
-
-**v0.22.0 - Library Tab & Category System** (Nov 23, 2025)
-- ✅ Unified Library tab combining templates and user tests
-- ✅ 12-category classification system with color-coded pills
-- ✅ Tab restructure: Test (YAML + Run), Suite, Library
-- ✅ 10 new templates across all categories
-- ✅ Category assignment in test creation/editing
-- ✅ Persistent state for run details and suite expansion
-- ✅ Refined card UI with icon prefixes and optimized toolbar
-
-**v0.17.0 - Code Complexity Analysis** (Nov 22, 2025)
-- ✅ Python complexity analysis with Radon (avg 3.44, target < 10)
-- ✅ 96.4% of functions with A-grade complexity
-- ✅ All modules with A/B maintainability grade
-- ✅ Comprehensive complexity report created
-
-**v0.16.0 - Performance Benchmarking** (Nov 22, 2025)
-- ✅ Canvas rendering: 31,143 ops/sec (519x faster than target)
-- ✅ Build time: 1.68s (83% faster than target)
-- ✅ Bundle size: 677KB (99% smaller than target)
-- ✅ Performance baseline established
-
-**v0.15.0 - E2E Testing Infrastructure** (Nov 22, 2025)
-- ✅ Playwright E2E testing infrastructure configured
-- ✅ 21 E2E tests across 3 critical user journeys
-- ✅ Strategic test IDs added to all components
-- ✅ CI/CD ready with headless, UI, and debug modes
-
-**v0.14.5 - Phase 2 Complete** (Nov 22, 2025)
-- ✅ 50%+ frontend test coverage achieved
-- ✅ 389 passing frontend tests across 24 test files
-- ✅ Comprehensive component testing (canvas, nodes, UI, hooks)
-
-**v0.14.4 - Backend Code Style** (Nov 22, 2025)
-- ✅ Black formatting compliance (line-length: 100)
-- ✅ Ruff linting compliance
-- ✅ MyPy type checking compliance
-
-**v0.14.3 - TypeScript Type Safety** (Nov 22, 2025)
-- ✅ 0 TypeScript errors achieved
-- ✅ Strict type checking enabled
-- ✅ Phase 1 complete
-
-**v0.3.0 - React Migration** (Nov 16, 2025)
-- ✅ Migrated from Svelte to React 19 for production stability
-- ✅ React Flow 12.3 (400k+ weekly downloads, production-ready)
-- ✅ All 5 node types working with 100% reliable drag-and-drop
-- ✅ Tauri desktop app running smoothly
-
-See `CHANGELOG.md` for full release history and `backlog/active.md` for detailed roadmap.
+See `CHANGELOG.md` for full release history, `releases/` for detailed release notes, and `backlog/active.md` for feature roadmap.
 
 ## Development Commands
 
@@ -479,13 +365,11 @@ cd backend && pip install --upgrade -e ".[dev]"
 
 ### Frontend Testing (Vitest + React Testing Library)
 
-The frontend has **24 test files** with **389 passing tests** (100% pass rate):
-
 ```bash
 cd frontend
 
 # Run all tests
-npm test                      # ✅ 24 test files, 389 tests passing
+npm test                      # Run all unit tests
 
 # Watch mode (auto-rerun on changes)
 npm run test:watch
@@ -500,19 +384,15 @@ npm test -- src/components/nodes/InputNode.test.tsx
 npm test -- --coverage
 ```
 
-**Test Coverage by Module:**
-- **Canvas components**: 2 test files (Canvas, CanvasControls)
-- **Node components**: 10 test files (InputNode, ModelNode, AssertionNode, ToolNode, SystemNode, etc.)
-- **UI components**: Multiple test files covering 19 UI components (TrendChart, etc.)
-- **Hooks**: 6 test files (useAutoSave, useTemplates, useExecution, etc.)
-- **Services**: 4 test files (API client, storage, templates)
-- **Stores**: Tests for Zustand state management
-
-**Test Duration**: ~2-3 seconds for full suite
+**Test Coverage Areas:**
+- Canvas components (Canvas, CanvasControls)
+- Node components (InputNode, ModelNode, AssertionNode, ToolNode, SystemNode, etc.)
+- UI components (shared components like TrendChart, etc.)
+- Custom hooks (useAutoSave, useTemplates, useExecution, etc.)
+- Services (API client, storage, templates)
+- Store management (Zustand state)
 
 ### Backend Testing (pytest + pytest-cov)
-
-The backend has **7 test files** with **comprehensive coverage** (90%+):
 
 ```bash
 # IMPORTANT: Run from project root, not backend/
@@ -530,12 +410,12 @@ xdg-open htmlcov/index.html               # Linux
 start htmlcov/index.html                  # Windows
 ```
 
-**Backend Test Coverage:**
-- **Providers**: Anthropic, OpenAI provider tests
-- **Validators**: Assertion validation tests
-- **Storage**: Database operation tests
-- **API**: FastAPI endpoint tests
-- **Core**: Schema and parser tests
+**Backend Test Coverage Areas:**
+- Providers (Anthropic, OpenAI provider tests)
+- Validators (assertion validation tests)
+- Storage (database operation tests)
+- API (FastAPI endpoint tests)
+- Core (schema and parser tests)
 
 **Configuration**: Tests configured in `pytest.ini` (root) and `backend/pyproject.toml`
 
@@ -635,26 +515,20 @@ sentinel import suite.yaml      # Import YAML suite
 
 ### Testing Strategy
 
-**Current Status** (v0.14.5):
-- **Frontend**: 24 test files, 389 passing tests (Vitest + React Testing Library)
-  - Component tests for all node types (10 files)
-  - UI component tests (19 components)
-  - Hook tests (6 custom hooks)
-  - Service tests (API, storage, templates)
-  - Store tests (Zustand state management)
-- **Backend**: 7 test files, 90%+ coverage (pytest + pytest-cov)
-  - Unit tests for providers, validators, storage
-  - Integration tests (mocked model providers)
-  - API endpoint tests
-- **Visual testing**: Screenshot comparisons for UI consistency (future)
-- **Round-trip testing**: Verify Visual → YAML → Visual produces identical results
+**Test Coverage Requirements**:
+- Frontend: Component tests (Vitest + React Testing Library)
+- Backend: Unit + integration tests (pytest + pytest-cov)
+- E2E: User journey tests (Playwright)
+- Visual testing: Screenshot comparisons for UI consistency (future)
+- Round-trip testing: Verify Visual → YAML → Visual produces identical results
 
 **Key Testing Principles**:
 - All new features require tests
 - Frontend: Component-level testing with React Testing Library
 - Backend: Unit + integration tests with mocked external APIs
-- 100% test pass rate enforced
-- Tests run in CI/CD before merge
+- 100% test pass rate enforced before merge
+- Tests run in CI/CD pipeline
+- Test IDs added to all interactive components for E2E testing
 
 ### Performance Targets
 
