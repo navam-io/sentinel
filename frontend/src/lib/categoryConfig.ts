@@ -70,7 +70,7 @@ export const CATEGORY_CONFIG: Record<TestCategory, CategoryConfig> = {
 };
 
 export function getCategoryConfig(category?: TestCategory): CategoryConfig {
-  if (!category) {
+  if (!category || !CATEGORY_CONFIG[category]) {
     return {
       label: 'Uncategorized',
       color: 'bg-gray-500',

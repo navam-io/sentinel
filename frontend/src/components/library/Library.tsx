@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { Search, Filter } from 'lucide-react';
 import { LibraryCard } from './LibraryCard';
 import type { TestDefinition, TestCategory } from '../../types/test-spec';
-import { CATEGORY_CONFIG } from '../../lib/categoryConfig';
+import { CATEGORY_CONFIG, getCategoryConfig } from '../../lib/categoryConfig';
 
 export interface LibraryProps {
   tests: TestDefinition[];
@@ -147,7 +147,7 @@ export function Library({
               }`}
               data-testid={`category-${cat}`}
             >
-              {cat === 'all' ? 'All Categories' : CATEGORY_CONFIG[cat as TestCategory].label}
+              {cat === 'all' ? 'All Categories' : getCategoryConfig(cat as TestCategory).label}
             </button>
           ))}
         </div>
