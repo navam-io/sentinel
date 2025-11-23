@@ -4,81 +4,83 @@
 - generic [ref=e1]:
   - generic [ref=e3]:
     - generic [ref=e4]:
-      - generic [ref=e5]:
-        - heading "Sentinel" [level=1] [ref=e6]
-        - paragraph [ref=e7]: AI Agent Testing Platform
-      - generic [ref=e8]:
-        - heading "Components" [level=2] [ref=e9]
-        - paragraph [ref=e10]: Click to add to canvas
-      - generic [ref=e11]:
-        - generic [ref=e12]:
-          - heading "Inputs" [level=3] [ref=e13]
-          - generic [ref=e14]:
-            - button "Prompt User input prompt" [ref=e15] [cursor=pointer]:
-              - generic [ref=e16]:
-                - img [ref=e17]
-                - generic [ref=e19]:
-                  - generic [ref=e20]: Prompt
-                  - generic [ref=e21]: User input prompt
-            - button "System System prompt" [ref=e22] [cursor=pointer]:
-              - generic [ref=e23]:
-                - img [ref=e24]
-                - generic [ref=e27]:
-                  - generic [ref=e28]: System
-                  - generic [ref=e29]: System prompt
-        - generic [ref=e30]:
-          - heading "Models" [level=3] [ref=e31]
-          - button "Model AI model configuration" [ref=e33] [cursor=pointer]:
-            - generic [ref=e34]:
-              - img [ref=e35]
-              - generic [ref=e38]:
-                - generic [ref=e39]: Model
-                - generic [ref=e40]: AI model configuration
-        - generic [ref=e41]:
-          - heading "Tools" [level=3] [ref=e42]
-          - button "Tool Agent tool" [ref=e44] [cursor=pointer]:
-            - generic [ref=e45]:
-              - img [ref=e46]
-              - generic [ref=e48]:
-                - generic [ref=e49]: Tool
-                - generic [ref=e50]: Agent tool
-        - generic [ref=e51]:
-          - heading "Assertions" [level=3] [ref=e52]
-          - button "Assertion Test assertion" [active] [ref=e54] [cursor=pointer]:
-            - generic [ref=e55]:
-              - img [ref=e56]
-              - generic [ref=e59]:
-                - generic [ref=e60]: Assertion
-                - generic [ref=e61]: Test assertion
-      - button "+ Add Custom Node" [ref=e63]
-    - application [ref=e65]:
-      - generic [ref=e67]:
+      - generic [ref=e6]:
+        - img "Sentinel Logo" [ref=e8]
+        - generic [ref=e9]:
+          - heading "Sentinel" [level=1] [ref=e10]
+          - paragraph [ref=e11]: AI Agent Testing Platform
+      - generic [ref=e12]:
+        - heading "Components" [level=2] [ref=e13]
+        - paragraph [ref=e14]: Click to add to canvas
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - heading "Inputs" [level=3] [ref=e17]
+          - generic [ref=e18]:
+            - button "Prompt User input prompt" [ref=e19] [cursor=pointer]:
+              - generic [ref=e20]:
+                - img [ref=e21]
+                - generic [ref=e23]:
+                  - generic [ref=e24]: Prompt
+                  - generic [ref=e25]: User input prompt
+            - button "System System prompt" [ref=e26] [cursor=pointer]:
+              - generic [ref=e27]:
+                - img [ref=e28]
+                - generic [ref=e31]:
+                  - generic [ref=e32]: System
+                  - generic [ref=e33]: System prompt
+        - generic [ref=e34]:
+          - heading "Models" [level=3] [ref=e35]
+          - button "Model AI model configuration" [ref=e37] [cursor=pointer]:
+            - generic [ref=e38]:
+              - img [ref=e39]
+              - generic [ref=e42]:
+                - generic [ref=e43]: Model
+                - generic [ref=e44]: AI model configuration
+        - generic [ref=e45]:
+          - heading "Tools" [level=3] [ref=e46]
+          - button "Tool Agent tool" [ref=e48] [cursor=pointer]:
+            - generic [ref=e49]:
+              - img [ref=e50]
+              - generic [ref=e52]:
+                - generic [ref=e53]: Tool
+                - generic [ref=e54]: Agent tool
+        - generic [ref=e55]:
+          - heading "Assertions" [level=3] [ref=e56]
+          - button "Assertion Test assertion" [active] [ref=e58] [cursor=pointer]:
+            - generic [ref=e59]:
+              - img [ref=e60]
+              - generic [ref=e63]:
+                - generic [ref=e64]: Assertion
+                - generic [ref=e65]: Test assertion
+      - button "+ Add Custom Node" [ref=e67]
+    - application [ref=e69]:
+      - generic [ref=e71]:
         - generic:
           - generic:
             - img:
-              - group "Edge from 1 to 2" [ref=e68] [cursor=pointer]
+              - group "Edge from 1 to 2" [ref=e72] [cursor=pointer]
             - img:
-              - group "Edge from 2 to 3" [ref=e71] [cursor=pointer]
+              - group "Edge from 2 to 3" [ref=e75] [cursor=pointer]
           - generic:
-            - group [ref=e74]:
-              - generic [ref=e75]:
-                - button "Delete node" [ref=e76] [cursor=pointer]:
-                  - img [ref=e77]
-                - generic [ref=e80]:
+            - group [ref=e78]:
+              - generic [ref=e79]:
+                - button "Delete node" [ref=e80] [cursor=pointer]:
                   - img [ref=e81]
-                  - generic [ref=e83]: Input
-                - textbox "Enter your prompt..." [ref=e85]: What is the capital of France?
-            - group [ref=e87]:
-              - generic [ref=e88]:
-                - button "Delete node" [ref=e89] [cursor=pointer]:
-                  - img [ref=e90]
-                - generic [ref=e93]:
+                - generic [ref=e84]:
+                  - img [ref=e85]
+                  - generic [ref=e87]: Input
+                - textbox "Enter your prompt..." [ref=e89]: What is the capital of France?
+            - group [ref=e91]:
+              - generic [ref=e92]:
+                - button "Delete node" [ref=e93] [cursor=pointer]:
                   - img [ref=e94]
-                  - generic [ref=e97]: Model
-                - generic [ref=e99]:
-                  - generic [ref=e100]:
-                    - generic [ref=e101]: Model
-                    - combobox "Model Model" [ref=e102]:
+                - generic [ref=e97]:
+                  - img [ref=e98]
+                  - generic [ref=e101]: Model
+                - generic [ref=e103]:
+                  - generic [ref=e104]:
+                    - generic [ref=e105]: Model
+                    - combobox "Model Model" [ref=e106]:
                       - option "claude-sonnet-4-5-20250929"
                       - option "claude-haiku-4-5-20251001"
                       - option "claude-opus-4-1-20250805"
@@ -92,49 +94,49 @@
                       - option "gpt-4-turbo"
                       - option "gpt-4"
                       - option "gpt-3.5-turbo"
-                  - generic [ref=e103]:
-                    - generic [ref=e104]: "Temperature: 0.7"
-                    - 'slider "Temperature: 0.7 Temperature: 0.7" [ref=e105] [cursor=pointer]': "0.7"
-            - group [ref=e108]:
-              - generic [ref=e109]:
-                - button "Delete node" [ref=e110] [cursor=pointer]:
-                  - img [ref=e111]
-                - generic [ref=e114]:
+                  - generic [ref=e107]:
+                    - generic [ref=e108]: "Temperature: 0.7"
+                    - 'slider "Temperature: 0.7 Temperature: 0.7" [ref=e109] [cursor=pointer]': "0.7"
+            - group [ref=e112]:
+              - generic [ref=e113]:
+                - button "Delete node" [ref=e114] [cursor=pointer]:
                   - img [ref=e115]
-                  - generic [ref=e118]: Assertion
-                - generic [ref=e120]:
-                  - generic [ref=e121]:
-                    - generic [ref=e122]: Type
-                    - combobox "Type Type" [ref=e123]:
+                - generic [ref=e118]:
+                  - img [ref=e119]
+                  - generic [ref=e122]: Assertion
+                - generic [ref=e124]:
+                  - generic [ref=e125]:
+                    - generic [ref=e126]: Type
+                    - combobox "Type Type" [ref=e127]:
                       - option "Must Contain" [selected]
                       - option "Must Not Contain"
                       - option "Regex Match"
                       - option "Output Type"
                       - option "Max Latency"
-                  - generic [ref=e124]:
-                    - generic [ref=e125]: Value
-                    - textbox "Value Value" [ref=e126]:
+                  - generic [ref=e128]:
+                    - generic [ref=e129]: Value
+                    - textbox "Value Value" [ref=e130]:
                       - /placeholder: Expected value...
                       - text: Paris
-            - group [ref=e128]:
-              - generic [ref=e129]:
-                - button "Delete node" [ref=e130] [cursor=pointer]:
-                  - img [ref=e131]
-                - generic [ref=e134]:
+            - group [ref=e132]:
+              - generic [ref=e133]:
+                - button "Delete node" [ref=e134] [cursor=pointer]:
                   - img [ref=e135]
-                  - generic [ref=e137]: Input
-                - textbox "Enter your prompt..." [ref=e139]: Enter your query here
-            - group [ref=e141]:
-              - generic [ref=e142]:
-                - button "Delete node" [ref=e143] [cursor=pointer]:
-                  - img [ref=e144]
-                - generic [ref=e147]:
+                - generic [ref=e138]:
+                  - img [ref=e139]
+                  - generic [ref=e141]: Input
+                - textbox "Enter your prompt..." [ref=e143]: Enter your query here
+            - group [ref=e145]:
+              - generic [ref=e146]:
+                - button "Delete node" [ref=e147] [cursor=pointer]:
                   - img [ref=e148]
-                  - generic [ref=e151]: Model
-                - generic [ref=e153]:
-                  - generic [ref=e154]:
-                    - generic [ref=e155]: Model
-                    - combobox [ref=e156]:
+                - generic [ref=e151]:
+                  - img [ref=e152]
+                  - generic [ref=e155]: Model
+                - generic [ref=e157]:
+                  - generic [ref=e158]:
+                    - generic [ref=e159]: Model
+                    - combobox [ref=e160]:
                       - option "claude-sonnet-4-5-20250929"
                       - option "claude-haiku-4-5-20251001"
                       - option "claude-opus-4-1-20250805"
@@ -148,116 +150,116 @@
                       - option "gpt-4-turbo"
                       - option "gpt-4"
                       - option "gpt-3.5-turbo"
-                  - generic [ref=e157]:
-                    - generic [ref=e158]: "Temperature: 0.7"
-                    - slider [ref=e159] [cursor=pointer]: "0.7"
-            - group [ref=e162]:
-              - generic [ref=e163]:
-                - button "Delete node" [ref=e164] [cursor=pointer]:
-                  - img [ref=e165]
-                - generic [ref=e168]:
+                  - generic [ref=e161]:
+                    - generic [ref=e162]: "Temperature: 0.7"
+                    - slider [ref=e163] [cursor=pointer]: "0.7"
+            - group [ref=e166]:
+              - generic [ref=e167]:
+                - button "Delete node" [ref=e168] [cursor=pointer]:
                   - img [ref=e169]
-                  - generic [ref=e172]: Assertion
-                - generic [ref=e174]:
-                  - generic [ref=e175]:
-                    - generic [ref=e176]: Type
-                    - combobox [ref=e177]:
+                - generic [ref=e172]:
+                  - img [ref=e173]
+                  - generic [ref=e176]: Assertion
+                - generic [ref=e178]:
+                  - generic [ref=e179]:
+                    - generic [ref=e180]: Type
+                    - combobox [ref=e181]:
                       - option "Must Contain" [selected]
                       - option "Must Not Contain"
                       - option "Regex Match"
                       - option "Output Type"
                       - option "Max Latency"
-                  - generic [ref=e178]:
-                    - generic [ref=e179]: Value
-                    - textbox "Expected value..." [ref=e180]: Paris
+                  - generic [ref=e182]:
+                    - generic [ref=e183]: Value
+                    - textbox "Expected value..." [ref=e184]: Paris
       - img
-      - generic "Control Panel" [ref=e182]:
-        - button "Zoom In" [ref=e183] [cursor=pointer]:
-          - img [ref=e184]
-        - button "Zoom Out" [ref=e186] [cursor=pointer]:
-          - img [ref=e187]
-        - button "Fit View" [ref=e189] [cursor=pointer]:
-          - img [ref=e190]
-        - button "Toggle Interactivity" [ref=e192] [cursor=pointer]:
-          - img [ref=e193]
-      - img "Mini Map" [ref=e196]
-    - generic [ref=e204]:
-      - generic [ref=e205]:
-        - button "YAML" [ref=e206]:
-          - img [ref=e207]
-          - generic [ref=e212]: YAML
-        - button "Tests" [ref=e213]:
-          - img [ref=e214]
-          - generic [ref=e216]: Tests
-        - button "Templates" [ref=e217]:
+      - generic "Control Panel" [ref=e186]:
+        - button "Zoom In" [ref=e187] [cursor=pointer]:
+          - img [ref=e188]
+        - button "Zoom Out" [ref=e190] [cursor=pointer]:
+          - img [ref=e191]
+        - button "Fit View" [ref=e193] [cursor=pointer]:
+          - img [ref=e194]
+        - button "Toggle Interactivity" [ref=e196] [cursor=pointer]:
+          - img [ref=e197]
+      - img "Mini Map" [ref=e200]
+    - generic [ref=e208]:
+      - generic [ref=e209]:
+        - button "YAML" [ref=e210]:
+          - img [ref=e211]
+          - generic [ref=e216]: YAML
+        - button "Tests" [ref=e217]:
           - img [ref=e218]
-          - generic [ref=e220]: Templates
-        - button "Run" [ref=e221]:
+          - generic [ref=e220]: Tests
+        - button "Templates" [ref=e221]:
           - img [ref=e222]
-          - generic [ref=e224]: Run
-      - generic [ref=e226]:
-        - generic [ref=e227]:
-          - generic [ref=e228]:
-            - heading "Test Script" [level=2] [ref=e229]
-            - paragraph [ref=e230]: Auto-generated from canvas
+          - generic [ref=e224]: Templates
+        - button "Run" [ref=e225]:
+          - img [ref=e226]
+          - generic [ref=e228]: Run
+      - generic [ref=e230]:
+        - generic [ref=e231]:
           - generic [ref=e232]:
-            - button "Import YAML/JSON file" [ref=e233]:
-              - img [ref=e234]
-              - text: Import
-            - button "Edit YAML" [ref=e237]:
+            - heading "Test Script" [level=2] [ref=e233]
+            - paragraph [ref=e234]: Auto-generated from canvas
+          - generic [ref=e236]:
+            - button "Import YAML/JSON file" [ref=e237]:
               - img [ref=e238]
+              - text: Import
+            - button "Edit YAML" [ref=e241]:
+              - img [ref=e242]
               - text: Edit
-            - button "Copy YAML to clipboard" [ref=e240]:
-              - img [ref=e241]
-              - text: Copy
-            - button "Download YAML file" [ref=e244]:
+            - button "Copy YAML to clipboard" [ref=e244]:
               - img [ref=e245]
+              - text: Copy
+            - button "Download YAML file" [ref=e248]:
+              - img [ref=e249]
               - text: Save
-        - code [ref=e253]:
-          - generic [ref=e254]:
-            - textbox "Editor content" [ref=e255]
-            - textbox [ref=e256]
-            - generic [ref=e259]:
-              - generic [ref=e262]: "1"
-              - generic [ref=e264]: "2"
-              - generic [ref=e265]:
-                - generic [ref=e266] [cursor=pointer]: 
-                - generic [ref=e267]: "3"
-              - generic [ref=e269]: "4"
-              - generic [ref=e270]:
-                - generic [ref=e271] [cursor=pointer]: 
-                - generic [ref=e272]: "5"
-              - generic [ref=e274]: "6"
-              - generic [ref=e276]: "7"
-              - generic [ref=e277]:
-                - generic [ref=e278] [cursor=pointer]: 
-                - generic [ref=e279]: "8"
-              - generic [ref=e281]: "9"
-              - generic [ref=e282]:
-                - generic [ref=e283] [cursor=pointer]: 
-                - generic [ref=e284]: "10"
-              - generic [ref=e286]: "11"
-              - generic [ref=e288]: "12"
-              - generic [ref=e290]: "13"
-              - generic [ref=e292]: "14"
-            - generic [ref=e315]:
-              - generic [ref=e317]: "name: Test from Canvas"
-              - generic [ref=e319]: "model: gpt-5.1"
-              - generic [ref=e321]: "inputs:"
-              - generic [ref=e323]: "query: Enter your query here"
-              - generic [ref=e325]: "assertions:"
-              - generic [ref=e327]: "- must_contain: Paris"
-              - generic [ref=e329]: "- must_contain: \"\""
-              - generic [ref=e331]: "tags:"
-              - generic [ref=e333]: "- canvas-generated"
-              - generic [ref=e335]: "model_config:"
-              - generic [ref=e337]: "temperature: 0.7"
-              - generic [ref=e339]: "max_tokens: 1000"
-              - generic [ref=e341]: "provider: openai"
-        - generic [ref=e345]:
-          - generic [ref=e346]: Real-time sync enabled
-          - generic [ref=e347]: ● Live
-  - generic [ref=e348]:
+        - code [ref=e257]:
+          - generic [ref=e258]:
+            - textbox "Editor content" [ref=e259]
+            - textbox [ref=e260]
+            - generic [ref=e263]:
+              - generic [ref=e266]: "1"
+              - generic [ref=e268]: "2"
+              - generic [ref=e269]:
+                - generic [ref=e270] [cursor=pointer]: 
+                - generic [ref=e271]: "3"
+              - generic [ref=e273]: "4"
+              - generic [ref=e274]:
+                - generic [ref=e275] [cursor=pointer]: 
+                - generic [ref=e276]: "5"
+              - generic [ref=e278]: "6"
+              - generic [ref=e280]: "7"
+              - generic [ref=e281]:
+                - generic [ref=e282] [cursor=pointer]: 
+                - generic [ref=e283]: "8"
+              - generic [ref=e285]: "9"
+              - generic [ref=e286]:
+                - generic [ref=e287] [cursor=pointer]: 
+                - generic [ref=e288]: "10"
+              - generic [ref=e290]: "11"
+              - generic [ref=e292]: "12"
+              - generic [ref=e294]: "13"
+              - generic [ref=e296]: "14"
+            - generic [ref=e319]:
+              - generic [ref=e321]: "name: Test from Canvas"
+              - generic [ref=e323]: "model: gpt-5.1"
+              - generic [ref=e325]: "inputs:"
+              - generic [ref=e327]: "query: Enter your query here"
+              - generic [ref=e329]: "assertions:"
+              - generic [ref=e331]: "- must_contain: Paris"
+              - generic [ref=e333]: "- must_contain: \"\""
+              - generic [ref=e335]: "tags:"
+              - generic [ref=e337]: "- canvas-generated"
+              - generic [ref=e339]: "model_config:"
+              - generic [ref=e341]: "temperature: 0.7"
+              - generic [ref=e343]: "max_tokens: 1000"
+              - generic [ref=e345]: "provider: openai"
+        - generic [ref=e349]:
+          - generic [ref=e350]: Real-time sync enabled
+          - generic [ref=e351]: ● Live
+  - generic [ref=e352]:
     - alert
     - alert
 ```

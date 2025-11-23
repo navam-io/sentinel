@@ -280,11 +280,11 @@ See `backlog/active.md` for complete feature specifications.
 
 ## Project Status
 
-**Current Version**: 0.15.0 (November 22, 2025)
+**Current Version**: 0.17.0 (November 22, 2025)
 
-**Status**: Phase 3 (Task 8) COMPLETE ✅ - E2E Testing Infrastructure
+**Status**: Phase 3 (Task 10) COMPLETE ✅ - Code Complexity Analysis Infrastructure
 
-**Latest Release**: v0.15.0 - E2E Testing Infrastructure (Phase 3, Task 8 COMPLETE)
+**Latest Release**: v0.17.0 - Code Complexity Analysis Infrastructure (Phase 3, Task 10 COMPLETE)
 
 **Architecture**:
 - Frontend: React 19 + Vite + Tauri 2.0 + React Flow 12.3
@@ -301,6 +301,18 @@ See `backlog/active.md` for complete feature specifications.
 - Code Quality: Black ✅, Ruff ✅, MyPy ✅, ESLint ✅, Playwright ✅
 
 ### Recent Milestones
+
+**v0.17.0 - Code Complexity Analysis** (Nov 22, 2025)
+- ✅ Python complexity analysis with Radon (avg 3.44, target < 10)
+- ✅ 96.4% of functions with A-grade complexity
+- ✅ All modules with A/B maintainability grade
+- ✅ Comprehensive complexity report created
+
+**v0.16.0 - Performance Benchmarking** (Nov 22, 2025)
+- ✅ Canvas rendering: 31,143 ops/sec (519x faster than target)
+- ✅ Build time: 1.68s (83% faster than target)
+- ✅ Bundle size: 677KB (99% smaller than target)
+- ✅ Performance baseline established
 
 **v0.15.0 - E2E Testing Infrastructure** (Nov 22, 2025)
 - ✅ Playwright E2E testing infrastructure configured
