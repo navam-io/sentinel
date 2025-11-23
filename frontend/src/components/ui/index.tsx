@@ -29,6 +29,10 @@ export { TrendChart } from './TrendChart';
 export { Sparkline } from './Sparkline';
 export { PieDonut } from './PieDonut';
 
+// Navigation & Interaction Components
+export { CommandPalette } from './CommandPalette';
+export { AssertionCard } from './AssertionCard';
+
 // Types
 export type { SidebarProps } from './Sidebar';
 export type { TopbarProps } from './Topbar';
@@ -41,3 +45,5 @@ export type { MetricCardProps } from './MetricCard';
 export type { TrendDataPoint, TrendChartProps } from './TrendChart';
 export type { SparklineProps } from './Sparkline';
 export type { PieDataPoint, PieDonutProps } from './PieDonut';
+export type { Command, CommandPaletteProps } from './CommandPalette';
+export type { AssertionCardProps } from './AssertionCard';
