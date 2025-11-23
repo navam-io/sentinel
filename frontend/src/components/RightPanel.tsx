@@ -152,26 +152,61 @@ function RightPanel() {
 	const handleLoadTest = async (testId: string) => {
 		try {
 			const testIdNum = parseInt(testId);
+
+			// First check if it's a saved test
+			const savedTest = savedTests.find((t) => t.id === testIdNum);
+			if (savedTest) {
+				// Load from saved test
+				if (savedTest.canvas_state && savedTest.canvas_state.nodes && savedTest.canvas_state.edges) {
+					setNodes(savedTest.canvas_state.nodes);
+					setEdges(savedTest.canvas_state.edges);
+				} else if (savedTest.spec_yaml) {
+					const { nodes: parsedNodes, edges: parsedEdges } = parseYAMLToNodes(savedTest.spec_yaml);
+					setNodes(parsedNodes);
+					setEdges(parsedEdges);
+				}
+
+				setSavedTestInfo({
+					name: savedTest.name,
+					description: savedTest.description || '',
+				});
+
+				setActiveTab('test');
+				return;
+			}
+
+			// Check if it's a template (templates have non-numeric IDs or ID 0)
+			const template = templates.find((t) => parseInt(t.id) === testIdNum || t.id === testId);
+			if (template && template.yamlContent) {
+				// Load from template YAML
+				const { nodes: parsedNodes, edges: parsedEdges } = parseYAMLToNodes(template.yamlContent);
+				setNodes(parsedNodes);
+				setEdges(parsedEdges);
+
+				// Clear saved test info for templates (they're not saved yet)
+				setSavedTestInfo(null);
+
+				setActiveTab('test');
+				return;
+			}
+
+			// Fallback: try to fetch from API
 			const test = await getTest(testIdNum);
 
-			// Load canvas state if available
 			if (test.canvas_state && test.canvas_state.nodes && test.canvas_state.edges) {
 				setNodes(test.canvas_state.nodes);
 				setEdges(test.canvas_state.edges);
 			} else if (test.spec_yaml) {
-				// Fallback to YAML import if no canvas state
 				const { nodes: parsedNodes, edges: parsedEdges } = parseYAMLToNodes(test.spec_yaml);
 				setNodes(parsedNodes);
 				setEdges(parsedEdges);
 			}
 
-			// Update saved test info
 			setSavedTestInfo({
 				name: test.name,
 				description: test.description || '',
 			});
 
-			// Switch to Test tab to show the loaded test
 			setActiveTab('test');
 		} catch (err) {
 			alert(`Failed to load test: ${err instanceof Error ? err.message : String(err)}`);
@@ -247,6 +282,12 @@ function RightPanel() {
 		const test = savedTests.find((t) => t.id === testIdNum);
 
 		if (!test) {
+			// Check if it's a template
+			const template = templates.find((t) => parseInt(t.id) === testIdNum || t.id === testId);
+			if (template) {
+				alert('Please save this template as a test first before adding it to a suite.\n\nClick "Save" button in the Test tab to save it.');
+				return;
+			}
 			alert('Test not found');
 			return;
 		}
