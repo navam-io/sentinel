@@ -117,7 +117,7 @@ function ComponentPalette() {
 	};
 
 	return (
-		<div className="w-64 bg-sentinel-bg-elevated border-r border-sentinel-border flex flex-col">
+		<div className="w-64 bg-sentinel-bg-elevated border-r border-sentinel-border flex flex-col" data-testid="component-palette">
 			{/* App Title */}
 			<div className="p-4 border-b border-sentinel-border">
 				<h1 className="text-xl font-bold text-sentinel-primary">Sentinel</h1>
@@ -143,6 +143,7 @@ function ComponentPalette() {
 								return (
 									<button
 										key={node.type}
+										data-testid={`palette-node-${node.type}`}
 										className="w-full text-left p-2 bg-sentinel-surface border border-sentinel-border rounded-md hover:bg-sentinel-hover hover:border-sentinel-primary transition-all duration-150 cursor-pointer"
 										onClick={() => handleAddNode(node.type, node.label)}
 									>

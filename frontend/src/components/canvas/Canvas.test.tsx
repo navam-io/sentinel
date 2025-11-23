@@ -11,7 +11,7 @@ vi.mock('@xyflow/react', async () => {
 		...actual,
 		ReactFlow: ({ children, onPaneClick, ...props }: any) => (
 			<div
-				data-testid="react-flow"
+				data-testid="react-flow-canvas"
 				onClick={onPaneClick}
 				{...props}
 			>
@@ -72,7 +72,7 @@ describe('Canvas', () => {
 				</ReactFlowProvider>
 			);
 
-			expect(screen.getByTestId('react-flow')).toBeInTheDocument();
+			expect(screen.getByTestId('react-flow-canvas')).toBeInTheDocument();
 			expect(screen.getByTestId('background')).toBeInTheDocument();
 			expect(screen.getByTestId('controls')).toBeInTheDocument();
 			expect(screen.getByTestId('minimap')).toBeInTheDocument();
@@ -213,7 +213,7 @@ describe('Canvas', () => {
 
 			// Node types are registered internally by ReactFlow
 			// We verify by checking that the component renders without errors
-			expect(screen.getByTestId('react-flow')).toBeInTheDocument();
+			expect(screen.getByTestId('react-flow-canvas')).toBeInTheDocument();
 		});
 
 		it('should support input node type', () => {
@@ -340,7 +340,7 @@ describe('Canvas', () => {
 				</ReactFlowProvider>
 			);
 
-			const reactFlow = container.querySelector('[data-testid="react-flow"]');
+			const reactFlow = container.querySelector('[data-testid="react-flow-canvas"]');
 			expect(reactFlow).toBeInTheDocument();
 		});
 
@@ -353,7 +353,7 @@ describe('Canvas', () => {
 
 			// Zoom levels are configured but not visible in the DOM
 			// We verify the component renders without errors
-			expect(screen.getByTestId('react-flow')).toBeInTheDocument();
+			expect(screen.getByTestId('react-flow-canvas')).toBeInTheDocument();
 		});
 
 		it('should enable Background component', () => {

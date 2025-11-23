@@ -49,7 +49,7 @@ function Canvas() {
 	}), []);
 
 	return (
-		<div className="w-full h-full">
+		<div className="w-full h-full" data-testid="canvas-container">
 			<ReactFlow
 				nodes={nodes}
 				edges={edges}
@@ -61,6 +61,7 @@ function Canvas() {
 				defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
 				minZoom={0.1}
 				maxZoom={4}
+				data-testid="react-flow-canvas"
 			>
 				<Background
 					variant={BackgroundVariant.Dots}

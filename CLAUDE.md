@@ -109,72 +109,67 @@ Priority order:
 **Bidirectional**: Edit in either mode, stay in sync
 **Git-Friendly**: Visual changes show as clean YAML diffs
 
-### File Structure (Current)
+### File Structure (Actual)
 
 ```
-sentinel/
-├── frontend/                   # React + Vite + Tauri
+sentinel/                      # Project root
+├── frontend/                  # React + Vite + Tauri desktop app
 │   ├── src/
-│   │   ├── main.tsx            # React entry point
-│   │   ├── App.tsx             # Main app component
-│   │   ├── index.css           # Global styles + Sentinel theme
-│   │   ├── components/
-│   │   │   ├── canvas/         # React Flow canvas components
-│   │   │   ├── palette/        # Component palette (drag-drop)
-│   │   │   ├── nodes/          # Node type components (React)
-│   │   │   ├── yaml/           # YAML preview component
-│   │   │   ├── assertions/     # Visual assertion builder (future)
-│   │   │   ├── providers/      # Provider marketplace UI (future)
-│   │   │   ├── execution/      # Live execution dashboard (future)
-│   │   │   ├── comparison/     # Regression comparison views (future)
-│   │   │   ├── templates/      # Template gallery (future)
-│   │   │   ├── workspace/      # Collaboration UI (future)
-│   │   │   └── ui/             # shadcn/ui base components (future)
-│   │   ├── lib/
-│   │   │   └── dsl/            # DSL generator & importer
-│   │   ├── stores/             # Zustand stores (state)
-│   │   └── types/              # TypeScript types
-│   ├── src-tauri/              # Tauri Rust backend
-│   │   ├── src/
-│   │   │   └── main.rs         # Tauri app entry
+│   │   ├── main.tsx          # React entry point
+│   │   ├── App.tsx           # Main app component
+│   │   ├── index.css         # Global styles + Sentinel theme
+│   │   ├── components/       # React components (57 files, 6,659 LOC)
+│   │   │   ├── canvas/       # React Flow canvas (2 files)
+│   │   │   ├── palette/      # Component palette (2 files)
+│   │   │   ├── nodes/        # Node types (10 components)
+│   │   │   ├── execution/    # Execution panel (1 file)
+│   │   │   ├── templates/    # Template gallery (5 files)
+│   │   │   ├── ui/           # Shared UI components (19 files)
+│   │   │   ├── icons/        # Icon components (13 files)
+│   │   │   └── yaml/         # YAML editor/preview (3 files)
+│   │   ├── hooks/            # Custom React hooks (6 files, 753 LOC)
+│   │   ├── services/         # API client, templates, storage (4 files, 738 LOC)
+│   │   ├── stores/           # Zustand state management (2 files, 542 LOC)
+│   │   ├── lib/dsl/          # DSL generator & parser (2 files, 765 LOC)
+│   │   ├── types/            # TypeScript types
+│   │   └── test/             # Test setup
+│   ├── src-tauri/            # Tauri Rust backend
+│   │   ├── src/main.rs       # Tauri desktop app entry
 │   │   ├── Cargo.toml
 │   │   └── tauri.conf.json
-│   ├── index.html              # Vite entry point
-│   ├── tailwind.config.js      # Tailwind theme (Sentinel colors)
-│   ├── vite.config.ts          # Vite + React configuration
-│   ├── tsconfig.json           # TypeScript configuration
-│   ├── tsconfig.node.json      # Node environment config
-│   ├── src-svelte-backup/      # Archived Svelte implementation
-│   └── package.json
+│   ├── package.json          # Frontend dependencies
+│   ├── vite.config.ts        # Vite + testing config
+│   ├── tailwind.config.js    # Tailwind theme (Sentinel colors)
+│   └── tsconfig.json         # TypeScript configuration
 │
-├── backend/                    # Python FastAPI
-│   ├── api/                    # REST API endpoints
-│   ├── core/
-│   │   ├── schema.py           # Pydantic models (TestSpec, etc.)
-│   │   └── parser.py           # YAML/JSON parser
-│   ├── providers/              # Model provider implementations
-│   │   ├── base.py             # Abstract provider
-│   │   ├── anthropic.py
-│   │   └── openai.py
-│   ├── executor/               # Test execution engine
-│   ├── validators/             # Assertion validation
-│   ├── frameworks/             # Agentic framework adapters
-│   ├── regression/             # Regression detection
-│   ├── recorder/               # Record & replay
-│   ├── ai/                     # AI test generation
-│   ├── safety/                 # Safety detectors
-│   ├── storage/                # Database layer
-│   ├── main.py                 # FastAPI app
-│   └── requirements.txt
+├── backend/                   # Python FastAPI (sibling to frontend/)
+│   ├── api/                  # REST API endpoints (4 files, 208 LOC)
+│   ├── core/                 # Pydantic schema & parser
+│   ├── providers/            # Model providers (4 files, 297 LOC)
+│   │   ├── base.py           # Abstract provider
+│   │   ├── anthropic.py      # Anthropic Claude provider
+│   │   └── openai.py         # OpenAI GPT provider
+│   ├── validators/           # Assertion validation (2 files, 272 LOC)
+│   ├── storage/              # SQLite database layer (4 files, 339 LOC)
+│   ├── executor/             # Test execution engine
+│   ├── tests/                # pytest test suite (7 files, 1,114 LOC)
+│   ├── main.py               # FastAPI app entry
+│   ├── pyproject.toml        # Python project config + tools (Black, Ruff, MyPy)
+│   ├── requirements.txt      # Python dependencies
+│   └── start.sh              # Backend startup script
 │
-├── backlog/
-│   ├── active.md               # Feature roadmap
-│   ├── spec-03.md              # Design system specs
-│   └── spec-04.md              # Visual UI component specs
-│
-├── templates/                  # Built-in test templates (YAML)
+├── tests/                    # Root-level backend tests (pytest)
+├── backlog/                  # Specs, roadmap, release notes (45 files)
+│   ├── active.md             # Feature roadmap
+│   ├── 03-spec-design-system.md  # Design system specs
+│   ├── 02-spec-visual-first.md   # Visual UI component specs
+│   └── release-*.md          # Release notes (v0.1.0 - v0.14.5)
+├── templates/                # Built-in YAML test templates
+├── docs/                     # User documentation
+├── .env.example              # Environment variables template
+├── pytest.ini                # Pytest configuration (root level)
 ├── .gitignore
-├── CLAUDE.md                   # This file
+├── CLAUDE.md                 # This file
 ├── README.md
 └── LICENSE
 ```
@@ -285,91 +280,305 @@ See `backlog/active.md` for complete feature specifications.
 
 ## Project Status
 
-**Current Version**: 0.3.0 (React Migration Complete)
+**Current Version**: 0.15.0 (November 22, 2025)
 
-**Status**: Visual-first React implementation with production-ready canvas
+**Status**: Phase 3 (Task 8) COMPLETE ✅ - E2E Testing Infrastructure
 
-**Latest Milestone**: Feature 1 - Visual Canvas Foundation (v0.3.0) ✅ COMPLETE
+**Latest Release**: v0.15.0 - E2E Testing Infrastructure (Phase 3, Task 8 COMPLETE)
 
-**Next Feature**: Feature 2 - DSL Parser & Visual Importer (v0.4.0)
+**Architecture**:
+- Frontend: React 19 + Vite + Tauri 2.0 + React Flow 12.3
+- Backend: FastAPI + Pydantic + SQLite
+- Testing: 24 frontend test files (389 unit tests), 3 E2E test files (21 E2E tests), 7 backend test files (70 tests)
 
-**Architecture**: React 19 + Vite + Tauri + React Flow (production-ready)
+**Key Metrics (Current)**:
+- Frontend: 76 TypeScript files, ~9,700 LOC
+- Backend: 18 Python files, ~1,400 LOC
+- Components: 57 React components across 8 categories
+- Test Coverage: Frontend 50%+, Backend 85%+
+- Tests: 459 total (389 frontend unit + 70 backend + 21 E2E), 100% pass rate
+- TypeScript Errors: 0
+- Code Quality: Black ✅, Ruff ✅, MyPy ✅, ESLint ✅, Playwright ✅
 
-### React Migration (November 16, 2025)
+### Recent Milestones
 
-Successfully migrated from **Svelte + SvelteFlow** to **React + React Flow** for production stability:
+**v0.15.0 - E2E Testing Infrastructure** (Nov 22, 2025)
+- ✅ Playwright E2E testing infrastructure configured
+- ✅ 21 E2E tests across 3 critical user journeys
+- ✅ Strategic test IDs added to all components
+- ✅ CI/CD ready with headless, UI, and debug modes
 
-**Why Migrate?**
-- SvelteFlow is alpha (v0.1.28) with known drag-and-drop bugs (#4980, #4418)
-- React Flow is production-ready (v11+, 400k+ weekly downloads)
-- Visual canvas is our CORE feature - cannot compromise on stability
-- Better ecosystem: 100+ React UI libraries vs 10-15 for Svelte
-- shadcn/ui works with v0.dev for AI-assisted development
+**v0.14.5 - Phase 2 Complete** (Nov 22, 2025)
+- ✅ 50%+ frontend test coverage achieved
+- ✅ 389 passing frontend tests across 24 test files
+- ✅ Comprehensive component testing (canvas, nodes, UI, hooks)
 
-**Migration Results**:
-- ✅ ~1,500 LOC migrated in 2-3 hours
-- ✅ All 5 node types working (Input, Model, Assertion, Tool, System)
-- ✅ Drag-and-drop works 100% reliably
-- ✅ Real-time YAML generation
-- ✅ Bidirectional Visual ↔ DSL sync
-- ✅ 0 TypeScript errors, 0 build errors
+**v0.14.4 - Backend Code Style** (Nov 22, 2025)
+- ✅ Black formatting compliance (line-length: 100)
+- ✅ Ruff linting compliance
+- ✅ MyPy type checking compliance
+
+**v0.14.3 - TypeScript Type Safety** (Nov 22, 2025)
+- ✅ 0 TypeScript errors achieved
+- ✅ Strict type checking enabled
+- ✅ Phase 1 complete
+
+**v0.3.0 - React Migration** (Nov 16, 2025)
+- ✅ Migrated from Svelte to React 19 for production stability
+- ✅ React Flow 12.3 (400k+ weekly downloads, production-ready)
+- ✅ All 5 node types working with 100% reliable drag-and-drop
 - ✅ Tauri desktop app running smoothly
 
-See `backlog/06-spec-framework.md` for comprehensive migration analysis.
+See `CHANGELOG.md` for full release history and `backlog/active.md` for detailed roadmap.
 
 ## Development Commands
 
 ### Frontend (React + Vite + Tauri)
 
 ```bash
+# Navigate to frontend directory
 cd frontend
 
 # Install dependencies
 npm install
 
 # Development (browser only - Vite dev server)
-npm run dev
+npm run dev                    # Runs on http://localhost:1420
 
-# Development (Tauri desktop app)
-npm run tauri:dev
+# Development (Tauri desktop app - RECOMMENDED)
+npm run tauri:dev              # Hot reload enabled
 
-# Build desktop app
-npm run tauri:build
+# Build desktop app for production
+npm run tauri:build            # Output: src-tauri/target/release/
 
 # Type checking
-npm run type-check
+npm run type-check             # TypeScript validation (0 errors)
 
-# Production build (browser)
-npm run build
+# Linting
+npm run lint                   # ESLint
+
+# Testing (Unit Tests)
+npm test                       # Run all unit tests (Vitest) - 389 tests
+npm run test:watch             # Watch mode
+npm run test:ui                # Visual test UI
+
+# Testing (E2E Tests)
+npm run test:e2e               # Run all E2E tests (headless) - 21 tests
+npm run test:e2e:ui            # Interactive UI mode (Playwright UI)
+npm run test:e2e:headed        # Headed mode (see browser)
+npm run test:e2e:debug         # Debug mode (step through tests)
+npm run test:all               # Run all tests (unit + E2E)
+
+# Production build (web)
+npm run build                  # Output: dist/
+npm run preview                # Preview production build
 ```
 
 ### Backend (Python FastAPI)
 
+**IMPORTANT**: Backend is at project root level, not inside frontend/
+
 ```bash
+# Navigate to backend directory (from project root)
 cd backend
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+# Create virtual environment (first time only)
+python3 -m venv venv
+source venv/bin/activate      # Windows: venv\Scripts\activate
 
 # Install dependencies
+pip install -e ".[dev]"       # Includes dev tools (pytest, black, ruff, mypy)
+# OR
 pip install -r requirements.txt
 
 # Development server
+uvicorn main:app --reload     # Runs on http://localhost:8000
+# OR use the startup script
+chmod +x start.sh
+./start.sh
+
+# Testing (run from project root)
+cd ..                         # Go to project root
+pytest                        # Run all backend tests
+pytest -v                     # Verbose output
+pytest --cov                  # With coverage report
+pytest backend/tests/test_specific.py  # Run specific test file
+
+# Code Quality Tools
+cd backend
+black .                       # Format code (line-length: 100)
+ruff check .                  # Lint code
+ruff check --fix .            # Auto-fix linting issues
+mypy .                        # Type checking
+
+# View API documentation
+# Start server, then visit:
+# http://localhost:8000/docs   # Swagger UI
+# http://localhost:8000/redoc  # ReDoc
+```
+
+### Full Stack Development
+
+```bash
+# Terminal 1: Start backend API
+cd backend
+source venv/bin/activate
 uvicorn main:app --reload
 
-# Run tests
+# Terminal 2: Start frontend dev server
+cd frontend
+npm run tauri:dev
+
+# Run tests (from project root)
+pytest                        # Backend tests
+cd frontend && npm test       # Frontend tests
+```
+
+### Common Development Tasks
+
+```bash
+# Run all tests (frontend unit + backend + E2E)
+cd frontend && npm run test:all && cd ..
 pytest
 
-# Type checking
-mypy .
+# Check code quality (all)
+cd backend && black . && ruff check . && mypy . && cd ..
+cd frontend && npm run lint && npm run type-check
 
-# Linting
-ruff check .
+# Clean build artifacts
+cd frontend && rm -rf dist build node_modules/.vite
+cd backend && rm -rf htmlcov .pytest_cache .mypy_cache __pycache__
 
-# Format
-black .
+# Update dependencies
+cd frontend && npm update
+cd backend && pip install --upgrade -e ".[dev]"
 ```
+
+## Testing & Code Quality
+
+### Frontend Testing (Vitest + React Testing Library)
+
+The frontend has **24 test files** with **389 passing tests** (100% pass rate):
+
+```bash
+cd frontend
+
+# Run all tests
+npm test                      # ✅ 24 test files, 389 tests passing
+
+# Watch mode (auto-rerun on changes)
+npm run test:watch
+
+# Visual UI (browser-based test runner)
+npm run test:ui
+
+# Test specific file
+npm test -- src/components/nodes/InputNode.test.tsx
+
+# Coverage report
+npm test -- --coverage
+```
+
+**Test Coverage by Module:**
+- **Canvas components**: 2 test files (Canvas, CanvasControls)
+- **Node components**: 10 test files (InputNode, ModelNode, AssertionNode, ToolNode, SystemNode, etc.)
+- **UI components**: Multiple test files covering 19 UI components (TrendChart, etc.)
+- **Hooks**: 6 test files (useAutoSave, useTemplates, useExecution, etc.)
+- **Services**: 4 test files (API client, storage, templates)
+- **Stores**: Tests for Zustand state management
+
+**Test Duration**: ~2-3 seconds for full suite
+
+### Backend Testing (pytest + pytest-cov)
+
+The backend has **7 test files** with **comprehensive coverage** (90%+):
+
+```bash
+# IMPORTANT: Run from project root, not backend/
+pytest                                    # All tests
+pytest -v                                 # Verbose
+pytest --cov=backend --cov-report=html    # HTML coverage report
+pytest -k "test_parser"                   # Run tests matching pattern
+pytest backend/tests/test_providers.py    # Specific file
+pytest -x                                 # Stop on first failure
+pytest --lf                               # Run last failed tests
+
+# View coverage report
+open htmlcov/index.html                   # macOS
+xdg-open htmlcov/index.html               # Linux
+start htmlcov/index.html                  # Windows
+```
+
+**Backend Test Coverage:**
+- **Providers**: Anthropic, OpenAI provider tests
+- **Validators**: Assertion validation tests
+- **Storage**: Database operation tests
+- **API**: FastAPI endpoint tests
+- **Core**: Schema and parser tests
+
+**Configuration**: Tests configured in `pytest.ini` (root) and `backend/pyproject.toml`
+
+### Code Quality Standards
+
+**TypeScript (Frontend):**
+- **Strict mode**: TypeScript strict checks enabled
+- **Zero errors**: `npm run type-check` must pass with 0 errors
+- **ESLint**: Code linting enforced
+- **Component structure**: Functional components with hooks
+
+```bash
+cd frontend
+npm run type-check            # TypeScript validation
+npm run lint                  # ESLint
+```
+
+**Python (Backend):**
+
+All tools configured in `backend/pyproject.toml`:
+
+- **Black**: Code formatting (line-length: 100, target: py313)
+  ```bash
+  cd backend
+  black .                     # Format all Python files
+  black --check .             # Check without modifying
+  ```
+
+- **Ruff**: Fast linting (replaces flake8, isort, pyupgrade)
+  ```bash
+  cd backend
+  ruff check .                # Lint all files
+  ruff check --fix .          # Auto-fix issues
+  ```
+
+- **MyPy**: Type checking (gradual typing enabled)
+  ```bash
+  cd backend
+  mypy .                      # Type check all files
+  ```
+
+**Tool Configuration Highlights:**
+- Black: 100 char line length, Python 3.13 target
+- Ruff: E, W, F, I, N, UP, B, C4, SIM rules enabled
+- MyPy: Strict mode disabled (gradual enablement), warn_return_any enabled
+- Pytest: Coverage reporting enabled, HTML reports generated
+
+### Pre-commit Quality Checks
+
+Before committing code, run:
+
+```bash
+# Backend (from project root)
+cd backend && black . && ruff check --fix . && mypy . && cd .. && pytest
+
+# Frontend
+cd frontend && npm run lint && npm run type-check && npm test
+
+# Quick check (all)
+cd backend && black . && ruff check . && cd ..
+cd frontend && npm run lint && npm test
+```
+
+**CI/CD Integration**: All quality checks should pass before merging PRs.
 
 ## Key CLI Commands (Future)
 
@@ -405,10 +614,26 @@ sentinel import suite.yaml      # Import YAML suite
 
 ### Testing Strategy
 
-- **Frontend**: Component tests (Vitest), E2E tests (Playwright)
-- **Backend**: Unit tests (pytest), integration tests (mocked providers)
-- **Visual testing**: Screenshot comparisons for UI consistency
+**Current Status** (v0.14.5):
+- **Frontend**: 24 test files, 389 passing tests (Vitest + React Testing Library)
+  - Component tests for all node types (10 files)
+  - UI component tests (19 components)
+  - Hook tests (6 custom hooks)
+  - Service tests (API, storage, templates)
+  - Store tests (Zustand state management)
+- **Backend**: 7 test files, 90%+ coverage (pytest + pytest-cov)
+  - Unit tests for providers, validators, storage
+  - Integration tests (mocked model providers)
+  - API endpoint tests
+- **Visual testing**: Screenshot comparisons for UI consistency (future)
 - **Round-trip testing**: Verify Visual → YAML → Visual produces identical results
+
+**Key Testing Principles**:
+- All new features require tests
+- Frontend: Component-level testing with React Testing Library
+- Backend: Unit + integration tests with mocked external APIs
+- 100% test pass rate enforced
+- Tests run in CI/CD before merge
 
 ### Performance Targets
 

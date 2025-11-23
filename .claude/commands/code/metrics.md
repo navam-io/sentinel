@@ -96,6 +96,19 @@ Analyze the following aspects of the Sentinel platform (Tauri desktop app + Reac
 
 ## Implementation Steps
 
+**CRITICAL:** All analysis commands exclude virtual environments, node_modules, and build artifacts to focus ONLY on Sentinel project code.
+
+**Excluded Directories:**
+- `node_modules/` - npm packages
+- `.venv/`, `venv/`, `env/`, `.env/` - Python virtual environments
+- `.claude/` - Claude Code skills with Python virtualenv
+- `site-packages/` - Python packages
+- `dist/`, `build/`, `target/` - Build artifacts
+- `__pycache__/`, `.pytest_cache/`, `.mypy_cache/`, `.ruff_cache/` - Python cache
+- `htmlcov/`, `coverage/`, `.coverage/` - Coverage reports
+- `src-svelte-backup/` - Legacy code backups
+- `.next/`, `.turbo/`, `.parcel-cache/` - Build caches
+
 ### Step 1: Setup Metrics Directory
 ```bash
 mkdir -p metrics
@@ -108,8 +121,12 @@ cd /Users/manavsehgal/Developer/sentinel
 # Install cloc if needed (should already be installed)
 # brew install cloc (macOS)
 
-# Run analysis for Sentinel project structure
-cloc --json --exclude-dir=node_modules,.venv,.git,dist,metrics,target,__pycache__,.mypy_cache,.pytest_cache,htmlcov,src-svelte-backup . > /tmp/cloc-total.json
+# IMPORTANT: Exclude all virtual environments, node_modules, and build artifacts
+# Focus ONLY on Sentinel project code (not dependencies)
+EXCLUDE_DIRS="node_modules,.venv,venv,env,.env,.claude,site-packages,.git,dist,build,metrics,target,__pycache__,.mypy_cache,.pytest_cache,.ruff_cache,htmlcov,coverage,.coverage,src-svelte-backup,.next,.turbo,.parcel-cache"
+
+# Run analysis for Sentinel project structure (PROJECT CODE ONLY)
+cloc --json --exclude-dir=$EXCLUDE_DIRS . > /tmp/cloc-project-only.json
 
 # Analyze frontend modules separately
 cloc --json frontend/src/components/ > /tmp/cloc-frontend-components.json
@@ -118,7 +135,7 @@ cloc --json frontend/src/hooks/ > /tmp/cloc-frontend-hooks.json
 cloc --json frontend/src/stores/ > /tmp/cloc-frontend-stores.json
 cloc --json frontend/src/lib/ > /tmp/cloc-frontend-lib.json
 
-# Analyze backend modules separately
+# Analyze backend modules separately (PROJECT CODE ONLY - no virtualenv)
 cloc --json backend/api/ > /tmp/cloc-backend-api.json
 cloc --json backend/providers/ > /tmp/cloc-backend-providers.json
 cloc --json backend/validators/ > /tmp/cloc-backend-validators.json
@@ -128,25 +145,37 @@ cloc --json backend/tests/ > /tmp/cloc-backend-tests.json
 # Analyze Tauri Rust code
 cloc --json frontend/src-tauri/src/ > /tmp/cloc-tauri.json
 
-# Documentation
+# Documentation (project documentation only)
 cloc --json backlog/ > /tmp/cloc-docs.json
+
+# NOTE: All cloc commands automatically exclude virtual environments and node_modules
+# to focus on actual Sentinel application code, not dependencies.
 ```
 
 ### Step 3: Analyze File Structure
 ```bash
-# Count files by type
-find frontend/src backend -name "*.ts" -o -name "*.tsx" | wc -l
-find backend -name "*.py" | wc -l
-find frontend/src-tauri -name "*.rs" | wc -l
-find . -name "*.md" | wc -l
-find . -name "*.toml" | wc -l
-find . -name "*.json" | wc -l
-find . -name "*.yaml" -o -name "*.yml" | wc -l
+# Count files by type (PROJECT CODE ONLY - exclude virtual environments)
+# TypeScript/TSX files (frontend only, no node_modules)
+find frontend/src -name "*.ts" -o -name "*.tsx" | wc -l
 
-# Analyze directory structure
-tree -L 3 frontend/src/ > /tmp/structure-frontend.txt
-tree -L 3 backend/ > /tmp/structure-backend.txt
-tree -L 2 frontend/src-tauri/ > /tmp/structure-tauri.txt
+# Python files (backend only, no virtualenv)
+find backend -name "*.py" -not -path "*/venv/*" -not -path "*/.venv/*" -not -path "*/site-packages/*" | wc -l
+
+# Rust files (Tauri)
+find frontend/src-tauri -name "*.rs" | wc -l
+
+# Documentation files (project only, no node_modules or virtualenv)
+find . -name "*.md" -not -path "*/node_modules/*" -not -path "*/.venv/*" -not -path "*/venv/*" -not -path "*/.claude/*" | wc -l
+
+# Config files (project only)
+find . -name "*.toml" -not -path "*/node_modules/*" -not -path "*/.venv/*" -not -path "*/venv/*" | wc -l
+find . -name "*.json" -not -path "*/node_modules/*" -not -path "*/.venv/*" -not -path "*/venv/*" -not -path "*/.claude/*" | wc -l
+find . -name "*.yaml" -o -name "*.yml" -not -path "*/node_modules/*" -not -path "*/.venv/*" -not -path "*/venv/*" | wc -l
+
+# Analyze directory structure (exclude node_modules, venv)
+tree -L 3 -I "node_modules|venv|.venv|.claude" frontend/src/ > /tmp/structure-frontend.txt
+tree -L 3 -I "node_modules|venv|.venv|__pycache__|.pytest_cache|.mypy_cache" backend/ > /tmp/structure-backend.txt
+tree -L 2 -I "target" frontend/src-tauri/ > /tmp/structure-tauri.txt
 ```
 
 ### Step 4: Application Metadata Analysis
@@ -201,13 +230,13 @@ done | sort -t: -k2 -n -r | head -10
 
 ### Step 6: Backend Module Analysis
 ```bash
-# Count FastAPI endpoints
-grep -r "@app\.\|@router\." backend/api/ | wc -l
+# Count FastAPI endpoints (PROJECT CODE ONLY)
+grep -r "@app\.\|@router\." backend/api/ --include="*.py" | wc -l
 
-# Count model providers
-ls -1 backend/providers/*.py | grep -v "__init__" | wc -l
+# Count model providers (PROJECT CODE ONLY)
+ls -1 backend/providers/*.py 2>/dev/null | grep -v "__init__" | wc -l
 
-# Analyze provider file sizes
+# Analyze provider file sizes (PROJECT CODE ONLY)
 for provider in backend/providers/*.py; do
   if [[ "$(basename $provider)" != "__init__.py" ]]; then
     lines=$(wc -l < "$provider")
@@ -215,15 +244,15 @@ for provider in backend/providers/*.py; do
   fi
 done
 
-# Count validators
-ls -1 backend/validators/*.py 2>/dev/null | wc -l
+# Count validators (PROJECT CODE ONLY)
+ls -1 backend/validators/*.py 2>/dev/null | grep -v "__init__" | wc -l
 
-# Storage layer analysis
-ls -1 backend/storage/*.py 2>/dev/null | wc -l
+# Storage layer analysis (PROJECT CODE ONLY)
+ls -1 backend/storage/*.py 2>/dev/null | grep -v "__init__" | wc -l
 grep -c "CREATE TABLE\|class.*Base" backend/storage/*.py 2>/dev/null
 
-# Count Pydantic models
-grep -r "class.*BaseModel" backend/ | wc -l
+# Count Pydantic models (exclude venv)
+grep -r "class.*BaseModel" backend/ --include="*.py" --exclude-dir=venv --exclude-dir=.venv --exclude-dir=site-packages | wc -l
 ```
 
 ### Step 7: Test Coverage Analysis
@@ -272,31 +301,31 @@ grep -r "\/\*\*" frontend/src/ | wc -l
 # Count React components
 grep -r "^export \(default \)\?function\|^const.*=.*function\|^const.*=.*=>" frontend/src/components/ | wc -l
 
-# Backend Python quality
-# Count docstrings
-grep -r '"""' backend/ | wc -l
+# Backend Python quality (PROJECT CODE ONLY - exclude virtualenv)
+# Count docstrings (exclude venv)
+grep -r '"""' backend/ --include="*.py" --exclude-dir=venv --exclude-dir=.venv --exclude-dir=site-packages | wc -l
 
-# Count type hints
-grep -r ": str\|: int\|: float\|: bool\|: List\|: Dict\|: Optional\|-> " backend/ | wc -l
+# Count type hints (exclude venv)
+grep -r ": str\|: int\|: float\|: bool\|: List\|: Dict\|: Optional\|-> " backend/ --include="*.py" --exclude-dir=venv --exclude-dir=.venv --exclude-dir=site-packages | wc -l
 
-# Count functions
-grep -r "^def \|^async def " backend/ | wc -l
+# Count functions (exclude venv)
+grep -r "^def \|^async def " backend/ --include="*.py" --exclude-dir=venv --exclude-dir=.venv --exclude-dir=site-packages | wc -l
 
-# Error handling patterns
-grep -r "try:" backend/ | wc -l
-grep -r "except " backend/ | wc -l
-grep -r "raise " backend/ | wc -l
+# Error handling patterns (exclude venv)
+grep -r "try:" backend/ --include="*.py" --exclude-dir=venv --exclude-dir=.venv --exclude-dir=site-packages | wc -l
+grep -r "except " backend/ --include="*.py" --exclude-dir=venv --exclude-dir=.venv --exclude-dir=site-packages | wc -l
+grep -r "raise " backend/ --include="*.py" --exclude-dir=venv --exclude-dir=.venv --exclude-dir=site-packages | wc -l
 
-# Count Pydantic models (strong typing)
-grep -r "class.*BaseModel" backend/ | wc -l
+# Count Pydantic models (strong typing, exclude venv)
+grep -r "class.*BaseModel" backend/ --include="*.py" --exclude-dir=venv --exclude-dir=.venv --exclude-dir=site-packages | wc -l
 ```
 
 ### Step 9: Model Provider Integration Analysis
 ```bash
-# Count provider implementations
-ls -1 backend/providers/*.py | grep -v "__init__\|base" | wc -l
+# Count provider implementations (PROJECT CODE ONLY)
+ls -1 backend/providers/*.py 2>/dev/null | grep -v "__init__\|base" | wc -l
 
-# Analyze provider patterns
+# Analyze provider patterns (PROJECT CODE ONLY)
 for provider in anthropic openai bedrock huggingface ollama; do
   if [[ -f "backend/providers/${provider}.py" ]]; then
     lines=$(wc -l < "backend/providers/${provider}.py")
@@ -304,14 +333,14 @@ for provider in anthropic openai bedrock huggingface ollama; do
   fi
 done
 
-# Check provider API usage
-grep -r "anthropic\|openai\|boto3\|huggingface_hub" backend/providers/ | wc -l
+# Check provider API usage (exclude venv)
+grep -r "anthropic\|openai\|boto3\|huggingface_hub" backend/providers/ --include="*.py" --exclude-dir=venv --exclude-dir=.venv | wc -l
 
-# Test execution patterns
-grep -r "execute_test\|run_test" backend/ | wc -l
+# Test execution patterns (exclude venv)
+grep -r "execute_test\|run_test" backend/ --include="*.py" --exclude-dir=venv --exclude-dir=.venv --exclude-dir=site-packages | wc -l
 
-# Assertion validation
-grep -r "validate.*assertion\|AssertionValidator" backend/ | wc -l
+# Assertion validation (exclude venv)
+grep -r "validate.*assertion\|AssertionValidator" backend/ --include="*.py" --exclude-dir=venv --exclude-dir=.venv --exclude-dir=site-packages | wc -l
 ```
 
 ### Step 10: Visual Canvas & DSL Analysis
@@ -375,7 +404,9 @@ Create a comprehensive markdown report at `metrics/report-{timestamp}.md` with t
 
 ## Executive Summary
 
-- **Total Lines of Code:** {number}
+**IMPORTANT:** All metrics exclude virtual environment libraries (node_modules, .venv, venv, .claude, site-packages) and build artifacts. This report analyzes ONLY Sentinel project code.
+
+- **Total Lines of Code (Project Only):** {number}
 - **Frontend Files (TS/TSX):** {number}
 - **Backend Files (Python):** {number}
 - **Tauri Files (Rust):** {number}
@@ -387,7 +418,9 @@ Create a comprehensive markdown report at `metrics/report-{timestamp}.md` with t
 
 ## 1. Code Volume Metrics
 
-### Lines of Code by Language (Project Only)
+**ANALYSIS SCOPE:** Project code only - excludes node_modules, Python virtualenvs (.venv, venv, .claude/skills), site-packages, and build artifacts (dist, target, __pycache__, etc.)
+
+### Lines of Code by Language (Project Code Only)
 | Language   | Files | Blank | Comment | Code  | Total  | % of Code |
 |------------|-------|-------|---------|-------|--------|-----------|
 | Markdown   | ...   | ...   | 0       | ...   | ...    | ...%      |
@@ -403,9 +436,10 @@ Create a comprehensive markdown report at `metrics/report-{timestamp}.md` with t
 
 **Key Insights:**
 - Documentation-rich: High percentage of Markdown (specs, guides, roadmap)
-- Lean codebase: Application code in TypeScript + Python
+- Lean codebase: Application code in TypeScript + Python (no dependency bloat)
 - TypeScript-heavy: Frontend larger than backend
 - Well-documented: Comment lines across codebase
+- Clean metrics: All virtual environments and node_modules excluded
 
 ### Lines of Code by Module (Sentinel Application)
 | Module                | Files | Lines | Purpose                                    |

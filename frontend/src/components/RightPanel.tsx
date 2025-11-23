@@ -57,10 +57,11 @@ function RightPanel() {
 	};
 
 	return (
-		<div className="w-96 flex flex-col h-full bg-sentinel-bg-elevated border-l border-sentinel-border flex-shrink-0">
+		<div className="w-96 flex flex-col h-full bg-sentinel-bg-elevated border-l border-sentinel-border flex-shrink-0" data-testid="right-panel">
 			{/* Tab Navigation */}
 			<div className="flex border-b border-sentinel-border bg-sentinel-bg">
 				<button
+					data-testid="tab-yaml"
 					onClick={() => setActiveTab('yaml')}
 					className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-xs font-medium transition-colors ${
 						activeTab === 'yaml'
@@ -73,6 +74,7 @@ function RightPanel() {
 				</button>
 
 				<button
+					data-testid="tab-tests"
 					onClick={() => setActiveTab('tests')}
 					className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-xs font-medium transition-colors ${
 						activeTab === 'tests'
@@ -85,6 +87,7 @@ function RightPanel() {
 				</button>
 
 				<button
+					data-testid="tab-templates"
 					onClick={() => setActiveTab('templates')}
 					className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-xs font-medium transition-colors ${
 						activeTab === 'templates'
@@ -97,6 +100,7 @@ function RightPanel() {
 				</button>
 
 				<button
+					data-testid="tab-execution"
 					onClick={() => setActiveTab('execution')}
 					className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-xs font-medium transition-colors ${
 						activeTab === 'execution'
@@ -110,7 +114,7 @@ function RightPanel() {
 			</div>
 
 			{/* Tab Content */}
-			<div className="flex-1 overflow-hidden">
+			<div className="flex-1 overflow-hidden" data-testid="tab-content">
 				{activeTab === 'yaml' && <YamlPreview />}
 				{activeTab === 'tests' && <TestManager onTestLoaded={() => setActiveTab('yaml')} />}
 				{activeTab === 'templates' && (
