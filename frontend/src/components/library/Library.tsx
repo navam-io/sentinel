@@ -8,11 +8,11 @@ export interface LibraryProps {
   tests: TestDefinition[];
   templates: TestDefinition[];
   loading: boolean;
-  suites: Array<{ id: string; name: string }>;
+  suites: Array<{ id: string; name: string; tests: Array<{ id: string; name: string }> }>;
   onLoadTest: (testId: number) => void;
   onRunTest: (testId: number) => void;
   onAddToSuite: (testId: number, suiteId: string) => void;
-  onRenameTest: (testId: number, newName: string) => void;
+  onRenameTest: (testId: number, newName: string, category?: TestCategory) => void;
   onDeleteTest: (testId: number) => void;
 }
 

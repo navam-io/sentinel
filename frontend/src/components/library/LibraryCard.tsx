@@ -1,11 +1,11 @@
-import { Eye, Plus, Edit2, Trash2, ChevronDown, Sparkles, User } from 'lucide-react';
-import { useState } from 'react';
+import { Eye, Plus, Edit2, Trash2, ChevronDown, Sparkles, User, Folder } from 'lucide-react';
+import { useState, useMemo } from 'react';
 import type { TestDefinition, TestCategory } from '../../types/test-spec';
 import { getCategoryConfig, CATEGORY_CONFIG } from '../../lib/categoryConfig';
 
 export interface LibraryCardProps {
   test: TestDefinition;
-  suites: Array<{ id: string; name: string }>;
+  suites: Array<{ id: string; name: string; tests: Array<{ id: string; name: string }> }>;
   onLoad: (testId: number) => void;
   onRun: (testId: number) => void;
   onAddToSuite: (testId: number, suiteId: string) => void;
@@ -31,6 +31,13 @@ export function LibraryCard({
 
   const categoryConfig = getCategoryConfig(test.category);
   const isTemplate = test.is_template ?? false;
+
+  // Find suites that contain this test
+  const assignedSuites = useMemo(() => {
+    return suites.filter(suite =>
+      suite.tests?.some(item => item.id === String(test.id))
+    );
+  }, [suites, test.id]);
 
   const handleRename = () => {
     if (newName.trim() && onRename) {
@@ -144,17 +151,29 @@ export function LibraryCard({
 
       {/* Description */}
       {test.description && (
-        <p className="text-xs text-sentinel-text-muted line-clamp-2 mb-3">
+        <p className="text-xs text-sentinel-text-muted line-clamp-2 mb-2">
           {test.description}
         </p>
       )}
 
-      {/* Category Badge - Bottom Right */}
-      <div className="absolute bottom-3 right-3">
-        <span className={`${categoryConfig.color} text-white text-xs font-medium px-2 py-0.5 rounded`}>
-          {categoryConfig.label}
-        </span>
-      </div>
+      {/* Suite Indicator */}
+      {assignedSuites.length > 0 && (
+        <div className="flex items-center gap-1.5 mb-3">
+          <Folder className="w-3 h-3 text-sentinel-text-muted" />
+          <span className="text-xs text-sentinel-text-muted">
+            {assignedSuites.map(s => s.name).join(', ')}
+          </span>
+        </div>
+      )}
+
+      {/* Category Badge - Bottom Right (hide when delete confirmation showing) */}
+      {!deleteConfirm && (
+        <div className="absolute bottom-3 right-3">
+          <span className={`${categoryConfig.color} text-white text-xs font-medium px-2 py-0.5 rounded`}>
+            {categoryConfig.label}
+          </span>
+        </div>
+      )}
 
       {/* Action Toolbar */}
       <div className="flex items-center gap-1 pt-2 border-t border-sentinel-border opacity-0 group-hover:opacity-100 transition-opacity">

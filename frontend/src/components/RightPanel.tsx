@@ -435,7 +435,7 @@ function RightPanel() {
 							version: 1,
 						}))}
 						loading={loadingTests || templatesLoading}
-						suites={suites.map((s) => ({ id: s.id, name: s.name }))}
+						suites={suites.map((s) => ({ id: s.id, name: s.name, tests: s.tests }))}
 						onLoadTest={(testId) => handleLoadTest(testId.toString())}
 						onRunTest={handleRunTestById}
 						onAddToSuite={handleAddTestToSuiteById}
