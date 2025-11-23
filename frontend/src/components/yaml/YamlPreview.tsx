@@ -166,8 +166,9 @@ function YamlPreview() {
 			setTestName(savedTestInfo.name);
 			setTestDescription(savedTestInfo.description);
 		} else {
-			setTestName('');
-			setTestDescription('');
+			// Prefill with auto-generated values
+			setTestName(displayTestInfo.name);
+			setTestDescription(displayTestInfo.description);
 		}
 		setIsSaveMode(true);
 		setErrorMessage('');
