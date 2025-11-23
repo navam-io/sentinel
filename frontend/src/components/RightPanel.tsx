@@ -153,7 +153,26 @@ function RightPanel() {
 		try {
 			const testIdNum = parseInt(testId);
 
-			// First check if it's a saved test
+			// Check if it's a template (negative IDs)
+			if (testIdNum < 0) {
+				const templateIndex = -testIdNum - 1000;
+				const template = templates[templateIndex];
+
+				if (template && template.yamlContent) {
+					// Load from template YAML
+					const { nodes: parsedNodes, edges: parsedEdges } = parseYAMLToNodes(template.yamlContent);
+					setNodes(parsedNodes);
+					setEdges(parsedEdges);
+
+					// Clear saved test info for templates (they're not saved yet)
+					setSavedTestInfo(null);
+
+					setActiveTab('test');
+					return;
+				}
+			}
+
+			// Check if it's a saved test (positive IDs)
 			const savedTest = savedTests.find((t) => t.id === testIdNum);
 			if (savedTest) {
 				// Load from saved test
@@ -170,21 +189,6 @@ function RightPanel() {
 					name: savedTest.name,
 					description: savedTest.description || '',
 				});
-
-				setActiveTab('test');
-				return;
-			}
-
-			// Check if it's a template (templates have non-numeric IDs or ID 0)
-			const template = templates.find((t) => parseInt(t.id) === testIdNum || t.id === testId);
-			if (template && template.yamlContent) {
-				// Load from template YAML
-				const { nodes: parsedNodes, edges: parsedEdges } = parseYAMLToNodes(template.yamlContent);
-				setNodes(parsedNodes);
-				setEdges(parsedEdges);
-
-				// Clear saved test info for templates (they're not saved yet)
-				setSavedTestInfo(null);
 
 				setActiveTab('test');
 				return;
@@ -277,17 +281,18 @@ function RightPanel() {
 	};
 
 	const handleAddTestToSuite = (suiteId: string, testId: string) => {
-		// Find the test from saved tests
 		const testIdNum = parseInt(testId);
+
+		// Check if it's a template (negative IDs)
+		if (testIdNum < 0) {
+			alert('Please save this template as a test first before adding it to a suite.\n\nClick "Save" button in the Test tab to save it.');
+			return;
+		}
+
+		// Find the test from saved tests
 		const test = savedTests.find((t) => t.id === testIdNum);
 
 		if (!test) {
-			// Check if it's a template
-			const template = templates.find((t) => parseInt(t.id) === testIdNum || t.id === testId);
-			if (template) {
-				alert('Please save this template as a test first before adding it to a suite.\n\nClick "Save" button in the Test tab to save it.');
-				return;
-			}
 			alert('Test not found');
 			return;
 		}
@@ -463,8 +468,8 @@ function RightPanel() {
 				{activeTab === 'library' && (
 					<Library
 						tests={savedTests}
-						templates={templates.map((template) => ({
-							id: parseInt(template.id) || 0,
+						templates={templates.map((template, index) => ({
+							id: -(index + 1000), // Use negative IDs for templates to avoid conflicts
 							name: template.name,
 							description: template.description,
 							category: template.category as TestDefinition['category'],
@@ -474,6 +479,8 @@ function RightPanel() {
 							provider: template.provider,
 							model: template.model,
 							version: 1,
+							// Store original template ID for reference
+							...(template as any).originalId !== undefined ? { originalId: template.id } : {},
 						}))}
 						loading={loadingTests || templatesLoading}
 						suites={suites.map((s) => ({ id: s.id, name: s.name, tests: s.tests }))}
