@@ -1,4 +1,4 @@
-import { Eye, Plus, Edit2, Trash2, ChevronDown, Sparkles, User, Folder } from 'lucide-react';
+import { Eye, Plus, Edit2, Trash2, ChevronDown, Sparkles, User, Folder, Check, X } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import type { TestDefinition, TestCategory } from '../../types/test-spec';
 import { getCategoryConfig, CATEGORY_CONFIG } from '../../lib/categoryConfig';
@@ -39,13 +39,20 @@ export function LibraryCard({
     );
   }, [suites, test.id]);
 
-  const handleRename = () => {
+  const handleSaveRename = () => {
     if (newName.trim() && onRename) {
       const hasChanges = newName !== test.name || newCategory !== test.category;
       if (hasChanges) {
         onRename(test.id, newName.trim(), newCategory);
       }
     }
+    setIsRenaming(false);
+    setCategoryDropdownOpen(false);
+  };
+
+  const handleCancelRename = () => {
+    setNewName(test.name);
+    setNewCategory(test.category);
     setIsRenaming(false);
     setCategoryDropdownOpen(false);
   };
@@ -59,30 +66,37 @@ export function LibraryCard({
       <div className="mb-2">
         {isRenaming && !isTemplate ? (
           <div className="space-y-2">
-            {/* Name Input */}
+            {/* Name Input with Save/Cancel */}
             <div className="flex items-center gap-2">
               <User className="w-4 h-4 text-blue-500 flex-shrink-0" aria-label="User Test" />
               <input
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                onBlur={() => {
-                  // Delay to allow category dropdown clicks
-                  setTimeout(handleRename, 200);
-                }}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleRename();
-                  if (e.key === 'Escape') {
-                    setNewName(test.name);
-                    setNewCategory(test.category);
-                    setIsRenaming(false);
-                    setCategoryDropdownOpen(false);
-                  }
+                  if (e.key === 'Enter') handleSaveRename();
+                  if (e.key === 'Escape') handleCancelRename();
                 }}
                 className="flex-1 px-2 py-1 text-sm font-semibold bg-sentinel-bg border border-sentinel-primary rounded text-sentinel-text focus:outline-none"
                 autoFocus
                 data-testid={`rename-input-${test.id}`}
               />
+              <button
+                onClick={handleSaveRename}
+                className="p-1 hover:bg-sentinel-hover rounded transition-colors"
+                title="Save changes"
+                data-testid={`save-rename-${test.id}`}
+              >
+                <Check className="w-4 h-4 text-green-500" />
+              </button>
+              <button
+                onClick={handleCancelRename}
+                className="p-1 hover:bg-sentinel-hover rounded transition-colors"
+                title="Cancel"
+                data-testid={`cancel-rename-${test.id}`}
+              >
+                <X className="w-4 h-4 text-red-500" />
+              </button>
             </div>
 
             {/* Category Dropdown */}
