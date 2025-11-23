@@ -1,6 +1,7 @@
 import { LucideIcon, MessageSquare, Settings, Cpu, Wrench, CheckCircle2 } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import type { NodeData } from '../../types/test-spec';
+import logo from '../../assets/sentinel-square-abstract-transparent.png';
 
 interface NodeType {
 	type: string;
@@ -118,10 +119,24 @@ function ComponentPalette() {
 
 	return (
 		<div className="w-64 bg-sentinel-bg-elevated border-r border-sentinel-border flex flex-col" data-testid="component-palette">
-			{/* App Title */}
-			<div className="p-4 border-b border-sentinel-border">
-				<h1 className="text-xl font-bold text-sentinel-primary">Sentinel</h1>
-				<p className="text-xs text-sentinel-text-muted whitespace-nowrap">AI Agent Testing Platform</p>
+			{/* App Title with Logo */}
+			<div className="px-4 pt-6 pb-4 border-b border-sentinel-border">
+				<div className="flex flex-col items-center gap-3">
+					<div className="w-full flex justify-center">
+						<img
+							src={logo}
+							alt="Sentinel Logo"
+							className="w-40 h-40 object-contain"
+							style={{
+								filter: 'drop-shadow(0 4px 16px rgba(99, 102, 241, 0.5))'
+							}}
+						/>
+					</div>
+					<div className="text-center -mt-2">
+						<h1 className="text-xl font-bold text-sentinel-primary">Sentinel</h1>
+						<p className="text-xs text-sentinel-text-muted mt-1">AI Agent Testing Platform</p>
+					</div>
+				</div>
 			</div>
 
 			{/* Palette Header */}
