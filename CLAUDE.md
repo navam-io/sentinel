@@ -280,11 +280,11 @@ See `backlog/active.md` for complete feature specifications.
 
 ## Project Status
 
-**Current Version**: 0.17.0 (November 22, 2025)
+**Current Version**: 0.22.0 (November 23, 2025)
 
-**Status**: Phase 3 (Task 10) COMPLETE ✅ - Code Complexity Analysis Infrastructure
+**Status**: Library Tab & Category System COMPLETE ✅
 
-**Latest Release**: v0.17.0 - Code Complexity Analysis Infrastructure (Phase 3, Task 10 COMPLETE)
+**Latest Release**: v0.22.0 - Unified Library Tab with Category System and Tab Restructure
 
 **Architecture**:
 - Frontend: React 19 + Vite + Tauri 2.0 + React Flow 12.3
@@ -301,6 +301,15 @@ See `backlog/active.md` for complete feature specifications.
 - Code Quality: Black ✅, Ruff ✅, MyPy ✅, ESLint ✅, Playwright ✅
 
 ### Recent Milestones
+
+**v0.22.0 - Library Tab & Category System** (Nov 23, 2025)
+- ✅ Unified Library tab combining templates and user tests
+- ✅ 12-category classification system with color-coded pills
+- ✅ Tab restructure: Test (YAML + Run), Suite, Library
+- ✅ 10 new templates across all categories
+- ✅ Category assignment in test creation/editing
+- ✅ Persistent state for run details and suite expansion
+- ✅ Refined card UI with icon prefixes and optimized toolbar
 
 **v0.17.0 - Code Complexity Analysis** (Nov 22, 2025)
 - ✅ Python complexity analysis with Radon (avg 3.44, target < 10)

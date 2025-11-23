@@ -7,6 +7,127 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.22.0] - 2025-11-23
+
+### Added
+
+#### Library Tab & Category System
+- **Unified Library Tab**: Combined templates and user tests in a single browsable interface with search and filters
+- **12-Category Classification System**: Tests can now be categorized as:
+  - Q&A (blue)
+  - Code Generation (purple)
+  - Browser Agents (green)
+  - Multi-turn (orange)
+  - LangGraph (cyan)
+  - Safety (red)
+  - Data Analysis (indigo)
+  - Reasoning (pink)
+  - Tool Use (yellow)
+  - API Testing (teal)
+  - UI Testing (lime)
+  - Regression (amber)
+- **Category Management**: Dropdown selectors in both Test and Library tabs for assigning categories
+- **10 New Templates**: Production-ready templates across all categories
+  - API Testing Template (REST endpoint testing)
+  - Data Analysis Template (data processing tasks)
+  - JSON Generation Template (structured output validation)
+  - LangGraph Workflow Template (agentic workflows with state)
+  - Multi-Agent Template (conversation scenarios)
+  - Prompt Injection Test (safety and security testing)
+  - Reasoning Template (logic and problem-solving)
+  - Regression Template (consistency testing)
+  - Tool Use Template (function calling)
+  - UI Testing Template (visual and interaction testing)
+
+#### UI Components
+- **LibraryCard Component**: Refined card UI distinguishing templates (✨ Sparkles icon) from user tests (👤 User icon)
+- **Library Component**: Unified view with:
+  - Search functionality
+  - Type filters (All / Templates / My Tests)
+  - Category filters (all 12 categories)
+  - Consistent action toolbar
+- **TestTab Component**: Integrated YAML editor with collapsible run section
+- **Category Configuration**: Centralized system with labels, colors, and descriptions
+
+#### State Persistence
+- **Run Details State**: User preference for expanded/collapsed state saved to localStorage
+- **Default Collapsed**: Run Details section starts minimized for cleaner interface
+- **Saved Test Info**: Test name and description persisted in Zustand store across tab switches
+- **Suite Expansion**: Folder expansion state maintained across all actions and app reloads
+
+### Changed
+
+#### Tab Restructure
+- **"YAML" → "Test"**: Now includes integrated run section below YAML editor
+- **"Tests" → "Suite"**: Focused on test suite organization (MyTests section removed)
+- **"Templates" → "Library"**: Unified view combining templates and user tests
+- **Removed "Run" Tab**: Functionality integrated into Test tab as collapsible section
+
+#### UI Improvements
+- **LibraryCard Layout**:
+  - Icon prefix for title (Sparkles/User)
+  - Category pill moved to bottom-right corner
+  - Toolbar buttons left-aligned in order: Load (👁), Add to Suite ([+▼]), Rename (✎), Delete (🗑)
+- **Execution Panel**: Removed redundant "Test Execution" title and duplicate test info block
+- **Test Tab Layout**:
+  - YAML editor at top (resizes when run section expands)
+  - Collapsible run section at bottom (smooth height transitions)
+  - Both sections independently scrollable
+  - Custom scrollbar (only visible during scroll)
+
+### Fixed
+- Test name and description no longer disappear when switching tabs
+- Suite folders maintain expansion state across all actions and app reloads
+- YAML tab always displays test info (auto-generated if not saved)
+- Run tab shows which test will execute before running
+
+### Backend
+
+#### Database Schema
+- Added `category` field to `TestDefinition` model (nullable string, indexed)
+- Added `is_template` boolean field to distinguish templates from user tests
+- Updated `to_dict()` serialization to include new fields
+
+#### API Endpoints
+- Updated `POST /api/tests/create`:
+  - Added `category` parameter (optional)
+  - Added `is_template` parameter (default: false)
+- Updated `PUT /api/tests/{test_id}`:
+  - Added `category` parameter (optional)
+  - Added `is_template` parameter (optional)
+- Updated `TestResponse` model to include `category` and `is_template`
+- Added `renameTest()` convenience function to API client
+- Updated `updateTest()` to support category changes
+
+#### Repository Methods
+- Enhanced `create()` method with `category` and `is_template` parameters
+- Enhanced `update()` method with `category` and `is_template` parameters
+- Database migration support for new schema fields
+
+### Technical Details
+- **New Files**: 10 templates + 8 TypeScript components (1,622+ LOC added)
+- **Modified Files**: 16 TypeScript files + 8 Python files (231 LOC modified)
+- **Type Definitions**: Added `TestCategory` type union and configuration system
+- **Code Quality**:
+  - 0 TypeScript errors
+  - All ESLint checks passing
+  - Black, Ruff, MyPy compliance maintained
+- **Commit**: d128ed7
+- **Components Added**:
+  - `Library.tsx` (unified template/test browser)
+  - `LibraryCard.tsx` (refined card UI)
+  - `TestTab.tsx` (YAML + run integration)
+  - `categoryConfig.ts` (category system)
+  - Barrel exports for organization
+
+### Migration Notes
+- No breaking changes to existing test definitions
+- Existing tests will show as "Uncategorized" until category is assigned
+- All templates automatically marked with `is_template: true`
+- Database will auto-migrate with new columns (nullable/defaulted)
+
+---
+
 ## [0.3.1] - 2025-11-16
 
 ### Changed
@@ -144,6 +265,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Release Date | Type | Key Features |
 |---------|--------------|------|--------------|
+| **0.22.0** | 2025-11-23 | Minor | Unified Library + 12-category system + Tab restructure |
 | **0.3.1** | 2025-11-16 | Patch | Click-to-add UX + Production tests |
 | **0.3.0** | 2025-11-16 | Minor | React migration (Svelte → React) |
 | **0.2.0** | 2025-11-15 | Minor | Visual Canvas Foundation (Svelte) |
