@@ -1,8 +1,10 @@
 import { useState, useMemo } from 'react';
-import { Download, Upload, Edit3, Copy, Check, X } from 'lucide-react';
+import { Download, Upload, Edit3, Copy, Check, X, Save } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import { generateYAML, parseYAMLToNodes } from '../../lib/dsl/generator';
 import { writeText } from '@tauri-apps/plugin-clipboard-manager';
+import { createTest } from '../../services/api';
+import type { TestSpec, CanvasState } from '../../services/api';
 import MonacoYamlEditor from './MonacoYamlEditor';
 
 function YamlPreview() {
@@ -10,6 +12,11 @@ function YamlPreview() {
 	const [isEditMode, setIsEditMode] = useState(false);
 	const [editedYaml, setEditedYaml] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
+	const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+	const [testName, setTestName] = useState('');
+	const [testDescription, setTestDescription] = useState('');
+	const [isSaving, setIsSaving] = useState(false);
+	const [saveSuccess, setSaveSuccess] = useState(false);
 
 	// Generate YAML from current canvas state
 	const yaml = useMemo(() => generateYAML(nodes, edges), [nodes, edges]);
@@ -108,6 +115,77 @@ function YamlPreview() {
 		input.click();
 	};
 
+	const openSaveDialog = () => {
+		if (nodes.length === 0) {
+			alert('Please add nodes to the canvas before saving');
+			return;
+		}
+		setTestName('');
+		setTestDescription('');
+		setIsSaveDialogOpen(true);
+		setSaveSuccess(false);
+		setErrorMessage('');
+	};
+
+	const saveTestToBackend = async () => {
+		if (!testName.trim()) {
+			setErrorMessage('Please enter a test name');
+			return;
+		}
+
+		setIsSaving(true);
+		setErrorMessage('');
+
+		try {
+			// Parse YAML to get TestSpec
+			const { nodes: parsedNodes } = parseYAMLToNodes(yaml);
+			if (parsedNodes.length === 0) {
+				setErrorMessage('Failed to parse YAML. Please check your test configuration.');
+				setIsSaving(false);
+				return;
+			}
+
+			// Create canvas state
+			const canvasState: CanvasState = {
+				nodes,
+				edges,
+			};
+
+			// Parse YAML to TestSpec (this validates the YAML)
+			const testSpec: TestSpec = JSON.parse(
+				JSON.stringify(
+					parsedNodes.reduce((acc: Record<string, unknown>, node) => {
+						return { ...acc, ...(node.data as Record<string, unknown>) };
+					}, {})
+				)
+			) as TestSpec;
+
+			// Call API to create test
+			await createTest({
+				name: testName.trim(),
+				description: testDescription.trim() || undefined,
+				spec: testSpec,
+				spec_yaml: yaml,
+				canvas_state: canvasState,
+			});
+
+			// Show success
+			setSaveSuccess(true);
+			setTestName('');
+			setTestDescription('');
+
+			// Close dialog after brief delay
+			setTimeout(() => {
+				setIsSaveDialogOpen(false);
+				setSaveSuccess(false);
+			}, 1500);
+		} catch (err) {
+			setErrorMessage(`Failed to save test: ${err instanceof Error ? err.message : String(err)}`);
+		} finally {
+			setIsSaving(false);
+		}
+	};
+
 	return (
 		<div className="h-full bg-sentinel-bg-elevated flex flex-col">
 			{/* Preview Header */}
@@ -124,6 +202,15 @@ function YamlPreview() {
 					<div className="flex gap-2">
 						{!isEditMode ? (
 							<>
+								<button
+									onClick={openSaveDialog}
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-success text-white rounded hover:opacity-90 transition-opacity duration-120"
+									title="Save test to backend"
+									aria-label="Save test to backend"
+								>
+									<Save size={12} strokeWidth={2} />
+									Save Test
+								</button>
 								<button
 									onClick={importYamlFile}
 									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120"
@@ -154,11 +241,11 @@ function YamlPreview() {
 								<button
 									onClick={downloadYaml}
 									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
-									title="Download YAML"
+									title="Download YAML file"
 									aria-label="Download YAML file"
 								>
 									<Download size={12} strokeWidth={2} />
-									Save
+									Download
 								</button>
 							</>
 						) : (
@@ -221,6 +308,84 @@ function YamlPreview() {
 					</>
 				)}
 			</div>
+
+			{/* Save Test Dialog */}
+			{isSaveDialogOpen && (
+				<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+					<div className="bg-sentinel-bg-elevated border border-sentinel-border rounded-lg p-4 max-w-md w-full">
+						<h3 className="text-sm font-semibold text-sentinel-text mb-3">Save Test</h3>
+
+						{saveSuccess ? (
+							<div className="p-4 text-center">
+								<div className="text-sentinel-success mb-2">
+									<Check size={32} className="mx-auto" />
+								</div>
+								<p className="text-sm text-sentinel-text">Test saved successfully!</p>
+								<p className="text-xs text-sentinel-text-muted mt-1">
+									Check the Tests tab to add it to a suite
+								</p>
+							</div>
+						) : (
+							<>
+								<div className="mb-3">
+									<label className="text-xs text-sentinel-text-muted mb-1 block">
+										Test Name *
+									</label>
+									<input
+										type="text"
+										value={testName}
+										onChange={(e) => setTestName(e.target.value)}
+										className="w-full px-3 py-2 bg-sentinel-surface border border-sentinel-border rounded text-sentinel-text text-sm focus:outline-none focus:ring-2 focus:ring-sentinel-primary"
+										placeholder="e.g., Login Test"
+										autoFocus
+										onKeyDown={(e) => {
+											if (e.key === 'Enter' && testName.trim()) {
+												saveTestToBackend();
+											}
+										}}
+									/>
+								</div>
+
+								<div className="mb-4">
+									<label className="text-xs text-sentinel-text-muted mb-1 block">
+										Description (optional)
+									</label>
+									<textarea
+										value={testDescription}
+										onChange={(e) => setTestDescription(e.target.value)}
+										rows={3}
+										className="w-full px-3 py-2 bg-sentinel-surface border border-sentinel-border rounded text-sentinel-text text-sm focus:outline-none focus:ring-2 focus:ring-sentinel-primary resize-none"
+										placeholder="Describe what this test does..."
+									/>
+								</div>
+
+								{errorMessage && (
+									<div className="mb-3 p-2 bg-sentinel-error bg-opacity-20 border border-sentinel-error rounded text-xs text-sentinel-error">
+										{errorMessage}
+									</div>
+								)}
+
+								<div className="flex gap-2 justify-end">
+									<button
+										onClick={() => setIsSaveDialogOpen(false)}
+										className="px-3 py-1.5 text-sm bg-sentinel-surface border border-sentinel-border rounded text-sentinel-text hover:bg-sentinel-hover transition-colors duration-120"
+										disabled={isSaving}
+									>
+										Cancel
+									</button>
+									<button
+										onClick={saveTestToBackend}
+										disabled={isSaving || !testName.trim()}
+										className="px-3 py-1.5 text-sm bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120 disabled:opacity-50 disabled:cursor-not-allowed"
+									>
+										{isSaving ? 'Saving...' : 'Save Test'}
+									</button>
+								</div>
+							</>
+						)}
+					</div>
+				</div>
+			)}
 
 			{/* Preview Footer */}
 			<div className="p-3 border-t border-sentinel-border">

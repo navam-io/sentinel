@@ -10,17 +10,23 @@ import { useTemplates } from '../hooks/useTemplates';
 import { useCanvasStore } from '../stores/canvasStore';
 import { parseYAMLToNodes } from '../lib/dsl/generator';
 import { listTests, type TestDefinition } from '../services/api';
+import { loadSuites, saveSuites } from '../services/suiteStorage';
 import type { Template } from './templates/TemplateCard';
 
 type Tab = 'yaml' | 'tests' | 'templates' | 'execution';
 
 function RightPanel() {
 	const [activeTab, setActiveTab] = useState<Tab>('yaml');
-	const [suites, setSuites] = useState<TestSuite[]>([]);
+	const [suites, setSuites] = useState<TestSuite[]>(() => loadSuites());
 	const [savedTests, setSavedTests] = useState<TestDefinition[]>([]);
 	const [loadingTests, setLoadingTests] = useState(false);
 	const { templates, loading: templatesLoading } = useTemplates();
 	const { nodes, setNodes, setEdges } = useCanvasStore();
+
+	// Auto-save suites to localStorage whenever they change
+	useEffect(() => {
+		saveSuites(suites);
+	}, [suites]);
 
 	const handleLoadTemplate = (template: Template) => {
 		try {
