@@ -1,27 +1,26 @@
 import { useState, useEffect } from 'react';
-import { FileCode, FolderOpen, Play, Library } from 'lucide-react';
-import YamlPreview from './yaml/YamlPreview';
-import TestManager from './tests/TestManager';
-import ExecutionPanel from './execution/ExecutionPanel';
-import { TemplateGallery } from './templates';
+import { FileCode, FolderOpen, Library as LibraryIcon } from 'lucide-react';
+import TestTab from './yaml/TestTab';
+import { Library } from './library/Library';
 import { TestSuiteOrganizer } from './suites';
 import type { TestSuite, TestSuiteItem } from './suites';
 import { useTemplates } from '../hooks/useTemplates';
 import { useCanvasStore } from '../stores/canvasStore';
 import { parseYAMLToNodes } from '../lib/dsl/generator';
-import { listTests, type TestDefinition } from '../services/api';
+import { listTests, getTest, executeTest, deleteTest, updateTest, type TestDefinition } from '../services/api';
 import { loadSuites, saveSuites } from '../services/suiteStorage';
+import { convertYAMLToTestSpec } from '../lib/dsl/generator';
 import type { Template } from './templates/TemplateCard';
 
-type Tab = 'yaml' | 'tests' | 'templates' | 'execution';
+type Tab = 'test' | 'suite' | 'library';
 
 function RightPanel() {
-	const [activeTab, setActiveTab] = useState<Tab>('yaml');
+	const [activeTab, setActiveTab] = useState<Tab>('test');
 	const [suites, setSuites] = useState<TestSuite[]>(() => loadSuites());
 	const [savedTests, setSavedTests] = useState<TestDefinition[]>([]);
 	const [loadingTests, setLoadingTests] = useState(false);
 	const { templates, loading: templatesLoading } = useTemplates();
-	const { nodes, setNodes, setEdges } = useCanvasStore();
+	const { nodes, setNodes, setEdges, setSavedTestInfo } = useCanvasStore();
 
 	// Auto-save suites to localStorage whenever they change
 	useEffect(() => {
@@ -57,8 +56,11 @@ function RightPanel() {
 				setNodes(parsedNodes);
 				setEdges(parsedEdges);
 
-				// Switch to YAML tab to show the loaded template
-				setActiveTab('yaml');
+				// Clear saved test info since we loaded a template
+				setSavedTestInfo(null);
+
+				// Switch to Test tab to show the loaded template
+				setActiveTab('test');
 
 				// Show success message
 				alert(`Successfully loaded template: ${template.name}`);
@@ -82,8 +84,8 @@ function RightPanel() {
 			}
 		};
 
-		// Load tests when Tests tab is active
-		if (activeTab === 'tests') {
+		// Load tests when Suite or Library tab is active
+		if (activeTab === 'suite' || activeTab === 'library') {
 			loadSavedTests();
 		}
 	}, [activeTab]);
@@ -116,12 +118,27 @@ function RightPanel() {
 		setSuites(suites.filter((suite) => suite.id !== id));
 	};
 
-	const handleRunSuite = (id: string) => {
+	const handleToggleSuite = (id: string) => {
+		setSuites(
+			suites.map((suite) =>
+				suite.id === id ? { ...suite, isExpanded: !suite.isExpanded } : suite
+			)
+		);
+	};
+
+	const handleRunSuite = async (id: string) => {
 		const suite = suites.find((s) => s.id === id);
-		if (suite) {
-			alert(`Running all tests in suite: ${suite.name}`);
-			// TODO: Implement actual suite execution
+		if (!suite || suite.tests.length === 0) {
+			alert('No tests to run in this suite');
+			return;
 		}
+
+		// Run all tests in the suite sequentially
+		for (const test of suite.tests) {
+			await handleRunTest(id, test.id);
+		}
+
+		alert(`Completed running all ${suite.tests.length} tests in suite: ${suite.name}`);
 	};
 
 	const handleExportSuite = (id: string) => {
@@ -132,15 +149,96 @@ function RightPanel() {
 		}
 	};
 
-	const handleLoadTest = (testId: string) => {
-		alert(`Loading test: ${testId}`);
-		// TODO: Load test to canvas
-		setActiveTab('yaml');
+	const handleLoadTest = async (testId: string) => {
+		try {
+			const testIdNum = parseInt(testId);
+			const test = await getTest(testIdNum);
+
+			// Load canvas state if available
+			if (test.canvas_state && test.canvas_state.nodes && test.canvas_state.edges) {
+				setNodes(test.canvas_state.nodes);
+				setEdges(test.canvas_state.edges);
+			} else if (test.spec_yaml) {
+				// Fallback to YAML import if no canvas state
+				const { nodes: parsedNodes, edges: parsedEdges } = parseYAMLToNodes(test.spec_yaml);
+				setNodes(parsedNodes);
+				setEdges(parsedEdges);
+			}
+
+			// Update saved test info
+			setSavedTestInfo({
+				name: test.name,
+				description: test.description || '',
+			});
+
+			// Switch to Test tab to show the loaded test
+			setActiveTab('test');
+		} catch (err) {
+			alert(`Failed to load test: ${err instanceof Error ? err.message : String(err)}`);
+		}
 	};
 
-	const handleRunTest = (suiteId: string, testId: string) => {
-		alert(`Running test: ${testId} in suite: ${suiteId}`);
-		// TODO: Implement test execution
+	const handleRunTest = async (suiteId: string, testId: string) => {
+		try {
+			// Fetch the full test definition
+			const testIdNum = parseInt(testId);
+			const test = await getTest(testIdNum);
+
+			// Execute the test using its spec
+			let testSpec;
+			if (test.spec) {
+				testSpec = test.spec;
+			} else if (test.spec_yaml) {
+				testSpec = convertYAMLToTestSpec(test.spec_yaml);
+			} else {
+				throw new Error('Test has no specification');
+			}
+
+			const result = await executeTest(testSpec);
+
+			// Update test status in suite based on result
+			const status = result.all_assertions_passed ? 'passed' : 'failed';
+			setSuites(
+				suites.map((suite) =>
+					suite.id === suiteId
+						? {
+								...suite,
+								tests: suite.tests.map((t) =>
+									t.id === testId
+										? { ...t, status, lastRun: new Date() }
+										: t
+								),
+								updatedAt: new Date(),
+						  }
+						: suite
+				)
+			);
+
+			// Show result notification
+			const message = result.all_assertions_passed
+				? `✅ Test "${test.name}" passed!`
+				: `❌ Test "${test.name}" failed`;
+			alert(message);
+		} catch (err) {
+			// Update test status to failed on error
+			setSuites(
+				suites.map((suite) =>
+					suite.id === suiteId
+						? {
+								...suite,
+								tests: suite.tests.map((t) =>
+									t.id === testId
+										? { ...t, status: 'failed' as const, lastRun: new Date() }
+										: t
+								),
+								updatedAt: new Date(),
+						  }
+						: suite
+				)
+			);
+
+			alert(`Failed to run test: ${err instanceof Error ? err.message : String(err)}`);
+		}
 	};
 
 	const handleAddTestToSuite = (suiteId: string, testId: string) => {
@@ -189,67 +287,118 @@ function RightPanel() {
 		);
 	};
 
+	const handleAddTestToSuiteById = (testId: number, suiteId: string) => {
+		handleAddTestToSuite(suiteId, testId.toString());
+	};
+
+	const handleRunTestById = async (testId: number) => {
+		try {
+			const test = await getTest(testId);
+
+			let testSpec;
+			if (test.spec) {
+				testSpec = test.spec;
+			} else if (test.spec_yaml) {
+				testSpec = convertYAMLToTestSpec(test.spec_yaml);
+			} else {
+				throw new Error('Test has no specification');
+			}
+
+			const result = await executeTest(testSpec);
+
+			const message = result.all_assertions_passed
+				? `✅ Test "${test.name}" passed!`
+				: `❌ Test "${test.name}" failed`;
+			alert(message);
+		} catch (err) {
+			alert(`Failed to run test: ${err instanceof Error ? err.message : String(err)}`);
+		}
+	};
+
+	const handleDeleteTestById = async (testId: number) => {
+		try {
+			await deleteTest(testId);
+			// Refresh the tests list
+			const response = await listTests(100, 0);
+			setSavedTests(response.tests);
+		} catch (err) {
+			alert(`Failed to delete test: ${err instanceof Error ? err.message : String(err)}`);
+		}
+	};
+
+	const refreshTests = async () => {
+		setLoadingTests(true);
+		try {
+			const response = await listTests(100, 0);
+			setSavedTests(response.tests);
+		} catch (err) {
+			console.error('Failed to load tests:', err);
+		} finally {
+			setLoadingTests(false);
+		}
+	};
+
+	const handleRenameTest = async (testId: number, newName: string, category?: TestDefinition['category']) => {
+		try {
+			const updates: any = { name: newName };
+			if (category !== undefined) {
+				updates.category = category;
+			}
+			await updateTest(testId, updates);
+			await refreshTests();
+		} catch (err) {
+			alert(`Failed to rename test: ${err instanceof Error ? err.message : String(err)}`);
+		}
+	};
+
 	return (
 		<div className="w-96 flex flex-col h-full bg-sentinel-bg-elevated border-l border-sentinel-border flex-shrink-0" data-testid="right-panel">
 			{/* Tab Navigation */}
 			<div className="flex border-b border-sentinel-border bg-sentinel-bg">
 				<button
-					data-testid="tab-yaml"
-					onClick={() => setActiveTab('yaml')}
+					data-testid="tab-test"
+					onClick={() => setActiveTab('test')}
 					className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-xs font-medium transition-colors ${
-						activeTab === 'yaml'
+						activeTab === 'test'
 							? 'text-sentinel-primary border-b-2 border-sentinel-primary'
 							: 'text-sentinel-text-muted hover:text-sentinel-text hover:bg-sentinel-surface'
 					}`}
 				>
 					<FileCode size={16} strokeWidth={2} />
-					<span>YAML</span>
+					<span>Test</span>
 				</button>
 
 				<button
-					data-testid="tab-tests"
-					onClick={() => setActiveTab('tests')}
+					data-testid="tab-suite"
+					onClick={() => setActiveTab('suite')}
 					className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-xs font-medium transition-colors ${
-						activeTab === 'tests'
+						activeTab === 'suite'
 							? 'text-sentinel-primary border-b-2 border-sentinel-primary'
 							: 'text-sentinel-text-muted hover:text-sentinel-text hover:bg-sentinel-surface'
 					}`}
 				>
 					<FolderOpen size={16} strokeWidth={2} />
-					<span>Tests</span>
+					<span>Suite</span>
 				</button>
 
 				<button
-					data-testid="tab-templates"
-					onClick={() => setActiveTab('templates')}
+					data-testid="tab-library"
+					onClick={() => setActiveTab('library')}
 					className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-xs font-medium transition-colors ${
-						activeTab === 'templates'
+						activeTab === 'library'
 							? 'text-sentinel-primary border-b-2 border-sentinel-primary'
 							: 'text-sentinel-text-muted hover:text-sentinel-text hover:bg-sentinel-surface'
 					}`}
 				>
-					<Library size={16} strokeWidth={2} />
-					<span>Templates</span>
-				</button>
-
-				<button
-					data-testid="tab-execution"
-					onClick={() => setActiveTab('execution')}
-					className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-xs font-medium transition-colors ${
-						activeTab === 'execution'
-							? 'text-sentinel-primary border-b-2 border-sentinel-primary'
-							: 'text-sentinel-text-muted hover:text-sentinel-text hover:bg-sentinel-surface'
-					}`}
-				>
-					<Play size={16} strokeWidth={2} />
-					<span>Run</span>
+					<LibraryIcon size={16} strokeWidth={2} />
+					<span>Library</span>
 				</button>
 			</div>
 
 			{/* Tab Content */}
 			<div className="flex-1 overflow-hidden" data-testid="tab-content">
-				{activeTab === 'yaml' && <YamlPreview />}
-				{activeTab === 'tests' && (
+				{activeTab === 'test' && <TestTab />}
+				{activeTab === 'suite' && (
 					<div className="h-full overflow-y-auto">
 						<div className="p-4">
 							<TestSuiteOrganizer
@@ -265,27 +414,35 @@ function RightPanel() {
 								onRunTest={handleRunTest}
 								onExportSuite={handleExportSuite}
 								onLoadTest={handleLoadTest}
+								onToggleSuite={handleToggleSuite}
 							/>
 						</div>
 					</div>
 				)}
-				{activeTab === 'templates' && (
-					<div className="h-full overflow-y-auto">
-						{templatesLoading ? (
-							<div className="flex items-center justify-center h-full">
-								<p className="text-sentinel-text-muted text-sm">Loading templates...</p>
-							</div>
-						) : (
-							<div className="p-4">
-								<TemplateGallery
-									templates={templates}
-									onLoadTemplate={handleLoadTemplate}
-								/>
-							</div>
-						)}
-					</div>
+				{activeTab === 'library' && (
+					<Library
+						tests={savedTests}
+						templates={templates.map((template) => ({
+							id: parseInt(template.id) || 0,
+							name: template.name,
+							description: template.description,
+							category: template.category as TestDefinition['category'],
+							is_template: true,
+							spec: { name: template.name, provider: template.provider, model: template.model, inputs: {}, assertions: [] },
+							spec_yaml: template.yamlContent,
+							provider: template.provider,
+							model: template.model,
+							version: 1,
+						}))}
+						loading={loadingTests || templatesLoading}
+						suites={suites.map((s) => ({ id: s.id, name: s.name }))}
+						onLoadTest={(testId) => handleLoadTest(testId.toString())}
+						onRunTest={handleRunTestById}
+						onAddToSuite={handleAddTestToSuiteById}
+						onRenameTest={handleRenameTest}
+						onDeleteTest={handleDeleteTestById}
+					/>
 				)}
-				{activeTab === 'execution' && <ExecutionPanel />}
 			</div>
 		</div>
 	);

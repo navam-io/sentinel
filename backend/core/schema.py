@@ -215,9 +215,7 @@ class TestSpec(BaseModel):
 
     @field_validator("tools")
     @classmethod
-    def validate_tools(
-        cls, v: list[str | ToolSpec] | None
-    ) -> list[str | ToolSpec] | None:
+    def validate_tools(cls, v: list[str | ToolSpec] | None) -> list[str | ToolSpec] | None:
         """Validate tools field."""
         if v is None:
             return v

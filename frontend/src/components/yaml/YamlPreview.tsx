@@ -1,25 +1,66 @@
 import { useState, useMemo } from 'react';
-import { Download, Upload, Edit3, Copy, Check, X, Save } from 'lucide-react';
+import { Download, Upload, Edit3, Copy, Check, X, Save, Edit2, ChevronDown } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import { generateYAML, parseYAMLToNodes } from '../../lib/dsl/generator';
 import { writeText } from '@tauri-apps/plugin-clipboard-manager';
 import { createTest } from '../../services/api';
 import type { TestSpec, CanvasState } from '../../services/api';
+import type { TestCategory } from '../../types/test-spec';
+import { getCategoryConfig, CATEGORY_CONFIG } from '../../lib/categoryConfig';
 import MonacoYamlEditor from './MonacoYamlEditor';
 
 function YamlPreview() {
-	const { nodes, edges, setNodes, setEdges } = useCanvasStore();
+	const { nodes, edges, setNodes, setEdges, savedTestInfo, setSavedTestInfo } = useCanvasStore();
 	const [isEditMode, setIsEditMode] = useState(false);
 	const [editedYaml, setEditedYaml] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
-	const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
+	const [isSaveMode, setIsSaveMode] = useState(false);
 	const [testName, setTestName] = useState('');
 	const [testDescription, setTestDescription] = useState('');
+	const [testCategory, setTestCategory] = useState<TestCategory | undefined>(undefined);
+	const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
 	const [isSaving, setIsSaving] = useState(false);
-	const [saveSuccess, setSaveSuccess] = useState(false);
 
 	// Generate YAML from current canvas state
 	const yaml = useMemo(() => generateYAML(nodes, edges), [nodes, edges]);
+
+	// Auto-generate test name and description if not saved
+	const displayTestInfo = useMemo(() => {
+		if (savedTestInfo) {
+			return savedTestInfo;
+		}
+
+		// Parse YAML to extract name or generate one
+		try {
+			const yamlObj = parseYAMLToNodes(yaml);
+			const nameFromYaml = yamlObj.nodes.find((n) => n.data.name)?.data.name as string | undefined;
+
+			// Generate a unique name based on canvas content
+			const inputNode = nodes.find((n) => n.type === 'input');
+			const modelNode = nodes.find((n) => n.type === 'model');
+
+			let autoName = 'Untitled Test';
+			let autoDescription = 'Auto-generated test from canvas';
+
+			if (nameFromYaml && nameFromYaml !== 'Test from Canvas') {
+				autoName = nameFromYaml;
+			} else if (inputNode && modelNode) {
+				const model = (modelNode.data.model as string) || 'GPT-5.1';
+				autoName = `Test with ${model}`;
+				const query = (inputNode.data.query as string) || '';
+				if (query) {
+					const truncatedQuery = query.length > 50 ? query.slice(0, 50) + '...' : query;
+					autoDescription = truncatedQuery;
+				}
+			} else if (nodes.length > 0) {
+				autoName = `Test - ${nodes.length} node${nodes.length > 1 ? 's' : ''}`;
+			}
+
+			return { name: autoName, description: autoDescription };
+		} catch {
+			return { name: 'Untitled Test', description: 'Auto-generated test from canvas' };
+		}
+	}, [savedTestInfo, yaml, nodes]);
 
 	const toggleEditMode = () => {
 		if (!isEditMode) {
@@ -115,15 +156,20 @@ function YamlPreview() {
 		input.click();
 	};
 
-	const openSaveDialog = () => {
+	const openSaveForm = () => {
 		if (nodes.length === 0) {
 			alert('Please add nodes to the canvas before saving');
 			return;
 		}
-		setTestName('');
-		setTestDescription('');
-		setIsSaveDialogOpen(true);
-		setSaveSuccess(false);
+		if (savedTestInfo) {
+			// If already saved, populate with existing info for rename
+			setTestName(savedTestInfo.name);
+			setTestDescription(savedTestInfo.description);
+		} else {
+			setTestName('');
+			setTestDescription('');
+		}
+		setIsSaveMode(true);
 		setErrorMessage('');
 	};
 
@@ -164,25 +210,32 @@ function YamlPreview() {
 			await createTest({
 				name: testName.trim(),
 				description: testDescription.trim() || undefined,
+				category: testCategory,
 				spec: testSpec,
 				spec_yaml: yaml,
 				canvas_state: canvasState,
 			});
 
-			// Show success
-			setSaveSuccess(true);
-			setTestName('');
-			setTestDescription('');
-
-			// Close dialog after brief delay
-			setTimeout(() => {
-				setIsSaveDialogOpen(false);
-				setSaveSuccess(false);
-			}, 1500);
+			// Save test info and exit save mode
+			setSavedTestInfo({
+				name: testName.trim(),
+				description: testDescription.trim(),
+			});
+			setIsSaveMode(false);
+			setErrorMessage('');
 		} catch (err) {
 			setErrorMessage(`Failed to save test: ${err instanceof Error ? err.message : String(err)}`);
 		} finally {
 			setIsSaving(false);
+		}
+	};
+
+	const cancelSave = () => {
+		setIsSaveMode(false);
+		setErrorMessage('');
+		if (!savedTestInfo) {
+			setTestName('');
+			setTestDescription('');
 		}
 	};
 
@@ -203,17 +256,17 @@ function YamlPreview() {
 						{!isEditMode ? (
 							<>
 								<button
-									onClick={openSaveDialog}
-									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-success text-white rounded hover:opacity-90 transition-opacity duration-120"
+									onClick={openSaveForm}
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
 									title="Save test to backend"
 									aria-label="Save test to backend"
 								>
 									<Save size={12} strokeWidth={2} />
-									Save Test
+									Save
 								</button>
 								<button
 									onClick={importYamlFile}
-									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120"
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
 									title="Import YAML/JSON file"
 									aria-label="Import YAML/JSON file"
 								>
@@ -276,6 +329,167 @@ function YamlPreview() {
 
 			{/* YAML Content */}
 			<div className="flex-1 overflow-hidden flex flex-col">
+				{/* Test Info Display (always shown) */}
+				{!isSaveMode && (
+					<div className={`mx-4 mt-4 p-3 rounded-md ${
+						savedTestInfo
+							? 'bg-sentinel-surface border border-sentinel-border'
+							: 'bg-sentinel-bg border border-dashed border-sentinel-border'
+					}`}>
+						<div className="flex items-start justify-between">
+							<div className="flex-1">
+								<div className="flex items-center gap-2 mb-1">
+									<h3 className="text-sm font-semibold text-sentinel-text">
+										{displayTestInfo.name}
+									</h3>
+									{savedTestInfo ? (
+										<button
+											onClick={openSaveForm}
+											className="p-1 hover:bg-sentinel-hover rounded transition-colors duration-120"
+											title="Rename test"
+											aria-label="Rename test"
+										>
+											<Edit2 size={12} className="text-sentinel-text-muted" />
+										</button>
+									) : (
+										<button
+											onClick={openSaveForm}
+											className="px-2 py-0.5 text-xs bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120"
+											title="Save test"
+											aria-label="Save test"
+										>
+											Save
+										</button>
+									)}
+								</div>
+								{displayTestInfo.description && (
+									<p className={`text-xs ${savedTestInfo ? 'text-sentinel-text-muted' : 'text-sentinel-text-muted italic'}`}>
+										{displayTestInfo.description}
+									</p>
+								)}
+							</div>
+						</div>
+					</div>
+				)}
+
+				{/* Inline Save Form */}
+				{isSaveMode && (
+					<div className="mx-4 mt-4 p-3 bg-sentinel-surface border border-sentinel-border rounded-md">
+						<h3 className="text-sm font-semibold text-sentinel-text mb-3">
+							{savedTestInfo ? 'Rename Test' : 'Save Test'}
+						</h3>
+						<div className="mb-3">
+							<label className="text-xs text-sentinel-text-muted mb-1 block">
+								Test Name *
+							</label>
+							<input
+								type="text"
+								value={testName}
+								onChange={(e) => setTestName(e.target.value)}
+								className="w-full px-3 py-2 bg-sentinel-bg border border-sentinel-border rounded text-sentinel-text text-sm focus:outline-none focus:ring-2 focus:ring-sentinel-primary"
+								placeholder="e.g., Login Test"
+								autoFocus
+								onKeyDown={(e) => {
+									if (e.key === 'Enter' && testName.trim()) {
+										saveTestToBackend();
+									} else if (e.key === 'Escape') {
+										cancelSave();
+									}
+								}}
+							/>
+						</div>
+						<div className="mb-3">
+							<label className="text-xs text-sentinel-text-muted mb-1 block">
+								Description (optional)
+							</label>
+							<textarea
+								value={testDescription}
+								onChange={(e) => setTestDescription(e.target.value)}
+								rows={2}
+								className="w-full px-3 py-2 bg-sentinel-bg border border-sentinel-border rounded text-sentinel-text text-sm focus:outline-none focus:ring-2 focus:ring-sentinel-primary resize-none"
+								placeholder="Describe what this test does..."
+							/>
+						</div>
+						<div className="mb-3">
+							<label className="text-xs text-sentinel-text-muted mb-1 block">
+								Category
+							</label>
+							<div className="relative">
+								<button
+									onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+									className="w-full flex items-center justify-between px-3 py-2 bg-sentinel-bg border border-sentinel-border rounded text-sentinel-text text-sm hover:bg-sentinel-hover transition-colors focus:outline-none focus:ring-2 focus:ring-sentinel-primary"
+									type="button"
+								>
+									<span>{getCategoryConfig(testCategory).label}</span>
+									<ChevronDown className="w-4 h-4" />
+								</button>
+
+								{categoryDropdownOpen && (
+									<>
+										<div
+											className="fixed inset-0 z-10"
+											onClick={() => setCategoryDropdownOpen(false)}
+										/>
+										<div className="absolute left-0 top-full mt-1 w-full bg-sentinel-surface border border-sentinel-border rounded-md shadow-lg z-20 max-h-48 overflow-y-auto">
+											<div className="py-1">
+												{/* Uncategorized option */}
+												<button
+													onClick={() => {
+														setTestCategory(undefined);
+														setCategoryDropdownOpen(false);
+													}}
+													className="w-full text-left px-3 py-2 text-sm text-sentinel-text hover:bg-sentinel-hover transition-colors"
+													type="button"
+												>
+													Uncategorized
+												</button>
+												{/* All categories */}
+												{(Object.keys(CATEGORY_CONFIG) as TestCategory[]).map((cat) => (
+													<button
+														key={cat}
+														onClick={() => {
+															setTestCategory(cat);
+															setCategoryDropdownOpen(false);
+														}}
+														className="w-full text-left px-3 py-2 text-sm text-sentinel-text hover:bg-sentinel-hover transition-colors"
+														type="button"
+													>
+														{CATEGORY_CONFIG[cat].label}
+													</button>
+												))}
+											</div>
+										</div>
+									</>
+								)}
+							</div>
+						</div>
+						{errorMessage && (
+							<div className="mb-3 p-2 bg-sentinel-error bg-opacity-20 border border-sentinel-error rounded text-xs text-sentinel-error">
+								{errorMessage}
+							</div>
+						)}
+						<div className="flex gap-2 justify-end">
+							<button
+								onClick={cancelSave}
+								className="flex items-center gap-1 text-xs px-3 py-1.5 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
+								disabled={isSaving}
+							>
+								<X size={14} strokeWidth={2} />
+								Cancel
+							</button>
+							<button
+								onClick={saveTestToBackend}
+								disabled={isSaving || !testName.trim()}
+								className="flex items-center gap-1 text-xs px-3 py-1.5 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120 disabled:opacity-50 disabled:cursor-not-allowed"
+							>
+								<Check size={14} strokeWidth={2} />
+								{isSaving ? 'Saving...' : savedTestInfo ? 'Update' : 'Save'}
+							</button>
+						</div>
+					</div>
+				)}
+
+				{/* YAML Editor */}
 				{isEditMode ? (
 					<>
 						<div className="flex-1 overflow-hidden border border-sentinel-border rounded-md m-4">
@@ -286,7 +500,7 @@ function YamlPreview() {
 								onError={setErrorMessage}
 							/>
 						</div>
-						{errorMessage && (
+						{errorMessage && !isSaveMode && (
 							<div className="mx-4 mb-4 p-2 bg-sentinel-error bg-opacity-20 border border-sentinel-error rounded text-[0.6rem] text-sentinel-error">
 								{errorMessage}
 							</div>
@@ -300,101 +514,13 @@ function YamlPreview() {
 								readOnly={true}
 							/>
 						</div>
-						{errorMessage && (
+						{errorMessage && !isSaveMode && (
 							<div className="mx-4 mb-4 p-2 bg-sentinel-error bg-opacity-20 border border-sentinel-error rounded text-[0.6rem] text-sentinel-error">
 								{errorMessage}
 							</div>
 						)}
 					</>
 				)}
-			</div>
-
-			{/* Save Test Dialog */}
-			{isSaveDialogOpen && (
-				<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-					<div className="bg-sentinel-bg-elevated border border-sentinel-border rounded-lg p-4 max-w-md w-full">
-						<h3 className="text-sm font-semibold text-sentinel-text mb-3">Save Test</h3>
-
-						{saveSuccess ? (
-							<div className="p-4 text-center">
-								<div className="text-sentinel-success mb-2">
-									<Check size={32} className="mx-auto" />
-								</div>
-								<p className="text-sm text-sentinel-text">Test saved successfully!</p>
-								<p className="text-xs text-sentinel-text-muted mt-1">
-									Check the Tests tab to add it to a suite
-								</p>
-							</div>
-						) : (
-							<>
-								<div className="mb-3">
-									<label className="text-xs text-sentinel-text-muted mb-1 block">
-										Test Name *
-									</label>
-									<input
-										type="text"
-										value={testName}
-										onChange={(e) => setTestName(e.target.value)}
-										className="w-full px-3 py-2 bg-sentinel-surface border border-sentinel-border rounded text-sentinel-text text-sm focus:outline-none focus:ring-2 focus:ring-sentinel-primary"
-										placeholder="e.g., Login Test"
-										autoFocus
-										onKeyDown={(e) => {
-											if (e.key === 'Enter' && testName.trim()) {
-												saveTestToBackend();
-											}
-										}}
-									/>
-								</div>
-
-								<div className="mb-4">
-									<label className="text-xs text-sentinel-text-muted mb-1 block">
-										Description (optional)
-									</label>
-									<textarea
-										value={testDescription}
-										onChange={(e) => setTestDescription(e.target.value)}
-										rows={3}
-										className="w-full px-3 py-2 bg-sentinel-surface border border-sentinel-border rounded text-sentinel-text text-sm focus:outline-none focus:ring-2 focus:ring-sentinel-primary resize-none"
-										placeholder="Describe what this test does..."
-									/>
-								</div>
-
-								{errorMessage && (
-									<div className="mb-3 p-2 bg-sentinel-error bg-opacity-20 border border-sentinel-error rounded text-xs text-sentinel-error">
-										{errorMessage}
-									</div>
-								)}
-
-								<div className="flex gap-2 justify-end">
-									<button
-										onClick={() => setIsSaveDialogOpen(false)}
-										className="px-3 py-1.5 text-sm bg-sentinel-surface border border-sentinel-border rounded text-sentinel-text hover:bg-sentinel-hover transition-colors duration-120"
-										disabled={isSaving}
-									>
-										Cancel
-									</button>
-									<button
-										onClick={saveTestToBackend}
-										disabled={isSaving || !testName.trim()}
-										className="px-3 py-1.5 text-sm bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120 disabled:opacity-50 disabled:cursor-not-allowed"
-									>
-										{isSaving ? 'Saving...' : 'Save Test'}
-									</button>
-								</div>
-							</>
-						)}
-					</div>
-				</div>
-			)}
-
-			{/* Preview Footer */}
-			<div className="p-3 border-t border-sentinel-border">
-				<div className="text-[0.6rem] text-sentinel-text-muted">
-					<div className="flex justify-between items-center">
-						<span>{isEditMode ? 'Edit mode active' : 'Real-time sync enabled'}</span>
-						<span className="text-sentinel-success">● {isEditMode ? 'Editing' : 'Live'}</span>
-					</div>
-				</div>
 			</div>
 		</div>
 	);

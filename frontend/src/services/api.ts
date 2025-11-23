@@ -172,3 +172,10 @@ export async function deleteTest(testId: number): Promise<{ message: string }> {
 
 	return await response.json();
 }
+
+/**
+ * Rename a test definition (convenience method).
+ */
+export async function renameTest(testId: number, newName: string): Promise<TestDefinition> {
+	return updateTest(testId, { name: newName });
+}

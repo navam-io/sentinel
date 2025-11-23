@@ -1,0 +1,17 @@
+name: Multi-Agent Collaboration
+description: Test multi-turn agent collaboration scenario
+category: multi-turn
+model: gpt-5.1
+inputs:
+  query: "You are a travel planning assistant. User: I want to plan a trip to Japan. Agent: Great! When are you planning to travel? User: Next spring, around March. Agent: How many days do you have? User: About 10 days. Now suggest a complete itinerary."
+assertions:
+  - must_contain: "Tokyo"
+  - must_contain: "itinerary"
+  - must_contain: "day"
+  - word_count_min: 150
+tags:
+  - multi-turn
+  - conversation
+  - travel
+model_config:
+  temperature: 0.7

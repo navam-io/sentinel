@@ -30,6 +30,8 @@ class TestRepository:
         spec_yaml: str | None = None,
         canvas_state: dict[str, Any] | None = None,
         description: str | None = None,
+        category: str | None = None,
+        is_template: bool = False,
     ) -> TestDefinition:
         """Create a new test definition.
 
@@ -39,6 +41,8 @@ class TestRepository:
             spec_yaml: Optional YAML representation
             canvas_state: Optional canvas state (React Flow nodes/edges)
             description: Optional description
+            category: Optional test category
+            is_template: Whether this is a template (default False)
 
         Returns:
             Created test definition
@@ -46,6 +50,8 @@ class TestRepository:
         test = TestDefinition(
             name=name,
             description=description,
+            category=category,
+            is_template=is_template,
             spec_json=json.dumps(spec),
             spec_yaml=spec_yaml,
             canvas_state=json.dumps(canvas_state) if canvas_state else None,
@@ -105,6 +111,8 @@ class TestRepository:
         spec_yaml: str | None = None,
         canvas_state: dict[str, Any] | None = None,
         description: str | None = None,
+        category: str | None = None,
+        is_template: bool | None = None,
     ) -> TestDefinition | None:
         """Update test definition.
 
@@ -115,6 +123,8 @@ class TestRepository:
             spec_yaml: Optional new YAML representation
             canvas_state: Optional new canvas state
             description: Optional new description
+            category: Optional new category
+            is_template: Optional new template flag
 
         Returns:
             Updated test definition or None if not found
@@ -127,6 +137,10 @@ class TestRepository:
             test.name = name
         if description is not None:
             test.description = description
+        if category is not None:
+            test.category = category
+        if is_template is not None:
+            test.is_template = is_template
         if spec is not None:
             test.spec_json = json.dumps(spec)
             test.provider = spec.get("provider")

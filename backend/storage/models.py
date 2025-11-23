@@ -20,6 +20,12 @@ class TestDefinition(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255), nullable=False, index=True)
     description = Column(Text, nullable=True)
+    category = Column(
+        String(50), nullable=True, index=True
+    )  # Test category (qa, code-generation, etc.)
+    is_template = Column(
+        Boolean, default=False, nullable=False
+    )  # Distinguishes templates from user tests
 
     # Test specification (stored as JSON)
     spec_json = Column(Text, nullable=False)  # Full TestSpec as JSON
@@ -46,6 +52,8 @@ class TestDefinition(Base):
             "id": self.id,
             "name": self.name,
             "description": self.description,
+            "category": self.category,
+            "is_template": self.is_template,
             "spec": json.loads(self.spec_json) if self.spec_json else None,
             "spec_yaml": self.spec_yaml,
             "canvas_state": json.loads(self.canvas_state) if self.canvas_state else None,

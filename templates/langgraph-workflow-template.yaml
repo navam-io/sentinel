@@ -1,0 +1,17 @@
+name: LangGraph Workflow
+description: Test LangGraph agentic workflow with state management
+category: langgraph
+model: gpt-5.1
+inputs:
+  query: Design a LangGraph workflow for a customer support bot that can check order status, process refunds, and escalate to human agents. Include state transitions.
+assertions:
+  - must_contain: "workflow"
+  - must_contain: "state"
+  - must_contain: "node"
+  - must_contain: "transition"
+tags:
+  - langgraph
+  - workflow
+  - state-machine
+model_config:
+  temperature: 0.5

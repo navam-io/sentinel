@@ -21,6 +21,8 @@ class CreateTestRequest(BaseModel):
     spec_yaml: str | None = None
     canvas_state: dict[str, Any] | None = None
     description: str | None = None
+    category: str | None = None
+    is_template: bool = False
 
 
 class UpdateTestRequest(BaseModel):
@@ -31,6 +33,8 @@ class UpdateTestRequest(BaseModel):
     spec_yaml: str | None = None
     canvas_state: dict[str, Any] | None = None
     description: str | None = None
+    category: str | None = None
+    is_template: bool | None = None
 
 
 class TestResponse(BaseModel):
@@ -39,6 +43,8 @@ class TestResponse(BaseModel):
     id: int
     name: str
     description: str | None
+    category: str | None
+    is_template: bool
     spec: dict[str, Any] | None
     spec_yaml: str | None
     canvas_state: dict[str, Any] | None
@@ -84,6 +90,8 @@ async def create_test(request: CreateTestRequest, session: Session = Depends(get
             spec_yaml=request.spec_yaml,
             canvas_state=request.canvas_state,
             description=request.description,
+            category=request.category,
+            is_template=request.is_template,
         )
         return TestResponse(**test.to_dict())
 
@@ -175,6 +183,8 @@ async def update_test(
             spec_yaml=request.spec_yaml,
             canvas_state=request.canvas_state,
             description=request.description,
+            category=request.category,
+            is_template=request.is_template,
         )
         if not test:
             raise HTTPException(status_code=404, detail=f"Test {test_id} not found")

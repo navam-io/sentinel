@@ -3,10 +3,16 @@ import type { Node, Edge, Connection } from '@xyflow/react';
 import { addEdge, applyNodeChanges, applyEdgeChanges } from '@xyflow/react';
 import type { NodeChange, EdgeChange } from '@xyflow/react';
 
+interface SavedTestInfo {
+	name: string;
+	description: string;
+}
+
 interface CanvasStore {
 	nodes: Node[];
 	edges: Edge[];
 	lastCanvasClickPosition: { x: number; y: number };
+	savedTestInfo: SavedTestInfo | null;
 
 	// Actions
 	setNodes: (nodes: Node[]) => void;
@@ -18,6 +24,7 @@ interface CanvasStore {
 	removeNode: (nodeId: string) => void;
 	updateNode: (nodeId: string, data: Partial<Node['data']>) => void;
 	setLastClickPosition: (position: { x: number; y: number }) => void;
+	setSavedTestInfo: (info: SavedTestInfo | null) => void;
 }
 
 export const useCanvasStore = create<CanvasStore>((set, get) => ({
@@ -57,6 +64,7 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 		}
 	],
 	lastCanvasClickPosition: { x: 250, y: 150 },
+	savedTestInfo: null,
 
 	// Actions
 	setNodes: (nodes) => set({ nodes }),
@@ -103,5 +111,9 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 
 	setLastClickPosition: (position) => {
 		set({ lastCanvasClickPosition: position });
+	},
+
+	setSavedTestInfo: (info) => {
+		set({ savedTestInfo: info });
 	}
 }));

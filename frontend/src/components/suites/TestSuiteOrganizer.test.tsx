@@ -42,6 +42,7 @@ describe('TestSuiteOrganizer', () => {
     onRunTest: vi.fn(),
     onExportSuite: vi.fn(),
     onLoadTest: vi.fn(),
+    onToggleSuite: vi.fn(),
   };
 
   beforeEach(() => {
@@ -105,9 +106,9 @@ describe('TestSuiteOrganizer', () => {
       // Suite 1 is initially collapsed
       expect(screen.queryByText('Login Test')).not.toBeInTheDocument();
 
-      // Click to expand
+      // Click to expand - should call onToggleSuite
       await user.click(screen.getByTestId('toggle-suite-suite-1'));
-      expect(screen.getByText('Login Test')).toBeInTheDocument();
+      expect(mockHandlers.onToggleSuite).toHaveBeenCalledWith('suite-1');
     });
 
     it('should show folder icon when collapsed and folder-open when expanded', () => {
@@ -280,24 +281,26 @@ describe('TestSuiteOrganizer', () => {
 
   describe('Test Display', () => {
     it('should show test status badges', () => {
-      render(<TestSuiteOrganizer suites={mockSuites} {...mockHandlers} />);
-
-      // Expand suite 1 to see tests
-      fireEvent.click(screen.getByTestId('toggle-suite-suite-1'));
+      // Use expanded suites to see test details
+      const expandedSuites = mockSuites.map(s => ({ ...s, isExpanded: true }));
+      render(<TestSuiteOrganizer suites={expandedSuites} {...mockHandlers} />);
 
       expect(screen.getByText('passed')).toBeInTheDocument();
       expect(screen.getByText('failed')).toBeInTheDocument();
     });
 
     it('should show test last run date', () => {
-      render(<TestSuiteOrganizer suites={mockSuites} {...mockHandlers} />);
+      // Use expanded suites to see test details
+      const expandedSuites = mockSuites.map(s => ({ ...s, isExpanded: true }));
+      render(<TestSuiteOrganizer suites={expandedSuites} />);
 
-      // Expand suite 1
-      fireEvent.click(screen.getByTestId('toggle-suite-suite-1'));
+      // Check that test rows are rendered (dates formatted by browser locale)
+      const suite1Tests = screen.getByTestId('suite-tests-suite-1');
+      expect(suite1Tests).toBeInTheDocument();
 
-      // Check that dates are rendered (format may vary)
-      const suite1 = screen.getByTestId('suite-tests-suite-1');
-      expect(suite1).toBeInTheDocument();
+      // Verify tests are shown
+      expect(screen.getByText('Login Test')).toBeInTheDocument();
+      expect(screen.getByText('Logout Test')).toBeInTheDocument();
     });
 
     it('should show empty state when suite has no tests', () => {
@@ -316,10 +319,9 @@ describe('TestSuiteOrganizer', () => {
 
     it('should load test when clicking test name', async () => {
       const user = userEvent.setup();
-      render(<TestSuiteOrganizer suites={mockSuites} {...mockHandlers} />);
-
-      // Expand suite 1
-      await user.click(screen.getByTestId('toggle-suite-suite-1'));
+      // Use expanded suites to see test details
+      const expandedSuites = mockSuites.map(s => ({ ...s, isExpanded: true }));
+      render(<TestSuiteOrganizer suites={expandedSuites} {...mockHandlers} />);
 
       // Click on test name
       await user.click(screen.getByText('Login Test'));
@@ -329,10 +331,9 @@ describe('TestSuiteOrganizer', () => {
 
     it('should run individual test', async () => {
       const user = userEvent.setup();
-      render(<TestSuiteOrganizer suites={mockSuites} {...mockHandlers} />);
-
-      // Expand suite 1
-      await user.click(screen.getByTestId('toggle-suite-suite-1'));
+      // Use expanded suites to see test details
+      const expandedSuites = mockSuites.map(s => ({ ...s, isExpanded: true }));
+      render(<TestSuiteOrganizer suites={expandedSuites} {...mockHandlers} />);
 
       // Click run button on test
       await user.click(screen.getByTestId('run-test-test-1'));
@@ -342,10 +343,9 @@ describe('TestSuiteOrganizer', () => {
 
     it('should remove test from suite', async () => {
       const user = userEvent.setup();
-      render(<TestSuiteOrganizer suites={mockSuites} {...mockHandlers} />);
-
-      // Expand suite 1
-      await user.click(screen.getByTestId('toggle-suite-suite-1'));
+      // Use expanded suites to see test details
+      const expandedSuites = mockSuites.map(s => ({ ...s, isExpanded: true }));
+      render(<TestSuiteOrganizer suites={expandedSuites} {...mockHandlers} />);
 
       // Click remove button
       await user.click(screen.getByTestId('remove-test-test-1'));

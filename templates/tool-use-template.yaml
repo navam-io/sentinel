@@ -1,0 +1,21 @@
+name: Weather Tool Integration
+description: Test function calling with weather API tool
+category: tool-use
+model: gpt-5.1
+inputs:
+  query: What's the weather like in San Francisco right now? Should I bring an umbrella?
+tools:
+  - name: get_current_weather
+    description: Get the current weather in a given location
+    parameters:
+      location: string
+      unit: enum [celsius, fahrenheit]
+assertions:
+  - tool_called: get_current_weather
+  - must_contain: "umbrella"
+tags:
+  - tools
+  - function-calling
+  - weather
+model_config:
+  temperature: 0.5

@@ -1,0 +1,16 @@
+name: Data Analysis Task
+description: Analyze a dataset and generate insights with visualizations
+category: data-analysis
+model: gpt-5.1
+inputs:
+  query: Analyze the following sales data and provide key insights. Identify trends, anomalies, and recommendations. Sales by quarter: Q1: $120K, Q2: $95K, Q3: $145K, Q4: $180K
+assertions:
+  - must_contain: "trend"
+  - must_contain: "Q4"
+  - must_contain: "recommendation"
+tags:
+  - data
+  - analysis
+  - insights
+model_config:
+  temperature: 0.3

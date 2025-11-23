@@ -1,14 +1,34 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Play, CheckCircle2, XCircle, Clock, DollarSign, Zap } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import { generateYAML, convertYAMLToTestSpec } from '../../lib/dsl/generator';
 import { executeTest, type ExecuteResponse } from '../../services/api';
 
 function ExecutionPanel() {
-	const { nodes, edges } = useCanvasStore();
+	const { nodes, edges, savedTestInfo } = useCanvasStore();
 	const [isExecuting, setIsExecuting] = useState(false);
 	const [response, setResponse] = useState<ExecuteResponse | null>(null);
 	const [error, setError] = useState<string | null>(null);
+
+	// Auto-generate test name if not saved
+	const testName = useMemo(() => {
+		if (savedTestInfo) {
+			return savedTestInfo.name;
+		}
+
+		// Generate name based on canvas content
+		const inputNode = nodes.find((n) => n.type === 'input');
+		const modelNode = nodes.find((n) => n.type === 'model');
+
+		if (inputNode && modelNode) {
+			const model = (modelNode.data.model as string) || 'GPT-5.1';
+			return `Test with ${model}`;
+		} else if (nodes.length > 0) {
+			return `Test - ${nodes.length} node${nodes.length > 1 ? 's' : ''}`;
+		}
+
+		return 'Untitled Test';
+	}, [savedTestInfo, nodes]);
 
 	const handleRun = async () => {
 		setIsExecuting(true);
@@ -39,7 +59,6 @@ function ExecutionPanel() {
 		<div className="h-full bg-sentinel-bg-elevated flex flex-col">
 			{/* Header */}
 			<div className="p-4 border-b border-sentinel-border">
-				<h2 className="text-sm font-semibold text-sentinel-text mb-2">Test Execution</h2>
 				<button
 					onClick={handleRun}
 					disabled={isExecuting || nodes.length === 0}

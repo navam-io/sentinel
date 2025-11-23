@@ -1,0 +1,18 @@
+name: REST API Endpoint Test
+description: Test API response validation and error handling
+category: api-testing
+model: gpt-5.1
+inputs:
+  query: Generate a curl command to test a user registration API endpoint. The API should accept POST requests with email and password fields.
+assertions:
+  - must_contain: "curl"
+  - must_contain: "POST"
+  - must_contain: "email"
+  - must_contain: "password"
+  - regex_match: "https?://"
+tags:
+  - api
+  - testing
+  - curl
+model_config:
+  temperature: 0.3

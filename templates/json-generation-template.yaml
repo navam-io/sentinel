@@ -1,0 +1,17 @@
+name: Structured JSON Output
+description: Test structured JSON generation with schema validation
+category: code-generation
+model: gpt-5.1
+inputs:
+  query: Generate a JSON schema for a product catalog with fields: id, name, price, category, inStock, and tags (array). Include 3 example products.
+assertions:
+  - is_json: true
+  - must_contain: "id"
+  - must_contain: "price"
+  - must_contain: "category"
+tags:
+  - json
+  - structured-output
+  - schema
+model_config:
+  temperature: 0.3

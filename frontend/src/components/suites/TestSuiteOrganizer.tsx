@@ -44,10 +44,11 @@ export interface TestSuiteOrganizerProps {
   onRunTest: (suiteId: string, testId: string) => void;
   onExportSuite: (suiteId: string) => void;
   onLoadTest: (testId: string) => void;
+  onToggleSuite: (suiteId: string) => void;
 }
 
 export function TestSuiteOrganizer({
-  suites: initialSuites,
+  suites,
   availableTests,
   loadingTests,
   onCreateSuite,
@@ -59,8 +60,8 @@ export function TestSuiteOrganizer({
   onRunTest,
   onExportSuite,
   onLoadTest,
+  onToggleSuite,
 }: TestSuiteOrganizerProps) {
-  const [suites, setSuites] = useState<TestSuite[]>(initialSuites);
   const [isCreating, setIsCreating] = useState(false);
   const [newSuiteName, setNewSuiteName] = useState('');
   const [newSuiteDescription, setNewSuiteDescription] = useState('');
@@ -68,19 +69,6 @@ export function TestSuiteOrganizer({
   const [editingName, setEditingName] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [addingTestToSuite, setAddingTestToSuite] = useState<string | null>(null);
-
-  // Update local state when props change
-  useEffect(() => {
-    setSuites(initialSuites);
-  }, [initialSuites]);
-
-  const handleToggleSuite = (suiteId: string) => {
-    setSuites(
-      suites.map((suite) =>
-        suite.id === suiteId ? { ...suite, isExpanded: !suite.isExpanded } : suite
-      )
-    );
-  };
 
   const handleCreateSuite = () => {
     if (!newSuiteName.trim()) return;
@@ -149,7 +137,7 @@ export function TestSuiteOrganizer({
     <div className="h-full flex flex-col" data-testid="test-suite-organizer">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-sentinel-border">
-        <h2 className="text-lg font-semibold text-sentinel-text">Test Suites</h2>
+        <h2 className="text-sm font-semibold text-sentinel-text">Test Suites</h2>
         <button
           onClick={() => setIsCreating(true)}
           className="flex items-center gap-2 px-3 py-1.5 bg-sentinel-primary text-sentinel-bg rounded-md hover:bg-sentinel-primary-dark transition-colors duration-150 text-sm font-medium"
@@ -221,7 +209,7 @@ export function TestSuiteOrganizer({
                 {/* Suite Header */}
                 <div className="flex items-center gap-2 p-2 bg-sentinel-surface hover:bg-sentinel-hover rounded-lg transition-colors duration-150">
                   <button
-                    onClick={() => handleToggleSuite(suite.id)}
+                    onClick={() => onToggleSuite(suite.id)}
                     className="p-1 hover:bg-sentinel-active rounded transition-colors duration-150"
                     data-testid={`toggle-suite-${suite.id}`}
                   >

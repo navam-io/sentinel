@@ -1,0 +1,17 @@
+name: Model Version Comparison
+description: Compare outputs across different model versions
+category: regression
+model: gpt-5.1
+inputs:
+  query: Write a Python function to calculate factorial recursively
+assertions:
+  - must_contain: "def factorial"
+  - must_contain: "return"
+  - must_contain: "recursive"
+  - regex_match: "def\\s+factorial\\s*\\("
+tags:
+  - regression
+  - comparison
+  - versioning
+model_config:
+  temperature: 0.2

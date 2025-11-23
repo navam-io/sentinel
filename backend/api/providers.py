@@ -2,7 +2,6 @@
 Provider management API endpoints.
 """
 
-
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 

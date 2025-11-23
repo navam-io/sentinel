@@ -166,10 +166,26 @@ export interface CanvasState {
 	edges: Edge[];
 }
 
+export type TestCategory =
+	| 'qa'
+	| 'code-generation'
+	| 'browser'
+	| 'multi-turn'
+	| 'langgraph'
+	| 'safety'
+	| 'data-analysis'
+	| 'reasoning'
+	| 'tool-use'
+	| 'api-testing'
+	| 'ui-testing'
+	| 'regression';
+
 export interface TestDefinition {
 	id: number;
 	name: string;
 	description?: string;
+	category?: TestCategory;
+	is_template?: boolean;
 	spec: TestSpec;
 	spec_yaml?: string;
 	canvas_state?: CanvasState;
@@ -186,6 +202,7 @@ export interface CreateTestRequest {
 	spec_yaml?: string;
 	canvas_state?: CanvasState;
 	description?: string;
+	category?: TestCategory;
 }
 
 export interface UpdateTestRequest {
@@ -194,6 +211,7 @@ export interface UpdateTestRequest {
 	spec_yaml?: string;
 	canvas_state?: CanvasState;
 	description?: string;
+	category?: TestCategory;
 }
 
 export interface TestListResponse {
