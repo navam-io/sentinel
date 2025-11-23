@@ -10,7 +10,9 @@ import {
   Download,
   ChevronRight,
   ChevronDown,
+  ListPlus,
 } from 'lucide-react';
+import type { TestDefinition } from '../../services/api';
 
 export interface TestSuite {
   id: string;
@@ -31,6 +33,8 @@ export interface TestSuiteItem {
 
 export interface TestSuiteOrganizerProps {
   suites: TestSuite[];
+  availableTests: TestDefinition[];
+  loadingTests: boolean;
   onCreateSuite: (name: string, description?: string) => void;
   onDeleteSuite: (suiteId: string) => void;
   onRenameSuite: (suiteId: string, newName: string) => void;
@@ -44,6 +48,8 @@ export interface TestSuiteOrganizerProps {
 
 export function TestSuiteOrganizer({
   suites: initialSuites,
+  availableTests,
+  loadingTests,
   onCreateSuite,
   onDeleteSuite,
   onRenameSuite,
@@ -61,6 +67,7 @@ export function TestSuiteOrganizer({
   const [editingSuiteId, setEditingSuiteId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [addingTestToSuite, setAddingTestToSuite] = useState<string | null>(null);
 
   // Update local state when props change
   useEffect(() => {
@@ -320,9 +327,62 @@ export function TestSuiteOrganizer({
                 {/* Tests List (when expanded) */}
                 {suite.isExpanded && (
                   <div className="ml-8 mt-1 space-y-1" data-testid={`suite-tests-${suite.id}`}>
+                    {/* Add Test Button */}
+                    {addingTestToSuite === suite.id ? (
+                      <div className="p-2 bg-sentinel-bg-elevated rounded border border-sentinel-primary">
+                        <div className="text-xs text-sentinel-text-muted mb-2">Select a test to add:</div>
+                        {loadingTests ? (
+                          <div className="p-2 text-center text-xs text-sentinel-text-muted">
+                            Loading tests...
+                          </div>
+                        ) : availableTests.length === 0 ? (
+                          <div className="p-2 text-center text-xs text-sentinel-text-muted">
+                            No saved tests available. Create a test first.
+                          </div>
+                        ) : (
+                          <div className="max-h-48 overflow-y-auto space-y-1">
+                            {availableTests.map((test) => (
+                              <button
+                                key={test.id}
+                                onClick={() => {
+                                  onAddTestToSuite(suite.id, test.id.toString());
+                                  setAddingTestToSuite(null);
+                                }}
+                                className="w-full text-left p-2 bg-sentinel-surface hover:bg-sentinel-hover rounded text-sm text-sentinel-text transition-colors duration-150"
+                              >
+                                <div className="font-medium">{test.name}</div>
+                                {test.description && (
+                                  <div className="text-xs text-sentinel-text-muted line-clamp-1">
+                                    {test.description}
+                                  </div>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                        <div className="mt-2 flex justify-end">
+                          <button
+                            onClick={() => setAddingTestToSuite(null)}
+                            className="px-2 py-1 text-xs bg-sentinel-surface text-sentinel-text rounded hover:bg-sentinel-hover"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setAddingTestToSuite(suite.id)}
+                        className="w-full p-2 bg-sentinel-bg-elevated hover:bg-sentinel-hover rounded border border-dashed border-sentinel-border flex items-center justify-center gap-2 text-sm text-sentinel-text-muted hover:text-sentinel-text transition-colors duration-150"
+                        data-testid={`add-test-to-suite-${suite.id}`}
+                      >
+                        <ListPlus className="w-4 h-4" />
+                        Add Test to Suite
+                      </button>
+                    )}
+
                     {suite.tests.length === 0 ? (
                       <div className="p-4 text-center text-sentinel-text-muted text-sm">
-                        No tests in this suite
+                        No tests in this suite yet
                       </div>
                     ) : (
                       suite.tests.map((test) => (

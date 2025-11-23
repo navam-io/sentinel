@@ -31,6 +31,8 @@ describe('TestSuiteOrganizer', () => {
   ];
 
   const mockHandlers = {
+    availableTests: [],
+    loadingTests: false,
     onCreateSuite: vi.fn(),
     onDeleteSuite: vi.fn(),
     onRenameSuite: vi.fn(),
@@ -309,7 +311,7 @@ describe('TestSuiteOrganizer', () => {
       };
 
       render(<TestSuiteOrganizer suites={[emptySuite]} {...mockHandlers} />);
-      expect(screen.getByText('No tests in this suite')).toBeInTheDocument();
+      expect(screen.getByText('No tests in this suite yet')).toBeInTheDocument();
     });
 
     it('should load test when clicking test name', async () => {

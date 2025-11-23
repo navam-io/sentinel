@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FileCode, FolderOpen, Play, Library } from 'lucide-react';
 import YamlPreview from './yaml/YamlPreview';
 import TestManager from './tests/TestManager';
 import ExecutionPanel from './execution/ExecutionPanel';
 import { TemplateGallery } from './templates';
 import { TestSuiteOrganizer } from './suites';
-import type { TestSuite } from './suites';
+import type { TestSuite, TestSuiteItem } from './suites';
 import { useTemplates } from '../hooks/useTemplates';
 import { useCanvasStore } from '../stores/canvasStore';
 import { parseYAMLToNodes } from '../lib/dsl/generator';
+import { listTests, type TestDefinition } from '../services/api';
 import type { Template } from './templates/TemplateCard';
 
 type Tab = 'yaml' | 'tests' | 'templates' | 'execution';
@@ -16,6 +17,8 @@ type Tab = 'yaml' | 'tests' | 'templates' | 'execution';
 function RightPanel() {
 	const [activeTab, setActiveTab] = useState<Tab>('yaml');
 	const [suites, setSuites] = useState<TestSuite[]>([]);
+	const [savedTests, setSavedTests] = useState<TestDefinition[]>([]);
+	const [loadingTests, setLoadingTests] = useState(false);
 	const { templates, loading: templatesLoading } = useTemplates();
 	const { nodes, setNodes, setEdges } = useCanvasStore();
 
@@ -58,6 +61,26 @@ function RightPanel() {
 			alert(`Error loading template: ${err instanceof Error ? err.message : String(err)}`);
 		}
 	};
+
+	// Load saved tests from backend
+	useEffect(() => {
+		const loadSavedTests = async () => {
+			setLoadingTests(true);
+			try {
+				const response = await listTests(100, 0);
+				setSavedTests(response.tests);
+			} catch (err) {
+				console.error('Failed to load saved tests:', err);
+			} finally {
+				setLoadingTests(false);
+			}
+		};
+
+		// Load tests when Tests tab is active
+		if (activeTab === 'tests') {
+			loadSavedTests();
+		}
+	}, [activeTab]);
 
 	// Test Suite handlers
 	const handleCreateSuite = (name: string, description?: string) => {
@@ -115,8 +138,35 @@ function RightPanel() {
 	};
 
 	const handleAddTestToSuite = (suiteId: string, testId: string) => {
-		alert(`Adding test ${testId} to suite ${suiteId}`);
-		// TODO: Implement adding test to suite
+		// Find the test from saved tests
+		const testIdNum = parseInt(testId);
+		const test = savedTests.find((t) => t.id === testIdNum);
+
+		if (!test) {
+			alert('Test not found');
+			return;
+		}
+
+		// Convert TestDefinition to TestSuiteItem
+		const testItem: TestSuiteItem = {
+			id: test.id.toString(),
+			name: test.name,
+			status: 'pending', // Default status
+			lastRun: undefined,
+		};
+
+		// Add test to suite
+		setSuites(
+			suites.map((suite) =>
+				suite.id === suiteId
+					? {
+							...suite,
+							tests: [...suite.tests, testItem],
+							updatedAt: new Date(),
+					  }
+					: suite
+			)
+		);
 	};
 
 	const handleRemoveTestFromSuite = (suiteId: string, testId: string) => {
@@ -198,6 +248,8 @@ function RightPanel() {
 						<div className="p-4">
 							<TestSuiteOrganizer
 								suites={suites}
+								availableTests={savedTests}
+								loadingTests={loadingTests}
 								onCreateSuite={handleCreateSuite}
 								onRenameSuite={handleRenameSuite}
 								onDeleteSuite={handleDeleteSuite}
