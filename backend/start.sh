@@ -14,5 +14,5 @@ fi
 # Change to parent directory to run as module
 cd ..
 
-# Start the server
-python3 -m backend.main
+# Start the server with uvicorn
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000

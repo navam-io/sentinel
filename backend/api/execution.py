@@ -5,9 +5,9 @@ Test execution API endpoints.
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 
-from core.schema import TestSpec
-from providers.base import ExecutionResult
-from validators.assertion_validator import ValidationResult, validate_assertions
+from ..core.schema import TestSpec
+from ..providers.base import ExecutionResult
+from ..validators.assertion_validator import ValidationResult, validate_assertions
 
 router = APIRouter()
 

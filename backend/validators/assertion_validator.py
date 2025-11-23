@@ -17,7 +17,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from providers.base import ExecutionResult
+from ..providers.base import ExecutionResult
 
 
 class ValidationResult(BaseModel):
