@@ -12,10 +12,10 @@
 
 **"Point, Click, Test" — Make AI agent testing as intuitive as Postman made API testing**
 
-[![Version](https://img.shields.io/badge/version-0.15.0-blue?style=flat-square)](https://github.com/navam-io/sentinel/releases)
+[![Version](https://img.shields.io/badge/version-0.22.0-blue?style=flat-square)](https://github.com/navam-io/sentinel/releases)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-459%20passing-success?style=flat-square)](frontend/src/)
-[![Coverage](https://img.shields.io/badge/coverage-50%25+-brightgreen?style=flat-square)](frontend/src/)
+[![Tests](https://img.shields.io/badge/tests-473%20passing-success?style=flat-square)](frontend/src/)
+[![Coverage](https://img.shields.io/badge/coverage-frontend%2050%25%2B%20%7C%20backend%2085%25%2B-brightgreen?style=flat-square)](metrics/latest.md)
 [![TypeScript](https://img.shields.io/badge/typescript-0%20errors-blue?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![React](https://img.shields.io/badge/react-19.0-blue?style=flat-square&logo=react&logoColor=white)](https://react.dev)
 [![Python](https://img.shields.io/badge/python-3.13-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
@@ -74,36 +74,38 @@ Built for frontier AI labs with deterministic, repeatable testing.
 
 ## ✨ Key Features
 
-### Current Release (v0.15.0 - November 22, 2025)
+### Current Release (v0.22.0 - November 23, 2025)
 
 <table>
 <tr>
 <td width="50%">
 
-#### 🎨 **Visual Canvas**
+#### 🎨 **Visual Canvas & Library**
 <sup>React 19 • React Flow 12.3 • Tauri 2.0</sup>
 
-- ✅ **Click-to-add** node-based interface
-- ✅ **5 node types**: Input, Model, Assertion, Tool, System
-- ✅ **Real-time YAML** generation
-- ✅ **Smart positioning** with auto-layout
-- ✅ **Template gallery** with 6+ built-in templates
-- ✅ **Desktop app** (Tauri 2.0) for local-first workflow
-- ✅ **389 unit tests** + **21 E2E tests** (100% pass rate)
+- ✅ **Unified Library Tab**: Templates + user tests in one interface
+- ✅ **12-Category System**: Q&A, Code Gen, Browser Agents, Multi-turn, Safety, and more
+- ✅ **16 Built-in Templates**: Production-ready test templates
+- ✅ **6+ Node Types**: Input, Model, Assertion, Tool, System, Output
+- ✅ **Real-time YAML** generation from canvas
+- ✅ **Smart Positioning** with auto-layout
+- ✅ **Desktop App** (Tauri 2.0) for local-first workflow
+- ✅ **473 Unit Tests** (100% pass rate)
 
 </td>
 <td width="50%">
 
-#### 🔧 **Type-Safe DSL**
-<sup>Pydantic • YAML/JSON • Python 3.13</sup>
+#### 🔧 **Type-Safe Backend & Execution**
+<sup>FastAPI • Pydantic • Python 3.13</sup>
 
-- ✅ **8 assertion types** (text, regex, tools, format, perf)
-- ✅ **Round-trip** conversion (zero data loss)
-- ✅ **Validation** with clear error messages
-- ✅ **70 backend tests**, 85%+ coverage
-- ✅ **Model providers**: Anthropic Claude, OpenAI GPT-5
-- ✅ **FastAPI backend** with SQLite/PostgreSQL support
-- ✅ **Type safety**: Black, Ruff, MyPy, TypeScript strict mode
+- ✅ **8 Assertion Types** (text, regex, tools, format, perf)
+- ✅ **Round-Trip Conversion** (Visual ↔ YAML, zero data loss)
+- ✅ **Schema Validation** with clear error messages
+- ✅ **Backend Tests** with comprehensive coverage
+- ✅ **Model Providers**: Anthropic Claude, OpenAI GPT-5
+- ✅ **FastAPI Backend** with SQLite/PostgreSQL support
+- ✅ **Type Safety**: Black, Ruff, MyPy, TypeScript strict mode
+- ✅ **Test Suites** with folder organization
 
 </td>
 </tr>
@@ -113,14 +115,14 @@ Built for frontier AI labs with deterministic, repeatable testing.
 
 <div align="center">
 
-| Category | Tests | Coverage | Status |
-|----------|-------|----------|--------|
-| **Frontend Unit Tests** | 389 tests | 50%+ | ✅ All passing |
-| **E2E Tests (Playwright)** | 21 tests | 3 user journeys | ✅ All passing |
-| **Backend Tests (pytest)** | 70 tests | 85%+ | ✅ All passing |
-| **Total Tests** | **459 tests** | **Mixed** | ✅ **100% pass rate** |
-| **TypeScript Errors** | 0 | N/A | ✅ Strict mode |
-| **Code Quality** | Black, Ruff, MyPy, ESLint | N/A | ✅ All checks pass |
+| Category | Metric | Status |
+|----------|--------|--------|
+| **Frontend Unit Tests** | 473 tests across 27 test files | ✅ 100% passing |
+| **Frontend Coverage** | Component, hooks, services, stores | ✅ 50%+ coverage |
+| **Backend Tests** | pytest suite with comprehensive coverage | ✅ 85%+ coverage |
+| **TypeScript Strict Mode** | 0 errors, only 4 `any` usages | ✅ Excellent type safety |
+| **Code Quality** | Black, Ruff, MyPy, ESLint | ✅ All checks pass |
+| **Total Codebase** | 57,581 LOC (project code only) | ✅ Well-documented (47% docs) |
 
 </div>
 
@@ -129,26 +131,25 @@ Built for frontier AI labs with deterministic, repeatable testing.
 
 #### Frontend
 - **Framework**: React 19 + Vite 6.0
-- **Desktop**: Tauri 2.0 (Rust-powered, 600KB installer)
+- **Desktop**: Tauri 2.0 (Rust-powered desktop app)
 - **Canvas**: React Flow 12.3 (@xyflow/react)
 - **State**: Zustand 5.0
-- **Styling**: TailwindCSS 4.0 + shadcn/ui
-- **Testing**: Vitest 4.0 + React Testing Library + Playwright
+- **Styling**: TailwindCSS + shadcn/ui
+- **Testing**: Vitest + React Testing Library
 - **Type Safety**: TypeScript 5.7 (strict mode, 0 errors)
 - **Icons**: lucide-react
 
 #### Backend
-- **API**: FastAPI 0.115
-- **Schema**: Pydantic v2
+- **API**: FastAPI 0.115+
+- **Schema**: Pydantic v2 (type-safe validation)
 - **Database**: SQLite (local) / PostgreSQL (server)
-- **Storage**: Custom repository pattern with JSON support
 - **Testing**: pytest + pytest-cov
 - **Code Quality**: Black (line-length: 100), Ruff, MyPy
 - **Python**: 3.13+
 
 #### Model Providers (Pluggable)
-- **Anthropic API**: Claude 3.5 Sonnet, Claude 3 Opus
-- **OpenAI API**: GPT-5.1 (default), GPT-5 Pro, GPT-5 Mini
+- **Anthropic API**: Claude 3.5 Sonnet, Claude 3 Opus (≥0.43.1)
+- **OpenAI API**: GPT-5.1 (default), GPT-5 Pro, GPT-5 Mini (≥1.59.6)
 - **Future**: Amazon Bedrock, HuggingFace, Ollama
 
 </details>
@@ -174,13 +175,15 @@ npm run tauri:dev
 **🎉 That's it!** The visual canvas opens with:
 - Component palette on the left
 - Interactive canvas in the center
-- YAML preview panel on the right
+- Library tab with 16+ templates
+- Test suite organizer
 
 **Try it now:**
-1. Click "Prompt" button → Input node appears
-2. Click "Model" button → Model node appears
-3. Click "Assertion" button → Assertion node appears
-4. See YAML generated automatically in right panel!
+1. Click **Library** tab → Browse 16 built-in templates
+2. Click **Load** on any template → Canvas populates automatically
+3. Click **Canvas** tab → See visual node representation
+4. Click **Test** tab → View auto-generated YAML
+5. Click **Run Test** → Execute and see live results!
 
 <details>
 <summary><b>Option 2: Development Mode (Browser Only)</b></summary>
@@ -208,7 +211,7 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -e ".[dev]"
 
 # Run tests to verify
-pytest -v  # ✅ 70 tests pass
+pytest -v  # ✅ All tests pass
 
 # Start API server (optional)
 uvicorn main:app --reload
@@ -227,38 +230,46 @@ uvicorn main:app --reload
 <tr>
 <td width="25%" align="center">
 
-**1. Click "Prompt"**
+**1. Browse Library**
 <br><br>
-💬 Input node appears
+📚 16+ templates
 <br>
-Enter your test query
+12 categories
+<br>
+Search & filter
 
 </td>
 <td width="25%" align="center">
 
-**2. Click "Model"**
+**2. Load Template**
 <br><br>
-🤖 Model node appears
+👁️ Click "Load"
 <br>
-Pre-configured with GPT-5.1
+Canvas auto-populates
+<br>
+Nodes connected
 
 </td>
 <td width="25%" align="center">
 
-**3. Click "Assertion"**
+**3. Customize**
 <br><br>
-✅ Assertion node appears
+✏️ Edit node values
 <br>
-Configure validation rules
+Add/remove nodes
+<br>
+Real-time YAML sync
 
 </td>
 <td width="25%" align="center">
 
-**4. View YAML**
+**4. Run & Validate**
 <br><br>
-📝 Auto-generated spec
+▶️ Execute test
 <br>
-Copy or download
+Live results
+<br>
+Pass/fail indicators
 
 </td>
 </tr>
@@ -271,6 +282,7 @@ Copy or download
 name: "Geography Quiz"
 version: "1.0"
 description: "Test factual knowledge about world capitals"
+category: "qa"
 
 model:
   provider: "openai"
@@ -298,23 +310,25 @@ tags:
 
 ---
 
-## 💡 Use Cases
+## 💡 12-Category Test Classification
 
 <table>
 <tr>
 <td width="33%">
 
 ### 📝 **Q&A Testing**
-Test factual knowledge and reasoning
+<sup>Blue • Knowledge validation</sup>
+
+Test factual knowledge and basic reasoning
 
 ```yaml
+category: "qa"
 assertions:
   - must_contain: "Paris"
   - max_latency_ms: 2000
-  - output_type: "text"
 ```
 
-**Perfect for:**
+**Use Cases:**
 - Knowledge validation
 - Fact-checking
 - Simple reasoning
@@ -323,16 +337,18 @@ assertions:
 <td width="33%">
 
 ### 💻 **Code Generation**
-Validate code structure and syntax
+<sup>Purple • Syntax validation</sup>
+
+Validate code structure and quality
 
 ```yaml
+category: "code-generation"
 assertions:
   - regex_match: "def\\s+\\w+"
   - output_type: "code"
-  - must_contain: "return"
 ```
 
-**Perfect for:**
+**Use Cases:**
 - Code quality checks
 - Syntax validation
 - Function detection
@@ -340,24 +356,110 @@ assertions:
 </td>
 <td width="33%">
 
-### 🤖 **Agent Tools**
-Verify tool calls and outputs
+### 🌐 **Browser Agents**
+<sup>Green • Web automation</sup>
+
+Test browser interactions and scraping
 
 ```yaml
+category: "browser-agents"
 assertions:
   - must_call_tool: ["browser"]
   - output_type: "json"
-  - must_contain: "result"
 ```
 
-**Perfect for:**
-- Tool invocation tests
-- Multi-step workflows
-- Agent debugging
+**Use Cases:**
+- Web scraping tests
+- UI automation
+- Browser tool usage
+
+</td>
+</tr>
+<tr>
+<td width="33%">
+
+### 🔄 **Multi-turn**
+<sup>Orange • Conversations</sup>
+
+Multi-step dialogue testing
+
+```yaml
+category: "multi-turn"
+assertions:
+  - must_contain: "context"
+  - min_tokens: 50
+```
+
+**Use Cases:**
+- Conversation flows
+- Context retention
+- Multi-step reasoning
+
+</td>
+<td width="33%">
+
+### 🔗 **LangGraph**
+<sup>Cyan • Agentic workflows</sup>
+
+Test LangGraph state machines
+
+```yaml
+category: "langgraph"
+assertions:
+  - must_call_tool: ["state"]
+  - output_type: "json"
+```
+
+**Use Cases:**
+- Workflow testing
+- State management
+- Agent coordination
+
+</td>
+<td width="33%">
+
+### 🛡️ **Safety**
+<sup>Red • Security testing</sup>
+
+Security and safety validation
+
+```yaml
+category: "safety"
+assertions:
+  - must_not_contain: "sensitive"
+  - output_type: "text"
+```
+
+**Use Cases:**
+- Prompt injection tests
+- Content safety
+- Security validation
 
 </td>
 </tr>
 </table>
+
+<details>
+<summary><b>📚 See All 12 Categories</b></summary>
+
+<br>
+
+| Category | Color | Purpose | Example Use Cases |
+|----------|-------|---------|-------------------|
+| **Q&A** | Blue | Knowledge & reasoning tests | Fact-checking, trivia, simple Q&A |
+| **Code Generation** | Purple | Code quality validation | Syntax checks, function detection, code structure |
+| **Browser Agents** | Green | Web automation testing | Scraping, UI testing, browser tools |
+| **Multi-turn** | Orange | Conversation flows | Dialogue testing, context retention |
+| **LangGraph** | Cyan | Agentic workflows | State machines, workflow orchestration |
+| **Safety** | Red | Security & safety | Prompt injection, content filtering |
+| **Data Analysis** | Indigo | Data processing tasks | CSV parsing, data transformation |
+| **Reasoning** | Pink | Logic & problem-solving | Chain-of-thought, math, puzzles |
+| **Tool Use** | Yellow | Function calling tests | API calls, tool invocation |
+| **API Testing** | Teal | REST endpoint validation | HTTP requests, API responses |
+| **UI Testing** | Lime | Visual & interaction tests | Component rendering, user flows |
+| **Regression** | Amber | Consistency testing | Version comparison, behavior stability |
+
+</details>
 
 <details>
 <summary><b>📚 See All 8 Assertion Types</b></summary>
@@ -389,10 +491,12 @@ assertions:
 - [Installation Guide](docs/getting-started.md) - Setup in 5 minutes
 - [Visual Canvas Guide](docs/visual-canvas.md) - Build tests visually
 - [Quick Start Tutorial](docs/quick-start.md) - Your first test
+- [Code Metrics Report](metrics/latest.md) - Comprehensive codebase analysis
 
 ### 📚 **Examples & Templates**
-- [6+ Built-in Templates](templates/) - Production-ready examples
+- [16 Built-in Templates](templates/) - Production-ready examples
 - [Example Walkthroughs](docs/examples.md) - Detailed guides
+- [12 Test Categories](docs/categories.md) - Classification guide
 
 </td>
 <td width="50%">
@@ -405,6 +509,7 @@ assertions:
 ### 🔧 **Advanced**
 - [Best Practices](docs/best-practices.md) - Writing effective tests
 - [CI/CD Integration](docs/ci-cd.md) - Automation guide
+- [Architecture Guide](CLAUDE.md) - Technical deep-dive
 
 </td>
 </tr>
@@ -414,73 +519,57 @@ assertions:
 
 ## 🗺️ Roadmap
 
-### ✅ **Released**
+### ✅ **Recently Released**
 
 <details open>
-<summary><b>v0.15.0 - E2E Testing Infrastructure</b> (Nov 22, 2025) ⭐ Latest</summary>
+<summary><b>v0.22.0 - Unified Library Tab & 12-Category System</b> (Nov 23, 2025) ⭐ Latest</summary>
 
 <br>
 
-**Phase 3, Task 8 Complete** - Production-grade E2E testing
+**Major UX Improvements & Template Expansion**
 
-- ✅ Playwright E2E testing infrastructure
-- ✅ 21 comprehensive E2E tests across 3 user journeys
-- ✅ Strategic test IDs added to all components
-- ✅ CI/CD ready with headless, UI, and debug modes
-- ✅ Video recording and screenshot capture on failures
-- ✅ 100% test pass rate (459 total tests)
+#### Library Tab & Category System
+- ✅ Unified Library Tab combining templates and user tests
+- ✅ 12-Category Classification System (Q&A, Code Gen, Browser, Multi-turn, Safety, etc.)
+- ✅ 10 New Templates (API Testing, Data Analysis, LangGraph, Safety, Reasoning, etc.)
+- ✅ Enhanced search and filtering
+- ✅ Category-based organization with color coding
 
-**Test Coverage:**
-- Create Test from Scratch (7 tests)
-- Template Loading Workflow (8 tests)
-- Visual ↔ YAML Round-Trip (6 tests)
+#### UI/UX Improvements
+- ✅ Tab restructure: Canvas, Test, Suite, Library
+- ✅ Integrated run section in Test tab (collapsible)
+- ✅ State persistence (run details, suite expansion)
+- ✅ Refined LibraryCard component with icons
+- ✅ Better visual hierarchy and information design
+
+#### Backend Enhancements
+- ✅ Database schema updates (category, is_template fields)
+- ✅ Updated API endpoints for category management
+- ✅ Test renaming functionality
 
 </details>
 
 <details>
-<summary><b>v0.14.5 - Frontend Test Coverage 50%+</b> (Nov 22, 2025)</summary>
+<summary><b>v0.21.0 - Test Suite Organizer</b> (Nov 22, 2025)</summary>
 
 <br>
 
-- ✅ 389 passing frontend tests across 24 test files
-- ✅ 50%+ coverage achieved (comprehensive component testing)
-- ✅ Canvas, nodes, UI, hooks, services, stores all tested
-- ✅ Phase 2 COMPLETE
+- ✅ Test suite organizer with folders
+- ✅ Suite search and filtering
+- ✅ Drag-and-drop test organization
+- ✅ Suite export/import
 
 </details>
 
 <details>
-<summary><b>v0.14.4 - Backend Code Style Compliance</b> (Nov 22, 2025)</summary>
+<summary><b>v0.20.0 - Enhanced Visual Canvas</b> (Nov 2025)</summary>
 
 <br>
 
-- ✅ Black formatting (line-length: 100)
-- ✅ Ruff linting
-- ✅ MyPy type checking
-- ✅ All quality checks passing
-
-</details>
-
-<details>
-<summary><b>v0.14.3 - TypeScript Type Safety</b> (Nov 22, 2025)</summary>
-
-<br>
-
-- ✅ 0 TypeScript errors achieved
-- ✅ Strict type checking enabled
-- ✅ Phase 1 COMPLETE
-
-</details>
-
-<details>
-<summary><b>v0.3.0 - React Migration</b> (Nov 16, 2025)</summary>
-
-<br>
-
-- ✅ Migrated from Svelte to React 19 for production stability
-- ✅ React Flow 12.3 (400k+ weekly downloads)
-- ✅ All 5 node types working with 100% reliable drag-and-drop
-- ✅ Tauri desktop app running smoothly
+- ✅ Test renaming functionality
+- ✅ Improved drag-drop palette
+- ✅ Auto-save improvements
+- ✅ Better YAML synchronization
 
 </details>
 
@@ -493,13 +582,13 @@ gantt
     title Sentinel 2026 Roadmap
     dateFormat  YYYY-MM
     section Phase 4
-    DSL Parser & Import      :2026-01, 2m
-    Model Execution          :2026-02, 2m
+    Model Execution         :2026-01, 2m
+    Result Storage          :2026-02, 1m
     section Phase 5
-    Assertion Builder        :2026-04, 1m
-    Design System            :2026-05, 1m
+    Advanced Providers      :2026-03, 2m
+    LangGraph Support       :2026-05, 1m
     section Phase 6
-    Advanced Features        :2026-06, 3m
+    Analytics & CI/CD       :2026-06, 3m
 ```
 
 </div>
@@ -508,60 +597,58 @@ gantt
 <tr>
 <td width="33%">
 
-**v0.4.0 - DSL Import**
+**v0.23.0 - Execution**
 <sup>Q1 2026</sup>
 
-- YAML → Canvas import
-- Monaco editor integration
-- Bidirectional sync
-- Split view mode
-- Zero data loss guarantee
-
-</td>
-<td width="33%">
-
-**v0.5.0 - Execution**
-<sup>Q1-Q2 2026</sup>
-
-- Anthropic + OpenAI providers
 - Live execution dashboard
-- Result storage (SQLite/PostgreSQL)
-- Metrics & analytics
+- Result storage (SQLite)
 - Test run history
+- Metrics & analytics
+- Performance tracking
 
 </td>
 <td width="33%">
 
-**v0.6.0 - Templates**
+**v0.24.0 - Providers**
+<sup>Q1 2026</sup>
+
+- Bedrock integration
+- HuggingFace support
+- Ollama local models
+- Provider comparison
+- Cost tracking
+
+</td>
+<td width="33%">
+
+**v0.25.0 - LangGraph**
 <sup>Q2 2026</sup>
 
-- Template gallery (10+ templates)
-- Template search & filter
-- Custom template creation
-- Template sharing
-- Version management
+- LangGraph framework support
+- State machine testing
+- Multi-agent workflows
+- Workflow visualization
+- Debug tools
 
 </td>
 </tr>
 </table>
 
 <details>
-<summary><b>🔮 Future Features (v0.7.0 - v0.15.0)</b></summary>
+<summary><b>🔮 Future Features (v0.26.0+)</b></summary>
 
 <br>
 
-**Phase 5 - Core Value (Q2-Q3 2026)**
-- **v0.7.0**: Visual assertion builder
-- **v0.8.0**: Regression engine & comparison view
+**Advanced Features (Q2-Q3 2026)**
+- **v0.26.0**: AI-assisted test generation
+- **v0.27.0**: Visual assertion builder enhancements
+- **v0.28.0**: Regression engine & comparison view
 
-**Phase 6 - Extended Value (Q3-Q4 2026)**
-- **v0.9.0**: LangGraph framework support
-- **v0.10.0**: AI-assisted test generation
-- **v0.11.0**: Collaborative workspaces
-- **v0.12.0**: Additional providers (Bedrock, HuggingFace, Ollama)
-- **v0.13.0**: Safety scenarios & evaluation sets
-- **v0.14.0**: Dashboard & analytics
-- **v0.15.0**: CI/CD integration & export
+**Enterprise Features (Q3-Q4 2026)**
+- **v0.29.0**: Collaborative workspaces
+- **v0.30.0**: Advanced safety scenarios
+- **v0.31.0**: Dashboard & analytics platform
+- **v0.32.0**: CI/CD integration & automation
 
 **[→ Full roadmap with detailed specs](backlog/active.md)**
 
@@ -610,20 +697,27 @@ gantt
 
 | Metric | Value | Metric | Value |
 |--------|-------|--------|-------|
-| **Version** | 0.15.0 | **Release Date** | Nov 22, 2025 |
-| **Total Tests** | 459 passing | **Test Pass Rate** | 100% |
-| **E2E Tests** | 21 (Playwright) | **Unit Tests** | 389 (Vitest) |
-| **Backend Tests** | 70 (pytest) | **Coverage** | 50%+ (frontend), 85%+ (backend) |
-| **Node Types** | 5 production | **Templates** | 6+ ready-to-use |
-| **Frontend LOC** | ~9,700 (76 files) | **Backend LOC** | ~1,400 (18 files) |
-| **TypeScript Errors** | 0 | **Code Quality** | Black, Ruff, MyPy, ESLint ✅ |
-| **Components** | 57 React components | **Assertion Types** | 8 validators |
+| **Version** | 0.22.0 | **Release Date** | Nov 23, 2025 |
+| **Total Tests** | 473 passing | **Test Pass Rate** | 100% ✅ |
+| **Frontend Tests** | 27 files, 473 tests | **Backend Tests** | 6 files, comprehensive coverage |
+| **Frontend Coverage** | 50%+ | **Backend Coverage** | 85%+ |
+| **Node Types** | 6+ production | **Templates** | 16 ready-to-use |
+| **Categories** | 12 classifications | **Assertion Types** | 8 validators |
+| **Frontend LOC** | 13,536 (100 files) | **Backend LOC** | 3,234 (34 files) |
+| **TypeScript Errors** | 0 (strict mode) | **TypeScript `any`** | Only 4 instances |
+| **Components** | 68 React components | **Documentation** | 27,157 LOC (47% of codebase) |
 
 **Tech Metrics:**
 - **Build Time**: ~3s (Vite HMR)
-- **Desktop App Size**: ~600KB (Tauri 2.0)
-- **Startup Time**: <2s
-- **Test Execution**: ~3s (unit tests), ~15s (E2E tests)
+- **Desktop App**: Tauri 2.0 (lightweight, fast startup)
+- **Test Execution**: 2.24s for 473 unit tests
+- **Type Safety**: TypeScript strict mode, Pydantic v2
+
+**Code Quality:**
+- ✅ **Frontend**: ESLint, TypeScript strict (0 errors)
+- ✅ **Backend**: Black (line-length: 100), Ruff, MyPy
+- ✅ **Codebase**: 57,581 LOC (project code only, excluding dependencies)
+- ✅ **Documentation**: Exceptional (47.2% of codebase is documentation)
 
 </div>
 
@@ -680,17 +774,16 @@ cd frontend
 npm install
 
 # Run frontend tests
-npm test                    # Unit tests (Vitest)
-npm run test:e2e           # E2E tests (Playwright)
-npm run test:all           # All tests
+npm test                    # Unit tests (Vitest) - 473 tests
+npm run lint                # ESLint
+npm run type-check          # TypeScript (0 errors)
 
 # Run dev server
-npm run dev                # Browser only
-npm run tauri:dev          # Desktop app (recommended)
+npm run dev                 # Browser only
+npm run tauri:dev           # Desktop app (recommended)
 
-# Code quality
-npm run lint
-npm run type-check
+# Code quality checks
+npm run lint && npm run type-check
 ```
 
 <details>
@@ -709,14 +802,14 @@ npm run type-check
 **Code Style:**
 - **Frontend**: ESLint + TypeScript strict mode (0 errors required)
 - **Backend**: Black (line-length: 100) + Ruff + MyPy
-- **Tests**: Required for all features (unit + E2E where applicable)
+- **Tests**: Required for all features (unit tests where applicable)
 - **Commits**: Conventional Commits format (`feat:`, `fix:`, `docs:`, etc.)
 
 **Testing Requirements:**
 - Unit tests for all new components/functions
-- E2E tests for new user-facing features
 - 100% test pass rate before merge
 - No TypeScript errors allowed
+- Maintain or improve test coverage
 
 **Review Process:**
 - All PRs require 1 approval
@@ -867,6 +960,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 <div align="center">
 
 [![Documentation](https://img.shields.io/badge/docs-read%20now-blue?style=for-the-badge&logo=readthedocs&logoColor=white)](docs/)
+[![Metrics Report](https://img.shields.io/badge/metrics-view%20report-purple?style=for-the-badge&logo=chartdotjs&logoColor=white)](metrics/latest.md)
 [![GitHub Issues](https://img.shields.io/badge/issues-report%20bug-red?style=for-the-badge&logo=github&logoColor=white)](https://github.com/navam-io/sentinel/issues)
 [![Discussions](https://img.shields.io/badge/discussions-join-green?style=for-the-badge&logo=github&logoColor=white)](https://github.com/navam-io/sentinel/discussions)
 [![Twitter](https://img.shields.io/badge/twitter-follow-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/navam_io)
@@ -886,17 +980,19 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
 
 ### 🚀 Current Status
 
-**Version**: 0.15.0 (Released November 22, 2025)<br>
-**Status**: E2E Testing Infrastructure Complete ✅<br>
-**Next Milestone**: v0.4.0 - DSL Parser & Visual Importer (Q1 2026)
+**Version**: 0.22.0 (Released November 23, 2025)<br>
+**Status**: Unified Library Tab with 12-Category System ✅<br>
+**Next Milestone**: v0.23.0 - Model Execution & Result Storage (Q1 2026)
 
 **Production Ready Features:**
-- ✅ Visual canvas with 5 node types
-- ✅ Real-time YAML generation
-- ✅ Template gallery with 6+ templates
+- ✅ Visual canvas with 6+ node types
+- ✅ Real-time Visual ↔ YAML synchronization
+- ✅ Library with 16 categorized templates
+- ✅ 12-category classification system
+- ✅ Test suite organizer
 - ✅ Desktop app (Tauri 2.0)
-- ✅ 459 tests with 100% pass rate
-- ✅ E2E testing infrastructure
+- ✅ 473 tests with 100% pass rate
+- ✅ Comprehensive documentation (47% of codebase)
 
 ---
 
