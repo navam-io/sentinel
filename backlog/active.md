@@ -1686,6 +1686,87 @@ Generate tests from natural language descriptions using AI.
 
 ---
 
+### Feature 11: Unified Test Management System
+**Status**: Not Started
+**Priority**: P1 - Core UX Improvement
+**Semver Impact**: minor (0.29.0 - 0.32.0, 4 phases)
+**Specification**: See `backlog/11-spec-test-management.md` for comprehensive details
+
+**Description**:
+Unify test creation, editing, saving, and management into a seamless, intuitive experience. Address fundamental UX issues with multiple disconnected save points, inconsistent state management, and confusing workflows.
+
+**Problem Statement**:
+Current architecture has critical UX issues:
+- Multiple disconnected save points (YamlPreview, TestManager, Library)
+- Tests saved to database but templates from filesystem (inconsistent)
+- Comparison view broken for unsaved tests (no test ID linkage)
+- Name/description editable in 3+ places with different behaviors
+- "Save" in YamlPreview always creates NEW test (duplicates)
+- No dirty state indicator for unsaved changes
+
+**Requirements**:
+
+- **Phase 1 (v0.29.0): Unified Test State**
+  - Create `useTestStore.ts` - single source of truth for test state
+  - Track: id, filename, name, description, category, isDirty, lastSaved
+  - Refactor YamlPreview to use unified store (remove internal save state)
+  - Remove/deprecate TestManager component (consolidate to Library)
+  - Update canvasStore to call markDirty() on changes
+
+- **Phase 2 (v0.30.0): File-Based Storage**
+  - Store tests as YAML files in `artifacts/tests/` (like templates)
+  - Database stores metadata only (id, filename, runs) - not full spec
+  - Backend TestFileService for CRUD operations on YAML files
+  - New API endpoints: `/api/tests/files` for file operations
+  - Migration script to export existing database tests to files
+
+- **Phase 3 (v0.31.0): Unified UI/UX**
+  - TestHeader component with inline name editing and dirty indicator
+  - TestActions bar with unified Save/Save As/Import/Export
+  - Keyboard shortcuts: ⌘S (save), ⌘⇧S (save as), ⌘N (new)
+  - Auto-save by default (no toggle needed), 3-second debounce
+  - State indicators: dirty (●), saved (✓), saving (⟳), template badge
+
+- **Phase 4 (v0.32.0): Comparison Integration**
+  - Auto-link runs to tests (prompt to save if unsaved)
+  - Comparison view shows "Save to enable comparison" for unsaved tests
+  - Run history section in Test tab (last 5 runs, quick compare)
+
+**Deliverables**:
+- `frontend/src/stores/testStore.ts` - Unified test state management
+- `frontend/src/components/test/TestHeader.tsx` - Inline editable header
+- `frontend/src/components/test/TestActions.tsx` - Unified action bar
+- `backend/services/test_files.py` - File-based test storage
+- `backend/api/test_files.py` - File CRUD API endpoints
+- `backend/migrations/export_tests_to_files.py` - Migration script
+- Database schema changes (remove spec_json, spec_yaml, canvas_state; add filename)
+- Tests for all new components and services
+- Documentation: Test management guide
+
+**Success Criteria**:
+- Single "Save" button with consistent behavior (no duplicates)
+- Tests stored as YAML files in `artifacts/tests/` (git-friendly)
+- Clear dirty state indicator when changes are unsaved
+- Auto-save works automatically without toggle
+- Comparison view works for all saved tests
+- All runs linked to test definitions
+- Keyboard shortcuts work (⌘S to save)
+- No data loss during migration
+
+**User Experience Transformation**:
+
+| Before | After |
+|--------|-------|
+| Multiple save buttons | Single unified Save |
+| Creates duplicates | Updates existing test |
+| Tests in database only | Tests as YAML files (git-friendly) |
+| No dirty indicator | Clear unsaved changes indicator |
+| Manual auto-save toggle | Auto-save by default |
+| Comparison broken for unsaved | Clear "save to compare" prompt |
+| 3 places to edit name | Inline edit in one place |
+
+---
+
 ### Feature 12: Additional Model Providers
 **Status**: Not Started
 **Priority**: P2 - Extended Value
@@ -1948,13 +2029,14 @@ User Experience:
 - **Testing is mandatory**: All features require tests
 - **Documentation is required**: Each feature needs user documentation
 - **🔴 Code quality is critical**: All developers must follow the Code Quality & Testing Initiative (see above and `backlog/08-spec-code-quality.md`). Testing gaps in critical code (DSL, Canvas, Nodes) must be addressed in Phase 1.
+- **🟡 Test management UX**: Feature 11 addresses critical UX issues with test saving/editing. Tests should be stored as YAML files in `artifacts/tests/` for git-friendliness. See `backlog/11-spec-test-management.md` for details.
 
 ## Current Status
 
 - **Version**: 0.28.0 (Regression Engine & Comparison View ✅)
 - **Latest Release**: Release 0.28.0 - Regression Engine & Comparison View (November 24, 2025)
 - **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish) + Feature 5 (Design System Implementation ✅) + Feature 7 (Template Gallery & Test Suites COMPLETE ✅ - Now Filesystem-Based) + Native System Menu & About Dialog (v0.27.0) + **Feature 8 (Regression Engine & Comparison View ✅ - v0.28.0)**
-- **Next Feature**: Feature 6 - Record & Replay Test Generation OR Feature 9 - Agentic Framework Support (LangGraph)
+- **Next Feature**: **Feature 11 - Unified Test Management System (P1)** OR Feature 6 - Record & Replay Test Generation OR Feature 9 - Agentic Framework Support (LangGraph)
 - **🔴 Critical Initiative**: Code Quality & Testing - **ALL PHASES COMPLETE ✅** (Phase 1-4 done)
 - **✅ Infrastructure Task**: Tauri 2.1 → 2.9.3 Upgrade - **COMPLETED** (v0.25.0, November 24, 2025)
 - **✅ Desktop App Polish**: Native System Menu - **COMPLETED** (v0.27.0, November 24, 2025)
