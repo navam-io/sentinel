@@ -128,8 +128,16 @@ function ComponentPalette() {
 			style={{ width: showLeftPanel ? '16rem' : '0', overflow: 'hidden' }}
 			data-testid="component-palette"
 		>
-			{/* Collapse Button */}
-			<div className="flex justify-end border-b border-sentinel-border">
+			{/* Toolbar with Settings and Collapse */}
+			<div className="flex justify-between border-b border-sentinel-border">
+				<button
+					onClick={() => setSettingsOpen(true)}
+					className="px-2 py-3 hover:bg-sentinel-hover transition-colors"
+					title="Settings"
+					data-testid="settings-button"
+				>
+					<SettingsIcon size={16} className="text-sentinel-text-muted" />
+				</button>
 				<button
 					onClick={() => setShowLeftPanel(false)}
 					className="px-2 py-3 hover:bg-sentinel-hover transition-colors"
@@ -195,19 +203,6 @@ function ComponentPalette() {
 						})}
 					</div>
 				))}
-			</div>
-
-			{/* Palette Footer */}
-			<div className="p-3 border-t border-sentinel-border">
-				<button
-					onClick={() => setSettingsOpen(true)}
-					className="w-full sentinel-button-secondary text-[0.65rem] flex items-center justify-center gap-2"
-					title="Settings"
-					data-testid="settings-button"
-				>
-					<SettingsIcon size={14} />
-					Settings
-				</button>
 			</div>
 
 			{/* Settings Modal */}
