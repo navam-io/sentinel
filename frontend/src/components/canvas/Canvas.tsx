@@ -10,6 +10,7 @@ import {
 } from '@xyflow/react';
 import { Network } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
+import { useSettingsStore } from '../../stores/settingsStore';
 import InputNode from '../nodes/InputNode';
 import ModelNode from '../nodes/ModelNode';
 import AssertionNode from '../nodes/AssertionNode';
@@ -27,6 +28,7 @@ function Canvas() {
 		organizeNodes
 	} = useCanvasStore();
 
+	const { showMinimap } = useSettingsStore();
 	const { screenToFlowPosition } = useReactFlow();
 
 	// Handle canvas clicks for positioning
@@ -76,7 +78,7 @@ function Canvas() {
 						<Network className="w-4 h-4" />
 					</ControlButton>
 				</Controls>
-				<MiniMap />
+				{showMinimap && <MiniMap />}
 			</ReactFlow>
 		</div>
 	);

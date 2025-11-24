@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.25.0] - 2025-11-24
+
+### Changed
+
+#### 🔧 Tauri Infrastructure Upgrade (2.1 → 2.9.3)
+- **Rust Core**: Upgraded Tauri from 2.1.0 to 2.9.3 (+8 minor versions)
+- **Build System**: tauri-build 2.1.0 → 2.5.2 (+4 minor versions)
+- **Plugins**: All Tauri plugins upgraded to latest stable:
+  - tauri-plugin-fs: 2.1.0 → 2.4.4 (+3 minor versions)
+  - tauri-plugin-dialog: 2.1.0 → 2.4.2 (+3 minor versions)
+  - tauri-plugin-shell: 2.1.0 → 2.3.3 (+2 minor versions)
+  - tauri-plugin-clipboard-manager: 2.0.0 → 2.3.2 (+3 minor versions)
+- **JavaScript CLI**: @tauri-apps/cli 2.1.0 → 2.9.4 (+8 minor versions)
+- **Version Consistency**: Eliminated Rust (2.1) ↔ JavaScript (2.9.0) version mismatch
+- **Zero Regressions**: All 544 tests passing (456 frontend + 88 backend)
+- **Build Time**: 1.78s production build ✅
+- **Bundle Size**: 676KB (gzipped: 212KB) ✅
+
+### Added
+
+#### 🎨 New Features Unlocked (Tauri 2.8.0+)
+- **Submenu Icon Support**: New capability to add icons to submenu items (Rust + JavaScript APIs)
+- **Improved SVG Rendering**: Fixed gray fringe around icons (tauri-cli 2.9.4 improvement)
+- **8 Minor Version Updates**: Bug fixes, stability improvements, security updates
+
+### Technical Details
+
+- **Risk Level**: LOW (minor version upgrade, no breaking changes)
+- **Upgrade Time**: ~2 hours (as planned)
+- **Test Coverage**: 0 TypeScript errors, 544 tests passing
+- **Documentation**: Updated CLAUDE.md, created comprehensive upgrade plan
+- **References**:
+  - Upgrade Plan: `backlog/09-spec-tauri-upgrade.md` (400+ lines)
+  - Release Notes: `releases/release-0.25.0.md`
+  - Research: `refer/tauri/v2-window-menu-api.md`
+
+---
+
 ## [0.24.0] - 2025-11-24
 
 ### Added

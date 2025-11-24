@@ -45,7 +45,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Tech Stack
 
 **Frontend (Visual UI)**
-- **Tauri 2.0**: Rust core + TypeScript UI (desktop app)
+- **Tauri 2.9.3**: Rust core + TypeScript UI (desktop app) - *Upgraded from 2.1 in v0.25.0*
 - **React 19 + Vite**: Modern web framework with TypeScript
 - **React Flow** (@xyflow/react v12.3): Production-ready node-based canvas
 - **Zustand**: Lightweight state management

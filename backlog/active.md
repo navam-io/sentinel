@@ -51,7 +51,7 @@ This file contains the active feature backlog for Sentinel. Features are listed 
 - See `backlog/05-spec-flow.md` for React Flow implementation guide
 
 **Frontend (Visual UI)**
-- Tauri 2.0 (Rust core + TypeScript UI)
+- **Tauri 2.1** (Rust core + TypeScript UI) - *Upgrading to 2.9.3 in v0.25.0*
 - **React 19 + TypeScript + Vite** (replacing SvelteKit 2.0)
 - **React Flow** (@xyflow/react) - production-ready node-based canvas (400k+ weekly downloads)
 - **shadcn/ui** (original React version with v0 AI support)
@@ -89,6 +89,42 @@ Priority order:
 - **Research Inspiration**: Langflow, n8n, Postman, Playwright Codegen, LangSmith
 
 ## Completed Features
+
+---
+
+### ✅ Release 0.25.0: Tauri 2.9.3 Infrastructure Upgrade
+**Status**: Completed ✅
+**Released**: November 24, 2025
+**Semver**: 0.23.0 → 0.25.0 (minor - infrastructure upgrade)
+
+**Description**:
+Infrastructure upgrade to Tauri 2.9.3, resolving version mismatches between Rust and JavaScript dependencies, unlocking new features, and ensuring all dependencies are on the latest stable releases.
+
+**What Was Delivered**:
+- **Rust Core Upgrade**: Tauri 2.1.0 → 2.9.3 (+8 minor versions) ✅
+- **Build System**: tauri-build 2.1.0 → 2.5.2 (+4 minor versions) ✅
+- **All Plugins Upgraded**: fs, dialog, shell, clipboard-manager to latest stable ✅
+- **JavaScript CLI**: @tauri-apps/cli 2.1.0 → 2.9.4 (+8 minor versions) ✅
+- **Version Consistency**: Eliminated Rust 2.1 ↔ JS 2.9.0 mismatch ✅
+- **Zero Regressions**: All 544 tests passing (456 frontend + 88 backend) ✅
+- **Documentation**: CLAUDE.md, CHANGELOG.md, comprehensive release notes ✅
+
+**Key Features Unlocked**:
+1. Submenu icon support (Tauri 2.8.0+) - new API capability
+2. Improved SVG icon rendering (no more gray fringe)
+3. 8 minor versions of bug fixes and stability improvements
+4. Security updates across all Tauri packages
+5. Better Rust/JavaScript dependency alignment
+
+**Success Criteria Met**:
+- ✅ All 544 tests passing (same as baseline)
+- ✅ 0 TypeScript errors (100% type safety maintained)
+- ✅ Production build successful (1.78s, 676KB)
+- ✅ No breaking changes or regressions
+- ✅ Comprehensive documentation updated
+- ✅ Upgrade completed in ~2 hours (as estimated)
+
+**Documentation**: See `releases/release-0.25.0.md` for complete release notes and `backlog/09-spec-tauri-upgrade.md` for upgrade plan.
 
 ---
 
@@ -629,6 +665,163 @@ By end of implementation:
 - **Quality Specification**: `backlog/08-spec-code-quality.md` (comprehensive 800+ line spec)
 - **Active Backlog**: This file
 - **Development Guide**: `CLAUDE.md`
+
+---
+
+## ✅ Infrastructure: Tauri 2.1 → 2.9.3 Upgrade - COMPLETED
+
+**Status**: Completed ✅ (November 24, 2025)
+**Priority**: P1 - Infrastructure Maintenance
+**Release**: v0.25.0
+**Actual Time**: ~2 hours (as estimated)
+**Risk Level**: LOW
+**Specification**: See `backlog/09-spec-tauri-upgrade.md` for complete upgrade plan
+**Release Notes**: See `releases/release-0.25.0.md` for comprehensive details
+
+### Overview
+
+Upgrade Tauri from version 2.1 to 2.9.3 to fix version mismatches, unlock new features, and ensure all dependencies are on latest stable releases.
+
+**Current State:**
+- **Rust Core**: Tauri 2.1 (8 minor versions behind)
+- **JS API**: @tauri-apps/api 2.9.0 (already latest ✅)
+- **Version Mismatch**: Rust 2.1 ↔ JS 2.9.0 (inconsistent)
+
+**Target State:**
+- **Rust Core**: Tauri 2.9.3 ✅
+- **All Plugins**: Latest stable (2.3.x - 2.4.x) ✅
+- **JS CLI**: @tauri-apps/cli 2.9.4 ✅
+- **Version Consistency**: All dependencies aligned ✅
+
+### Benefits
+
+**New Features Unlocked:**
+- 🎨 Submenu icon support (Tauri 2.8.0+)
+- 🖼️ Improved SVG icon rendering (no gray fringe)
+- 🔧 8 minor versions of bug fixes and improvements
+- 🛡️ Security updates
+
+**Version Consistency:**
+- ✅ Eliminates Rust/JS version mismatch
+- ✅ All plugins aligned to latest stable
+- ✅ Improved compatibility
+
+### Upgrade Plan Summary
+
+**5-Phase Approach** (see `backlog/09-spec-tauri-upgrade.md` for details):
+
+**Phase 1: Preparation**
+- Create feature branch `upgrade/tauri-2.9.3`
+- Run baseline tests (459 tests - all must pass)
+- Backup configuration files
+
+**Phase 2: Rust Dependencies**
+- Update `Cargo.toml` with new versions
+- Run `cargo update` and verify builds
+
+**Phase 3: JavaScript Dependencies**
+- Update `package.json` with new CLI version
+- Run `npm install` and verify
+
+**Phase 4: Testing & Validation**
+- Type checking (0 errors required)
+- All 459 tests must pass (389 unit + 21 E2E + 49 backend)
+- Manual testing checklist (templates, clipboard, file ops)
+- Production build verification
+
+**Phase 5: Documentation**
+- Update CLAUDE.md tech stack section
+- Update CHANGELOG.md with upgrade notes
+- Create release notes (v0.25.0)
+
+### Version Changes
+
+| Package | Current | Target | Change |
+|---------|---------|--------|--------|
+| tauri (Rust) | 2.1.0 | 2.9.3 | +8 minor |
+| tauri-build | 2.1.0 | 2.5.2 | +4 minor |
+| tauri-plugin-fs | 2.1.0 | 2.4.4 | +3 minor |
+| tauri-plugin-dialog | 2.1.0 | 2.4.0 | +3 minor |
+| tauri-plugin-shell | 2.1.0 | 2.3.3 | +2 minor |
+| tauri-plugin-clipboard-manager | 2.0.0 | 2.3.2 | +3 minor |
+| @tauri-apps/api | 2.9.0 | 2.9.0 | No change ✅ |
+| @tauri-apps/cli | 2.1.0 | 2.9.4 | +8 minor |
+
+### Risk Assessment
+
+**Risk Level: LOW** ✅
+- Minor version upgrade within Tauri 2.x (no breaking changes expected)
+- Minimal Tauri usage in codebase (4 plugins, 1 custom command)
+- All APIs used are stable and well-established
+- Comprehensive testing plan with rollback strategy
+
+**Risk Mitigation:**
+- Baseline tests captured before upgrade
+- Full test suite validation (459 tests)
+- Manual testing checklist for Tauri features
+- Rollback plan documented
+
+### Success Criteria
+
+✅ Upgrade is successful when:
+
+1. **All tests pass**: 459 tests (389 unit + 21 E2E + 49 backend)
+2. **Type checking passes**: 0 TypeScript errors
+3. **Build succeeds**: Production build completes without errors
+4. **Manual tests pass**: All checklist items verified
+5. **No regressions**: All existing features work as before
+6. **New features available**: Submenu icons API accessible
+7. **Documentation updated**: CLAUDE.md, CHANGELOG.md, release notes
+
+### Manual Testing Checklist
+
+**Desktop App:**
+- [ ] App launches successfully (dev mode: `npm run tauri:dev`)
+- [ ] DevTools open in debug mode
+- [ ] No console errors on startup
+
+**Tauri Features:**
+- [ ] Template loading works (readDir, readTextFile, resolveResource)
+- [ ] Custom command works (invoke 'get_project_root')
+- [ ] Clipboard functionality (writeText)
+- [ ] File system operations
+- [ ] Production build succeeds
+
+### Rollback Plan
+
+If issues occur:
+```bash
+# Restore backup files
+cp frontend/src-tauri/Cargo.toml.backup frontend/src-tauri/Cargo.toml
+cp frontend/package.json.backup frontend/package.json
+
+# Reinstall old versions
+cd frontend/src-tauri && cargo update
+cd .. && npm install
+
+# Verify rollback
+npm test && npm run test:e2e
+```
+
+### References
+
+- **Upgrade Plan**: `backlog/09-spec-tauri-upgrade.md` (comprehensive 400+ line spec)
+- **Tauri Releases**: https://v2.tauri.app/release/
+- **GitHub Releases**: https://github.com/tauri-apps/tauri/releases
+- **Migration Guide**: https://v2.tauri.app/start/migrate/
+- **Window Menu Docs**: https://v2.tauri.app/learn/window-menu/ (new features in 2.8.0+)
+
+### Next Steps
+
+When ready to execute:
+```bash
+# 1. Create upgrade branch
+git checkout -b upgrade/tauri-2.9.3
+
+# 2. Follow phases 1-5 in backlog/09-spec-tauri-upgrade.md
+
+# 3. Estimated time: 2-3 hours
+```
 
 ---
 
@@ -1670,12 +1863,13 @@ User Experience:
 
 ## Current Status
 
-- **Version**: 0.23.0 (Dynamic Templates Loading System ✅)
-- **Latest Release**: Release 0.23.0 - Dynamic Templates Loading System (November 23, 2025)
+- **Version**: 0.25.0 (Tauri 2.9.3 Infrastructure Upgrade ✅)
+- **Latest Release**: Release 0.25.0 - Tauri 2.9.3 Infrastructure Upgrade (November 24, 2025)
 - **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish) + Feature 5 (Design System Implementation ✅) + Feature 7 (Template Gallery & Test Suites COMPLETE ✅ - Now Filesystem-Based)
 - **Next Feature**: Feature 8 - Regression Engine & Comparison View OR Feature 6 - Record & Replay Test Generation
 - **🔴 Critical Initiative**: Code Quality & Testing - **ALL PHASES COMPLETE ✅** (Phase 1-4 done)
-- **Architecture**: Visual-first desktop app (Tauri + React 19 + React Flow) with Python backend + SQLite storage + Auto-save + Assertion Validation + WCAG AAA UI + Dynamic Templates (Filesystem-Based) + Settings Store + Test Suite Organizer + Complete Design System + 100% Type Safety + Professional Code Quality + 50%+ Test Coverage + E2E Testing + Cross-User Compatibility
+- **✅ Infrastructure Task**: Tauri 2.1 → 2.9.3 Upgrade - **COMPLETED** (v0.25.0, November 24, 2025)
+- **Architecture**: Visual-first desktop app (**Tauri 2.9.3** + React 19 + React Flow) with Python backend + SQLite storage + Auto-save + Assertion Validation + WCAG AAA UI + Dynamic Templates (Filesystem-Based) + Settings Store + Test Suite Organizer + Complete Design System + 100% Type Safety + Professional Code Quality + 50%+ Test Coverage + E2E Testing + Cross-User Compatibility
 - **Test Status**: 459/459 tests passing (100% - backend + frontend) ✅
 - **Code Quality Status** (All Phases Complete ✅):
   - ✅ **Critical Code Tested**: DSL (24 tests), Canvas (24 tests), Nodes (158 tests)

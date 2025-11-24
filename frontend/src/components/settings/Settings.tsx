@@ -13,7 +13,7 @@ interface SettingsProps {
  * Allows users to configure application settings including templates folder path
  */
 export function Settings({ isOpen, onClose }: SettingsProps) {
-	const { templatesFolder, setTemplatesFolder, resetToDefaults } = useSettingsStore();
+	const { templatesFolder, setTemplatesFolder, showMinimap, setShowMinimap, resetToDefaults } = useSettingsStore();
 	const [localPath, setLocalPath] = useState(templatesFolder);
 	const [isSaving, setIsSaving] = useState(false);
 
@@ -107,6 +107,27 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
 							<p className="text-xs text-sentinel-text-muted mt-2">
 								Default: <code className="text-sentinel-primary">artifacts/templates</code>
 							</p>
+						</div>
+
+						{/* Minimap Visibility Setting */}
+						<div>
+							<label className="flex items-center justify-between cursor-pointer">
+								<div className="flex-1">
+									<span className="block text-sm font-medium text-sentinel-text mb-1">
+										Show Minimap
+									</span>
+									<p className="text-xs text-sentinel-text-muted">
+										Display the minimap overview in the bottom-right corner of the canvas
+									</p>
+								</div>
+								<input
+									type="checkbox"
+									checked={showMinimap}
+									onChange={(e) => setShowMinimap(e.target.checked)}
+									className="w-10 h-5 appearance-none bg-sentinel-surface border-2 border-sentinel-border rounded-full relative cursor-pointer transition-colors checked:bg-sentinel-primary checked:border-sentinel-primary focus:outline-none focus:ring-2 focus:ring-sentinel-primary focus:ring-offset-2 focus:ring-offset-sentinel-bg-elevated before:content-[''] before:absolute before:top-0.5 before:left-0.5 before:w-3.5 before:h-3.5 before:bg-white before:rounded-full before:transition-transform checked:before:translate-x-5"
+									data-testid="minimap-toggle"
+								/>
+							</label>
 						</div>
 
 						{/* Info Box */}

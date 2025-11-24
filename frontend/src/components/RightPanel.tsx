@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import type { Node, Edge } from '@xyflow/react';
-import { FileCode, FolderOpen, Library as LibraryIcon } from 'lucide-react';
+import { FileCode, FolderOpen, Library as LibraryIcon, ChevronRight } from 'lucide-react';
 import TestTab from './yaml/TestTab';
 import { Library } from './library/Library';
 import { TestSuiteOrganizer } from './suites';
 import type { TestSuite, TestSuiteItem } from './suites';
 import { useTemplates } from '../hooks/useTemplates';
 import { useCanvasStore } from '../stores/canvasStore';
+import { useSettingsStore } from '../stores/settingsStore';
 import { parseYAMLToNodes } from '../lib/dsl/generator';
 import { listTests, getTest, executeTest, deleteTest, updateTest, type TestDefinition } from '../services/api';
 import { loadSuites, saveSuites } from '../services/suiteStorage';
@@ -22,6 +23,7 @@ function RightPanel() {
 	const [loadingTests, setLoadingTests] = useState(false);
 	const { templates, loading: templatesLoading } = useTemplates();
 	const { nodes, setNodes, setEdges, setSavedTestInfo, organizeNodes } = useCanvasStore();
+	const { showRightPanel, setShowRightPanel } = useSettingsStore();
 
 	// Auto-save suites to localStorage whenever they change
 	useEffect(() => {
@@ -479,9 +481,21 @@ function RightPanel() {
 	};
 
 	return (
-		<div className="w-96 flex flex-col h-full bg-sentinel-bg-elevated border-l border-sentinel-border flex-shrink-0" data-testid="right-panel">
+		<div
+			className="flex flex-col h-full bg-sentinel-bg-elevated border-l border-sentinel-border flex-shrink-0 transition-all duration-300 ease-in-out"
+			style={{ width: showRightPanel ? '24rem' : '0', overflow: 'hidden' }}
+			data-testid="right-panel"
+		>
 			{/* Tab Navigation */}
 			<div className="flex border-b border-sentinel-border bg-sentinel-bg">
+				<button
+					onClick={() => setShowRightPanel(false)}
+					className="px-2 py-3 hover:bg-sentinel-hover transition-colors"
+					title="Collapse panel"
+					data-testid="collapse-right-panel"
+				>
+					<ChevronRight size={16} className="text-sentinel-text-muted" />
+				</button>
 				<button
 					data-testid="tab-test"
 					onClick={() => setActiveTab('test')}
