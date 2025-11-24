@@ -178,6 +178,9 @@ export function parseYAMLToNodes(yamlContent: string): { nodes: Node[]; edges: E
 		const xPosition = 250;
 		const spacing = 180;
 
+		// Track if we created a system node
+		let hasSystemNode = false;
+
 		// Create system node if we have systemPrompt in inputs OR legacy system fields
 		if (spec.inputs?.system_prompt || spec.description || spec.timeout_ms || spec.framework) {
 			nodes.push({
@@ -192,6 +195,7 @@ export function parseYAMLToNodes(yamlContent: string): { nodes: Node[]; edges: E
 				},
 				position: { x: xPosition, y: yPosition }
 			});
+			hasSystemNode = true;
 			yPosition += spacing;
 		}
 
@@ -238,6 +242,16 @@ export function parseYAMLToNodes(yamlContent: string): { nodes: Node[]; edges: E
 			data: modelData,
 			position: { x: xPosition, y: yPosition }
 		});
+
+		// Create edge from system to model (if system node exists)
+		if (hasSystemNode) {
+			edges.push({
+				id: 'e-system-model',
+				source: 'system-1',
+				target: 'model-1',
+				animated: true
+			});
+		}
 
 		// Create edge from input to model
 		if (nodes.length > 1 && spec.inputs) {

@@ -291,28 +291,10 @@ function YamlPreview() {
 						{isEditMode ? 'Edit and apply to update canvas' : 'Auto-generated from canvas'}
 					</p>
 				</div>
-				<div className="flex items-center justify-end">
+				<div className="flex items-center">
 					<div className="flex gap-2">
 						{!isEditMode ? (
 							<>
-								<button
-									onClick={openSaveForm}
-									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
-									title="Save test to backend"
-									aria-label="Save test to backend"
-								>
-									<Save size={12} strokeWidth={2} />
-									Save
-								</button>
-								<button
-									onClick={importYamlFile}
-									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
-									title="Import YAML/JSON file"
-									aria-label="Import YAML/JSON file"
-								>
-									<Upload size={12} strokeWidth={2} />
-									Import
-								</button>
 								<button
 									onClick={toggleEditMode}
 									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
@@ -330,6 +312,15 @@ function YamlPreview() {
 								>
 									<Copy size={12} strokeWidth={2} />
 									Copy
+								</button>
+								<button
+									onClick={importYamlFile}
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
+									title="Import YAML/JSON file"
+									aria-label="Import YAML/JSON file"
+								>
+									<Upload size={12} strokeWidth={2} />
+									Import
 								</button>
 								<button
 									onClick={downloadYaml}
@@ -378,29 +369,20 @@ function YamlPreview() {
 					}`}>
 						<div className="flex items-start justify-between">
 							<div className="flex-1">
-								<div className="flex items-center gap-2 mb-1">
+								<div className="mb-1">
 									<h3 className="text-sm font-semibold text-sentinel-text">
 										{displayTestInfo.name}
+										{savedTestInfo && (
+											<button
+												onClick={openSaveForm}
+												className="ml-2 p-1 hover:bg-sentinel-hover rounded transition-colors duration-120 inline-flex"
+												title="Rename test"
+												aria-label="Rename test"
+											>
+												<Edit2 size={12} className="text-sentinel-text-muted" />
+											</button>
+										)}
 									</h3>
-									{savedTestInfo ? (
-										<button
-											onClick={openSaveForm}
-											className="p-1 hover:bg-sentinel-hover rounded transition-colors duration-120"
-											title="Rename test"
-											aria-label="Rename test"
-										>
-											<Edit2 size={12} className="text-sentinel-text-muted" />
-										</button>
-									) : (
-										<button
-											onClick={openSaveForm}
-											className="px-2 py-0.5 text-xs bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120"
-											title="Save test"
-											aria-label="Save test"
-										>
-											Save
-										</button>
-									)}
 								</div>
 								{displayTestInfo.description && (
 									<p className={`text-xs ${savedTestInfo ? 'text-sentinel-text-muted' : 'text-sentinel-text-muted italic'}`}>
@@ -408,6 +390,17 @@ function YamlPreview() {
 									</p>
 								)}
 							</div>
+							{!savedTestInfo && (
+								<button
+									onClick={openSaveForm}
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
+									title="Save test"
+									aria-label="Save test"
+								>
+									<Save size={12} strokeWidth={2} />
+									Save
+								</button>
+							)}
 						</div>
 					</div>
 				)}
@@ -511,18 +504,18 @@ function YamlPreview() {
 						<div className="flex gap-2 justify-end">
 							<button
 								onClick={cancelSave}
-								className="flex items-center gap-1 text-xs px-3 py-1.5 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
+								className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
 								disabled={isSaving}
 							>
-								<X size={14} strokeWidth={2} />
+								<X size={12} strokeWidth={2} />
 								Cancel
 							</button>
 							<button
 								onClick={saveTestToBackend}
 								disabled={isSaving || !testName.trim()}
-								className="flex items-center gap-1 text-xs px-3 py-1.5 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120 disabled:opacity-50 disabled:cursor-not-allowed"
+								className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120 disabled:opacity-50 disabled:cursor-not-allowed"
 							>
-								<Check size={14} strokeWidth={2} />
+								<Save size={12} strokeWidth={2} />
 								{isSaving ? 'Saving...' : savedTestInfo ? 'Update' : 'Save'}
 							</button>
 						</div>

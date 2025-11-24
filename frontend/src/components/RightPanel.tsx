@@ -21,7 +21,7 @@ function RightPanel() {
 	const [savedTests, setSavedTests] = useState<TestDefinition[]>([]);
 	const [loadingTests, setLoadingTests] = useState(false);
 	const { templates, loading: templatesLoading } = useTemplates();
-	const { nodes, setNodes, setEdges, setSavedTestInfo } = useCanvasStore();
+	const { nodes, setNodes, setEdges, setSavedTestInfo, organizeNodes } = useCanvasStore();
 
 	// Auto-save suites to localStorage whenever they change
 	useEffect(() => {
@@ -83,6 +83,13 @@ function RightPanel() {
 				setNodes(parsedNodes);
 				setEdges(parsedEdges);
 				console.log(`[Canvas Load] New content loaded: ${parsedNodes.length} nodes, ${parsedEdges.length} edges`);
+
+				// Apply auto-layout after loading
+				// Use another requestAnimationFrame to ensure nodes are rendered before organizing
+				requestAnimationFrame(() => {
+					console.log('[Canvas Load] Applying auto-layout');
+					organizeNodes();
+				});
 
 				// Update saved test info
 				if (options?.savedTestInfo !== undefined) {
