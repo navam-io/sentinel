@@ -281,3 +281,118 @@ export type NodeData =
 	| AssertionNodeData
 	| ToolNodeData
 	| SystemNodeData;
+
+// ============================================================================
+// Run Comparison Types
+// ============================================================================
+
+export interface TestRun {
+	id: number;
+	test_definition_id: number;
+	started_at: string | null;
+	completed_at: string | null;
+	status: string;
+	provider: string;
+	model: string;
+	latency_ms: number | null;
+	tokens_input: number | null;
+	tokens_output: number | null;
+	cost_usd: number | null;
+	error_message?: string | null;
+}
+
+export interface TestRunResult {
+	id: number;
+	test_run_id: number;
+	assertion_type: string;
+	assertion_value: string | null;
+	passed: boolean;
+	actual_value: string | null;
+	failure_reason: string | null;
+	output_text: string | null;
+	tool_calls: Record<string, unknown>[] | null;
+	raw_response: Record<string, unknown> | null;
+}
+
+export interface RunListResponse {
+	runs: TestRun[];
+	total: number;
+}
+
+export type RegressionSeverity = 'critical' | 'warning' | 'info' | 'improvement';
+
+export interface MetricDelta {
+	metric_name: string;
+	baseline_value: number | null;
+	current_value: number | null;
+	delta: number | null;
+	delta_percent: number | null;
+	unit: string;
+	severity: RegressionSeverity;
+	description: string;
+}
+
+export interface AssertionChanges {
+	baseline_total: number;
+	current_total: number;
+	baseline_passed: number;
+	current_passed: number;
+	baseline_pass_rate: number;
+	current_pass_rate: number;
+	pass_rate_delta: number;
+	new_failures: Array<{ assertion_type: string; message: string }>;
+	fixed_failures: Array<{ assertion_type: string }>;
+	has_new_failures: boolean;
+	has_fixes: boolean;
+}
+
+export interface RegressionAnalysis {
+	has_regressions: boolean;
+	severity: RegressionSeverity;
+	metric_deltas: MetricDelta[];
+	assertion_changes: AssertionChanges;
+	summary: string;
+}
+
+export interface AssertionComparison {
+	assertion_type: string;
+	baseline_passed: boolean | null;
+	current_passed: boolean | null;
+	baseline_message: string | null;
+	current_message: string | null;
+	status: 'unchanged' | 'improved' | 'regressed' | 'new' | 'removed';
+}
+
+export interface OutputComparison {
+	baseline_output: string | null;
+	current_output: string | null;
+	outputs_differ: boolean;
+	baseline_length: number;
+	current_length: number;
+	length_delta: number;
+}
+
+export interface RunMetrics {
+	run_id: number;
+	test_id: number;
+	status: string;
+	provider: string;
+	model: string;
+	latency_ms: number | null;
+	tokens_input: number | null;
+	tokens_output: number | null;
+	cost_usd: number | null;
+	started_at: string | null;
+	completed_at: string | null;
+	error_message?: string | null;
+}
+
+export interface ComparisonResult {
+	baseline_run: RunMetrics;
+	current_run: RunMetrics;
+	regression_analysis: RegressionAnalysis;
+	assertion_comparisons: AssertionComparison[];
+	output_comparison: OutputComparison | null;
+	model_changed: boolean;
+	provider_changed: boolean;
+}

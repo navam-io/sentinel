@@ -6,6 +6,7 @@ import type { NodeChange, EdgeChange } from '@xyflow/react';
 import { getLayoutedElements } from '../lib/layout';
 
 interface SavedTestInfo {
+	id?: number;
 	name: string;
 	description: string;
 }

@@ -269,7 +269,7 @@ Add entry for the upgrade:
 
 **3. Create Release Notes**
 
-Create `releases/v0.25.0.md`:
+Create `releases/release-0.25.0.md`:
 ```markdown
 # Release v0.25.0: Tauri 2.9.3 Upgrade
 

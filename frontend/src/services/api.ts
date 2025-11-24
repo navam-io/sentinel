@@ -17,6 +17,11 @@ import type {
 	CreateTestRequest,
 	UpdateTestRequest,
 	TestListResponse,
+	TestRun,
+	TestRunResult,
+	RunListResponse,
+	ComparisonResult,
+	RegressionAnalysis,
 } from '../types/test-spec';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -34,6 +39,11 @@ export type {
 	CreateTestRequest,
 	UpdateTestRequest,
 	TestListResponse,
+	TestRun,
+	TestRunResult,
+	RunListResponse,
+	ComparisonResult,
+	RegressionAnalysis,
 };
 
 /**
@@ -178,4 +188,125 @@ export async function deleteTest(testId: number): Promise<{ message: string }> {
  */
 export async function renameTest(testId: number, newName: string): Promise<TestDefinition> {
 	return updateTest(testId, { name: newName });
+}
+
+// Run Management API Functions
+
+/**
+ * List all test runs.
+ */
+export async function listRuns(limit = 100, offset = 0): Promise<RunListResponse> {
+	const response = await fetch(
+		`${API_BASE_URL}/api/runs/list?limit=${limit}&offset=${offset}`
+	);
+
+	if (!response.ok) {
+		throw new Error('Failed to fetch runs');
+	}
+
+	return await response.json();
+}
+
+/**
+ * List runs for a specific test.
+ */
+export async function listRunsForTest(
+	testId: number,
+	limit = 50,
+	offset = 0
+): Promise<RunListResponse> {
+	const response = await fetch(
+		`${API_BASE_URL}/api/runs/test/${testId}?limit=${limit}&offset=${offset}`
+	);
+
+	if (!response.ok) {
+		throw new Error(`Failed to fetch runs for test ${testId}`);
+	}
+
+	return await response.json();
+}
+
+/**
+ * Get a specific test run.
+ */
+export async function getRun(runId: number): Promise<TestRun> {
+	const response = await fetch(`${API_BASE_URL}/api/runs/${runId}`);
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || `Failed to fetch run ${runId}`);
+	}
+
+	return await response.json();
+}
+
+/**
+ * Get assertion results for a run.
+ */
+export async function getRunResults(runId: number): Promise<TestRunResult[]> {
+	const response = await fetch(`${API_BASE_URL}/api/runs/${runId}/results`);
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || `Failed to fetch results for run ${runId}`);
+	}
+
+	return await response.json();
+}
+
+/**
+ * Compare two test runs.
+ */
+export async function compareRuns(
+	baselineId: number,
+	currentId: number
+): Promise<ComparisonResult> {
+	const response = await fetch(
+		`${API_BASE_URL}/api/runs/compare/${baselineId}/${currentId}`
+	);
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || 'Failed to compare runs');
+	}
+
+	return await response.json();
+}
+
+/**
+ * Perform regression analysis between two runs.
+ */
+export async function analyzeRegression(
+	baselineId: number,
+	currentId: number,
+	options?: {
+		latencyThreshold?: number;
+		costThreshold?: number;
+		tokensThreshold?: number;
+	}
+): Promise<RegressionAnalysis> {
+	const params = new URLSearchParams();
+	if (options?.latencyThreshold !== undefined) {
+		params.set('latency_threshold', options.latencyThreshold.toString());
+	}
+	if (options?.costThreshold !== undefined) {
+		params.set('cost_threshold', options.costThreshold.toString());
+	}
+	if (options?.tokensThreshold !== undefined) {
+		params.set('tokens_threshold', options.tokensThreshold.toString());
+	}
+
+	const queryString = params.toString();
+	const url = `${API_BASE_URL}/api/runs/regression/${baselineId}/${currentId}${
+		queryString ? `?${queryString}` : ''
+	}`;
+
+	const response = await fetch(url);
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || 'Failed to analyze regression');
+	}
+
+	return await response.json();
 }

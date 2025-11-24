@@ -1,14 +1,21 @@
 import { useState, useMemo } from 'react';
-import { Play, CheckCircle2, XCircle, Clock, DollarSign, Zap } from 'lucide-react';
+import { Play, CheckCircle2, XCircle, Clock, DollarSign, Zap, GitCompare } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import { generateYAML, convertYAMLToTestSpec } from '../../lib/dsl/generator';
 import { executeTest, type ExecuteResponse } from '../../services/api';
+import ComparisonView from '../comparison/ComparisonView';
+
+type ViewMode = 'run' | 'compare';
 
 function ExecutionPanel() {
 	const { nodes, edges, savedTestInfo } = useCanvasStore();
 	const [isExecuting, setIsExecuting] = useState(false);
 	const [response, setResponse] = useState<ExecuteResponse | null>(null);
 	const [error, setError] = useState<string | null>(null);
+	const [viewMode, setViewMode] = useState<ViewMode>('run');
+
+	// Get test ID from saved test info (for comparison view)
+	const testId = savedTestInfo?.id ?? null;
 
 	// Auto-generate test name if not saved
 	const testName = useMemo(() => {
@@ -57,20 +64,67 @@ function ExecutionPanel() {
 
 	return (
 		<div className="h-full bg-sentinel-bg-elevated flex flex-col">
-			{/* Header */}
-			<div className="p-4 border-b border-sentinel-border">
-				<button
-					onClick={handleRun}
-					disabled={isExecuting || nodes.length === 0}
-					className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120 disabled:opacity-50 disabled:cursor-not-allowed"
-				>
-					<Play size={16} strokeWidth={2} />
-					<span className="text-sm font-medium">{isExecuting ? 'Running...' : 'Run Test'}</span>
-				</button>
+			{/* Header with Mode Toggle */}
+			<div className="p-4 border-b border-sentinel-border space-y-3">
+				{/* Mode Toggle */}
+				<div className="flex gap-1 bg-sentinel-surface rounded p-1">
+					<button
+						onClick={() => setViewMode('run')}
+						className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors duration-120 ${
+							viewMode === 'run'
+								? 'bg-sentinel-primary text-sentinel-bg'
+								: 'text-sentinel-text-muted hover:text-sentinel-text'
+						}`}
+						data-testid="mode-run"
+					>
+						<Play size={12} />
+						<span>Run</span>
+					</button>
+					<button
+						onClick={() => setViewMode('compare')}
+						className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors duration-120 ${
+							viewMode === 'compare'
+								? 'bg-sentinel-primary text-sentinel-bg'
+								: 'text-sentinel-text-muted hover:text-sentinel-text'
+						}`}
+						data-testid="mode-compare"
+					>
+						<GitCompare size={12} />
+						<span>Compare</span>
+					</button>
+				</div>
+
+				{/* Run Button (only in run mode) */}
+				{viewMode === 'run' && (
+					<button
+						onClick={handleRun}
+						disabled={isExecuting || nodes.length === 0}
+						className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120 disabled:opacity-50 disabled:cursor-not-allowed"
+					>
+						<Play size={16} strokeWidth={2} />
+						<span className="text-sm font-medium">{isExecuting ? 'Running...' : 'Run Test'}</span>
+					</button>
+				)}
 			</div>
 
-			{/* Results */}
-			<div className="flex-1 overflow-y-auto p-4">
+			{/* Results / Comparison View */}
+			<div className="flex-1 overflow-y-auto">
+				{viewMode === 'compare' ? (
+					testId ? (
+						<ComparisonView testId={testId} />
+					) : (
+						<div className="h-full flex items-center justify-center p-4">
+							<div className="text-center">
+								<GitCompare size={32} className="text-sentinel-text-muted mx-auto mb-3 opacity-30" />
+								<p className="text-xs text-sentinel-text-muted">Save the test to enable comparison</p>
+								<p className="text-[0.65rem] text-sentinel-text-muted mt-1">
+									Run history comparison requires a saved test
+								</p>
+							</div>
+						</div>
+					)
+				) : (
+					<div className="p-4">
 				{error && (
 					<div className="mb-4 p-3 bg-sentinel-error bg-opacity-10 border border-sentinel-error rounded">
 						<div className="flex items-start gap-2">
@@ -363,6 +417,8 @@ function ExecutionPanel() {
 					<div className="text-center py-8">
 						<div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-sentinel-primary mb-3"></div>
 						<p className="text-xs text-sentinel-text-muted">Executing test...</p>
+					</div>
+				)}
 					</div>
 				)}
 			</div>

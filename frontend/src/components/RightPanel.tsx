@@ -44,7 +44,7 @@ function RightPanel() {
 		parsedNodes: Node[],
 		parsedEdges: Edge[],
 		options?: {
-			savedTestInfo?: { name: string; description: string } | null;
+			savedTestInfo?: { id?: number; name: string; description: string } | null;
 			confirmClear?: boolean;
 			successMessage?: string;
 			switchToTest?: boolean;
@@ -268,6 +268,7 @@ function RightPanel() {
 				// Load to canvas using robust loading function
 				loadToCanvas(parsedNodes, parsedEdges, {
 					savedTestInfo: {
+						id: savedTest.id,
 						name: savedTest.name,
 						description: savedTest.description || '',
 					},
@@ -295,6 +296,7 @@ function RightPanel() {
 			// Load to canvas using robust loading function
 			loadToCanvas(parsedNodes, parsedEdges, {
 				savedTestInfo: {
+					id: test.id,
 					name: test.name,
 					description: test.description || '',
 				},

@@ -164,7 +164,9 @@ sentinel/                      # Project root
 │   ├── active.md             # Feature roadmap
 │   ├── 03-spec-design-system.md  # Design system specs
 │   └── 02-spec-visual-first.md   # Visual UI component specs
-├── releases/                 # Release notes
+├── releases/                 # Release notes (release-X.X.X.md format)
+│   ├── release-0.28.0.md     # Example: release notes for v0.28.0
+│   └── hotfix-0.12.1-*.md    # Example: hotfix notes
 ├── templates/                # Built-in YAML test templates
 ├── docs/                     # User documentation
 ├── .env.example              # Environment variables template
@@ -175,6 +177,22 @@ sentinel/                      # Project root
 ├── README.md
 └── LICENSE
 ```
+
+### File Naming Conventions
+
+**Release Notes** (`releases/` folder):
+- **Regular releases**: `release-X.X.X.md` (e.g., `release-0.28.0.md`)
+- **Hotfixes**: `hotfix-X.X.X-description.md` (e.g., `hotfix-0.12.1-ui-improvements.md`)
+- **Never use**: `vX.X.X.md` format - always use `release-X.X.X.md`
+
+**Backlog Specs** (`backlog/` folder):
+- **Feature specs**: `XX-spec-feature-name.md` (e.g., `08-spec-code-quality.md`)
+- **Active roadmap**: `active.md` (single source of truth for feature status)
+
+**Version Locations** (update all when releasing):
+- `frontend/package.json` → `"version": "X.X.X"`
+- `frontend/src-tauri/tauri.conf.json` → `"version": "X.X.X"`
+- `backend/main.py` → `version="X.X.X"` in FastAPI app
 
 ## Feature Roadmap
 
@@ -221,9 +239,9 @@ See `backlog/active.md` for complete V1 feature roadmap and specifications (15 t
 
 ## Project Status
 
-**Current Version**: 0.23.1 (November 23, 2025)
+**Current Version**: 0.28.0 (November 24, 2025)
 
-**Latest Release**: v0.23.1 - Canvas Synchronization Bug Fixes (Critical Patch)
+**Latest Release**: v0.28.0 - Regression Engine & Comparison View
 
 **Architecture**:
 - Frontend: React 19 + Vite + Tauri 2.0 + React Flow 12.3

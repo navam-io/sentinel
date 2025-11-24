@@ -1,6 +1,6 @@
 {
   "productName": "Sentinel",
-  "version": "0.2.0",
+  "version": "0.28.0",
   "identifier": "io.navam.sentinel",
   "build": {
     "beforeDevCommand": "npm run dev",

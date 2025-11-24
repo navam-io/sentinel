@@ -7,6 +7,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.28.0] - 2025-11-24
+
+### Added
+
+#### Regression Engine & Comparison View
+- **RegressionEngine**: Backend engine for detecting performance regressions
+  - Configurable thresholds for latency (20%), cost (10%), and tokens (15%)
+  - Severity levels: `critical`, `warning`, `info`, `improvement`
+  - Assertion pass/fail rate comparison
+  - New failure and fixed failure detection
+- **RunComparator**: Side-by-side comparison of test runs
+  - Model/provider change detection
+  - Output diff comparison
+  - Assertion status comparison table
+- **Run Comparison API Endpoints**:
+  - `GET /api/runs/list` - List all test runs
+  - `GET /api/runs/test/{test_id}` - List runs for a specific test
+  - `GET /api/runs/{run_id}` - Get a specific run
+  - `GET /api/runs/{run_id}/results` - Get assertion results for a run
+  - `GET /api/runs/compare/{baseline_id}/{current_id}` - Full run comparison
+  - `GET /api/runs/regression/{baseline_id}/{current_id}` - Regression analysis
+- **ComparisonView Component**: Visual comparison UI in ExecutionPanel
+  - Mode toggle (Run/Compare) in execution panel header
+  - RunSelector dropdowns for baseline and current run selection
+  - MetricDeltaCard components for visualizing metric changes
+  - Comparison summary with severity badge
+  - Assertion comparison table with status indicators
+  - Output change detection with character count diff
+
+### Changed
+- **ExecutionPanel**: Added Run/Compare mode toggle
+- **canvasStore**: `savedTestInfo` now includes optional `id` field
+- **RightPanel**: Passes test ID when loading saved tests
+
+### Technical Details
+- **New Files**:
+  - `backend/regression/engine.py` - Regression detection logic
+  - `backend/regression/comparator.py` - Run comparison utilities
+  - `backend/api/runs.py` - Run management API
+  - `frontend/src/components/comparison/ComparisonView.tsx`
+  - `frontend/src/components/comparison/MetricDeltaCard.tsx`
+  - `frontend/src/components/comparison/RunSelector.tsx`
+- **New Tests**: 65 tests (27 backend + 38 frontend)
+- **Test Results**: 115 backend tests, 530+ frontend tests passing
+- **TypeScript**: 0 errors (100% type safety)
+- **Python Quality**: Black, Ruff, MyPy compliance
+
+### Documentation
+- See `releases/release-0.28.0.md` for complete release notes
+
+---
+
+## [0.27.0] - 2025-11-24
+
+### Added
+
+#### Native System Menu & About Dialog
+- **macOS Native Menu**: Full native menu bar with standard items
+  - File menu: New, Open, Save, Save As
+  - Edit menu: Standard editing commands
+  - View menu: Panel toggles with keyboard shortcuts
+- **About Dialog**: Native "About Sentinel" window
+  - App icon, version info, and credits
+  - macOS-native presentation
+
+### Technical Details
+- See `releases/release-0.27.0.md` for complete release notes
+
+---
+
 ## [0.26.0] - 2025-11-24
 
 ### Added
