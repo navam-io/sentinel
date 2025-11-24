@@ -1863,8 +1863,8 @@ User Experience:
 
 ## Current Status
 
-- **Version**: 0.25.0 (Tauri 2.9.3 Infrastructure Upgrade ✅)
-- **Latest Release**: Release 0.25.0 - Tauri 2.9.3 Infrastructure Upgrade (November 24, 2025)
+- **Version**: 0.26.0 (Collapsible Panels & Workspace Customization ✅)
+- **Latest Release**: Release 0.26.0 - Collapsible Panels (November 24, 2025)
 - **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish) + Feature 5 (Design System Implementation ✅) + Feature 7 (Template Gallery & Test Suites COMPLETE ✅ - Now Filesystem-Based)
 - **Next Feature**: Feature 8 - Regression Engine & Comparison View OR Feature 6 - Record & Replay Test Generation
 - **🔴 Critical Initiative**: Code Quality & Testing - **ALL PHASES COMPLETE ✅** (Phase 1-4 done)

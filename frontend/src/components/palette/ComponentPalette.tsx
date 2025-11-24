@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { LucideIcon, MessageSquare, Settings as SettingsIcon, Cpu, Wrench, CheckCircle2 } from 'lucide-react';
+import { LucideIcon, MessageSquare, Settings as SettingsIcon, Cpu, Wrench, CheckCircle2, ChevronLeft } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
+import { useSettingsStore } from '../../stores/settingsStore';
 import { Settings } from '../settings';
 import type { NodeData } from '../../types/test-spec';
 import logo from '../../assets/sentinel-square-abstract-transparent.png';
@@ -47,6 +48,7 @@ const nodeTypes: NodeCategory[] = [
 
 function ComponentPalette() {
 	const { addNode, lastCanvasClickPosition, setLastClickPosition } = useCanvasStore();
+	const { showLeftPanel, setShowLeftPanel } = useSettingsStore();
 	const [settingsOpen, setSettingsOpen] = useState(false);
 
 	const handleAddNode = (nodeType: string, label: string) => {
@@ -121,9 +123,25 @@ function ComponentPalette() {
 	};
 
 	return (
-		<div className="w-64 bg-sentinel-bg-elevated border-r border-sentinel-border flex flex-col" data-testid="component-palette">
+		<div
+			className="flex flex-col h-full bg-sentinel-bg-elevated border-r border-sentinel-border flex-shrink-0 transition-all duration-300 ease-in-out"
+			style={{ width: showLeftPanel ? '16rem' : '0', overflow: 'hidden' }}
+			data-testid="component-palette"
+		>
+			{/* Collapse Button */}
+			<div className="flex justify-end border-b border-sentinel-border">
+				<button
+					onClick={() => setShowLeftPanel(false)}
+					className="px-2 py-3 hover:bg-sentinel-hover transition-colors"
+					title="Collapse panel"
+					data-testid="collapse-left-panel"
+				>
+					<ChevronLeft size={16} className="text-sentinel-text-muted" />
+				</button>
+			</div>
+
 			{/* App Title with Logo */}
-			<div className="px-4 pt-6 pb-4 border-b border-sentinel-border">
+			<div className="px-4 pt-4 pb-4 border-b border-sentinel-border">
 				<div className="flex flex-col items-center gap-3">
 					<div className="w-full flex justify-center">
 						<img

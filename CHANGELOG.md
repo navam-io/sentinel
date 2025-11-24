@@ -7,6 +7,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.26.0] - 2025-11-24
+
+### Added
+
+#### 🎨 Collapsible Panels & Workspace Customization
+- **Left Panel (Component Palette)**:
+  - Collapse button (ChevronLeft icon) at top of panel
+  - Smooth width animation (16rem → 0) with 300ms transition
+  - State persists across sessions via localStorage
+  - Content hidden when collapsed (overflow: hidden)
+- **Right Panel (Test Script)**:
+  - Collapse button (ChevronRight icon) at top of panel
+  - Smooth width animation (24rem → 0) with 300ms transition
+  - State persists across sessions via localStorage
+  - Content hidden when collapsed (overflow: hidden)
+- **Floating Expand Buttons**:
+  - Auto-appear when panels are collapsed
+  - Positioned at vertical center of screen edge (z-50)
+  - Hover effects with smooth transitions
+  - Clear visual indicators (ChevronRight/ChevronLeft icons)
+  - Keyboard accessible (tab + enter)
+- **Workspace Modes**:
+  - Focus mode: Both panels collapsed (maximum canvas space)
+  - Testing mode: Left collapsed, right open
+  - Building mode: Left open, right collapsed
+  - Full mode: Both panels open (default)
+
+### Technical Details
+
+- **Files Modified**: App.tsx, ComponentPalette.tsx, RightPanel.tsx
+- **New Tests**: 9 comprehensive tests for panel collapse/expand (App.test.tsx)
+- **State Management**: Settings store with showLeftPanel/showRightPanel
+- **Animation**: 300ms ease-in-out transitions
+- **Persistence**: localStorage sync across sessions
+- **Test Results**: 553 tests passing (465 frontend + 88 backend)
+- **TypeScript**: 0 errors (100% type safety)
+
+### User Experience
+
+- **Keyboard Accessible**: All collapse/expand buttons
+- **Responsive**: Smooth animations without layout shifts
+- **Persistent**: Panel states saved and restored
+- **Intuitive**: Clear visual indicators for expand/collapse
+
+---
+
 ## [0.25.0] - 2025-11-24
 
 ### Changed
