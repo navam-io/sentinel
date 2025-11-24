@@ -167,6 +167,7 @@
   },
   "active": "ba8476c767f1a009",
   "lastOpenFiles": [
+    "releases/release-0.23.1.md",
     "releases/release-0.23.0.md",
     "frontend/src-tauri/target/debug/incremental/sentinel-0yleokvejt963/s-hd9q4tfpki-1w95sie-6i2d9r6mvjzbinxm4i2wsjb62/work-products.bin",
     "frontend/src-tauri/target/debug/incremental/sentinel-0yleokvejt963/s-hd9q4tfpki-1w95sie-6i2d9r6mvjzbinxm4i2wsjb62/query-cache.bin",
@@ -205,7 +206,6 @@
     "frontend/node_modules/eslint-plugin-react-perf/docs/rules/jsx-no-new-array-as-prop.md",
     "frontend/node_modules/eslint-plugin-react-perf/docs/rules/jsx-no-jsx-as-prop.md",
     "frontend/node_modules/eslint-plugin-react-perf/reports/coverage/lcov-report/sort-arrow-sprite.png",
-    "frontend/node_modules/eslint-scope/README.md",
     "frontend/playwright-report/data/65b3e67d24d268a740e43d35a969b8efc96076ac.png",
     "frontend/playwright-report/data/b597d35900274ef511d0d8fd43024bfa8956329c.png",
     "frontend/playwright-report/data/93361b47cb43357ec566aab9ae61fa96fac301d9.png",

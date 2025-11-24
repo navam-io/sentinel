@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import type { Node, Edge } from '@xyflow/react';
 import { FileCode, FolderOpen, Library as LibraryIcon } from 'lucide-react';
 import TestTab from './yaml/TestTab';
 import { Library } from './library/Library';
@@ -27,46 +28,112 @@ function RightPanel() {
 		saveSuites(suites);
 	}, [suites]);
 
-	const handleLoadTemplate = (template: Template) => {
+	/**
+	 * Robust canvas loading function that properly clears and loads nodes/edges.
+	 * This ensures old canvas state is fully cleared before loading new content.
+	 *
+	 * CRITICAL: Uses explicit clearing pattern to prevent state merging issues.
+	 *
+	 * @param parsedNodes - New nodes to load
+	 * @param parsedEdges - New edges to load
+	 * @param options - Loading options (savedTestInfo, confirmClear, successMessage)
+	 */
+	const loadToCanvas = (
+		parsedNodes: Node[],
+		parsedEdges: Edge[],
+		options?: {
+			savedTestInfo?: { name: string; description: string } | null;
+			confirmClear?: boolean;
+			successMessage?: string;
+			switchToTest?: boolean;
+		}
+	) => {
 		try {
-			// Confirm if there are existing nodes on canvas
-			if (nodes.length > 0) {
+			// Confirm if there are existing nodes on canvas (if requested)
+			if (options?.confirmClear && nodes.length > 0) {
 				const confirmed = window.confirm(
-					`Loading this template will replace your current canvas. Continue?`
+					`Loading this will replace your current canvas. Continue?`
 				);
 				if (!confirmed) {
-					return;
+					return false;
 				}
 			}
 
-			// Parse the template YAML and load to canvas
+			if (parsedNodes.length === 0) {
+				alert('Failed to load content. No nodes found.');
+				return false;
+			}
+
+			// CRITICAL FIX: Explicitly clear canvas first, then load new content
+			// This prevents React from merging or partially updating state
+			console.log(`[Canvas Load] Current nodes before clear: ${nodes.length}`);
+			console.log(`[Canvas Load] New nodes to load: ${parsedNodes.length}`);
+
+			// Step 1: Clear everything
+			setNodes([]);
+			setEdges([]);
+			console.log('[Canvas Load] Canvas cleared (setNodes/setEdges to [])');
+
+			// Step 2: Use requestAnimationFrame to ensure clear is processed
+			// before loading new content (gives React time to flush updates)
+			requestAnimationFrame(() => {
+				console.log('[Canvas Load] requestAnimationFrame callback - loading new content');
+
+				// Now set the new nodes and edges
+				setNodes(parsedNodes);
+				setEdges(parsedEdges);
+				console.log(`[Canvas Load] New content loaded: ${parsedNodes.length} nodes, ${parsedEdges.length} edges`);
+
+				// Update saved test info
+				if (options?.savedTestInfo !== undefined) {
+					setSavedTestInfo(options.savedTestInfo);
+				}
+
+				// Switch to Test tab if requested
+				if (options?.switchToTest) {
+					setActiveTab('test');
+				}
+
+				// Show success message if provided
+				if (options?.successMessage) {
+					setTimeout(() => alert(options.successMessage), 100);
+				}
+			});
+
+			return true;
+		} catch (err) {
+			alert(`Error loading to canvas: ${err instanceof Error ? err.message : String(err)}`);
+			return false;
+		}
+	};
+
+	const handleLoadTemplate = (template: Template) => {
+		try {
+			console.log(`[Template Loading] Starting load for: ${template.name}`);
+			console.log('[Template Loading] YAML content:', template.yamlContent);
+
+			// Parse the template YAML
 			const { nodes: parsedNodes, edges: parsedEdges } = parseYAMLToNodes(template.yamlContent);
 
+			console.log(`[Template Loading] Parsed ${parsedNodes.length} nodes and ${parsedEdges.length} edges`);
+			console.log('[Template Loading] Parsed nodes:', parsedNodes);
+
 			if (parsedNodes.length === 0) {
-				alert('Failed to load template. Please try another template.');
+				console.error('[Template Loading] ERROR: No nodes parsed from template');
+				alert(`Failed to load template "${template.name}". No nodes were generated from the YAML.`);
 				return;
 			}
 
-			// Clear canvas first, then load template nodes and edges
-			setNodes([]);
-			setEdges([]);
-
-			// Small delay to ensure canvas is cleared before loading new template
-			setTimeout(() => {
-				setNodes(parsedNodes);
-				setEdges(parsedEdges);
-
-				// Clear saved test info since we loaded a template
-				setSavedTestInfo(null);
-
-				// Switch to Test tab to show the loaded template
-				setActiveTab('test');
-
-				// Show success message
-				alert(`Successfully loaded template: ${template.name}`);
-			}, 50);
+			// Load to canvas with confirmation
+			loadToCanvas(parsedNodes, parsedEdges, {
+				savedTestInfo: null, // Templates are not saved yet
+				confirmClear: true,
+				successMessage: `Successfully loaded template: ${template.name}`,
+				switchToTest: true,
+			});
 		} catch (err) {
-			alert(`Error loading template: ${err instanceof Error ? err.message : String(err)}`);
+			console.error('[Template Loading] ERROR:', err);
+			alert(`Error loading template "${template.name}": ${err instanceof Error ? err.message : String(err)}`);
 		}
 	};
 
@@ -159,15 +226,16 @@ function RightPanel() {
 				const template = templates[templateIndex];
 
 				if (template && template.yamlContent) {
-					// Load from template YAML
+					// Parse template YAML
 					const { nodes: parsedNodes, edges: parsedEdges } = parseYAMLToNodes(template.yamlContent);
-					setNodes(parsedNodes);
-					setEdges(parsedEdges);
 
-					// Clear saved test info for templates (they're not saved yet)
-					setSavedTestInfo(null);
-
-					setActiveTab('test');
+					// Load to canvas using robust loading function
+					loadToCanvas(parsedNodes, parsedEdges, {
+						savedTestInfo: null, // Templates are not saved yet
+						confirmClear: nodes.length > 0, // Only confirm if canvas has content
+						successMessage: `Loaded template: ${template.name}`,
+						switchToTest: true,
+					});
 					return;
 				}
 			}
@@ -175,43 +243,55 @@ function RightPanel() {
 			// Check if it's a saved test (positive IDs)
 			const savedTest = savedTests.find((t) => t.id === testIdNum);
 			if (savedTest) {
-				// Load from saved test
+				// Determine nodes and edges from saved test
+				let parsedNodes: Node[] = [];
+				let parsedEdges: Edge[] = [];
+
 				if (savedTest.canvas_state && savedTest.canvas_state.nodes && savedTest.canvas_state.edges) {
-					setNodes(savedTest.canvas_state.nodes);
-					setEdges(savedTest.canvas_state.edges);
+					parsedNodes = savedTest.canvas_state.nodes;
+					parsedEdges = savedTest.canvas_state.edges;
 				} else if (savedTest.spec_yaml) {
-					const { nodes: parsedNodes, edges: parsedEdges } = parseYAMLToNodes(savedTest.spec_yaml);
-					setNodes(parsedNodes);
-					setEdges(parsedEdges);
+					const parsed = parseYAMLToNodes(savedTest.spec_yaml);
+					parsedNodes = parsed.nodes;
+					parsedEdges = parsed.edges;
 				}
 
-				setSavedTestInfo({
-					name: savedTest.name,
-					description: savedTest.description || '',
+				// Load to canvas using robust loading function
+				loadToCanvas(parsedNodes, parsedEdges, {
+					savedTestInfo: {
+						name: savedTest.name,
+						description: savedTest.description || '',
+					},
+					confirmClear: nodes.length > 0, // Only confirm if canvas has content
+					switchToTest: true,
 				});
-
-				setActiveTab('test');
 				return;
 			}
 
 			// Fallback: try to fetch from API
 			const test = await getTest(testIdNum);
 
+			let parsedNodes: Node[] = [];
+			let parsedEdges: Edge[] = [];
+
 			if (test.canvas_state && test.canvas_state.nodes && test.canvas_state.edges) {
-				setNodes(test.canvas_state.nodes);
-				setEdges(test.canvas_state.edges);
+				parsedNodes = test.canvas_state.nodes;
+				parsedEdges = test.canvas_state.edges;
 			} else if (test.spec_yaml) {
-				const { nodes: parsedNodes, edges: parsedEdges } = parseYAMLToNodes(test.spec_yaml);
-				setNodes(parsedNodes);
-				setEdges(parsedEdges);
+				const parsed = parseYAMLToNodes(test.spec_yaml);
+				parsedNodes = parsed.nodes;
+				parsedEdges = parsed.edges;
 			}
 
-			setSavedTestInfo({
-				name: test.name,
-				description: test.description || '',
+			// Load to canvas using robust loading function
+			loadToCanvas(parsedNodes, parsedEdges, {
+				savedTestInfo: {
+					name: test.name,
+					description: test.description || '',
+				},
+				confirmClear: nodes.length > 0, // Only confirm if canvas has content
+				switchToTest: true,
 			});
-
-			setActiveTab('test');
 		} catch (err) {
 			alert(`Failed to load test: ${err instanceof Error ? err.message : String(err)}`);
 		}

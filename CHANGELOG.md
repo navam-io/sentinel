@@ -7,6 +7,90 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.23.1] - 2025-11-23
+
+### Fixed
+
+#### Canvas Synchronization (Critical Bug Fixes)
+- **Incomplete Canvas Clearing**: Fixed critical bug where canvas was not fully cleared between template loads
+  - Old nodes (especially Input node) remained visible when loading second template
+  - Templates showed mixed content from multiple sources
+  - Some templates (e.g., "Structured JSON Output") failed to load at all
+- **YAML Apply/Import**: Fixed canvas not clearing when applying YAML changes or importing files
+  - Old nodes remained alongside new content
+  - Canvas became cluttered with mixed content
+- **State Merging Issues**: React's automatic state batching was merging new state with old state instead of replacing
+
+#### Implementation
+- **2-Step Explicit Clearing Pattern**: Implemented using `requestAnimationFrame`
+  ```typescript
+  // Step 1: Clear everything
+  setNodes([]);
+  setEdges([]);
+
+  // Step 2: Wait for React to flush, then load new content
+  requestAnimationFrame(() => {
+    setNodes(parsedNodes);
+    setEdges(parsedEdges);
+  });
+  ```
+- **Guaranteed Canvas Reset**: All loading operations now properly clear canvas before loading new content
+- **No State Merging**: Prevents React from mixing old and new state
+
+### Added
+
+#### Enhanced Debugging
+- **Console Logging**: Comprehensive logging for template loading and canvas operations
+  - `[Template Loading]` - tracks template parsing and validation
+  - `[Canvas Load]` - tracks canvas state changes and clearing
+- **Better Error Messages**: Template names included in all error messages
+- **Validation Logging**: Logs show node counts, YAML content, and parsing results
+
+### Changed
+
+#### Loading Operations (All Fixed)
+- **`loadToCanvas()`** (RightPanel.tsx): Enhanced with 2-step clearing pattern
+- **`handleLoadTemplate()`**: Added comprehensive logging and validation
+- **`applyYamlChanges()`** (YamlPreview.tsx): Fixed canvas clearing
+- **`importYamlFile()`** (YamlPreview.tsx): Fixed canvas clearing
+
+### Technical
+
+#### Modified Files (2)
+- `frontend/src/components/RightPanel.tsx` (+118 LOC, -60 LOC)
+  - Enhanced loadToCanvas with 2-step clearing
+  - Added debug logging throughout
+  - Improved error handling with template names
+- `frontend/src/components/yaml/YamlPreview.tsx` (+43 LOC, -20 LOC)
+  - Fixed applyYamlChanges with requestAnimationFrame
+  - Fixed importYamlFile with requestAnimationFrame
+  - Enhanced error messages
+
+#### Code Metrics
+- **Lines Added**: 161 LOC
+- **Lines Removed**: 80 LOC
+- **Net Change**: +81 LOC
+- **Files Modified**: 2
+
+### User Experience
+
+**Before v0.23.1 (Broken)**:
+1. Load first template ✅
+2. Load second template → Input node stays from first template ❌
+3. Canvas shows mixed content ❌
+4. Some templates don't load at all ❌
+
+**After v0.23.1 (Fixed)**:
+1. Load first template ✅
+2. Load second template → Canvas clears completely, shows new template ✅
+3. All templates load correctly every time ✅
+4. Clean canvas with only current template ✅
+
+### Documentation
+- See `releases/release-0.23.1.md` for complete release notes
+
+---
+
 ## [0.23.0] - 2025-11-23
 
 ### Added

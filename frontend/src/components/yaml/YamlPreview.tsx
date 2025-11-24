@@ -81,13 +81,31 @@ function YamlPreview() {
 				return;
 			}
 
-			// Update canvas with parsed nodes and edges
-			setNodes(parsedNodes);
-			setEdges(parsedEdges);
+			// Confirm if there are existing nodes that will be replaced
+			if (nodes.length > 0 && parsedNodes.length > 0) {
+				const confirmed = window.confirm(
+					`Applying YAML changes will replace the current canvas (${nodes.length} nodes). Continue?`
+				);
+				if (!confirmed) {
+					return;
+				}
+			}
 
-			// Exit edit mode
-			setIsEditMode(false);
-			setErrorMessage('');
+			// CRITICAL FIX: Explicitly clear canvas first, then load new content
+			// Step 1: Clear everything
+			setNodes([]);
+			setEdges([]);
+
+			// Step 2: Use requestAnimationFrame to ensure clear is processed
+			requestAnimationFrame(() => {
+				// Now set the new nodes and edges
+				setNodes(parsedNodes);
+				setEdges(parsedEdges);
+
+				// Exit edit mode
+				setIsEditMode(false);
+				setErrorMessage('');
+			});
 		} catch (err) {
 			setErrorMessage(`Parse error: ${err instanceof Error ? err.message : String(err)}`);
 		}
@@ -141,13 +159,34 @@ function YamlPreview() {
 					return;
 				}
 
-				// Update canvas with imported data
-				setNodes(parsedNodes);
-				setEdges(parsedEdges);
+				// Confirm if there are existing nodes that will be replaced
+				if (nodes.length > 0) {
+					const confirmed = window.confirm(
+						`Importing ${file.name} will replace the current canvas (${nodes.length} nodes). Continue?`
+					);
+					if (!confirmed) {
+						return;
+					}
+				}
 
-				// Show success message
-				alert(`Successfully imported ${file.name}!`);
-				setErrorMessage('');
+				// CRITICAL FIX: Explicitly clear canvas first, then load new content
+				// Step 1: Clear everything
+				setNodes([]);
+				setEdges([]);
+
+				// Step 2: Use requestAnimationFrame to ensure clear is processed
+				requestAnimationFrame(() => {
+					// Now set the new nodes and edges
+					setNodes(parsedNodes);
+					setEdges(parsedEdges);
+
+					// Clear saved test info since this is imported content
+					setSavedTestInfo(null);
+
+					// Show success message
+					alert(`Successfully imported ${file.name}!`);
+					setErrorMessage('');
+				});
 			} catch (err) {
 				setErrorMessage(`Import error: ${err instanceof Error ? err.message : String(err)}`);
 			}
