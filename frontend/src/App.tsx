@@ -7,6 +7,7 @@ import RightPanel from './components/RightPanel';
 import { Settings } from './components/settings';
 import { useSettingsStore } from './stores/settingsStore';
 import { useMenuEvents } from './hooks/useMenuEvents';
+import { useSessionPersistence } from './hooks/useSessionPersistence';
 
 function App() {
 	const {
@@ -21,6 +22,13 @@ function App() {
 
 	// Initialize native menu event handlers
 	useMenuEvents();
+
+	// Initialize session persistence (auto-save + unsaved changes warning)
+	useSessionPersistence({
+		autoSaveEnabled: true,
+		autoSaveDelay: 3000,
+		warnOnUnsavedChanges: true,
+	});
 
 	// Listen for custom event to open Settings from menu
 	useEffect(() => {

@@ -1687,7 +1687,7 @@ Generate tests from natural language descriptions using AI.
 ---
 
 ### Feature 11: Unified Test Management System
-**Status**: Phase 2 Complete ✅
+**Status**: Phase 3 Complete ✅
 **Priority**: P1 - Core UX Improvement
 **Semver Impact**: minor (0.29.0 - 0.32.0, 4 phases)
 **Specification**: See `backlog/11-spec-test-management.md` for comprehensive details
@@ -1720,11 +1720,12 @@ Current architecture has critical UX issues:
   - Save dialog with name, description, and category inputs
   - Full integration with unified testStore
 
-- **Phase 3 (v0.31.0): New Test Flow & Session Persistence**
-  - Clear "New Test" action resets canvas and test state
-  - Session persistence: remember last test on app restart
-  - Auto-save by default (3-second debounce)
-  - Unsaved changes warning on app close
+- **Phase 3 (v0.31.0): Session Persistence & Auto-Save** ✅ COMPLETE
+  - Clear "New Test" action resets canvas and test state (done in Phase 2)
+  - Session persistence: Zustand persist middleware auto-reloads last test
+  - Auto-save with 3-second debounce for existing tests
+  - Unsaved changes warning on app close (beforeunload event)
+  - useSessionPersistence hook with 25 comprehensive tests
 
 - **Phase 4 (v0.32.0): File-Based Storage & Comparison Integration**
   - Store tests as YAML files in `artifacts/tests/` (like templates)
