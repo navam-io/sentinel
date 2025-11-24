@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import YamlPreview from './YamlPreview';
 import ExecutionPanel from '../execution/ExecutionPanel';
+import { TestToolbar } from '../test';
 
 const RUN_DETAILS_EXPANDED_KEY = 'sentinel-run-details-expanded';
 
@@ -28,6 +29,9 @@ function TestTab() {
 
   return (
     <div className="h-full flex flex-col">
+      {/* Test Toolbar */}
+      <TestToolbar />
+
       {/* YAML Editor Section */}
       <div
         className={`transition-all duration-300 ease-in-out overflow-hidden ${

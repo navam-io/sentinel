@@ -1687,7 +1687,7 @@ Generate tests from natural language descriptions using AI.
 ---
 
 ### Feature 11: Unified Test Management System
-**Status**: Not Started
+**Status**: Phase 2 Complete ✅
 **Priority**: P1 - Core UX Improvement
 **Semver Impact**: minor (0.29.0 - 0.32.0, 4 phases)
 **Specification**: See `backlog/11-spec-test-management.md` for comprehensive details
@@ -1706,30 +1706,30 @@ Current architecture has critical UX issues:
 
 **Requirements**:
 
-- **Phase 1 (v0.29.0): Unified Test State**
+- **Phase 1 (v0.29.0): Unified Test State** ✅ COMPLETE
   - Create `useTestStore.ts` - single source of truth for test state
   - Track: id, filename, name, description, category, isDirty, lastSaved
   - Refactor YamlPreview to use unified store (remove internal save state)
   - Remove/deprecate TestManager component (consolidate to Library)
   - Update canvasStore to call markDirty() on changes
 
-- **Phase 2 (v0.30.0): File-Based Storage**
+- **Phase 2 (v0.30.0): Test Toolbar** ✅ COMPLETE
+  - TestToolbar component with New/Save/Save As buttons
+  - Keyboard shortcuts: ⌘S (save), ⌘⇧S (save as), ⌘N (new)
+  - State indicators: dirty (●), saved (✓), template badge
+  - Save dialog with name, description, and category inputs
+  - Full integration with unified testStore
+
+- **Phase 3 (v0.31.0): New Test Flow & Session Persistence**
+  - Clear "New Test" action resets canvas and test state
+  - Session persistence: remember last test on app restart
+  - Auto-save by default (3-second debounce)
+  - Unsaved changes warning on app close
+
+- **Phase 4 (v0.32.0): File-Based Storage & Comparison Integration**
   - Store tests as YAML files in `artifacts/tests/` (like templates)
   - Database stores metadata only (id, filename, runs) - not full spec
-  - Backend TestFileService for CRUD operations on YAML files
-  - New API endpoints: `/api/tests/files` for file operations
-  - Migration script to export existing database tests to files
-
-- **Phase 3 (v0.31.0): Unified UI/UX**
-  - TestHeader component with inline name editing and dirty indicator
-  - TestActions bar with unified Save/Save As/Import/Export
-  - Keyboard shortcuts: ⌘S (save), ⌘⇧S (save as), ⌘N (new)
-  - Auto-save by default (no toggle needed), 3-second debounce
-  - State indicators: dirty (●), saved (✓), saving (⟳), template badge
-
-- **Phase 4 (v0.32.0): Comparison Integration**
   - Auto-link runs to tests (prompt to save if unsaved)
-  - Comparison view shows "Save to enable comparison" for unsaved tests
   - Run history section in Test tab (last 5 runs, quick compare)
 
 **Deliverables**:
@@ -2033,17 +2033,18 @@ User Experience:
 
 ## Current Status
 
-- **Version**: 0.29.0 (Unified Test Management - Phase 1 ✅)
-- **Latest Release**: Release 0.29.0 - Unified Test Management Phase 1 (November 24, 2025)
-- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish) + Feature 5 (Design System Implementation ✅) + Feature 7 (Template Gallery & Test Suites COMPLETE ✅ - Now Filesystem-Based) + Native System Menu & About Dialog (v0.27.0) + Feature 8 (Regression Engine & Comparison View ✅ - v0.28.0) + **Feature 11 Phase 1 (Unified Test Management ✅ - v0.29.0)**
-- **Next Feature**: **Feature 11 Phases 2-4** (Toolbar, New Test Flow, Session Persistence) OR Feature 6 - Record & Replay Test Generation OR Feature 9 - Agentic Framework Support (LangGraph)
+- **Version**: 0.30.0 (Test Toolbar with Keyboard Shortcuts ✅)
+- **Latest Release**: Release 0.30.0 - Test Toolbar with New/Save/SaveAs (November 24, 2025)
+- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish) + Feature 5 (Design System Implementation ✅) + Feature 7 (Template Gallery & Test Suites COMPLETE ✅ - Now Filesystem-Based) + Native System Menu & About Dialog (v0.27.0) + Feature 8 (Regression Engine & Comparison View ✅ - v0.28.0) + Feature 11 Phase 1 (Unified Test Management ✅ - v0.29.0) + **Feature 11 Phase 2 (Test Toolbar ✅ - v0.30.0)**
+- **Next Feature**: **Feature 11 Phases 3-4** (New Test Flow, Session Persistence) OR Feature 6 - Record & Replay Test Generation OR Feature 9 - Agentic Framework Support (LangGraph)
 - **🔴 Critical Initiative**: Code Quality & Testing - **ALL PHASES COMPLETE ✅** (Phase 1-4 done)
 - **✅ Infrastructure Task**: Tauri 2.1 → 2.9.3 Upgrade - **COMPLETED** (v0.25.0, November 24, 2025)
 - **✅ Desktop App Polish**: Native System Menu - **COMPLETED** (v0.27.0, November 24, 2025)
 - **✅ Regression Detection**: Regression Engine & Comparison View - **COMPLETED** (v0.28.0, November 24, 2025)
 - **✅ Test Management Phase 1**: Unified Test Store - **COMPLETED** (v0.29.0, November 24, 2025)
+- **✅ Test Management Phase 2**: Test Toolbar - **COMPLETED** (v0.30.0, November 24, 2025)
 - **Architecture**: Visual-first desktop app (**Tauri 2.9.3** + React 19 + React Flow) with Python backend + SQLite storage + Auto-save + Assertion Validation + WCAG AAA UI + Dynamic Templates (Filesystem-Based) + Settings Store + Test Suite Organizer + Complete Design System + 100% Type Safety + Professional Code Quality + 50%+ Test Coverage + E2E Testing + Cross-User Compatibility + Native System Menu + **Regression Detection Engine**
-- **Test Status**: 666/666 tests passing (100% - 551 frontend + 115 backend) ✅ (+21 new tests for testStore)
+- **Test Status**: 705/705 tests passing (100% - 590 frontend + 115 backend) ✅ (+39 new tests for TestToolbar)
 - **Code Quality Status** (All Phases Complete ✅):
   - ✅ **Critical Code Tested**: DSL (24 tests), Canvas (24 tests), Nodes (158 tests)
   - ✅ **Design System Tested**: CommandPalette (23 tests), AssertionCard (27 tests)
