@@ -92,6 +92,69 @@ Priority order:
 
 ---
 
+### ✅ Release 0.27.0: Native System Menu & About Dialog
+**Status**: Completed ✅
+**Released**: November 24, 2025
+**Semver**: 0.26.0 → 0.27.0 (minor)
+
+**Description**:
+Complete implementation of native system menus for the Sentinel desktop application. This release adds a fully-featured menu bar with customized About dialog, Settings access, panel visibility controls, and platform-appropriate menu structure for macOS and Windows/Linux.
+
+**What Was Delivered**:
+- **Native Menu Bar**: Full menu system with File, Edit, View, Window (macOS), Help menus ✅
+- **About Sentinel Dialog**: Customized with app icon, version, copyright, license, website ✅
+- **Settings Menu Access**: Settings... (⌘,/Ctrl+,) opens Settings dialog ✅
+- **Panel Visibility Controls**: View > Panels submenu with Left Panel (⌘1) and Right Panel (⌘2) ✅
+- **Panel State Sync**: Menu checkboxes sync bidirectionally with frontend state ✅
+- **Platform-Specific Menus**: macOS (app menu, Window menu) vs Windows/Linux (Settings in File, About in Help) ✅
+- **Keyboard Accelerators**: All menu items have proper shortcuts ✅
+- **Help Integration**: Documentation (F1), Keyboard Shortcuts (⌘/), Report Issue, Check Updates ✅
+
+**Key Features**:
+1. Customized AboutMetadata with proper branding
+2. useMenuEvents hook for Tauri event handling (127 LOC)
+3. sync_menu_state command for bidirectional checkbox sync
+4. Custom events: sentinel:open-settings, sentinel:file-action, etc.
+5. Platform-appropriate menu structure (macOS vs Windows/Linux)
+6. Full keyboard accessibility
+7. 24 new unit tests for useMenuEvents hook
+
+**Files**:
+- `frontend/src-tauri/src/main.rs` - Complete menu system (350 LOC, +310 LOC)
+- `frontend/src-tauri/Cargo.toml` - Added tray-icon and image-png features
+- `frontend/src/hooks/useMenuEvents.ts` - Menu event handler hook (127 LOC, new)
+- `frontend/src/hooks/useMenuEvents.test.ts` - Comprehensive tests (240 LOC, 24 tests, new)
+- `frontend/src/App.tsx` - Menu event integration
+- `frontend/src/stores/settingsStore.ts` - Added isSettingsOpen state
+- `frontend/src/App.test.tsx` - Extended with Settings dialog tests
+
+**Success Criteria Met**:
+- ✅ About Sentinel dialog with proper branding
+- ✅ Settings accessible via menu (⌘,/Ctrl+,)
+- ✅ Panel visibility toggles from View menu
+- ✅ Menu checkboxes sync with frontend state
+- ✅ Platform-appropriate menu structure
+- ✅ All keyboard accelerators working
+- ✅ 580 tests passing (492 frontend + 88 backend)
+- ✅ 0 TypeScript errors
+- ✅ Rust compiles successfully
+
+**Documentation**: See `releases/release-0.27.0.md` for complete release notes and `backlog/10-spec-system-menu.md` for specification.
+
+---
+
+### ✅ Release 0.26.0: Collapsible Panels & Workspace Customization
+**Status**: Completed ✅
+**Released**: November 24, 2025
+**Semver**: 0.25.0 → 0.26.0 (minor)
+
+**Description**:
+Complete implementation of collapsible panels for both left (Component Palette) and right (Test Script) panels, giving users full control over their workspace layout.
+
+**Documentation**: See `releases/release-0.26.0.md` for complete release notes.
+
+---
+
 ### ✅ Release 0.25.0: Tauri 2.9.3 Infrastructure Upgrade
 **Status**: Completed ✅
 **Released**: November 24, 2025
@@ -1863,14 +1926,15 @@ User Experience:
 
 ## Current Status
 
-- **Version**: 0.26.0 (Collapsible Panels & Workspace Customization ✅)
-- **Latest Release**: Release 0.26.0 - Collapsible Panels (November 24, 2025)
-- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish) + Feature 5 (Design System Implementation ✅) + Feature 7 (Template Gallery & Test Suites COMPLETE ✅ - Now Filesystem-Based)
+- **Version**: 0.27.0 (Native System Menu & About Dialog ✅)
+- **Latest Release**: Release 0.27.0 - Native System Menu (November 24, 2025)
+- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish) + Feature 5 (Design System Implementation ✅) + Feature 7 (Template Gallery & Test Suites COMPLETE ✅ - Now Filesystem-Based) + Native System Menu & About Dialog (v0.27.0)
 - **Next Feature**: Feature 8 - Regression Engine & Comparison View OR Feature 6 - Record & Replay Test Generation
 - **🔴 Critical Initiative**: Code Quality & Testing - **ALL PHASES COMPLETE ✅** (Phase 1-4 done)
 - **✅ Infrastructure Task**: Tauri 2.1 → 2.9.3 Upgrade - **COMPLETED** (v0.25.0, November 24, 2025)
-- **Architecture**: Visual-first desktop app (**Tauri 2.9.3** + React 19 + React Flow) with Python backend + SQLite storage + Auto-save + Assertion Validation + WCAG AAA UI + Dynamic Templates (Filesystem-Based) + Settings Store + Test Suite Organizer + Complete Design System + 100% Type Safety + Professional Code Quality + 50%+ Test Coverage + E2E Testing + Cross-User Compatibility
-- **Test Status**: 459/459 tests passing (100% - backend + frontend) ✅
+- **✅ Desktop App Polish**: Native System Menu - **COMPLETED** (v0.27.0, November 24, 2025)
+- **Architecture**: Visual-first desktop app (**Tauri 2.9.3** + React 19 + React Flow) with Python backend + SQLite storage + Auto-save + Assertion Validation + WCAG AAA UI + Dynamic Templates (Filesystem-Based) + Settings Store + Test Suite Organizer + Complete Design System + 100% Type Safety + Professional Code Quality + 50%+ Test Coverage + E2E Testing + Cross-User Compatibility + Native System Menu
+- **Test Status**: 580/580 tests passing (100% - backend + frontend) ✅
 - **Code Quality Status** (All Phases Complete ✅):
   - ✅ **Critical Code Tested**: DSL (24 tests), Canvas (24 tests), Nodes (158 tests)
   - ✅ **Design System Tested**: CommandPalette (23 tests), AssertionCard (27 tests)

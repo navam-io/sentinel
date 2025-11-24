@@ -1,12 +1,38 @@
+import { useEffect } from 'react';
 import { ReactFlowProvider } from '@xyflow/react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 import Canvas from './components/canvas/Canvas';
 import ComponentPalette from './components/palette/ComponentPalette';
 import RightPanel from './components/RightPanel';
+import { Settings } from './components/settings';
 import { useSettingsStore } from './stores/settingsStore';
+import { useMenuEvents } from './hooks/useMenuEvents';
 
 function App() {
-	const { showLeftPanel, setShowLeftPanel, showRightPanel, setShowRightPanel } = useSettingsStore();
+	const {
+		showLeftPanel,
+		setShowLeftPanel,
+		showRightPanel,
+		setShowRightPanel,
+		isSettingsOpen,
+		openSettings,
+		closeSettings,
+	} = useSettingsStore();
+
+	// Initialize native menu event handlers
+	useMenuEvents();
+
+	// Listen for custom event to open Settings from menu
+	useEffect(() => {
+		const handleOpenSettings = () => {
+			openSettings();
+		};
+
+		window.addEventListener('sentinel:open-settings', handleOpenSettings);
+		return () => {
+			window.removeEventListener('sentinel:open-settings', handleOpenSettings);
+		};
+	}, [openSettings]);
 
 	return (
 		<ReactFlowProvider>
@@ -38,6 +64,9 @@ function App() {
 						<ChevronLeft size={16} className="text-sentinel-text-muted" />
 					</button>
 				)}
+
+				{/* Settings Dialog */}
+				<Settings isOpen={isSettingsOpen} onClose={closeSettings} />
 			</div>
 		</ReactFlowProvider>
 	);

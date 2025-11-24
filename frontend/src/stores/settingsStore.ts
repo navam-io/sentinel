@@ -12,10 +12,13 @@ export interface SettingsState {
 	showMinimap: boolean;
 	showLeftPanel: boolean;
 	showRightPanel: boolean;
+	isSettingsOpen: boolean;
 	setTemplatesFolder: (path: string) => void;
 	setShowMinimap: (show: boolean) => void;
 	setShowLeftPanel: (show: boolean) => void;
 	setShowRightPanel: (show: boolean) => void;
+	openSettings: () => void;
+	closeSettings: () => void;
 	resetToDefaults: () => void;
 }
 
@@ -39,6 +42,9 @@ export const useSettingsStore = create<SettingsState>()(
 			// Show/hide right panel (Test Script)
 			showRightPanel: DEFAULT_SHOW_RIGHT_PANEL,
 
+			// Settings dialog state (not persisted)
+			isSettingsOpen: false,
+
 			// Update templates folder path
 			setTemplatesFolder: (path: string) => {
 				set({ templatesFolder: path });
@@ -59,6 +65,16 @@ export const useSettingsStore = create<SettingsState>()(
 				set({ showRightPanel: show });
 			},
 
+			// Open Settings dialog
+			openSettings: () => {
+				set({ isSettingsOpen: true });
+			},
+
+			// Close Settings dialog
+			closeSettings: () => {
+				set({ isSettingsOpen: false });
+			},
+
 			// Reset all settings to defaults
 			resetToDefaults: () => {
 				set({
@@ -71,6 +87,13 @@ export const useSettingsStore = create<SettingsState>()(
 		}),
 		{
 			name: 'sentinel-settings', // localStorage key
+			partialize: (state) => ({
+				// Only persist these settings, not the isSettingsOpen state
+				templatesFolder: state.templatesFolder,
+				showMinimap: state.showMinimap,
+				showLeftPanel: state.showLeftPanel,
+				showRightPanel: state.showRightPanel,
+			}),
 		}
 	)
 );

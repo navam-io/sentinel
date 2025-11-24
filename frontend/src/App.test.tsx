@@ -1,7 +1,27 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 import { useSettingsStore } from './stores/settingsStore';
+
+// Mock Tauri APIs
+vi.mock('@tauri-apps/api/event', () => ({
+	listen: vi.fn(() => Promise.resolve(() => {})),
+}));
+
+vi.mock('@tauri-apps/api/core', () => ({
+	invoke: vi.fn(() => Promise.resolve()),
+}));
+
+// Mock useMenuEvents hook to prevent Tauri API calls
+vi.mock('./hooks/useMenuEvents', () => ({
+	useMenuEvents: vi.fn(),
+}));
+
+// Mock Settings component
+vi.mock('./components/settings', () => ({
+	Settings: ({ isOpen }: { isOpen: boolean; onClose: () => void }) =>
+		isOpen ? <div data-testid="settings-modal">Settings</div> : null,
+}));
 
 // Mock React Flow
 vi.mock('@xyflow/react', () => ({
@@ -34,6 +54,15 @@ vi.mock('./components/RightPanel', () => ({
 }));
 
 describe('App - Collapsible Panels', () => {
+	beforeEach(() => {
+		// Reset settings store to default state before each test
+		useSettingsStore.setState({
+			showLeftPanel: true,
+			showRightPanel: true,
+			isSettingsOpen: false,
+		});
+	});
+
 	it('renders all main components', () => {
 		render(<App />);
 
@@ -132,5 +161,31 @@ describe('App - Collapsible Panels', () => {
 
 		expect(screen.queryByTestId('expand-left-panel')).toBeNull();
 		expect(screen.queryByTestId('expand-right-panel')).toBeNull();
+	});
+
+	it('shows Settings dialog when isSettingsOpen is true', () => {
+		useSettingsStore.setState({ isSettingsOpen: true });
+
+		render(<App />);
+
+		expect(screen.getByTestId('settings-modal')).toBeDefined();
+	});
+
+	it('hides Settings dialog when isSettingsOpen is false', () => {
+		useSettingsStore.setState({ isSettingsOpen: false });
+
+		render(<App />);
+
+		expect(screen.queryByTestId('settings-modal')).toBeNull();
+	});
+
+	it('opens Settings dialog when sentinel:open-settings event fires', () => {
+		render(<App />);
+
+		// Dispatch the custom event
+		window.dispatchEvent(new CustomEvent('sentinel:open-settings'));
+
+		// Check that isSettingsOpen is now true
+		expect(useSettingsStore.getState().isSettingsOpen).toBe(true);
 	});
 });
