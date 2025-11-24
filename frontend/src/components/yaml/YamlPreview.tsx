@@ -1,16 +1,25 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Download, Upload, Edit3, Copy, Check, X, Save, Edit2, ChevronDown } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
+import { useTestStore } from '../../stores/testStore';
 import { generateYAML, parseYAMLToNodes } from '../../lib/dsl/generator';
 import { writeText } from '@tauri-apps/plugin-clipboard-manager';
-import { createTest } from '../../services/api';
+import { createTest, updateTest } from '../../services/api';
 import type { TestSpec, CanvasState } from '../../services/api';
 import type { TestCategory } from '../../types/test-spec';
 import { getCategoryConfig, CATEGORY_CONFIG } from '../../lib/categoryConfig';
 import MonacoYamlEditor from './MonacoYamlEditor';
 
 function YamlPreview() {
-	const { nodes, edges, setNodes, setEdges, savedTestInfo, setSavedTestInfo } = useCanvasStore();
+	const { nodes, edges, setNodes, setEdges } = useCanvasStore();
+	const {
+		currentTest,
+		updateMetadata,
+		markDirty,
+		markClean,
+		newTest,
+	} = useTestStore();
+
 	const [isEditMode, setIsEditMode] = useState(false);
 	const [editedYaml, setEditedYaml] = useState('');
 	const [errorMessage, setErrorMessage] = useState('');
@@ -24,10 +33,16 @@ function YamlPreview() {
 	// Generate YAML from current canvas state
 	const yaml = useMemo(() => generateYAML(nodes, edges), [nodes, edges]);
 
-	// Auto-generate test name and description if not saved
+	// Auto-generate test name and description if no test is loaded
 	const displayTestInfo = useMemo(() => {
-		if (savedTestInfo) {
-			return savedTestInfo;
+		if (currentTest) {
+			return {
+				name: currentTest.name,
+				description: currentTest.description,
+				isDirty: currentTest.isDirty,
+				isTemplate: currentTest.isTemplate,
+				lastSaved: currentTest.lastSaved,
+			};
 		}
 
 		// Parse YAML to extract name or generate one
@@ -56,11 +71,30 @@ function YamlPreview() {
 				autoName = `Test - ${nodes.length} node${nodes.length > 1 ? 's' : ''}`;
 			}
 
-			return { name: autoName, description: autoDescription };
+			return {
+				name: autoName,
+				description: autoDescription,
+				isDirty: false,
+				isTemplate: false,
+				lastSaved: null,
+			};
 		} catch {
-			return { name: 'Untitled Test', description: 'Auto-generated test from canvas' };
+			return {
+				name: 'Untitled Test',
+				description: 'Auto-generated test from canvas',
+				isDirty: false,
+				isTemplate: false,
+				lastSaved: null,
+			};
 		}
-	}, [savedTestInfo, yaml, nodes]);
+	}, [currentTest, yaml, nodes]);
+
+	// Initialize test store if no current test but canvas has nodes
+	useEffect(() => {
+		if (!currentTest && nodes.length > 0) {
+			newTest(displayTestInfo.name, displayTestInfo.description);
+		}
+	}, [currentTest, nodes.length, displayTestInfo.name, displayTestInfo.description, newTest]);
 
 	const toggleEditMode = () => {
 		if (!isEditMode) {
@@ -71,7 +105,7 @@ function YamlPreview() {
 		setIsEditMode(!isEditMode);
 	};
 
-	const applyYamlChanges = () => {
+	const applyYamlChanges = useCallback(() => {
 		try {
 			// Parse the edited YAML
 			const { nodes: parsedNodes, edges: parsedEdges } = parseYAMLToNodes(editedYaml);
@@ -102,6 +136,9 @@ function YamlPreview() {
 				setNodes(parsedNodes);
 				setEdges(parsedEdges);
 
+				// Mark as dirty since canvas changed
+				markDirty();
+
 				// Exit edit mode
 				setIsEditMode(false);
 				setErrorMessage('');
@@ -109,7 +146,7 @@ function YamlPreview() {
 		} catch (err) {
 			setErrorMessage(`Parse error: ${err instanceof Error ? err.message : String(err)}`);
 		}
-	};
+	}, [editedYaml, nodes.length, setNodes, setEdges, markDirty]);
 
 	const cancelEdit = () => {
 		setIsEditMode(false);
@@ -120,7 +157,7 @@ function YamlPreview() {
 		try {
 			await writeText(yaml);
 			alert('YAML copied to clipboard!');
-		} catch (err) {
+		} catch {
 			// Fallback for browser mode
 			await navigator.clipboard.writeText(yaml);
 		}
@@ -131,7 +168,8 @@ function YamlPreview() {
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.href = url;
-		a.download = 'test-spec.yaml';
+		const filename = currentTest?.filename || `${displayTestInfo.name.toLowerCase().replace(/\s+/g, '-')}.yaml`;
+		a.download = filename;
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
@@ -180,8 +218,11 @@ function YamlPreview() {
 					setNodes(parsedNodes);
 					setEdges(parsedEdges);
 
-					// Clear saved test info since this is imported content
-					setSavedTestInfo(null);
+					// Create new test from imported file
+					const baseName = file.name.replace(/\.(yaml|yml|json)$/, '').replace(/-/g, ' ');
+					const capitalizedName = baseName.charAt(0).toUpperCase() + baseName.slice(1);
+					newTest(capitalizedName, `Imported from ${file.name}`);
+					markDirty();
 
 					// Show success message
 					alert(`Successfully imported ${file.name}!`);
@@ -200,15 +241,10 @@ function YamlPreview() {
 			alert('Please add nodes to the canvas before saving');
 			return;
 		}
-		if (savedTestInfo) {
-			// If already saved, populate with existing info for rename
-			setTestName(savedTestInfo.name);
-			setTestDescription(savedTestInfo.description);
-		} else {
-			// Prefill with auto-generated values
-			setTestName(displayTestInfo.name);
-			setTestDescription(displayTestInfo.description);
-		}
+		// Populate with current test info or auto-generated values
+		setTestName(currentTest?.name || displayTestInfo.name);
+		setTestDescription(currentTest?.description || displayTestInfo.description);
+		setTestCategory(currentTest?.category ?? undefined);
 		setIsSaveMode(true);
 		setErrorMessage('');
 	};
@@ -246,21 +282,44 @@ function YamlPreview() {
 				)
 			) as TestSpec;
 
-			// Call API to create test
-			await createTest({
-				name: testName.trim(),
-				description: testDescription.trim() || undefined,
-				category: testCategory,
-				spec: testSpec,
-				spec_yaml: yaml,
-				canvas_state: canvasState,
-			});
+			let savedId: number;
 
-			// Save test info and exit save mode
-			setSavedTestInfo({
+			// Check if we should update an existing test or create a new one
+			if (currentTest?.id) {
+				// Update existing test
+				await updateTest(currentTest.id, {
+					name: testName.trim(),
+					description: testDescription.trim() || undefined,
+					category: testCategory,
+					spec: testSpec,
+					spec_yaml: yaml,
+					canvas_state: canvasState,
+				});
+				savedId = currentTest.id;
+			} else {
+				// Create new test
+				const response = await createTest({
+					name: testName.trim(),
+					description: testDescription.trim() || undefined,
+					category: testCategory,
+					spec: testSpec,
+					spec_yaml: yaml,
+					canvas_state: canvasState,
+				});
+				savedId = response.id;
+			}
+
+			// Update unified test store
+			updateMetadata({
 				name: testName.trim(),
 				description: testDescription.trim(),
+				category: testCategory ?? null,
 			});
+			markClean({
+				id: savedId,
+				lastSaved: new Date(),
+			});
+
 			setIsSaveMode(false);
 			setErrorMessage('');
 		} catch (err) {
@@ -273,10 +332,16 @@ function YamlPreview() {
 	const cancelSave = () => {
 		setIsSaveMode(false);
 		setErrorMessage('');
-		if (!savedTestInfo) {
-			setTestName('');
-			setTestDescription('');
-		}
+	};
+
+	// Format last saved time
+	const formatLastSaved = (date: Date | null) => {
+		if (!date) return null;
+		const now = new Date();
+		const diff = now.getTime() - date.getTime();
+		if (diff < 60000) return 'Just now';
+		if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+		return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 	};
 
 	return (
@@ -288,7 +353,15 @@ function YamlPreview() {
 						Test Script
 					</h2>
 					<p className="text-[0.6rem] text-sentinel-text-muted whitespace-nowrap">
-						{isEditMode ? 'Edit and apply to update canvas' : 'Auto-generated from canvas'}
+						{displayTestInfo.isDirty ? (
+							<span className="text-sentinel-warning">● Unsaved changes</span>
+						) : displayTestInfo.lastSaved ? (
+							<span className="text-sentinel-success">✓ Saved {formatLastSaved(displayTestInfo.lastSaved)}</span>
+						) : isEditMode ? (
+							'Edit and apply to update canvas'
+						) : (
+							'Auto-generated from canvas'
+						)}
 					</p>
 				</div>
 				<div className="flex items-center">
@@ -363,21 +436,29 @@ function YamlPreview() {
 				{/* Test Info Display (always shown) */}
 				{!isSaveMode && (
 					<div className={`mx-4 mt-4 p-3 rounded-md ${
-						savedTestInfo
+						currentTest?.id
 							? 'bg-sentinel-surface border border-sentinel-border'
 							: 'bg-sentinel-bg border border-dashed border-sentinel-border'
 					}`}>
 						<div className="flex items-start justify-between">
 							<div className="flex-1">
 								<div className="mb-1">
-									<h3 className="text-sm font-semibold text-sentinel-text">
+									<h3 className="text-sm font-semibold text-sentinel-text inline-flex items-center gap-2">
+										{displayTestInfo.isDirty && (
+											<span className="text-sentinel-warning text-xs" title="Unsaved changes">●</span>
+										)}
 										{displayTestInfo.name}
-										{savedTestInfo && (
+										{displayTestInfo.isTemplate && (
+											<span className="text-xs px-1.5 py-0.5 bg-sentinel-primary/20 text-sentinel-primary rounded">
+												Template
+											</span>
+										)}
+										{currentTest?.id && (
 											<button
 												onClick={openSaveForm}
-												className="ml-2 p-1 hover:bg-sentinel-hover rounded transition-colors duration-120 inline-flex"
-												title="Rename test"
-												aria-label="Rename test"
+												className="ml-1 p-1 hover:bg-sentinel-hover rounded transition-colors duration-120 inline-flex"
+												title="Edit test info"
+												aria-label="Edit test info"
 											>
 												<Edit2 size={12} className="text-sentinel-text-muted" />
 											</button>
@@ -385,17 +466,28 @@ function YamlPreview() {
 									</h3>
 								</div>
 								{displayTestInfo.description && (
-									<p className={`text-xs ${savedTestInfo ? 'text-sentinel-text-muted' : 'text-sentinel-text-muted italic'}`}>
+									<p className={`text-xs ${currentTest?.id ? 'text-sentinel-text-muted' : 'text-sentinel-text-muted italic'}`}>
 										{displayTestInfo.description}
 									</p>
 								)}
 							</div>
-							{!savedTestInfo && (
+							{!currentTest?.id && !displayTestInfo.isTemplate && (
 								<button
 									onClick={openSaveForm}
 									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120"
 									title="Save test"
 									aria-label="Save test"
+								>
+									<Save size={12} strokeWidth={2} />
+									Save
+								</button>
+							)}
+							{currentTest?.id && displayTestInfo.isDirty && (
+								<button
+									onClick={openSaveForm}
+									className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120"
+									title="Save changes"
+									aria-label="Save changes"
 								>
 									<Save size={12} strokeWidth={2} />
 									Save
@@ -409,7 +501,7 @@ function YamlPreview() {
 				{isSaveMode && (
 					<div className="mx-4 mt-4 p-3 bg-sentinel-surface border border-sentinel-border rounded-md">
 						<h3 className="text-sm font-semibold text-sentinel-text mb-3">
-							{savedTestInfo ? 'Rename Test' : 'Save Test'}
+							{currentTest?.id ? 'Update Test' : 'Save Test'}
 						</h3>
 						<div className="mb-3">
 							<label className="text-xs text-sentinel-text-muted mb-1 block">
@@ -516,7 +608,7 @@ function YamlPreview() {
 								className="flex items-center gap-1 text-[0.6rem] px-2 py-1 bg-sentinel-surface border border-sentinel-border rounded hover:bg-sentinel-hover transition-colors duration-120 disabled:opacity-50 disabled:cursor-not-allowed"
 							>
 								<Save size={12} strokeWidth={2} />
-								{isSaving ? 'Saving...' : savedTestInfo ? 'Update' : 'Save'}
+								{isSaving ? 'Saving...' : currentTest?.id ? 'Update' : 'Save'}
 							</button>
 						</div>
 					</div>

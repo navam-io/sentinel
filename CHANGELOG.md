@@ -7,6 +7,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.29.0] - 2025-11-24
+
+### Added
+
+#### Unified Test Management System (Phase 1)
+- **useTestStore**: New centralized Zustand store for test state management
+  - Single source of truth for current test identity (id, name, description, category)
+  - Dirty state tracking with `isDirty` flag
+  - Template vs user test distinction with `isTemplate` flag
+  - Persisted to localStorage (excludes transient state like `isDirty`)
+- **Auto-dirty Detection**: Canvas changes automatically mark test as dirty
+  - Node additions, removals, and data updates trigger dirty state
+  - Edge changes (add/remove) trigger dirty state
+  - Position-only changes (drag) do not mark dirty
+
+### Changed
+- **canvasStore**: Refactored to use unified testStore
+  - Removed `savedTestInfo` (moved to testStore)
+  - Added `markDirty()` calls on significant node/edge changes
+  - `clearCanvas()` now clears testStore as well
+- **YamlPreview**: Uses unified testStore for test metadata display
+  - Shows unsaved indicator when `isDirty` is true
+  - Shows "Saved X ago" when test was recently saved
+  - Save/Update buttons integrate with testStore
+- **RightPanel**: Uses testStore for loading tests from library
+  - `setCurrentTest()` replaces `setSavedTestInfo()`
+  - Template loading creates new test in testStore
+- **ExecutionPanel**: Uses testStore for comparison view
+  - Gets test ID from unified testStore instead of canvasStore
+
+### Technical Details
+- **New Files**:
+  - `frontend/src/stores/testStore.ts` - Unified test state management
+  - `frontend/src/stores/testStore.test.ts` - 21 test cases
+- **Test Results**: 551 frontend unit tests, 115 backend tests passing
+- **TypeScript**: 0 errors (100% type safety)
+
+### Documentation
+- See `releases/release-0.29.0.md` for complete release notes
+- See `backlog/11-spec-test-management.md` for full feature specification
+
+---
+
 ## [0.28.0] - 2025-11-24
 
 ### Added

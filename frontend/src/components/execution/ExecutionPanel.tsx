@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Play, CheckCircle2, XCircle, Clock, DollarSign, Zap, GitCompare } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
+import { useTestStore } from '../../stores/testStore';
 import { generateYAML, convertYAMLToTestSpec } from '../../lib/dsl/generator';
 import { executeTest, type ExecuteResponse } from '../../services/api';
 import ComparisonView from '../comparison/ComparisonView';
@@ -8,19 +9,20 @@ import ComparisonView from '../comparison/ComparisonView';
 type ViewMode = 'run' | 'compare';
 
 function ExecutionPanel() {
-	const { nodes, edges, savedTestInfo } = useCanvasStore();
+	const { nodes, edges } = useCanvasStore();
+	const { currentTest } = useTestStore();
 	const [isExecuting, setIsExecuting] = useState(false);
 	const [response, setResponse] = useState<ExecuteResponse | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [viewMode, setViewMode] = useState<ViewMode>('run');
 
-	// Get test ID from saved test info (for comparison view)
-	const testId = savedTestInfo?.id ?? null;
+	// Get test ID from unified test store (for comparison view)
+	const testId = currentTest?.id ?? null;
 
 	// Auto-generate test name if not saved
 	const testName = useMemo(() => {
-		if (savedTestInfo) {
-			return savedTestInfo.name;
+		if (currentTest) {
+			return currentTest.name;
 		}
 
 		// Generate name based on canvas content
@@ -35,7 +37,7 @@ function ExecutionPanel() {
 		}
 
 		return 'Untitled Test';
-	}, [savedTestInfo, nodes]);
+	}, [currentTest, nodes]);
 
 	const handleRun = async () => {
 		setIsExecuting(true);

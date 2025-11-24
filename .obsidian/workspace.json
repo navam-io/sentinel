@@ -171,6 +171,9 @@
   },
   "active": "ba8476c767f1a009",
   "lastOpenFiles": [
+    "releases/release-0.29.0.md",
+    "frontend/src/stores/testStore.test.ts",
+    "frontend/src/stores/testStore.ts",
     "backlog/11-spec-test-management.md",
     "frontend/src-tauri/target/debug/deps/sentinel-f33caee9ae5183dd",
     "frontend/src-tauri/target/debug/incremental/sentinel-29zg54zz4ihje/s-hdakhvz8xr-1uuksih-9yfwtydudvkjczvxd58lt9rri/work-products.bin",
@@ -180,8 +183,6 @@
     "frontend/src-tauri/target/debug/incremental/sentinel-29zg54zz4ihje/s-hdakhvz8xr-1uuksih-9yfwtydudvkjczvxd58lt9rri/ey05dguu0t3nh66bidxrn0p0l.o",
     "frontend/src-tauri/target/debug/incremental/sentinel-29zg54zz4ihje/s-hdakhvz8xr-1uuksih-9yfwtydudvkjczvxd58lt9rri/etg96z5sa7n98fj4mp1eh934e.o",
     "frontend/src-tauri/target/debug/incremental/sentinel-29zg54zz4ihje/s-hdakhvz8xr-1uuksih-9yfwtydudvkjczvxd58lt9rri/eunv6u0xym1f6wcwt5ye8s2jx.o",
-    "frontend/src-tauri/target/debug/incremental/sentinel-29zg54zz4ihje/s-hdakhvz8xr-1uuksih-9yfwtydudvkjczvxd58lt9rri/es1zr63j7r95ap3yxo2sm4u4k.o",
-    "frontend/src-tauri/target/debug/incremental/sentinel-29zg54zz4ihje/s-hdakhvz8xr-1uuksih-9yfwtydudvkjczvxd58lt9rri/eqwkbf4ph8p79sl8h4jcwasel.o",
     "blogs/research-paper/paper.md",
     "releases/release-0.28.0.md",
     "releases/v0.28.0.md",
@@ -213,7 +214,6 @@
     "frontend/src-tauri/target/debug/build/sentinel-d82113f8c8b9d5a7/out/tauri-codegen-assets/aa38783d02c4788fb881499d4259b88dc8c435b8c9ae0de2ccf40c48b58abee9.png",
     "frontend/node_modules/@tauri-apps/plugin-fs/README.md",
     "backlog/someday.md",
-    "releases/hotfix-0.12.1-ui-improvements.md",
     "frontend/node_modules/eslint-plugin-react-perf/reports/coverage/lcov-report/sort-arrow-sprite.png",
     "frontend/playwright-report/data/65b3e67d24d268a740e43d35a969b8efc96076ac.png",
     "frontend/playwright-report/data/b597d35900274ef511d0d8fd43024bfa8956329c.png"

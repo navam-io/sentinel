@@ -4,18 +4,24 @@ import type { Node, Edge, Connection } from '@xyflow/react';
 import { addEdge, applyNodeChanges, applyEdgeChanges } from '@xyflow/react';
 import type { NodeChange, EdgeChange } from '@xyflow/react';
 import { getLayoutedElements } from '../lib/layout';
+import { useTestStore } from './testStore';
 
-interface SavedTestInfo {
-	id?: number;
-	name: string;
-	description: string;
-}
+/**
+ * Canvas Store
+ *
+ * Manages the visual canvas state (nodes, edges, positions).
+ * Test identity and metadata are managed by testStore.
+ *
+ * Key changes in v0.29.0:
+ * - Removed savedTestInfo (moved to testStore)
+ * - Added markDirty() calls on node/edge changes
+ * - Kept activeTestId/activeTemplateId for Library integration
+ */
 
 interface CanvasStore {
 	nodes: Node[];
 	edges: Edge[];
 	lastCanvasClickPosition: { x: number; y: number };
-	savedTestInfo: SavedTestInfo | null;
 	activeTestId: string | null;
 	activeTemplateId: string | null;
 
@@ -29,10 +35,10 @@ interface CanvasStore {
 	removeNode: (nodeId: string) => void;
 	updateNode: (nodeId: string, data: Partial<Node['data']>) => void;
 	setLastClickPosition: (position: { x: number; y: number }) => void;
-	setSavedTestInfo: (info: SavedTestInfo | null) => void;
 	organizeNodes: () => void;
 	setActiveTestId: (id: string | null) => void;
 	setActiveTemplateId: (id: string | null) => void;
+	clearCanvas: () => void;
 }
 
 export const useCanvasStore = create<CanvasStore>()(
@@ -74,7 +80,6 @@ export const useCanvasStore = create<CanvasStore>()(
 				}
 			],
 			lastCanvasClickPosition: { x: 250, y: 150 },
-			savedTestInfo: null,
 			activeTestId: null,
 			activeTemplateId: null,
 
@@ -83,27 +88,49 @@ export const useCanvasStore = create<CanvasStore>()(
 			setEdges: (edges) => set({ edges }),
 
 			onNodesChange: (changes) => {
+				// Filter out position changes (from dragging) to avoid marking dirty on every drag
+				const significantChanges = changes.filter(
+					(change) => change.type !== 'position' && change.type !== 'select'
+				);
+
 				set({
 					nodes: applyNodeChanges(changes, get().nodes)
 				});
+
+				// Mark dirty only for significant changes (add, remove, reset)
+				if (significantChanges.length > 0) {
+					useTestStore.getState().markDirty();
+				}
 			},
 
 			onEdgesChange: (changes) => {
+				// Filter out select changes
+				const significantChanges = changes.filter((change) => change.type !== 'select');
+
 				set({
 					edges: applyEdgeChanges(changes, get().edges)
 				});
+
+				// Mark dirty for edge changes
+				if (significantChanges.length > 0) {
+					useTestStore.getState().markDirty();
+				}
 			},
 
 			onConnect: (connection) => {
 				set({
 					edges: addEdge({ ...connection, animated: true }, get().edges)
 				});
+				// Mark dirty when new connection is made
+				useTestStore.getState().markDirty();
 			},
 
 			addNode: (node) => {
 				set((state) => ({
 					nodes: [...state.nodes, node]
 				}));
+				// Mark dirty when node is added
+				useTestStore.getState().markDirty();
 			},
 
 			removeNode: (nodeId) => {
@@ -111,6 +138,8 @@ export const useCanvasStore = create<CanvasStore>()(
 					nodes: state.nodes.filter(n => n.id !== nodeId),
 					edges: state.edges.filter(e => e.source !== nodeId && e.target !== nodeId)
 				}));
+				// Mark dirty when node is removed
+				useTestStore.getState().markDirty();
 			},
 
 			updateNode: (nodeId, data) => {
@@ -119,14 +148,12 @@ export const useCanvasStore = create<CanvasStore>()(
 						n.id === nodeId ? { ...n, data: { ...n.data, ...data } } : n
 					)
 				}));
+				// Mark dirty when node data is updated
+				useTestStore.getState().markDirty();
 			},
 
 			setLastClickPosition: (position) => {
 				set({ lastCanvasClickPosition: position });
-			},
-
-			setSavedTestInfo: (info) => {
-				set({ savedTestInfo: info });
 			},
 
 			organizeNodes: () => {
@@ -141,6 +168,16 @@ export const useCanvasStore = create<CanvasStore>()(
 
 			setActiveTemplateId: (id) => {
 				set({ activeTemplateId: id, activeTestId: null });
+			},
+
+			clearCanvas: () => {
+				set({
+					nodes: [],
+					edges: [],
+					activeTestId: null,
+					activeTemplateId: null
+				});
+				useTestStore.getState().clearCurrentTest();
 			}
 		}),
 		{
@@ -149,7 +186,6 @@ export const useCanvasStore = create<CanvasStore>()(
 				nodes: state.nodes,
 				edges: state.edges,
 				lastCanvasClickPosition: state.lastCanvasClickPosition,
-				savedTestInfo: state.savedTestInfo,
 				activeTestId: state.activeTestId,
 				activeTemplateId: state.activeTemplateId
 			})

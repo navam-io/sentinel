@@ -20,7 +20,7 @@ from .storage import get_database
 app = FastAPI(
     title="Sentinel API",
     description="AI Agent Testing and Evaluation Platform",
-    version="0.28.0",
+    version="0.29.0",
 )
 
 # Configure CORS for Tauri frontend

@@ -7,12 +7,14 @@ import { TestSuiteOrganizer } from './suites';
 import type { TestSuite, TestSuiteItem } from './suites';
 import { useTemplates } from '../hooks/useTemplates';
 import { useCanvasStore } from '../stores/canvasStore';
+import { useTestStore } from '../stores/testStore';
 import { useSettingsStore } from '../stores/settingsStore';
 import { parseYAMLToNodes } from '../lib/dsl/generator';
 import { listTests, getTest, executeTest, deleteTest, updateTest, type TestDefinition } from '../services/api';
 import { loadSuites, saveSuites } from '../services/suiteStorage';
 import { convertYAMLToTestSpec } from '../lib/dsl/generator';
 import type { Template } from './templates/TemplateCard';
+import type { TestCategory } from '../types/test-spec';
 
 type Tab = 'test' | 'suite' | 'library';
 
@@ -22,7 +24,8 @@ function RightPanel() {
 	const [savedTests, setSavedTests] = useState<TestDefinition[]>([]);
 	const [loadingTests, setLoadingTests] = useState(false);
 	const { templates, loading: templatesLoading } = useTemplates();
-	const { nodes, setNodes, setEdges, setSavedTestInfo, organizeNodes } = useCanvasStore();
+	const { nodes, setNodes, setEdges, organizeNodes } = useCanvasStore();
+	const { setCurrentTest, newTest } = useTestStore();
 	const { showRightPanel, setShowRightPanel } = useSettingsStore();
 
 	// Auto-save suites to localStorage whenever they change
@@ -38,13 +41,19 @@ function RightPanel() {
 	 *
 	 * @param parsedNodes - New nodes to load
 	 * @param parsedEdges - New edges to load
-	 * @param options - Loading options (savedTestInfo, confirmClear, successMessage)
+	 * @param options - Loading options (testInfo, confirmClear, successMessage)
 	 */
 	const loadToCanvas = (
 		parsedNodes: Node[],
 		parsedEdges: Edge[],
 		options?: {
-			savedTestInfo?: { id?: number; name: string; description: string } | null;
+			testInfo?: {
+				id?: number;
+				name: string;
+				description: string;
+				category?: TestCategory | null;
+				isTemplate?: boolean;
+			} | null;
 			confirmClear?: boolean;
 			successMessage?: string;
 			switchToTest?: boolean;
@@ -93,9 +102,24 @@ function RightPanel() {
 					organizeNodes();
 				});
 
-				// Update saved test info
-				if (options?.savedTestInfo !== undefined) {
-					setSavedTestInfo(options.savedTestInfo);
+				// Update test store with test info
+				if (options?.testInfo !== undefined) {
+					if (options.testInfo === null) {
+						// Loading a template - create new unsaved test
+						newTest('Untitled Test', '');
+					} else {
+						// Loading a saved test or template
+						setCurrentTest({
+							id: options.testInfo.id ?? null,
+							filename: null, // Will be set when file-based storage is implemented
+							name: options.testInfo.name,
+							description: options.testInfo.description,
+							category: options.testInfo.category ?? null,
+							isTemplate: options.testInfo.isTemplate ?? false,
+							isDirty: false,
+							lastSaved: options.testInfo.id ? new Date() : null,
+						});
+					}
 				}
 
 				// Switch to Test tab if requested
@@ -135,7 +159,12 @@ function RightPanel() {
 
 			// Load to canvas with confirmation
 			loadToCanvas(parsedNodes, parsedEdges, {
-				savedTestInfo: null, // Templates are not saved yet
+				testInfo: {
+					name: template.name,
+					description: template.description || '',
+					category: template.category as TestCategory | undefined,
+					isTemplate: true,
+				},
 				confirmClear: true,
 				successMessage: `Successfully loaded template: ${template.name}`,
 				switchToTest: true,
@@ -240,7 +269,12 @@ function RightPanel() {
 
 					// Load to canvas using robust loading function
 					loadToCanvas(parsedNodes, parsedEdges, {
-						savedTestInfo: null, // Templates are not saved yet
+						testInfo: {
+							name: template.name,
+							description: template.description || '',
+							category: template.category as TestCategory | undefined,
+							isTemplate: true,
+						},
 						confirmClear: nodes.length > 0, // Only confirm if canvas has content
 						successMessage: `Loaded template: ${template.name}`,
 						switchToTest: true,
@@ -267,10 +301,11 @@ function RightPanel() {
 
 				// Load to canvas using robust loading function
 				loadToCanvas(parsedNodes, parsedEdges, {
-					savedTestInfo: {
+					testInfo: {
 						id: savedTest.id,
 						name: savedTest.name,
 						description: savedTest.description || '',
+						category: savedTest.category,
 					},
 					confirmClear: nodes.length > 0, // Only confirm if canvas has content
 					switchToTest: true,
@@ -295,10 +330,11 @@ function RightPanel() {
 
 			// Load to canvas using robust loading function
 			loadToCanvas(parsedNodes, parsedEdges, {
-				savedTestInfo: {
+				testInfo: {
 					id: test.id,
 					name: test.name,
 					description: test.description || '',
+					category: test.category,
 				},
 				confirmClear: nodes.length > 0, // Only confirm if canvas has content
 				switchToTest: true,
