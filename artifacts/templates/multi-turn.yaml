@@ -1,5 +1,6 @@
 name: "Multi-Turn Conversation - Customer Support"
 description: "Test agent's ability to handle multi-turn conversations with context retention"
+category: multi-turn
 model: "gpt-4-turbo"
 provider: "openai"
 seed: 456

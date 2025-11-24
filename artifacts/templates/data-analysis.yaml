@@ -2,6 +2,7 @@ name: Data Analysis Task
 description: Analyze a dataset and generate insights with visualizations
 category: data-analysis
 model: gpt-5.1
+provider: openai
 inputs:
   query: Analyze the following sales data and provide key insights. Identify trends, anomalies, and recommendations. Sales by quarter: Q1: $120K, Q2: $95K, Q3: $145K, Q4: $180K
 assertions:

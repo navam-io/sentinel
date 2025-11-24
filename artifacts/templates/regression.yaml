@@ -2,6 +2,7 @@ name: Model Version Comparison
 description: Compare outputs across different model versions
 category: regression
 model: gpt-5.1
+provider: openai
 inputs:
   query: Write a Python function to calculate factorial recursively
 assertions:

@@ -1,5 +1,6 @@
 name: "Simple Q&A - Capital Cities"
 description: "Basic factual question answering without tools"
+category: qa
 model: "gpt-4"
 provider: "openai"
 seed: 123

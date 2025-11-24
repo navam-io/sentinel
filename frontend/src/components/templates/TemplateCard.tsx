@@ -1,11 +1,13 @@
 import React from 'react';
 import { FileText, Tag } from 'lucide-react';
+import type { TestCategory } from '../../types/test-spec';
+import { getCategoryConfig } from '../../lib/categoryConfig';
 
 export interface Template {
   id: string;
   name: string;
   description: string;
-  category: 'qa' | 'code-generation' | 'browser' | 'multi-turn' | 'langgraph' | 'safety';
+  category: TestCategory;
   tags: string[];
   model: string;
   provider: string;
@@ -31,14 +33,8 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
   onPreview,
   className = '',
 }) => {
-  const categoryColors = {
-    'qa': 'bg-blue-500/20 text-blue-400 border border-blue-500/30',
-    'code-generation': 'bg-purple-500/20 text-purple-400 border border-purple-500/30',
-    'browser': 'bg-orange-500/20 text-orange-400 border border-orange-500/30',
-    'multi-turn': 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30',
-    'langgraph': 'bg-green-500/20 text-green-400 border border-green-500/30',
-    'safety': 'bg-red-500/20 text-red-400 border border-red-500/30',
-  };
+  const categoryConfig = getCategoryConfig(template.category);
+  const categoryColor = categoryConfig.color;
 
   return (
     <div
@@ -54,11 +50,11 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
         <FileText size={16} className="text-sentinel-primary flex-shrink-0" />
         <span
           className={`
-            px-2 py-1 rounded text-[0.7rem] font-semibold uppercase tracking-wide
-            ${categoryColors[template.category]}
+            px-2 py-1 rounded text-[0.7rem] font-semibold uppercase tracking-wide text-white
+            ${categoryColor}
           `}
         >
-          {template.category.replace('-', ' ')}
+          {categoryConfig.label}
         </span>
       </div>
 

@@ -221,9 +221,9 @@ See `backlog/active.md` for complete V1 feature roadmap and specifications (15 t
 
 ## Project Status
 
-**Current Version**: 0.22.0 (November 23, 2025)
+**Current Version**: 0.23.0 (November 23, 2025)
 
-**Latest Release**: v0.22.0 - Unified Library Tab with Category System and Tab Restructure
+**Latest Release**: v0.23.0 - Dynamic Templates Loading System
 
 **Architecture**:
 - Frontend: React 19 + Vite + Tauri 2.0 + React Flow 12.3

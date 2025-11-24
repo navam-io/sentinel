@@ -4,6 +4,8 @@
 #[cfg(debug_assertions)]
 use tauri::Manager;
 
+mod commands;
+
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! Welcome to Sentinel.", name)
@@ -15,7 +17,7 @@ fn main() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_clipboard_manager::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, commands::get_project_root])
         .setup(|_app| {
             #[cfg(debug_assertions)]
             {

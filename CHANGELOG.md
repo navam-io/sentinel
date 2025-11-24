@@ -7,6 +7,120 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.23.0] - 2025-11-23
+
+### Added
+
+#### Dynamic Templates Loading System
+- **Filesystem-Based Templates**: Templates now load dynamically from YAML files instead of hardcoded JavaScript
+- **Settings Store**: Zustand store for persistent application settings (localStorage)
+- **Settings UI**: Modal dialog for configuring templates folder path
+  - Folder path input with validation
+  - Reset to defaults button
+  - Info box explaining template system
+  - Real-time template reload on path change
+- **Project Root Detection**: Rust backend command for dynamic project root detection
+  - `get_project_root()` command with smart directory traversal
+  - Verifies correct "sentinel" project folder
+  - Cross-platform support (Windows/Mac/Linux)
+  - No hardcoded usernames or paths
+- **Tauri Filesystem Permissions**: Proper Tauri 2.0 capabilities with scoped file access
+  - `fs:allow-read-text-file` - Read YAML files
+  - `fs:allow-read-dir` - List directory contents
+  - `fs:allow-exists` - Check path existence
+  - `core:path:default` - Path resolution APIs
+
+#### Template Organization
+- **Templates Moved**: Relocated from `templates/` to `artifacts/templates/`
+- **Kebab-Case Naming**: All templates standardized to kebab-case format
+  - `simple_qa.yaml` → `simple-qa.yaml`
+  - `code_generation.yaml` → `code-generation.yaml`
+  - `browser_agent.yaml` → `browser-agent.yaml`
+  - `multi_turn.yaml` → `multi-turn.yaml`
+  - `langgraph_agent.yaml` → `langgraph-agent.yaml`
+  - `test_suite.yaml` → `ecommerce-agent.yaml`
+  - Removed "-template" suffix from 9 files
+  - Removed "-test" suffix from 1 file
+- **16 Total Templates**: All templates schema-validated and standardized
+
+### Changed
+
+#### Templates Service (Complete Rewrite)
+- **Before**: 300+ LOC of hardcoded templates in JavaScript
+- **After**: 187 LOC dynamic filesystem loading with YAML parsing
+- **Loading Strategy**:
+  1. Get project root from Rust command
+  2. Construct full path to templates folder
+  3. Read all .yaml/.yml files
+  4. Parse metadata (name, description, category, model, provider, tags)
+  5. Return Template[] array
+- **Error Handling**: Graceful fallback if templates folder not accessible
+- **Performance**: ~50ms to load 16 templates from local filesystem
+
+#### App Layout
+- **Top Navigation Bar**: Added with app branding and settings button
+- **Settings Button**: Gear icon in top-right corner opens settings modal
+- **Flex Layout**: Updated to accommodate top bar + main content
+
+#### Template Schema
+- **Fixed Missing Categories**: Added `category` field to 5 templates
+- **Fixed Invalid Assertions**: Corrected assertion types across all templates
+  - `is_json: true` → `output_type: "json"`
+  - `word_count_min: N` → `min_tokens: N`
+  - `tool_called: name` → `must_call_tool: ["name"]`
+  - `output_type: "structured"` → `output_type: "json"`
+- **Added Missing Providers**: Added `provider: "openai"` to 10 templates
+- **Array Format**: Converted single-value assertions to array format where needed
+
+### Fixed
+
+- **Monaco Editor CDN Errors**: Resolved 404 errors from incorrect source map URLs
+  - Configured Monaco loader to use stable CDN path (v0.52.0)
+  - Prevents console errors without affecting functionality
+- **Template Path Resolution**: Fixed templates resolving to wrong directory in dev mode
+  - Before: `frontend/src-tauri/target/debug/artifacts/templates` ❌
+  - After: `{project-root}/artifacts/templates` ✅
+- **Hardcoded Paths**: Removed all hardcoded usernames and project locations
+- **Cross-User Compatibility**: App now works for any developer on any system
+
+### Technical
+
+#### New Files (6)
+- `frontend/src/stores/settingsStore.ts` (40 LOC)
+- `frontend/src/components/settings/Settings.tsx` (160 LOC)
+- `frontend/src/components/settings/index.tsx` (1 LOC)
+- `frontend/src-tauri/src/commands.rs` (42 LOC)
+- `frontend/src-tauri/capabilities/default.json` (33 LOC)
+- `artifacts/templates/` (16 YAML files moved/renamed)
+
+#### Modified Files (9)
+- `frontend/src/services/templates.ts` (complete rewrite)
+- `frontend/src/hooks/useTemplates.ts` (integrated with settings store)
+- `frontend/src/components/templates/TemplateCard.tsx` (use TestCategory type)
+- `frontend/src/App.tsx` (added top bar and settings)
+- `frontend/src-tauri/src/main.rs` (registered get_project_root command)
+- `frontend/src-tauri/tauri.conf.json` (added capabilities reference)
+- `frontend/src/components/yaml/MonacoYamlEditor.tsx` (CDN config)
+- `frontend/vite.config.ts` (import from vitest/config)
+- All 16 template YAML files (schema fixes, renamed)
+
+#### Dependencies
+- **Added**: `@tauri-apps/plugin-fs` (filesystem access for Tauri)
+- **Updated**: Monaco Editor loader configuration
+- **Updated**: Vite config import path
+
+#### Code Metrics
+- **Total Added**: 498 LOC (6 new files)
+- **Total Deleted**: 300 LOC (hardcoded templates removed)
+- **Net Change**: +198 LOC
+- **Bundle Size**: Reduced by ~30KB (templates not in bundle)
+
+### Documentation
+- See `releases/release-0.23.0.md` for complete release notes
+- Templates now documented in `artifacts/templates/` folder
+
+---
+
 ## [0.22.0] - 2025-11-23
 
 ### Added

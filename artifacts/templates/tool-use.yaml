@@ -2,6 +2,7 @@ name: Weather Tool Integration
 description: Test function calling with weather API tool
 category: tool-use
 model: gpt-5.1
+provider: openai
 inputs:
   query: What's the weather like in San Francisco right now? Should I bring an umbrella?
 tools:
@@ -11,7 +12,7 @@ tools:
       location: string
       unit: enum [celsius, fahrenheit]
 assertions:
-  - tool_called: get_current_weather
+  - must_call_tool: ["get_current_weather"]
   - must_contain: "umbrella"
 tags:
   - tools

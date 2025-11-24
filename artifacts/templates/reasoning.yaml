@@ -2,6 +2,7 @@ name: Logic Reasoning Challenge
 description: Test logical reasoning and problem-solving capabilities
 category: reasoning
 model: gpt-5.1
+provider: openai
 inputs:
   query: |
     Three people (Alice, Bob, Charlie) have different heights.

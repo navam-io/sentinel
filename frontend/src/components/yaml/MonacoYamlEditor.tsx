@@ -1,6 +1,13 @@
 import { useRef, useEffect } from 'react';
-import Editor, { OnMount } from '@monaco-editor/react';
+import Editor, { OnMount, loader } from '@monaco-editor/react';
 import type * as Monaco from 'monaco-editor';
+
+// Configure Monaco loader to use npm CDN with correct paths
+loader.config({
+	paths: {
+		vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.0/min/vs'
+	}
+});
 
 interface MonacoYamlEditorProps {
 	value: string;

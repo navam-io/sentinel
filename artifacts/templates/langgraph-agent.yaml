@@ -1,5 +1,6 @@
 name: "LangGraph Research Agent - Tech News"
 description: "Test LangGraph-based agent for researching and summarizing recent tech news"
+category: langgraph
 model: "claude-3-5-sonnet-20241022"
 provider: "anthropic"
 framework: "langgraph"
@@ -37,9 +38,9 @@ inputs:
     companies: ["Google", "OpenAI", "Anthropic", "Microsoft"]
 
 assertions:
-  - must_call_tool: "web_search"
+  - must_call_tool: ["web_search"]
   - must_contain: "AI"
-  - output_type: "structured"
+  - output_type: "json"
   - max_latency_ms: 15000
 
 timeout_ms: 30000

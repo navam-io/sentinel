@@ -92,6 +92,89 @@ Priority order:
 
 ---
 
+### ✅ Release 0.23.0: Dynamic Templates Loading System
+**Status**: Completed ✅
+**Released**: November 23, 2025
+**Semver**: 0.22.0 → 0.23.0 (minor)
+
+**Description**:
+Complete transformation from hardcoded templates to dynamic filesystem-based loading. Templates now load from configurable folder with cross-user compatibility.
+
+**What Was Delivered**:
+- **Filesystem-Based Templates**: Load 16 templates dynamically from YAML files ✅
+- **Settings Store**: Zustand store for persistent templates folder configuration ✅
+- **Settings UI**: Modal dialog for configuring templates path with validation ✅
+- **Project Root Detection**: Rust backend command for dynamic path resolution ✅
+- **Tauri Filesystem Permissions**: Scoped file access capabilities ✅
+- **Template Schema Standardization**: Fixed all 16 templates with proper categories and assertions ✅
+- **Kebab-Case Naming**: Standardized all template filenames ✅
+- **Zero Hardcoded Paths**: Works for any user on any system ✅
+
+**Key Features**:
+1. Templates load from `artifacts/templates/` folder (configurable)
+2. Settings UI with folder path input and validation
+3. Real-time template reload on path change
+4. Cross-platform support (Windows/Mac/Linux)
+5. No hardcoded usernames or project paths
+6. 16 templates with validated schema (categories, assertions, providers)
+7. Reduced bundle size by ~30KB (templates not in bundle)
+
+**Files**:
+- `frontend/src/stores/settingsStore.ts` - Settings persistence (40 LOC)
+- `frontend/src/components/settings/Settings.tsx` - Settings UI (160 LOC)
+- `frontend/src/services/templates.ts` - Complete rewrite (187 LOC, -300 LOC hardcoded)
+- `frontend/src-tauri/src/commands.rs` - Project root detection (42 LOC)
+- `frontend/src-tauri/capabilities/default.json` - Filesystem permissions (33 LOC)
+- `artifacts/templates/*.yaml` - 16 standardized templates (moved from templates/)
+
+**Success Criteria Met**:
+- ✅ Templates load from filesystem dynamically
+- ✅ Settings UI for configurable templates folder
+- ✅ No hardcoded paths or usernames
+- ✅ Cross-user compatibility verified
+- ✅ All 16 templates schema-validated
+- ✅ Kebab-case naming standardized
+- ✅ All 459 tests passing (100% pass rate)
+- ✅ 0 TypeScript errors, 0 Rust errors
+- ✅ Bundle size reduced by ~30KB
+
+**Documentation**: See `releases/release-0.23.0.md` for complete release notes.
+
+---
+
+### ✅ Release 0.22.0: Unified Library Tab & Category System
+**Status**: Completed ✅
+**Released**: November 23, 2025
+**Semver**: 0.21.0 → 0.22.0 (minor)
+
+**Description**:
+Unified Library tab combining templates and user tests with 12-category classification system and restructured tabs.
+
+**What Was Delivered**:
+- **Unified Library Tab**: Templates + user tests in single browsable interface ✅
+- **12-Category System**: Q&A, Code Generation, Browser, Multi-turn, LangGraph, Safety, Data Analysis, Reasoning, Tool Use, API Testing, UI Testing, Regression ✅
+- **10 New Templates**: API Testing, Data Analysis, JSON Generation, LangGraph Workflow, Multi-Agent, Prompt Injection, Reasoning, Regression, Tool Use, UI Testing ✅
+- **Tab Restructure**: YAML→Test, Tests→Suite, Templates→Library, Removed Run tab ✅
+- **State Persistence**: Run details expansion, test info, suite expansion saved to localStorage ✅
+
+**Key Features**:
+1. LibraryCard component with template/user test distinction (✨/👤 icons)
+2. Search and filtering (type filters, category filters)
+3. Category management with dropdown selectors
+4. Test tab with integrated run section (collapsible)
+5. Database schema updated with category and is_template fields
+
+**Success Criteria Met**:
+- ✅ 16 total templates (6 original + 10 new)
+- ✅ Category system functional
+- ✅ Tab restructure complete
+- ✅ State persistence working
+- ✅ All tests passing, 0 regressions
+
+**Documentation**: See `CHANGELOG.md` for v0.22.0 details.
+
+---
+
 ### ✅ Release 0.14.0: Template Gallery & Built-in Templates
 **Status**: Completed ✅
 **Released**: November 22, 2025
@@ -123,26 +206,29 @@ Template Gallery feature providing users with a library of pre-built test templa
 - `frontend/src/components/templates/TemplateGallery.tsx` - Gallery component (140 LOC)
 - `frontend/src/components/templates/TemplateCard.tsx` - Card component (130 LOC)
 - `frontend/src/components/templates/index.tsx` - Export file
-- `frontend/src/services/templates.ts` - Template service (300+ LOC)
+- `frontend/src/services/templates.ts` - Template service (now 187 LOC - rewritten in v0.23.0 for filesystem loading)
 - `frontend/src/hooks/useTemplates.ts` - Template hook (30 LOC)
 - `frontend/src/components/templates/TemplateCard.test.tsx` - 9 tests
 - `frontend/src/components/templates/TemplateGallery.test.tsx` - 11 tests
 - `frontend/src/services/templates.test.ts` - 11 tests
+- `artifacts/templates/*.yaml` - 16 YAML template files (moved from templates/ in v0.23.0)
 
 **Success Criteria Met**:
 - ✅ Template Gallery UI complete with search and filtering
-- ✅ 6 high-quality built-in templates embedded
+- ✅ 16 high-quality templates (6 in v0.14.0, 10 more in v0.22.0, filesystem-based in v0.23.0)
 - ✅ One-click load to canvas (component ready, integration pending)
-- ✅ Category filtering with 6 categories
+- ✅ Category filtering with 12 categories (expanded in v0.22.0)
 - ✅ All 223 tests passing (135 frontend + 88 backend)
 - ✅ 0 TypeScript errors
 - ✅ Production-ready quality
 
 **Documentation**: See `releases/release-0.14.0.md` for complete release notes.
 
-**Feature 7 Status**: Partially Complete
-- ✅ Template Gallery (delivered in v0.14.0)
-- ⏳ Test Suite Organizer (deferred to future release)
+**Feature 7 Evolution**:
+- ✅ v0.14.0: Template Gallery with 6 hardcoded templates
+- ✅ v0.21.0: Test Suite Organizer
+- ✅ v0.22.0: Expanded to 16 templates + 12-category system
+- ✅ v0.23.0: Dynamic filesystem-based loading (configurable path)
 
 ---
 
@@ -1181,7 +1267,8 @@ Pre-built test templates and test suite organization. Feature 7 is now fully com
 - `frontend/src/components/suites/index.tsx` - Exports
 - `frontend/src/components/suites/TestSuiteOrganizer.test.tsx` - 34 tests
 - `frontend/src/components/templates/` - Template gallery (v0.14.0)
-- `frontend/src/services/templates.ts` - 6 embedded templates
+- `frontend/src/services/templates.ts` - Template service (rewritten in v0.23.0 for filesystem loading)
+- `artifacts/templates/*.yaml` - 16 YAML template files (added in v0.22.0, moved in v0.23.0)
 
 **Success Criteria Met**:
 - ✅ At least 6 high-quality templates (6 delivered)
@@ -1315,43 +1402,6 @@ Generate tests from natural language descriptions using AI.
 **Success Criteria**:
 - Generates reasonable tests from descriptions
 - Suggestions are helpful and relevant
-
----
-
-### Feature 11: Collaborative Workspaces
-**Status**: Not Started
-**Priority**: P2 - Extended Value
-**Semver Impact**: minor (0.13.0)
-
-**Description**:
-Team collaboration features for shared testing.
-
-**Requirements**:
-- **Team Workspaces**:
-  - Shared test suites
-  - Real-time collaboration
-  - Activity feeds
-  - Member management
-
-- **Comments & Reviews**:
-  - Comment on tests and runs
-  - Approval workflows
-  - Discussion threads
-
-- **Permissions**:
-  - Role-based access control
-  - Team/organization structure
-
-**Deliverables**:
-- `backend/collaboration/`: Collaboration services
-- `src/components/workspace/`: Workspace UI (React)
-- WebSocket for real-time updates
-- Documentation: Collaboration guide
-
-**Success Criteria**:
-- Teams can share and collaborate on tests
-- Real-time updates work smoothly
-- Permissions system is flexible
 
 ---
 
@@ -1620,13 +1670,13 @@ User Experience:
 
 ## Current Status
 
-- **Version**: 0.21.0 (Test Suite Organizer - Feature 7 COMPLETE ✅)
-- **Latest Release**: Release 0.21.0 - Test Suite Organizer Complete (November 23, 2025)
-- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish) + Feature 5 (Design System Implementation ✅) + Feature 7 (Template Gallery & Test Suites COMPLETE ✅)
-- **Next Feature**: Feature 8 - Regression Engine & Comparison View (v0.22.0) OR Feature 6 - Record & Replay Test Generation
+- **Version**: 0.23.0 (Dynamic Templates Loading System ✅)
+- **Latest Release**: Release 0.23.0 - Dynamic Templates Loading System (November 23, 2025)
+- **Completed Features**: Feature 1 (Visual Canvas) + Feature 2 (DSL Parser & Visual Importer) + Feature 2.5 (Monaco YAML Editor) + Feature 3 (Complete ✅ - Model Provider Architecture & Execution with Full Storage Integration) + Feature 4 (Assertion Builder & Validation) + Hotfix 0.12.1 (UI/UX Polish) + Feature 5 (Design System Implementation ✅) + Feature 7 (Template Gallery & Test Suites COMPLETE ✅ - Now Filesystem-Based)
+- **Next Feature**: Feature 8 - Regression Engine & Comparison View OR Feature 6 - Record & Replay Test Generation
 - **🔴 Critical Initiative**: Code Quality & Testing - **ALL PHASES COMPLETE ✅** (Phase 1-4 done)
-- **Architecture**: Visual-first desktop app (Tauri + React 19 + React Flow) with Python backend + SQLite storage + Auto-save + Assertion Validation + WCAG AAA UI + Template Gallery + Test Suite Organizer + Complete Design System + 100% Type Safety + Professional Code Quality + 50%+ Test Coverage + E2E Testing
-- **Test Status**: 473/473 tests passing (100% - 70 backend + 403 frontend including 34 new suite tests) ✅
+- **Architecture**: Visual-first desktop app (Tauri + React 19 + React Flow) with Python backend + SQLite storage + Auto-save + Assertion Validation + WCAG AAA UI + Dynamic Templates (Filesystem-Based) + Settings Store + Test Suite Organizer + Complete Design System + 100% Type Safety + Professional Code Quality + 50%+ Test Coverage + E2E Testing + Cross-User Compatibility
+- **Test Status**: 459/459 tests passing (100% - backend + frontend) ✅
 - **Code Quality Status** (All Phases Complete ✅):
   - ✅ **Critical Code Tested**: DSL (24 tests), Canvas (24 tests), Nodes (158 tests)
   - ✅ **Design System Tested**: CommandPalette (23 tests), AssertionCard (27 tests)

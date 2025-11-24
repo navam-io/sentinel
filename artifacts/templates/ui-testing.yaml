@@ -2,6 +2,7 @@ name: UI Test Scenario
 description: Generate UI test cases for web application
 category: ui-testing
 model: gpt-5.1
+provider: openai
 inputs:
   query: Generate test cases for a login form with email, password fields, and a "Remember me" checkbox. Cover happy path and error cases.
 assertions:
@@ -9,7 +10,7 @@ assertions:
   - must_contain: "email"
   - must_contain: "password"
   - must_contain: "error"
-  - word_count_min: 100
+  - min_tokens: 100
 tags:
   - ui
   - testing

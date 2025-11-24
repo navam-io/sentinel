@@ -44,6 +44,6 @@ tests:
     assertions:
       - must_contain: "ASUS"
       - must_contain: "price"
-      - must_call_tool: "scraper"
-      - output_type: "structured"
+      - must_call_tool: ["scraper"]
+      - output_type: "json"
       - max_latency_ms: 8000

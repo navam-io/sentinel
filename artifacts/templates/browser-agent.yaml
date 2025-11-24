@@ -1,5 +1,6 @@
 name: "Browser Agent - Product Research"
 description: "Test agent's ability to research products with price constraints using browser tools"
+category: browser
 model: "claude-3-5-sonnet-20241022"
 provider: "anthropic"
 seed: 42

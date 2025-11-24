@@ -1,0 +1,33 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Default permissions for the Sentinel application",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:path:default",
+    {
+      "identifier": "fs:allow-read-text-file",
+      "allow": [
+        {
+          "path": "$RESOURCE/**"
+        },
+        {
+          "path": "$HOME/**/sentinel/artifacts/**"
+        }
+      ]
+    },
+    {
+      "identifier": "fs:allow-read-dir",
+      "allow": [
+        {
+          "path": "$RESOURCE/**"
+        },
+        {
+          "path": "$HOME/**/sentinel/artifacts/**"
+        }
+      ]
+    },
+    "fs:allow-exists"
+  ]
+}
