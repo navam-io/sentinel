@@ -170,13 +170,11 @@ describe('ComponentPalette', () => {
 	});
 
 	describe('UI Rendering', () => {
-		it('should render all component categories', () => {
+		it('should render Test Nodes header', () => {
 			render(<ComponentPalette />);
 
-			expect(screen.getByText('Inputs')).toBeInTheDocument();
-			expect(screen.getByText('Models')).toBeInTheDocument();
-			expect(screen.getByText('Tools')).toBeInTheDocument();
-			expect(screen.getByText('Assertions')).toBeInTheDocument();
+			expect(screen.getByText('Test Nodes')).toBeInTheDocument();
+			expect(screen.getByText('Click to add to canvas')).toBeInTheDocument();
 		});
 
 		it('should render all node types', () => {

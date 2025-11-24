@@ -3,10 +3,12 @@ import {
 	ReactFlow,
 	Background,
 	Controls,
+	ControlButton,
 	MiniMap,
 	BackgroundVariant,
 	useReactFlow
 } from '@xyflow/react';
+import { Network } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import InputNode from '../nodes/InputNode';
 import ModelNode from '../nodes/ModelNode';
@@ -21,7 +23,8 @@ function Canvas() {
 		onNodesChange,
 		onEdgesChange,
 		onConnect,
-		setLastClickPosition
+		setLastClickPosition,
+		organizeNodes
 	} = useCanvasStore();
 
 	const { screenToFlowPosition } = useReactFlow();
@@ -68,7 +71,11 @@ function Canvas() {
 					gap={16}
 					size={1}
 				/>
-				<Controls />
+				<Controls showInteractive={true}>
+					<ControlButton onClick={organizeNodes} title="Auto-organize nodes" data-testid="canvas-organize">
+						<Network className="w-4 h-4" />
+					</ControlButton>
+				</Controls>
 				<MiniMap />
 			</ReactFlow>
 		</div>

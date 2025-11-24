@@ -20,8 +20,16 @@ vi.mock('@xyflow/react', async () => {
 			</div>
 		),
 		Background: ({ variant }: any) => <div data-testid="background" data-variant={variant} />,
-		Controls: () => <div data-testid="controls" />,
+		Controls: ({ children }: any) => <div data-testid="controls">{children}</div>,
+		ControlButton: ({ children, onClick, ...props }: any) => (
+			<button onClick={onClick} {...props}>{children}</button>
+		),
 		MiniMap: () => <div data-testid="minimap" />,
+		Panel: ({ children, position }: any) => (
+			<div data-testid="panel" data-position={position}>
+				{children}
+			</div>
+		),
 		BackgroundVariant: {
 			Dots: 'dots',
 			Lines: 'lines',
@@ -33,6 +41,9 @@ vi.mock('@xyflow/react', async () => {
 			getEdges: vi.fn(() => []),
 			setNodes: vi.fn(),
 			setEdges: vi.fn(),
+			zoomIn: vi.fn(),
+			zoomOut: vi.fn(),
+			fitView: vi.fn(),
 		}),
 	};
 });
@@ -75,6 +86,7 @@ describe('Canvas', () => {
 			expect(screen.getByTestId('react-flow-canvas')).toBeInTheDocument();
 			expect(screen.getByTestId('background')).toBeInTheDocument();
 			expect(screen.getByTestId('controls')).toBeInTheDocument();
+			expect(screen.getByTestId('canvas-organize')).toBeInTheDocument();
 			expect(screen.getByTestId('minimap')).toBeInTheDocument();
 		});
 
@@ -374,6 +386,7 @@ describe('Canvas', () => {
 			);
 
 			expect(screen.getByTestId('controls')).toBeInTheDocument();
+			expect(screen.getByTestId('canvas-organize')).toBeInTheDocument();
 		});
 
 		it('should enable MiniMap component', () => {

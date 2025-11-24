@@ -1,5 +1,7 @@
-import { LucideIcon, MessageSquare, Settings, Cpu, Wrench, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
+import { LucideIcon, MessageSquare, Settings as SettingsIcon, Cpu, Wrench, CheckCircle2 } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
+import { Settings } from '../settings';
 import type { NodeData } from '../../types/test-spec';
 import logo from '../../assets/sentinel-square-abstract-transparent.png';
 
@@ -20,7 +22,7 @@ const nodeTypes: NodeCategory[] = [
 		category: 'Inputs',
 		nodes: [
 			{ type: 'input', label: 'Prompt', icon: MessageSquare, description: 'User input prompt' },
-			{ type: 'system', label: 'System', icon: Settings, description: 'System prompt' },
+			{ type: 'system', label: 'System', icon: SettingsIcon, description: 'System prompt' },
 		]
 	},
 	{
@@ -45,6 +47,7 @@ const nodeTypes: NodeCategory[] = [
 
 function ComponentPalette() {
 	const { addNode, lastCanvasClickPosition, setLastClickPosition } = useCanvasStore();
+	const [settingsOpen, setSettingsOpen] = useState(false);
 
 	const handleAddNode = (nodeType: string, label: string) => {
 		// Use last canvas click position
@@ -141,52 +144,56 @@ function ComponentPalette() {
 
 			{/* Palette Header */}
 			<div className="p-4 border-b border-sentinel-border">
-				<h2 className="text-sm font-semibold text-sentinel-text">Components</h2>
+				<h2 className="text-sm font-semibold text-sentinel-text">Test Nodes</h2>
 				<p className="text-[0.6rem] text-sentinel-text-muted mt-1">Click to add to canvas</p>
 			</div>
 
 			{/* Component Categories */}
-			<div className="flex-1 overflow-y-auto p-3 space-y-4">
+			<div className="flex-1 overflow-y-auto p-3 space-y-2">
 				{nodeTypes.map((category) => (
 					<div key={category.category} className="space-y-2">
-						<h3 className="text-[0.6rem] font-medium text-sentinel-text-muted uppercase tracking-wide px-2">
-							{category.category}
-						</h3>
-						<div className="space-y-1">
-							{category.nodes.map((node) => {
-								const Icon = node.icon;
-								return (
-									<button
-										key={node.type}
-										data-testid={`palette-node-${node.type}`}
-										className="w-full text-left p-2 bg-sentinel-surface border border-sentinel-border rounded-md hover:bg-sentinel-hover hover:border-sentinel-primary transition-all duration-150 cursor-pointer"
-										onClick={() => handleAddNode(node.type, node.label)}
-									>
-										<div className="flex items-center gap-2">
-											<Icon size={14} strokeWidth={2} className="text-sentinel-primary flex-shrink-0" />
-											<div className="flex-1 min-w-0">
-												<div className="text-[0.65rem] font-medium text-sentinel-text truncate">
-													{node.label}
-												</div>
-												<div className="text-[0.55rem] text-sentinel-text-muted truncate">
-													{node.description}
-												</div>
+						{category.nodes.map((node) => {
+							const Icon = node.icon;
+							return (
+								<button
+									key={node.type}
+									data-testid={`palette-node-${node.type}`}
+									className="w-full text-left p-2 bg-sentinel-surface border border-sentinel-border rounded-md hover:bg-sentinel-hover hover:border-sentinel-primary transition-all duration-150 cursor-pointer"
+									onClick={() => handleAddNode(node.type, node.label)}
+								>
+									<div className="flex items-center gap-2">
+										<Icon size={14} strokeWidth={2} className="text-sentinel-primary flex-shrink-0" />
+										<div className="flex-1 min-w-0">
+											<div className="text-[0.65rem] font-medium text-sentinel-text truncate">
+												{node.label}
+											</div>
+											<div className="text-[0.55rem] text-sentinel-text-muted truncate">
+												{node.description}
 											</div>
 										</div>
-									</button>
-								);
-							})}
-						</div>
+									</div>
+								</button>
+							);
+						})}
 					</div>
 				))}
 			</div>
 
 			{/* Palette Footer */}
 			<div className="p-3 border-t border-sentinel-border">
-				<button className="w-full sentinel-button-secondary text-[0.65rem]">
-					+ Add Custom Node
+				<button
+					onClick={() => setSettingsOpen(true)}
+					className="w-full sentinel-button-secondary text-[0.65rem] flex items-center justify-center gap-2"
+					title="Settings"
+					data-testid="settings-button"
+				>
+					<SettingsIcon size={14} />
+					Settings
 				</button>
 			</div>
+
+			{/* Settings Modal */}
+			<Settings isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
 		</div>
 	);
 }

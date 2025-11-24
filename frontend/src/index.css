@@ -414,6 +414,13 @@
     border-color: var(--sentinel-primary) !important;
   }
 
+  .react-flow__controls-button svg {
+    stroke: var(--sentinel-text) !important;
+    fill: var(--sentinel-text) !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+  }
+
   /* Improve icon color in node headers */
   .node-icon {
     color: var(--sentinel-primary);
