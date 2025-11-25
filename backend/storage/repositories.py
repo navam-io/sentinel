@@ -1,5 +1,5 @@
 """
-Data access layer (repositories) for tests and runs.
+Data access layer (repositories) for tests, runs, and recordings.
 """
 
 import json
@@ -9,7 +9,7 @@ from typing import Any
 from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
-from .models import TestDefinition, TestResult, TestRun
+from .models import RecordingEvent, RecordingSession, TestDefinition, TestResult, TestRun
 
 
 class TestRepository:
@@ -32,6 +32,7 @@ class TestRepository:
         description: str | None = None,
         category: str | None = None,
         is_template: bool = False,
+        filename: str | None = None,
     ) -> TestDefinition:
         """Create a new test definition.
 
@@ -43,6 +44,7 @@ class TestRepository:
             description: Optional description
             category: Optional test category
             is_template: Whether this is a template (default False)
+            filename: Optional YAML filename in artifacts/tests/
 
         Returns:
             Created test definition
@@ -52,6 +54,7 @@ class TestRepository:
             description=description,
             category=category,
             is_template=is_template,
+            filename=filename,
             spec_json=json.dumps(spec),
             spec_yaml=spec_yaml,
             canvas_state=json.dumps(canvas_state) if canvas_state else None,
@@ -103,6 +106,19 @@ class TestRepository:
             .all()
         )
 
+    def get_by_filename(self, filename: str) -> TestDefinition | None:
+        """Get test definition by filename.
+
+        Args:
+            filename: YAML filename (without extension)
+
+        Returns:
+            Test definition or None if not found
+        """
+        return (
+            self.session.query(TestDefinition).filter(TestDefinition.filename == filename).first()
+        )
+
     def update(
         self,
         test_id: int,
@@ -113,6 +129,7 @@ class TestRepository:
         description: str | None = None,
         category: str | None = None,
         is_template: bool | None = None,
+        filename: str | None = None,
     ) -> TestDefinition | None:
         """Update test definition.
 
@@ -125,6 +142,7 @@ class TestRepository:
             description: Optional new description
             category: Optional new category
             is_template: Optional new template flag
+            filename: Optional new filename
 
         Returns:
             Updated test definition or None if not found
@@ -141,6 +159,8 @@ class TestRepository:
             test.category = category
         if is_template is not None:
             test.is_template = is_template
+        if filename is not None:
+            test.filename = filename
         if spec is not None:
             test.spec_json = json.dumps(spec)
             test.provider = spec.get("provider")
@@ -153,6 +173,24 @@ class TestRepository:
         test.version += 1
         test.updated_at = datetime.utcnow()
 
+        self.session.commit()
+        self.session.refresh(test)
+        return test
+
+    def update_last_run(self, test_id: int) -> TestDefinition | None:
+        """Update last_run_at timestamp for a test.
+
+        Args:
+            test_id: Test ID
+
+        Returns:
+            Updated test definition or None if not found
+        """
+        test = self.get_by_id(test_id)
+        if not test:
+            return None
+
+        test.last_run_at = datetime.utcnow()
         self.session.commit()
         self.session.refresh(test)
         return test
@@ -368,3 +406,205 @@ class RunRepository:
             List of test results
         """
         return self.session.query(TestResult).filter(TestResult.test_run_id == run_id).all()
+
+
+class RecordingRepository:
+    """Repository for recording sessions and events."""
+
+    def __init__(self, session: Session):
+        """Initialize repository.
+
+        Args:
+            session: Database session
+        """
+        self.session = session
+
+    def create_session(
+        self,
+        name: str,
+        description: str | None = None,
+    ) -> RecordingSession:
+        """Create a new recording session.
+
+        Args:
+            name: Session name
+            description: Optional description
+
+        Returns:
+            Created recording session
+        """
+        recording = RecordingSession(
+            name=name,
+            description=description,
+            status="recording",
+        )
+        self.session.add(recording)
+        self.session.commit()
+        self.session.refresh(recording)
+        return recording
+
+    def get_session_by_id(self, session_id: int) -> RecordingSession | None:
+        """Get recording session by ID.
+
+        Args:
+            session_id: Recording session ID
+
+        Returns:
+            Recording session or None if not found
+        """
+        return (
+            self.session.query(RecordingSession).filter(RecordingSession.id == session_id).first()
+        )
+
+    def get_active_session(self) -> RecordingSession | None:
+        """Get the currently active (recording) session.
+
+        Returns:
+            Active recording session or None
+        """
+        return (
+            self.session.query(RecordingSession)
+            .filter(RecordingSession.status == "recording")
+            .order_by(desc(RecordingSession.started_at))
+            .first()
+        )
+
+    def update_session_status(
+        self,
+        session_id: int,
+        status: str,
+    ) -> RecordingSession | None:
+        """Update recording session status.
+
+        Args:
+            session_id: Recording session ID
+            status: New status (recording, paused, stopped)
+
+        Returns:
+            Updated recording session or None if not found
+        """
+        recording = self.get_session_by_id(session_id)
+        if not recording:
+            return None
+
+        recording.status = status
+        if status == "stopped":
+            recording.stopped_at = datetime.utcnow()
+
+        self.session.commit()
+        self.session.refresh(recording)
+        return recording
+
+    def set_generated_test(
+        self,
+        session_id: int,
+        test_id: int,
+    ) -> RecordingSession | None:
+        """Link recording session to generated test.
+
+        Args:
+            session_id: Recording session ID
+            test_id: Generated test definition ID
+
+        Returns:
+            Updated recording session or None if not found
+        """
+        recording = self.get_session_by_id(session_id)
+        if not recording:
+            return None
+
+        recording.generated_test_id = test_id
+        self.session.commit()
+        self.session.refresh(recording)
+        return recording
+
+    def add_event(
+        self,
+        session_id: int,
+        event_type: str,
+        data: dict[str, Any],
+    ) -> RecordingEvent:
+        """Add an event to a recording session.
+
+        Args:
+            session_id: Recording session ID
+            event_type: Type of event (model_call, tool_call, output, etc.)
+            data: Event data as dictionary
+
+        Returns:
+            Created recording event
+        """
+        # Get the current sequence number
+        max_seq = (
+            self.session.query(RecordingEvent.sequence_number)
+            .filter(RecordingEvent.recording_session_id == session_id)
+            .order_by(desc(RecordingEvent.sequence_number))
+            .first()
+        )
+        next_seq = (max_seq[0] + 1) if max_seq else 1
+
+        event = RecordingEvent(
+            recording_session_id=session_id,
+            event_type=event_type,
+            sequence_number=next_seq,
+            data_json=json.dumps(data),
+        )
+        self.session.add(event)
+        self.session.commit()
+        self.session.refresh(event)
+        return event
+
+    def get_events(self, session_id: int) -> list[RecordingEvent]:
+        """Get all events for a recording session.
+
+        Args:
+            session_id: Recording session ID
+
+        Returns:
+            List of recording events in order
+        """
+        return (
+            self.session.query(RecordingEvent)
+            .filter(RecordingEvent.recording_session_id == session_id)
+            .order_by(RecordingEvent.sequence_number)
+            .all()
+        )
+
+    def get_all_sessions(
+        self,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> list[RecordingSession]:
+        """Get all recording sessions.
+
+        Args:
+            limit: Maximum number of sessions to return
+            offset: Number of sessions to skip
+
+        Returns:
+            List of recording sessions
+        """
+        return (
+            self.session.query(RecordingSession)
+            .order_by(desc(RecordingSession.created_at))
+            .limit(limit)
+            .offset(offset)
+            .all()
+        )
+
+    def delete_session(self, session_id: int) -> bool:
+        """Delete a recording session and all its events.
+
+        Args:
+            session_id: Recording session ID
+
+        Returns:
+            True if deleted, False if not found
+        """
+        recording = self.get_session_by_id(session_id)
+        if not recording:
+            return False
+
+        self.session.delete(recording)
+        self.session.commit()
+        return True

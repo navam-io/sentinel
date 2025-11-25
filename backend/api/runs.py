@@ -284,9 +284,13 @@ async def compare_runs(
         baseline_output: str | None = None
         current_output: str | None = None
         if baseline_results:
-            baseline_output = str(baseline_results[0].output_text) if baseline_results[0].output_text else None
+            baseline_output = (
+                str(baseline_results[0].output_text) if baseline_results[0].output_text else None
+            )
         if current_results:
-            current_output = str(current_results[0].output_text) if current_results[0].output_text else None
+            current_output = (
+                str(current_results[0].output_text) if current_results[0].output_text else None
+            )
 
         # Perform comparison
         comparator = RunComparator()

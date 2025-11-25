@@ -27,6 +27,11 @@ class TestDefinition(Base):
         Boolean, default=False, nullable=False
     )  # Distinguishes templates from user tests
 
+    # File-based storage (Phase 4 - v0.32.0)
+    filename = Column(
+        String(100), nullable=True, unique=True, index=True
+    )  # YAML filename in artifacts/tests/
+
     # Test specification (stored as JSON)
     spec_json = Column(Text, nullable=False)  # Full TestSpec as JSON
     spec_yaml = Column(Text, nullable=True)  # Optional YAML representation
@@ -39,6 +44,7 @@ class TestDefinition(Base):
     model = Column(String(100), nullable=True, index=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    last_run_at = Column(DateTime, nullable=True)  # Timestamp of last test run
 
     # Version tracking
     version = Column(Integer, default=1, nullable=False)
@@ -54,6 +60,7 @@ class TestDefinition(Base):
             "description": self.description,
             "category": self.category,
             "is_template": self.is_template,
+            "filename": self.filename,
             "spec": json.loads(self.spec_json) if self.spec_json else None,
             "spec_yaml": self.spec_yaml,
             "canvas_state": json.loads(self.canvas_state) if self.canvas_state else None,
@@ -61,6 +68,7 @@ class TestDefinition(Base):
             "model": self.model,
             "created_at": self.created_at.isoformat() if self.created_at else None,
             "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "last_run_at": self.last_run_at.isoformat() if self.last_run_at else None,
             "version": self.version,
         }
 
@@ -153,4 +161,76 @@ class TestResult(Base):
             "output_text": self.output_text,
             "tool_calls": json.loads(self.tool_calls_json) if self.tool_calls_json else None,
             "raw_response": json.loads(self.raw_response_json) if self.raw_response_json else None,
+        }
+
+
+class RecordingSession(Base):
+    """Recording session for capturing agent interactions."""
+
+    __tablename__ = "recording_sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(255), nullable=False, index=True)
+    description = Column(Text, nullable=True)
+    status = Column(String(20), nullable=False, index=True)  # recording, paused, stopped
+
+    # Timing
+    started_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    stopped_at = Column(DateTime, nullable=True)
+
+    # Generated test (if converted to test)
+    generated_test_id = Column(Integer, ForeignKey("test_definitions.id"), nullable=True)
+
+    # Metadata
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    # Relationships
+    events = relationship("RecordingEvent", back_populates="session", cascade="all, delete-orphan")
+    generated_test = relationship("TestDefinition", foreign_keys=[generated_test_id])
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert to dictionary."""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "status": self.status,
+            "started_at": self.started_at.isoformat() if self.started_at else None,
+            "stopped_at": self.stopped_at.isoformat() if self.stopped_at else None,
+            "generated_test_id": self.generated_test_id,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "event_count": len(self.events) if self.events else 0,
+        }
+
+
+class RecordingEvent(Base):
+    """Individual event captured during a recording session."""
+
+    __tablename__ = "recording_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    recording_session_id = Column(
+        Integer, ForeignKey("recording_sessions.id"), nullable=False, index=True
+    )
+
+    # Event information
+    event_type = Column(String(50), nullable=False, index=True)  # model_call, tool_call, output
+    sequence_number = Column(Integer, nullable=False)  # Order of events
+    timestamp = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    # Event data (JSON-serialized)
+    data_json = Column(Text, nullable=False)
+
+    # Relationships
+    session = relationship("RecordingSession", back_populates="events")
+
+    def to_dict(self) -> dict[str, Any]:
+        """Convert to dictionary."""
+        return {
+            "id": self.id,
+            "recording_session_id": self.recording_session_id,
+            "event_type": self.event_type,
+            "sequence_number": self.sequence_number,
+            "timestamp": self.timestamp.isoformat() if self.timestamp else None,
+            "data": json.loads(self.data_json) if self.data_json else None,
         }

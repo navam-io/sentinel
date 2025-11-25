@@ -1,0 +1,22 @@
+# Sentinel Test Definition
+# Generated: 2025-11-25T06:29:34.974198+00:00
+name: Test from Canvas
+model: gpt-5.1
+inputs:
+  query: |
+    Three people (Alice, Bob, Charlie) have different heights.
+    - Alice is taller than Bob
+    - Charlie is shorter than Bob
+    Who is the tallest and who is the shortest?
+  system_prompt: You are a helpful AI assistant.
+assertions:
+  - must_contain: Alice
+  - must_contain: tallest
+  - must_contain: Charlie
+  - must_contain: shortest
+tags:
+  - canvas-generated
+description: Test logical reasoning and problem-solving capabilities
+provider: openai
+model_config:
+  temperature: 0.1

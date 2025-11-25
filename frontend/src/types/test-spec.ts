@@ -155,6 +155,7 @@ export interface ExecuteResponse {
 	result: ExecutionResult;
 	assertions: AssertionResult[];
 	all_assertions_passed: boolean;
+	run_id?: number;  // ID of the created run record (if test_id provided)
 }
 
 // ============================================================================
@@ -186,6 +187,7 @@ export interface TestDefinition {
 	description?: string;
 	category?: TestCategory;
 	is_template?: boolean;
+	filename?: string;  // YAML filename in artifacts/tests/
 	spec: TestSpec;
 	spec_yaml?: string;
 	canvas_state?: CanvasState;
@@ -193,6 +195,7 @@ export interface TestDefinition {
 	model?: string;
 	created_at?: string;
 	updated_at?: string;
+	last_run_at?: string;  // Timestamp of last test run
 	version: number;
 }
 
@@ -203,6 +206,7 @@ export interface CreateTestRequest {
 	canvas_state?: CanvasState;
 	description?: string;
 	category?: TestCategory;
+	filename?: string;  // YAML filename in artifacts/tests/
 }
 
 export interface UpdateTestRequest {
@@ -212,6 +216,44 @@ export interface UpdateTestRequest {
 	canvas_state?: CanvasState;
 	description?: string;
 	category?: TestCategory;
+	filename?: string;  // YAML filename in artifacts/tests/
+}
+
+// ============================================================================
+// Test File Types (File-Based Storage)
+// ============================================================================
+
+export interface TestFileInfo {
+	filename: string;
+	name: string;
+	description?: string;
+	category?: string;
+	provider?: string;
+	model?: string;
+	created_at?: string;
+	updated_at?: string;
+}
+
+export interface TestFileListResponse {
+	tests: TestFileInfo[];
+	total: number;
+	path: string;
+}
+
+export interface SaveTestFileRequest {
+	yaml_content: string;
+	filename?: string;
+	name?: string;
+}
+
+export interface TestFileContent {
+	filename: string;
+	yaml_content: string;
+	name: string;
+	description?: string;
+	category?: string;
+	provider?: string;
+	model?: string;
 }
 
 export interface TestListResponse {
@@ -395,4 +437,59 @@ export interface ComparisonResult {
 	output_comparison: OutputComparison | null;
 	model_changed: boolean;
 	provider_changed: boolean;
+}
+
+// ============================================================================
+// Recording Types (Record & Replay Feature)
+// ============================================================================
+
+export type RecordingStatus = 'recording' | 'paused' | 'stopped';
+
+export interface RecordingSession {
+	id: number;
+	name: string;
+	description: string | null;
+	status: RecordingStatus;
+	started_at: string | null;
+	stopped_at: string | null;
+	generated_test_id: number | null;
+	created_at: string | null;
+	event_count: number;
+}
+
+export interface RecordingEvent {
+	id: number;
+	recording_session_id: number;
+	event_type: string;  // model_call, tool_call, output, execution_complete
+	sequence_number: number;
+	timestamp: string | null;
+	data: Record<string, unknown> | null;
+}
+
+export interface SuggestedAssertion {
+	assertion_type: string;
+	assertion_value: string | Record<string, unknown> | string[] | null;
+	confidence: number;
+	reason: string;
+}
+
+export interface SmartDetectionResult {
+	has_tool_calls: boolean;
+	tool_names: string[];
+	output_format: string | null;
+	suggested_assertions: SuggestedAssertion[];
+	detected_patterns: string[];
+}
+
+export interface GeneratedTestResponse {
+	test_id: number;
+	test_name: string;
+	yaml_content: string;
+	canvas_state: CanvasState;
+	suggestions_applied: number;
+}
+
+export interface RecordingListResponse {
+	sessions: RecordingSession[];
+	total: number;
 }

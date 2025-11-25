@@ -45,7 +45,7 @@ export interface TestStoreState {
 	updateMetadata: (updates: Partial<Pick<CurrentTest, 'name' | 'description' | 'category'>>) => void;
 	/** Mark the current test as having unsaved changes */
 	markDirty: () => void;
-	/** Mark the current test as saved */
+	/** Mark the current test as saved (id, filename, and lastSaved are updated) */
 	markClean: (updates?: { id?: number; filename?: string; lastSaved?: Date }) => void;
 	/** Clear the current test (reset to empty state) */
 	clearCurrentTest: () => void;

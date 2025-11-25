@@ -22,6 +22,11 @@ import type {
 	RunListResponse,
 	ComparisonResult,
 	RegressionAnalysis,
+	RecordingSession,
+	RecordingEvent,
+	SmartDetectionResult,
+	GeneratedTestResponse,
+	RecordingListResponse,
 } from '../types/test-spec';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
@@ -44,18 +49,33 @@ export type {
 	RunListResponse,
 	ComparisonResult,
 	RegressionAnalysis,
+	RecordingSession,
+	RecordingEvent,
+	SmartDetectionResult,
+	GeneratedTestResponse,
+	RecordingListResponse,
 };
 
 /**
  * Execute a test specification.
+ *
+ * @param testSpec - Test specification to execute
+ * @param testId - Optional test ID to link the run to a saved test
+ * @returns Execution response with results and optional run_id
  */
-export async function executeTest(testSpec: TestSpec): Promise<ExecuteResponse> {
+export async function executeTest(
+	testSpec: TestSpec,
+	testId?: number
+): Promise<ExecuteResponse> {
 	const response = await fetch(`${API_BASE_URL}/api/execution/execute`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
-		body: JSON.stringify({ test_spec: testSpec }),
+		body: JSON.stringify({
+			test_spec: testSpec,
+			test_id: testId,
+		}),
 	});
 
 	if (!response.ok) {
@@ -306,6 +326,227 @@ export async function analyzeRegression(
 	if (!response.ok) {
 		const error = await response.json();
 		throw new Error(error.detail || 'Failed to analyze regression');
+	}
+
+	return await response.json();
+}
+
+// =============================================================================
+// Recording API Functions (Record & Replay Feature)
+// =============================================================================
+
+/**
+ * Start a new recording session.
+ */
+export async function startRecording(
+	name: string,
+	description?: string
+): Promise<RecordingSession> {
+	const response = await fetch(`${API_BASE_URL}/api/recording/start`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ name, description }),
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || 'Failed to start recording');
+	}
+
+	return await response.json();
+}
+
+/**
+ * Stop a recording session.
+ */
+export async function stopRecording(sessionId: number): Promise<RecordingSession> {
+	const response = await fetch(`${API_BASE_URL}/api/recording/${sessionId}/stop`, {
+		method: 'POST',
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || 'Failed to stop recording');
+	}
+
+	return await response.json();
+}
+
+/**
+ * Pause a recording session.
+ */
+export async function pauseRecording(sessionId: number): Promise<RecordingSession> {
+	const response = await fetch(`${API_BASE_URL}/api/recording/${sessionId}/pause`, {
+		method: 'POST',
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || 'Failed to pause recording');
+	}
+
+	return await response.json();
+}
+
+/**
+ * Resume a paused recording session.
+ */
+export async function resumeRecording(sessionId: number): Promise<RecordingSession> {
+	const response = await fetch(`${API_BASE_URL}/api/recording/${sessionId}/resume`, {
+		method: 'POST',
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || 'Failed to resume recording');
+	}
+
+	return await response.json();
+}
+
+/**
+ * Get the currently active recording session.
+ */
+export async function getActiveRecording(): Promise<RecordingSession | null> {
+	const response = await fetch(`${API_BASE_URL}/api/recording/active`);
+
+	if (!response.ok) {
+		throw new Error('Failed to check active recording');
+	}
+
+	const data = await response.json();
+	return data || null;
+}
+
+/**
+ * Get a recording session by ID.
+ */
+export async function getRecording(sessionId: number): Promise<RecordingSession> {
+	const response = await fetch(`${API_BASE_URL}/api/recording/${sessionId}`);
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || `Failed to fetch recording ${sessionId}`);
+	}
+
+	return await response.json();
+}
+
+/**
+ * Add an event to a recording session.
+ */
+export async function addRecordingEvent(
+	sessionId: number,
+	eventType: string,
+	data: Record<string, unknown>
+): Promise<RecordingEvent> {
+	const response = await fetch(`${API_BASE_URL}/api/recording/${sessionId}/event`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ event_type: eventType, data }),
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || 'Failed to add recording event');
+	}
+
+	return await response.json();
+}
+
+/**
+ * Get all events for a recording session.
+ */
+export async function getRecordingEvents(sessionId: number): Promise<RecordingEvent[]> {
+	const response = await fetch(`${API_BASE_URL}/api/recording/${sessionId}/events`);
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || `Failed to fetch events for recording ${sessionId}`);
+	}
+
+	return await response.json();
+}
+
+/**
+ * Analyze a recording session for smart detection.
+ */
+export async function analyzeRecording(sessionId: number): Promise<SmartDetectionResult> {
+	const response = await fetch(`${API_BASE_URL}/api/recording/${sessionId}/analyze`);
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || `Failed to analyze recording ${sessionId}`);
+	}
+
+	return await response.json();
+}
+
+/**
+ * Generate a test from a recording session.
+ */
+export async function generateTestFromRecording(
+	sessionId: number,
+	options?: {
+		testName?: string;
+		testDescription?: string;
+		includeSuggestions?: boolean;
+	}
+): Promise<GeneratedTestResponse> {
+	const response = await fetch(`${API_BASE_URL}/api/recording/generate-test`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			session_id: sessionId,
+			test_name: options?.testName,
+			test_description: options?.testDescription,
+			include_suggestions: options?.includeSuggestions ?? true,
+		}),
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || 'Failed to generate test from recording');
+	}
+
+	return await response.json();
+}
+
+/**
+ * List all recording sessions.
+ */
+export async function listRecordings(
+	limit = 50,
+	offset = 0
+): Promise<RecordingListResponse> {
+	const response = await fetch(
+		`${API_BASE_URL}/api/recording/list?limit=${limit}&offset=${offset}`
+	);
+
+	if (!response.ok) {
+		throw new Error('Failed to fetch recordings');
+	}
+
+	return await response.json();
+}
+
+/**
+ * Delete a recording session.
+ */
+export async function deleteRecording(sessionId: number): Promise<{ message: string }> {
+	const response = await fetch(`${API_BASE_URL}/api/recording/${sessionId}`, {
+		method: 'DELETE',
+	});
+
+	if (!response.ok) {
+		const error = await response.json();
+		throw new Error(error.detail || `Failed to delete recording ${sessionId}`);
 	}
 
 	return await response.json();

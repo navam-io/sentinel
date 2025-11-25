@@ -239,9 +239,9 @@ See `backlog/active.md` for complete V1 feature roadmap and specifications (15 t
 
 ## Project Status
 
-**Current Version**: 0.31.0 (November 24, 2025)
+**Current Version**: 0.33.0 (November 25, 2025)
 
-**Latest Release**: v0.31.0 - Session Persistence and Auto-Save
+**Latest Release**: v0.33.0 - Record & Replay Test Generation
 
 **Architecture**:
 - Frontend: React 19 + Vite + Tauri 2.0 + React Flow 12.3
@@ -252,7 +252,7 @@ See `backlog/active.md` for complete V1 feature roadmap and specifications (15 t
 - TypeScript: 0 errors with strict mode enabled
 - Code Quality: Black ✅, Ruff ✅, MyPy ✅, ESLint ✅, Playwright ✅
 - Test Coverage: Frontend 50%+, Backend 85%+
-- All tests passing (730 total - 615 frontend + 115 backend)
+- All tests passing (841 total - 660 frontend + 181 backend)
 
 See `CHANGELOG.md` for full release history, `releases/` for detailed release notes, and `backlog/active.md` for feature roadmap.
 

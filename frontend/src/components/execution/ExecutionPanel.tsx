@@ -1,16 +1,20 @@
 import { useState, useMemo } from 'react';
-import { Play, CheckCircle2, XCircle, Clock, DollarSign, Zap, GitCompare } from 'lucide-react';
+import { Play, CheckCircle2, XCircle, Clock, DollarSign, Zap, GitCompare, Circle } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import { useTestStore } from '../../stores/testStore';
+import { useRecordingStore, useIsRecording } from '../../stores/recordingStore';
 import { generateYAML, convertYAMLToTestSpec } from '../../lib/dsl/generator';
 import { executeTest, type ExecuteResponse } from '../../services/api';
 import ComparisonView from '../comparison/ComparisonView';
+import { RecordingControls } from '../recording';
 
-type ViewMode = 'run' | 'compare';
+type ViewMode = 'run' | 'compare' | 'record';
 
 function ExecutionPanel() {
 	const { nodes, edges } = useCanvasStore();
 	const { currentTest } = useTestStore();
+	const { activeSession, addEvent } = useRecordingStore();
+	const isRecording = useIsRecording();
 	const [isExecuting, setIsExecuting] = useState(false);
 	const [response, setResponse] = useState<ExecuteResponse | null>(null);
 	const [error, setError] = useState<string | null>(null);
@@ -51,8 +55,60 @@ function ExecutionPanel() {
 			// Convert YAML to TestSpec
 			const testSpec = convertYAMLToTestSpec(yaml);
 
-			// Execute the test
-			const executeResponse = await executeTest(testSpec);
+			// If recording, capture the model call event
+			if (isRecording) {
+				// Extract model and tool info from canvas
+				const modelNode = nodes.find((n) => n.type === 'model');
+				const inputNode = nodes.find((n) => n.type === 'input');
+				const toolNodes = nodes.filter((n) => n.type === 'tool');
+				const systemNode = nodes.find((n) => n.type === 'system');
+
+				await addEvent('model_call', {
+					query: (inputNode?.data?.query as string) || '',
+					system_prompt:
+						(inputNode?.data?.system_prompt as string) ||
+						(systemNode?.data?.systemPrompt as string) ||
+						'',
+					model: (modelNode?.data?.model as string) || 'gpt-5.1',
+					provider: (modelNode?.data?.provider as string) || 'openai',
+					temperature: (modelNode?.data?.temperature as number) || 0.7,
+					max_tokens: (modelNode?.data?.max_tokens as number) || 1000,
+					tools: toolNodes.map((t) => ({
+						name: t.data?.toolName as string,
+						description: t.data?.toolDescription as string,
+					})),
+				});
+			}
+
+			// Execute the test (pass testId to auto-link run if saved)
+			const executeResponse = await executeTest(testSpec, testId ?? undefined);
+
+			// If recording, capture the execution complete event
+			if (isRecording) {
+				await addEvent('execution_complete', {
+					success: executeResponse.result.success,
+					output: executeResponse.result.output,
+					model: executeResponse.result.model,
+					provider: executeResponse.result.provider,
+					latency_ms: executeResponse.result.latency_ms,
+					tokens_input: executeResponse.result.tokens_input,
+					tokens_output: executeResponse.result.tokens_output,
+					cost_usd: executeResponse.result.cost_usd,
+					tool_calls: executeResponse.result.tool_calls || [],
+					error: executeResponse.result.error,
+				});
+
+				// Also capture individual tool calls
+				if (executeResponse.result.tool_calls?.length) {
+					for (const toolCall of executeResponse.result.tool_calls) {
+						await addEvent('tool_call', {
+							id: toolCall.id,
+							name: toolCall.name,
+							input: toolCall.input,
+						});
+					}
+				}
+			}
 
 			setResponse(executeResponse);
 		} catch (err) {
@@ -83,6 +139,20 @@ function ExecutionPanel() {
 						<span>Run</span>
 					</button>
 					<button
+						onClick={() => setViewMode('record')}
+						className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors duration-120 ${
+							viewMode === 'record'
+								? 'bg-red-500 text-white'
+								: isRecording
+									? 'text-red-400 hover:text-red-300'
+									: 'text-sentinel-text-muted hover:text-sentinel-text'
+						}`}
+						data-testid="mode-record"
+					>
+						<Circle size={12} className={isRecording ? 'fill-current animate-pulse' : ''} />
+						<span>Record</span>
+					</button>
+					<button
 						onClick={() => setViewMode('compare')}
 						className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium transition-colors duration-120 ${
 							viewMode === 'compare'
@@ -109,9 +179,36 @@ function ExecutionPanel() {
 				)}
 			</div>
 
-			{/* Results / Comparison View */}
+			{/* Results / Comparison / Recording View */}
 			<div className="flex-1 overflow-y-auto">
-				{viewMode === 'compare' ? (
+				{viewMode === 'record' ? (
+					<div className="p-4">
+						<RecordingControls
+							onTestGenerated={(testId) => {
+								// Switch to run mode after test generation
+								setViewMode('run');
+							}}
+						/>
+						{/* Show run button when recording is active */}
+						{isRecording && (
+							<div className="mt-4 pt-4 border-t border-sentinel-border">
+								<p className="text-[0.65rem] text-sentinel-text-muted mb-2">
+									Run tests while recording to capture interactions
+								</p>
+								<button
+									onClick={handleRun}
+									disabled={isExecuting || nodes.length === 0}
+									className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-sentinel-primary text-sentinel-bg rounded hover:bg-sentinel-primary-dark transition-colors duration-120 disabled:opacity-50 disabled:cursor-not-allowed"
+								>
+									<Play size={16} strokeWidth={2} />
+									<span className="text-sm font-medium">
+										{isExecuting ? 'Running...' : 'Run & Capture'}
+									</span>
+								</button>
+							</div>
+						)}
+					</div>
+				) : viewMode === 'compare' ? (
 					testId ? (
 						<ComparisonView testId={testId} />
 					) : (

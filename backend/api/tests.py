@@ -23,6 +23,7 @@ class CreateTestRequest(BaseModel):
     description: str | None = None
     category: str | None = None
     is_template: bool = False
+    filename: str | None = None  # YAML filename in artifacts/tests/
 
 
 class UpdateTestRequest(BaseModel):
@@ -35,6 +36,7 @@ class UpdateTestRequest(BaseModel):
     description: str | None = None
     category: str | None = None
     is_template: bool | None = None
+    filename: str | None = None  # YAML filename in artifacts/tests/
 
 
 class TestResponse(BaseModel):
@@ -45,6 +47,7 @@ class TestResponse(BaseModel):
     description: str | None
     category: str | None
     is_template: bool
+    filename: str | None  # YAML filename in artifacts/tests/
     spec: dict[str, Any] | None
     spec_yaml: str | None
     canvas_state: dict[str, Any] | None
@@ -52,6 +55,7 @@ class TestResponse(BaseModel):
     model: str | None
     created_at: str | None
     updated_at: str | None
+    last_run_at: str | None  # Timestamp of last test run
     version: int
 
 
@@ -92,6 +96,7 @@ async def create_test(request: CreateTestRequest, session: Session = Depends(get
             description=request.description,
             category=request.category,
             is_template=request.is_template,
+            filename=request.filename,
         )
         return TestResponse(**test.to_dict())
 
@@ -185,6 +190,7 @@ async def update_test(
             description=request.description,
             category=request.category,
             is_template=request.is_template,
+            filename=request.filename,
         )
         if not test:
             raise HTTPException(status_code=404, detail=f"Test {test_id} not found")

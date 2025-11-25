@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import YamlPreview from './YamlPreview';
 import ExecutionPanel from '../execution/ExecutionPanel';
+import RunHistory from '../execution/RunHistory';
 import { TestToolbar } from '../test';
+import { useTestStore } from '../../stores/testStore';
 
 const RUN_DETAILS_EXPANDED_KEY = 'sentinel-run-details-expanded';
 
@@ -16,6 +18,8 @@ const RUN_DETAILS_EXPANDED_KEY = 'sentinel-run-details-expanded';
  * - Persists expanded/collapsed state in localStorage
  */
 function TestTab() {
+  const { currentTest } = useTestStore();
+
   // Load persisted state, default to false (collapsed)
   const [isRunExpanded, setIsRunExpanded] = useState(() => {
     const stored = localStorage.getItem(RUN_DETAILS_EXPANDED_KEY);
@@ -27,6 +31,12 @@ function TestTab() {
     localStorage.setItem(RUN_DETAILS_EXPANDED_KEY, String(isRunExpanded));
   }, [isRunExpanded]);
 
+  // Handle compare click from RunHistory
+  const handleCompareClick = useCallback(() => {
+    setIsRunExpanded(true);
+    // TODO: Could add a way to switch to compare mode in ExecutionPanel
+  }, []);
+
   return (
     <div className="h-full flex flex-col">
       {/* Test Toolbar */}
@@ -35,18 +45,25 @@ function TestTab() {
       {/* YAML Editor Section */}
       <div
         className={`transition-all duration-300 ease-in-out overflow-hidden ${
-          isRunExpanded ? 'h-1/2' : 'flex-1'
+          isRunExpanded ? 'h-2/5' : 'flex-1'
         }`}
       >
-        <div className="h-full overflow-y-auto custom-scrollbar">
-          <YamlPreview />
+        <div className="h-full overflow-y-auto custom-scrollbar flex flex-col">
+          <div className="flex-1">
+            <YamlPreview />
+          </div>
+          {/* Run History Section (below YAML, above Run Details) */}
+          <RunHistory
+            testId={currentTest?.id ?? null}
+            onCompareClick={handleCompareClick}
+          />
         </div>
       </div>
 
       {/* Run Section - Collapsible */}
       <div
         className={`border-t border-sentinel-border transition-all duration-300 ease-in-out ${
-          isRunExpanded ? 'h-1/2' : 'h-12'
+          isRunExpanded ? 'h-3/5' : 'h-12'
         }`}
       >
         {/* Collapse/Expand Header */}

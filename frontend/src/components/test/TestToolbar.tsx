@@ -1,9 +1,10 @@
 import { useState, useCallback, useEffect } from 'react';
-import { FilePlus, Save, FolderDown, ChevronDown } from 'lucide-react';
+import { FilePlus, Save, FolderDown, ChevronDown, FileText } from 'lucide-react';
 import { useCanvasStore } from '../../stores/canvasStore';
 import { useTestStore } from '../../stores/testStore';
 import { generateYAML, parseYAMLToNodes } from '../../lib/dsl/generator';
 import { createTest, updateTest } from '../../services/api';
+import { saveTestFile, updateTestFile } from '../../services/testFiles';
 import type { TestSpec, CanvasState } from '../../services/api';
 import type { TestCategory } from '../../types/test-spec';
 import { getCategoryConfig, CATEGORY_CONFIG } from '../../lib/categoryConfig';
@@ -137,8 +138,26 @@ function TestToolbar() {
 				) as TestSpec;
 
 				let savedId: number;
+				let savedFilename: string | undefined;
 				const isUpdate = saveDialog.mode === 'save' && currentTest?.id;
 
+				// First, save to YAML file (artifacts/tests/)
+				try {
+					if (isUpdate && currentTest?.filename) {
+						// Update existing file
+						const fileResult = await updateTestFile(currentTest.filename, yaml);
+						savedFilename = fileResult.filename;
+					} else {
+						// Create new file
+						const fileResult = await saveTestFile(yaml, undefined, name.trim());
+						savedFilename = fileResult.filename;
+					}
+				} catch (fileErr) {
+					console.warn('Failed to save to file (backend may not be running):', fileErr);
+					// Continue without file save - database save will still work
+				}
+
+				// Then save to database (for runs linkage and metadata)
 				if (isUpdate && currentTest?.id) {
 					// Update existing test
 					await updateTest(currentTest.id, {
@@ -148,6 +167,7 @@ function TestToolbar() {
 						spec: testSpec,
 						spec_yaml: yaml,
 						canvas_state: canvasState,
+						filename: savedFilename,
 					});
 					savedId = currentTest.id;
 				} else {
@@ -159,6 +179,7 @@ function TestToolbar() {
 						spec: testSpec,
 						spec_yaml: yaml,
 						canvas_state: canvasState,
+						filename: savedFilename,
 					});
 					savedId = response.id;
 				}
@@ -171,6 +192,7 @@ function TestToolbar() {
 				});
 				markClean({
 					id: savedId,
+					filename: savedFilename,
 					lastSaved: new Date(),
 				});
 

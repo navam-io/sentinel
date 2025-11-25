@@ -7,6 +7,118 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.33.0] - 2025-11-25
+
+### Added
+
+#### Record & Replay Test Generation (Feature 6)
+- **Recording Mode**: Capture agent interactions for automatic test generation
+  - Start/stop/pause/resume recording controls
+  - Real-time event feed showing captured interactions
+  - Event types: model_call, tool_call, output, execution_complete
+- **Smart Detection**: Intelligent analysis of recorded interactions
+  - Tool call detection with `must_call_tool` assertion suggestions
+  - Output format detection (JSON, Markdown, Code, Text)
+  - Confidence scoring and reasoning for each suggestion
+- **Test Generation**: One-click conversion of recordings to visual tests
+  - Auto-generated React Flow canvas nodes
+  - YAML specification generation
+  - Assertion integration from smart detection
+
+### New Backend Components
+- **Recording Models**: `RecordingSession`, `RecordingEvent` in storage layer
+- **RecordingRepository**: Full CRUD for sessions and events
+- **Recording API**: 12 endpoints for complete recording lifecycle
+- **Smart Detection Functions**: `detect_output_format()`, `analyze_recording_for_suggestions()`
+- **Generation Functions**: `generate_canvas_from_events()`, `generate_yaml_from_events()`
+
+### New Frontend Components
+- **recordingStore**: Zustand store for recording state management
+- **RecordingControls**: UI component with recording controls and event display
+- **Recording API Client**: 12 functions for recording management
+- **Recording Types**: TypeScript interfaces for recording data structures
+
+### Technical Details
+- **New Files**:
+  - `backend/api/recording.py` - Recording API (890 LOC)
+  - `frontend/src/stores/recordingStore.ts` - Recording state
+  - `frontend/src/components/recording/RecordingControls.tsx` - Recording UI
+- **Test Results**: 41 new tests (20 backend, 13 store, 8 component)
+- See `releases/release-0.33.0.md` for complete release notes
+
+---
+
+## [0.32.0] - 2025-11-24
+
+### Added
+
+#### File-Based Storage for Tests (Feature 11 Phase 4)
+- **YAML File Storage**: Tests saved as `.yaml` files in `artifacts/tests/`
+- **Auto-generated Filenames**: Kebab-case filenames from test names
+- **Dual Storage**: Tests saved to both file system (git-friendly) and database (metadata)
+- **Run History Section**: New collapsible section showing last 5 runs with Compare button
+- **Auto-Run Linkage**: Test runs automatically linked when executing saved tests
+- **Last Run Timestamp**: Tests track when last executed via `last_run_at`
+
+### New Backend Components
+- **TestFileService**: File operations for YAML tests (save, load, list, delete, rename)
+- **File API Endpoints**: `/api/tests/files/*` for file-based test management
+- **Database Schema**: Added `filename` and `last_run_at` columns
+
+### New Frontend Components
+- **RunHistory Component**: Displays test run history with quick compare access
+- **testFiles Service**: API client for file operations
+
+### Technical Details
+- **New Files**:
+  - `backend/services/test_files.py` - File service implementation
+  - `backend/api/test_files.py` - REST API endpoints
+  - `frontend/src/services/testFiles.ts` - Frontend API client
+  - `frontend/src/components/execution/RunHistory.tsx` - Run history UI
+- **Test Results**: 664 frontend tests (24 new), 140 backend tests (25 new)
+- See `releases/release-0.32.0.md` for complete release notes
+
+---
+
+## [0.31.0] - 2025-11-24
+
+### Added
+
+#### Session Persistence & Auto-Save
+- **useSessionPersistence Hook**: Session management with auto-save functionality
+  - Auto-saves dirty tests every 3 seconds (debounced)
+  - Warns on browser/app close if unsaved changes
+  - Zustand persist middleware for testStore
+- **Auto-Save Indicators**: Visual feedback for save status
+- **beforeunload Handler**: Prevents data loss on accidental close
+
+### Technical Details
+- **New Files**: `frontend/src/hooks/useSessionPersistence.ts`, tests (25 tests)
+- **Test Results**: 615 frontend tests, 115 backend tests passing
+- See `releases/release-0.31.0.md` for complete release notes
+
+---
+
+## [0.30.0] - 2025-11-24
+
+### Added
+
+#### Test Toolbar with Keyboard Shortcuts
+- **TestToolbar Component**: Unified toolbar with New/Save/Save As buttons
+- **Keyboard Shortcuts**:
+  - ⌘N / Ctrl+N: New Test
+  - ⌘S / Ctrl+S: Save Test
+  - ⌘⇧S / Ctrl+Shift+S: Save As
+- **Save Dialog**: Modal for entering name, description, and category
+- **State Indicators**: Dirty (●), saved (✓), template badge
+
+### Technical Details
+- **New Files**: `frontend/src/components/test/TestToolbar.tsx`, tests (39 tests)
+- **Test Results**: 590 frontend tests, 115 backend tests passing
+- See `releases/release-0.30.0.md` for complete release notes
+
+---
+
 ## [0.29.0] - 2025-11-24
 
 ### Added
@@ -833,48 +945,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Release Date | Type | Key Features |
 |---------|--------------|------|--------------|
-| **0.22.0** | 2025-11-23 | Minor | Unified Library + 12-category system + Tab restructure |
-| **0.3.1** | 2025-11-16 | Patch | Click-to-add UX + Production tests |
-| **0.3.0** | 2025-11-16 | Minor | React migration (Svelte → React) |
-| **0.2.0** | 2025-11-15 | Minor | Visual Canvas Foundation (Svelte) |
-| **0.1.0** | 2025-11-15 | Minor | DSL Foundation (Python/Pydantic) |
+| **0.31.0** | 2025-11-24 | Minor | Session Persistence & Auto-Save |
+| **0.30.0** | 2025-11-24 | Minor | Test Toolbar with Keyboard Shortcuts |
+| **0.29.0** | 2025-11-24 | Minor | Unified Test Management (Phase 1) |
+| **0.28.0** | 2025-11-24 | Minor | Regression Engine & Comparison View |
+| **0.27.0** | 2025-11-24 | Minor | Native System Menu & About Dialog |
+| **0.26.0** | 2025-11-24 | Minor | Collapsible Panels |
+| **0.25.0** | 2025-11-24 | Minor | Tauri 2.9.3 Infrastructure Upgrade |
+| **0.24.0** | 2025-11-24 | Minor | Auto-Layout & State Persistence |
+| **0.23.0** | 2025-11-23 | Minor | Dynamic Templates Loading |
+| **0.22.0** | 2025-11-23 | Minor | Unified Library + 12-Category System |
+| **0.21.0** | 2025-11-23 | Minor | Template Gallery & Test Suites |
+| **0.20.0** | 2025-11-22 | Minor | Design System Implementation |
+| **0.14.0** | 2025-11-22 | Minor | Template Gallery |
+| **0.12.0** | 2025-11-22 | Minor | Assertion Builder & Validation |
+| **0.11.0** | 2025-11-16 | Minor | Frontend API Integration |
+| **0.10.0** | 2025-11-16 | Minor | Data Persistence & Storage Layer |
+| **0.5.0** | 2025-11-16 | Minor | Monaco YAML Editor |
+| **0.4.0** | 2025-11-16 | Minor | DSL Parser & Visual Importer |
+| **0.3.0** | 2025-11-16 | Minor | React Migration |
+| **0.2.0** | 2025-11-15 | Minor | Visual Canvas Foundation |
+| **0.1.0** | 2025-11-15 | Minor | DSL Schema & Parser |
 
 ---
 
-## Upcoming Releases
+## Roadmap
 
-### [0.4.0] - Q1 2026 (Planned)
-- YAML → Canvas import (visual importer)
-- Monaco editor integration
-- Bidirectional sync (Canvas ↔ YAML)
-- Split view mode
-- Advanced YAML editing with syntax highlighting
-
-### [0.5.0] - Q1-Q2 2026 (Planned)
-- Anthropic + OpenAI provider integration
-- Local test execution from canvas
-- Live execution dashboard
-- Result storage (SQLite/PostgreSQL)
-- Metrics collection & visualization
-
-### [0.6.0+] - 2026 (Planned)
-- Record & replay test generation (v0.6.0)
-- Visual assertion builder (v0.7.0)
-- Regression detection & comparison (v0.8.0)
-- LangGraph framework support (v0.9.0)
-- AI-assisted test creation (v0.10.0)
-- Collaborative workspaces (v0.11.0)
-- Additional model providers: Bedrock, HuggingFace, Ollama (v0.12.0)
-- CI/CD integration (v0.15.0)
-
-**Full Roadmap**: [backlog/active.md](backlog/active.md)
+See [backlog/active.md](backlog/active.md) for current feature roadmap and planned features.
 
 ---
 
 ## Links
 
 - **Documentation**: [docs/README.md](docs/README.md)
-- **Release Notes**: [backlog/](backlog/)
+- **Release Notes**: [releases/](releases/)
+- **Roadmap**: [backlog/active.md](backlog/active.md)
 - **GitHub Releases**: https://github.com/navam-io/sentinel/releases
 - **Issue Tracker**: https://github.com/navam-io/sentinel/issues
 

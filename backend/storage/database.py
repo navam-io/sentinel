@@ -7,7 +7,7 @@ Supports SQLite for local/desktop mode and PostgreSQL for server mode.
 from collections.abc import Generator
 from pathlib import Path
 
-from sqlalchemy import create_engine, event
+from sqlalchemy import create_engine, event, inspect, text
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
 # Create base class for models
@@ -60,6 +60,39 @@ class Database:
         """Create all database tables."""
         Base.metadata.create_all(bind=self.engine)
 
+    def run_migrations(self):
+        """Run schema migrations for existing databases.
+
+        This handles adding new columns to existing tables that were
+        created before schema updates.
+        """
+        inspector = inspect(self.engine)
+
+        # Check test_definitions table for new columns
+        if "test_definitions" in inspector.get_table_names():
+            columns = {col["name"] for col in inspector.get_columns("test_definitions")}
+
+            with self.engine.connect() as conn:
+                # Add filename column if missing (added in v0.32.0)
+                if "filename" not in columns:
+                    conn.execute(
+                        text("ALTER TABLE test_definitions ADD COLUMN filename VARCHAR(255)")
+                    )
+                    conn.commit()
+
+                # Add last_run_at column if missing (added in v0.32.0)
+                if "last_run_at" not in columns:
+                    conn.execute(text("ALTER TABLE test_definitions ADD COLUMN last_run_at DATETIME"))
+                    conn.commit()
+
+        # Check for recording_sessions table columns
+        if "recording_sessions" in inspector.get_table_names():
+            columns = {col["name"] for col in inspector.get_columns("recording_sessions")}
+
+            with self.engine.connect() as conn:
+                # Add any missing columns here for future migrations
+                pass
+
     def drop_tables(self):
         """Drop all database tables (use with caution!)."""
         Base.metadata.drop_all(bind=self.engine)
@@ -106,6 +139,7 @@ def get_database(database_url: str | None = None) -> Database:
     if _db_instance is None:
         _db_instance = Database(database_url)
         _db_instance.create_tables()
+        _db_instance.run_migrations()
     return _db_instance
 
 
